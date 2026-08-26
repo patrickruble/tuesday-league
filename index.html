@@ -3,305 +3,314 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Static Cling — League Profile</title>
+<title>Static Cling — X-Golf League</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,100..125,400..800&family=Instrument+Sans:wght@400;500;600&family=Martian+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
-   THEME TOKENS
-   Everything team-specific lives here. Swapping these six
-   values is the entire per-team theming system.
+   TOKENS
+   League chrome is X-Golf green. Each team gets ONE accent,
+   used only on its crest, chips and scorecard highlights.
    ============================================================ */
 :root{
-  --kit-1:#173F5F;      /* team primary   */
-  --kit-2:#F6AE2D;      /* team secondary */
-  --kit-ink:#FFFFFF;    /* text on kit-1  */
+  --green:#007041;        /* X-Golf primary */
+  --green-deep:#00522F;
+  --green-line:#B4C9BC;
+  --lime:#B8EB7A;         /* X-Golf lime — live states only */
+  --sky:#7EBED7;          /* X-Golf blue — info only */
 
-  --void:#2A2F3A;       /* page chrome, cool steel */
-  --panel:#EDEEF0;      /* profile paper, blue-tinted */
-  --ink:#161A20;
-  --dim:#68707C;
-  --rule:#B9BEC7;
+  --field:#DCE1DC;        /* page, cool sage */
+  --card:#FFFFFF;         /* scorecard stock */
+  --ink:#10221A;
+  --dim:#5F6F66;
+  --rule:#D2D8D2;
 
-  --display:'Archivo Black', 'Haettenschweiler', 'Arial Black', sans-serif;
-  --chrome:Verdana, Geneva, Tahoma, sans-serif;   /* period-correct */
-  --data:'Space Mono', 'Courier New', monospace;
+  --accent:#C2410C;       /* per-team */
+
+  --display:'Archivo', 'Helvetica Neue', Arial, sans-serif;
+  --body:'Instrument Sans', system-ui, sans-serif;
+  --data:'Martian Mono', 'Courier New', monospace;
 }
 
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{
-  margin:0;
-  background:var(--void);
-  background-image:
-    repeating-linear-gradient(135deg,
-      rgba(255,255,255,.022) 0 2px, transparent 2px 9px);
-  color:var(--ink);
-  font-family:var(--chrome);
-  font-size:12px;
-  line-height:1.55;
+  margin:0;background:var(--field);color:var(--ink);
+  font-family:var(--body);font-size:15px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
 }
-a{color:var(--kit-1);text-decoration:none;border-bottom:1px solid currentColor}
-a:hover{background:var(--kit-2);color:var(--ink);border-color:var(--ink)}
-:focus-visible{outline:3px solid var(--kit-2);outline-offset:2px}
+h1,h2,h3{margin:0;font-family:var(--display);font-weight:800;line-height:1}
+a{color:var(--green);text-underline-offset:3px}
+:focus-visible{outline:2px solid var(--green);outline-offset:3px}
+
+.wrap{max-width:1040px;margin:0 auto;padding:0 24px}
 
 /* ============================================================
-   LEAGUE CHROME
+   MASTHEAD
    ============================================================ */
-.bar{
-  background:var(--void);
-  border-bottom:1px solid rgba(255,255,255,.14);
-  padding:9px 16px;
-  display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+.masthead{background:var(--green);color:#fff}
+.masthead .wrap{
+  display:flex;align-items:center;gap:26px;
+  padding-top:14px;padding-bottom:14px;flex-wrap:wrap;
 }
-.wordmark{
-  font-family:var(--display);
-  font-size:15px;letter-spacing:.06em;text-transform:uppercase;
-  color:#fff;
+.mark{
+  font-family:var(--display);font-weight:800;
+  font-variation-settings:'wdth' 118;
+  font-size:15px;letter-spacing:.1em;text-transform:uppercase;
 }
-.wordmark span{color:var(--kit-2)}
-.bar nav{display:flex;gap:14px;margin-left:auto;flex-wrap:wrap}
-.bar nav a{
-  color:#AEB6C2;border:0;font-size:11px;
-  text-transform:uppercase;letter-spacing:.09em;
+.mark em{font-style:normal;color:var(--lime)}
+.masthead nav{display:flex;gap:22px;margin-left:auto;flex-wrap:wrap}
+.masthead nav a{
+  color:rgba(255,255,255,.76);text-decoration:none;
+  font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:500;
 }
-.bar nav a:hover{background:none;color:var(--kit-2)}
-
-.shell{max-width:940px;margin:0 auto;padding:22px 16px 60px}
+.masthead nav a:hover,.masthead nav a[aria-current]{color:var(--lime)}
 
 /* ============================================================
-   HERO — the kit block
+   HERO — leaderboard board
    ============================================================ */
-.hero{
-  background:var(--kit-1);
-  color:var(--kit-ink);
-  display:grid;
-  grid-template-columns:104px 1fr auto;
-  gap:18px;align-items:center;
-  padding:18px;
-  border:1px solid rgba(0,0,0,.4);
-  position:relative;overflow:hidden;
-}
-.hero::after{ /* kit stripe */
-  content:"";position:absolute;inset:0 0 0 auto;width:26px;
-  background:repeating-linear-gradient(180deg,
-    var(--kit-2) 0 10px, transparent 10px 20px);
-  opacity:.9;
-}
+.hero{background:var(--green);color:#fff;padding-bottom:34px}
+.hero .wrap{display:grid;grid-template-columns:auto 1fr auto;gap:26px;align-items:end}
 .crest{
-  width:104px;height:104px;
-  background:var(--kit-2);
-  color:var(--kit-1);
-  font-family:var(--display);font-size:38px;
+  width:80px;height:80px;flex:none;
+  background:var(--accent);
   display:grid;place-items:center;
-  border:3px solid var(--kit-ink);
-  letter-spacing:-.02em;
+  font-family:var(--display);font-weight:800;font-size:27px;
+  color:#fff;letter-spacing:-.02em;
+  box-shadow:0 0 0 1px rgba(255,255,255,.25);
+}
+.pos{
+  font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--lime);margin-bottom:10px;font-weight:600;
 }
 .hero h1{
-  font-family:var(--display);
-  font-size:clamp(30px,6.4vw,52px);
-  line-height:.92;margin:0 0 6px;
-  text-transform:uppercase;letter-spacing:-.015em;
+  font-size:clamp(38px,8vw,74px);
+  font-variation-settings:'wdth' 112;
+  letter-spacing:-.025em;text-transform:uppercase;
 }
-.hero .sub{
-  font-size:11px;letter-spacing:.14em;text-transform:uppercase;
-  opacity:.78;
+.hero .meta{
+  margin-top:9px;font-size:13px;color:rgba(255,255,255,.7);
 }
-.record{
-  text-align:right;padding-right:34px;font-family:var(--data);
-}
-.record b{display:block;font-size:30px;line-height:1;font-weight:700}
-.record span{font-size:10px;letter-spacing:.1em;opacity:.72}
+.tally{text-align:right;font-family:var(--data);white-space:nowrap}
+.tally b{display:block;font-size:34px;font-weight:600;letter-spacing:-.04em}
+.tally span{font-size:10px;letter-spacing:.1em;color:rgba(255,255,255,.6)}
 
 /* ============================================================
-   STATUS STRIP — the signature element.
-   MySpace's real soul was the away message, not the glitter.
+   STATUS — mood + walk-up song. The personal layer, kept quiet.
    ============================================================ */
 .status{
-  display:grid;grid-template-columns:1fr auto;
-  gap:14px;align-items:center;
-  background:var(--panel);
-  border:1px solid rgba(0,0,0,.4);border-top:0;
-  padding:11px 14px;
+  background:var(--green-deep);color:#fff;
+  border-top:1px solid rgba(255,255,255,.13);
 }
-.mood{display:flex;align-items:baseline;gap:9px;min-width:0}
-.mood .tag{
-  background:var(--kit-1);color:var(--kit-ink);
-  font-size:9px;letter-spacing:.13em;text-transform:uppercase;
-  padding:3px 7px;flex:none;
+.status .wrap{
+  display:flex;gap:28px;align-items:center;flex-wrap:wrap;
+  padding-top:13px;padding-bottom:13px;
 }
-.mood q{font-size:13px;font-style:italic;quotes:'"' '"'}
-.mood .when{color:var(--dim);font-size:10px;flex:none}
+.mood{display:flex;align-items:baseline;gap:11px;min-width:0;flex:1}
+.lbl{
+  font-size:9px;letter-spacing:.17em;text-transform:uppercase;
+  color:var(--lime);font-weight:600;flex:none;
+}
+.mood p{margin:0;font-size:15px}
+.mood .ago{font-size:11px;color:rgba(255,255,255,.45);flex:none}
 
-/* song player */
-.song{display:flex;align-items:center;gap:9px;flex:none}
+.song{display:flex;align-items:center;gap:11px;flex:none}
 .play{
-  width:30px;height:30px;flex:none;cursor:pointer;
-  background:var(--kit-1);color:var(--kit-ink);
-  border:0;display:grid;place-items:center;font-size:11px;
+  width:34px;height:34px;border:0;border-radius:50%;cursor:pointer;
+  background:var(--lime);color:var(--green-deep);
+  display:grid;place-items:center;font-size:12px;
 }
-.play:hover{background:var(--kit-2);color:var(--ink)}
-.song-meta{font-size:10px;line-height:1.35;max-width:190px}
-.song-meta b{display:block;font-size:11px}
-.song-meta span{color:var(--dim)}
-.eq{display:flex;gap:2px;align-items:flex-end;height:13px;flex:none}
-.eq i{width:3px;background:var(--kit-1);height:3px}
-.playing .eq i{animation:bounce .62s ease-in-out infinite}
-.playing .eq i:nth-child(2){animation-delay:.11s}
-.playing .eq i:nth-child(3){animation-delay:.22s}
-.playing .eq i:nth-child(4){animation-delay:.33s}
-@keyframes bounce{50%{height:13px}}
+.play:hover{background:#fff}
+.song-meta{font-size:12px;line-height:1.35}
+.song-meta b{display:block;font-weight:600}
+.song-meta span{color:rgba(255,255,255,.5)}
+.eq{display:flex;gap:2px;align-items:flex-end;height:14px}
+.eq i{width:3px;height:3px;background:var(--lime)}
+.playing .eq i{animation:bob .6s ease-in-out infinite}
+.playing .eq i:nth-child(2){animation-delay:.1s}
+.playing .eq i:nth-child(3){animation-delay:.2s}
+.playing .eq i:nth-child(4){animation-delay:.3s}
+@keyframes bob{50%{height:14px}}
 @media (prefers-reduced-motion:reduce){.eq i{animation:none!important;height:8px}}
 
 /* ============================================================
-   TWO-COLUMN PROFILE — MySpace skeleton, built properly
+   NUMBERS STRIP
    ============================================================ */
-.cols{display:grid;grid-template-columns:236px 1fr;gap:14px;margin-top:14px}
-
-.block{background:var(--panel);border:1px solid rgba(0,0,0,.4)}
-.block > h2{
-  margin:0;padding:6px 11px;
-  background:var(--kit-1);color:var(--kit-ink);
-  font-family:var(--chrome);font-size:10px;font-weight:bold;
-  letter-spacing:.13em;text-transform:uppercase;
+.numbers{background:var(--card);border-bottom:1px solid var(--rule)}
+.numbers .wrap{
+  display:grid;grid-template-columns:repeat(5,1fr);
+  padding-top:22px;padding-bottom:22px;
 }
-.block .body{padding:11px}
-.block + .block{margin-top:14px}
-
-/* details table */
-.facts{width:100%;border-collapse:collapse;font-size:11px}
-.facts th{
-  text-align:left;color:var(--dim);font-weight:normal;
-  padding:4px 0;width:42%;vertical-align:top;
+.numbers div + div{border-left:1px solid var(--rule);padding-left:20px}
+.numbers b{
+  display:block;font-family:var(--data);font-size:25px;font-weight:600;
+  letter-spacing:-.045em;line-height:1;
 }
-.facts td{padding:4px 0;border-bottom:1px dotted var(--rule)}
-.facts tr:last-child td{border-bottom:0}
-.swatches{display:flex;gap:4px}
-.swatches i{width:15px;height:15px;border:1px solid rgba(0,0,0,.45)}
-
-/* about */
-.about p{margin:0 0 9px;font-size:12px}
-.about p:last-child{margin:0}
-
-/* ============================================================
-   TOP 3 — the roster. Fixed at three, so it can be a real
-   composition instead of a responsive grid that flexes.
-   ============================================================ */
-.top3{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}
-.mate{border:1px solid var(--rule);background:#fff}
-.mate .face{
-  aspect-ratio:1;display:grid;place-items:center;
-  background:var(--kit-1);color:var(--kit-2);
-  font-family:var(--display);font-size:30px;
-}
-.mate:nth-child(2) .face{background:var(--kit-2);color:var(--kit-1)}
-.mate .who{padding:7px 8px}
-.mate .who b{display:block;font-size:12px;line-height:1.25}
-.mate .who span{color:var(--dim);font-size:10px}
-.mate .who em{
-  display:block;margin-top:5px;font-size:10px;
-  border-top:1px dotted var(--rule);padding-top:5px;
+.numbers span{
+  display:block;margin-top:7px;font-size:10px;
+  letter-spacing:.11em;text-transform:uppercase;color:var(--dim);
 }
 
 /* ============================================================
-   SEASON
+   SECTIONS
    ============================================================ */
-.fixtures{width:100%;border-collapse:collapse;font-size:11px}
-.fixtures td{padding:6px 5px;border-bottom:1px dotted var(--rule)}
-.fixtures tr:last-child td{border-bottom:0}
-.fixtures .dt{color:var(--dim);font-family:var(--data);font-size:10px;white-space:nowrap;width:1%}
-.fixtures .sc{font-family:var(--data);text-align:right;white-space:nowrap;width:1%}
-.opp{display:flex;align-items:center;gap:7px}
-.chip{width:13px;height:13px;flex:none;border:1px solid rgba(0,0,0,.4)}
-.res{
-  font-family:var(--data);font-weight:700;font-size:10px;
-  width:17px;height:17px;display:grid;place-items:center;flex:none;
+section{padding:44px 0}
+section + section{border-top:1px solid var(--green-line)}
+.head{display:flex;align-items:baseline;gap:14px;margin-bottom:22px}
+.head h2{
+  font-size:13px;letter-spacing:.15em;text-transform:uppercase;
+  font-variation-settings:'wdth' 105;
 }
-.res.w{background:var(--kit-1);color:var(--kit-ink)}
-.res.l{background:transparent;color:var(--dim);border:1px solid var(--rule)}
-.res.next{background:var(--kit-2);color:var(--ink)}
+.head .note{font-size:12px;color:var(--dim);margin-left:auto}
+
+.blurb{max-width:60ch;font-size:17px;line-height:1.65}
+.blurb p{margin:0 0 12px}
+.blurb p:last-child{margin:0}
+
+/* ROSTER — fixed three-up */
+.roster{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.player{background:var(--card);padding:20px}
+.player .idx{
+  font-family:var(--data);font-size:10px;color:var(--dim);
+  letter-spacing:.05em;
+}
+.player h3{
+  font-size:21px;margin:7px 0 3px;letter-spacing:-.02em;
+  font-variation-settings:'wdth' 105;
+}
+.player .hcp{font-family:var(--data);font-size:12px;color:var(--accent);font-weight:600}
+.player dl{display:grid;grid-template-columns:1fr auto;gap:4px 0;margin:16px 0 0;font-size:12px}
+.player dt{color:var(--dim)}
+.player dd{margin:0;font-family:var(--data);text-align:right}
+.player .said{
+  margin:16px 0 0;padding-top:13px;border-top:1px solid var(--rule);
+  font-size:13px;font-style:italic;color:var(--dim);
+}
 
 /* ============================================================
-   GUESTBOOK
+   SCORECARD — the signature. A real 18-hole card.
    ============================================================ */
-.post{display:grid;grid-template-columns:34px 1fr;gap:9px;padding:9px 0;border-bottom:1px dotted var(--rule)}
-.post:first-child{padding-top:0}
-.post:last-child{border-bottom:0;padding-bottom:0}
-.post .av{width:34px;height:34px;display:grid;place-items:center;font-family:var(--display);font-size:13px;color:#fff}
-.post .txt b{font-size:11px}
-.post .txt .stamp{color:var(--dim);font-size:10px;margin-left:5px}
-.post .txt p{margin:2px 0 0;font-size:11px}
+.cardwrap{overflow-x:auto;border:1px solid var(--rule);background:var(--card)}
+table.sc{border-collapse:collapse;width:100%;min-width:820px;font-family:var(--data);font-size:11px}
+table.sc th,table.sc td{
+  border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);
+  padding:8px 0;text-align:center;width:3.6%;
+}
+table.sc .who{
+  width:14%;text-align:left;padding-left:14px;font-family:var(--body);
+  font-size:13px;font-weight:600;white-space:nowrap;
+}
+table.sc thead th{
+  background:var(--green);color:#fff;font-weight:400;
+  border-color:rgba(255,255,255,.2);
+}
+table.sc thead .who{background:var(--green);color:#fff}
+table.sc .par td{background:#F2F4F2;color:var(--dim)}
+table.sc .sum{background:#F2F4F2;font-weight:600}
+table.sc .tot{background:var(--green-deep);color:#fff;font-weight:600;border-color:rgba(255,255,255,.2)}
+table.sc tbody tr:last-child td{border-bottom:0}
+/* score markers */
+.bird{position:relative;color:var(--accent);font-weight:600}
+.bird::after{
+  content:"";position:absolute;inset:3px 22% auto;height:calc(100% - 6px);
+  border:1px solid var(--accent);border-radius:50%;
+}
+.bog{color:var(--dim)}
+.eag{background:var(--accent);color:#fff;font-weight:600}
 
 /* ============================================================
-   DEMO-ONLY: kit switcher. Delete in production.
+   SCHEDULE
    ============================================================ */
-.kits{
-  margin-top:26px;padding:11px 13px;
-  border:1px dashed rgba(255,255,255,.28);
-  display:flex;gap:11px;align-items:center;flex-wrap:wrap;
-  color:#98A1AE;font-size:10px;letter-spacing:.07em;text-transform:uppercase;
+.fix{width:100%;border-collapse:collapse}
+.fix td{padding:13px 8px;border-bottom:1px solid var(--rule);font-size:14px;vertical-align:middle}
+.fix tr:last-child td{border-bottom:0}
+.fix .when{font-family:var(--data);font-size:11px;color:var(--dim);white-space:nowrap;width:1%}
+.fix .score{font-family:var(--data);text-align:right;white-space:nowrap;width:1%;font-weight:600}
+.vs{display:flex;align-items:center;gap:11px}
+.chip{width:9px;height:26px;flex:none}
+.badge{
+  font-family:var(--data);font-size:9px;font-weight:600;
+  padding:3px 6px;letter-spacing:.05em;flex:none;
 }
-.kits button{
-  cursor:pointer;border:1px solid rgba(255,255,255,.3);background:none;
-  padding:0;width:42px;height:22px;display:flex;
-}
-.kits button i{flex:1}
-.kits button:hover{border-color:#fff}
+.badge.w{background:var(--green);color:#fff}
+.badge.l{background:transparent;color:var(--dim);box-shadow:inset 0 0 0 1px var(--rule)}
+.badge.up{background:var(--lime);color:var(--green-deep)}
 
-@media (max-width:720px){
-  .cols{grid-template-columns:1fr}
-  .hero{grid-template-columns:66px 1fr;padding:14px}
-  .crest{width:66px;height:66px;font-size:25px;border-width:2px}
-  .hero::after{width:12px}
-  .record{grid-column:1/-1;text-align:left;padding-right:0;
-          border-top:1px solid rgba(255,255,255,.22);padding-top:9px}
-  .record b{display:inline;font-size:20px}
-  .record span{margin-left:7px}
-  .status{grid-template-columns:1fr}
-  .song{border-top:1px dotted var(--rule);padding-top:9px}
-  .top3{grid-template-columns:1fr;gap:8px}
-  .mate{display:grid;grid-template-columns:62px 1fr}
-  .mate .face{font-size:22px}
+/* ============================================================
+   TRASH TALK
+   ============================================================ */
+.talk{display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.msg{background:var(--card);padding:16px 18px;display:grid;grid-template-columns:auto 1fr;gap:14px}
+.msg .from{width:5px;align-self:stretch}
+.msg b{font-size:13px}
+.msg time{font-size:11px;color:var(--dim);margin-left:8px;font-family:var(--data)}
+.msg p{margin:3px 0 0;font-size:14px}
+
+footer{background:var(--green);color:rgba(255,255,255,.55);font-size:12px}
+footer .wrap{padding:22px 24px;display:flex;gap:18px;flex-wrap:wrap}
+
+/* DEMO ONLY */
+.demo{
+  padding:16px 24px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;
+  font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--dim);
+}
+.demo button{width:30px;height:30px;border:1px solid var(--rule);cursor:pointer;padding:0}
+.demo button:hover{box-shadow:0 0 0 2px var(--ink)}
+
+@media (max-width:820px){
+  .hero .wrap{grid-template-columns:auto 1fr;gap:18px}
+  .tally{grid-column:1/-1;text-align:left;padding-top:14px;
+         border-top:1px solid rgba(255,255,255,.2)}
+  .tally b{display:inline;font-size:24px}
+  .tally span{margin-left:10px}
+  .numbers .wrap{grid-template-columns:repeat(2,1fr);gap:20px 0}
+  .numbers div + div{border-left:0;padding-left:0}
+  .numbers div:nth-child(even){border-left:1px solid var(--rule);padding-left:20px}
+  .roster{grid-template-columns:1fr}
+  section{padding:32px 0}
 }
 </style>
 </head>
 <body>
 
-<header class="bar">
-  <div class="wordmark">Sunday <span>/</span> League</div>
-  <nav>
-    <a href="#">Standings</a>
-    <a href="#">Fixtures</a>
-    <a href="#">Teams</a>
-    <a href="#">Rules</a>
-  </nav>
+<header class="masthead">
+  <div class="wrap">
+    <div class="mark">X-Golf <em>·</em> Friday League</div>
+    <nav>
+      <a href="#">Leaderboard</a>
+      <a href="#">Schedule</a>
+      <a href="#" aria-current="page">Teams</a>
+      <a href="#">Records</a>
+    </nav>
+  </div>
 </header>
 
-<div class="shell">
-
-  <!-- HERO -->
-  <div class="hero">
+<div class="hero">
+  <div class="wrap">
     <div class="crest">SC</div>
     <div>
-      <h1>Static&nbsp;Cling</h1>
-      <div class="sub">Est. 2024 &nbsp;·&nbsp; Division B &nbsp;·&nbsp; 3rd of 15</div>
+      <div class="pos">3rd of 15 · Division B</div>
+      <h1>Static Cling</h1>
+      <div class="meta">Bay 4 · Fridays 7:30 · Est. 2024</div>
     </div>
-    <div class="record">
+    <div class="tally">
       <b>7–3</b>
-      <span>W–L · STREAK W2</span>
+      <span>MATCH RECORD · W2</span>
     </div>
   </div>
+</div>
 
-  <!-- STATUS STRIP -->
-  <div class="status" id="status">
+<div class="status" id="status">
+  <div class="wrap">
     <div class="mood">
-      <span class="tag">Mood</span>
-      <q>quietly furious about week 6 and not letting it go</q>
-      <span class="when">2h ago</span>
+      <span class="lbl">Mood</span>
+      <p>quietly furious about week 6 and not letting it go</p>
+      <span class="ago">2h ago</span>
     </div>
     <div class="song">
-      <button class="play" id="play" aria-pressed="false" aria-label="Play team song">▶</button>
+      <span class="lbl">Walk-up</span>
+      <button class="play" id="play" aria-pressed="false" aria-label="Play walk-up song">▶</button>
       <div class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
       <div class="song-meta">
         <b>Cannonball</b>
@@ -309,179 +318,212 @@ a:hover{background:var(--kit-2);color:var(--ink);border-color:var(--ink)}
       </div>
     </div>
   </div>
+</div>
 
-  <div class="cols">
-
-    <!-- LEFT RAIL -->
-    <div>
-      <section class="block">
-        <h2>Team Details</h2>
-        <div class="body">
-          <table class="facts">
-            <tr><th>Captain</th><td>R. Okonkwo</td></tr>
-            <tr><th>Founded</th><td>Mar 2024</td></tr>
-            <tr><th>Home</th><td>Court 2, Fridays</td></tr>
-            <tr><th>Kit</th><td><div class="swatches"><i style="background:var(--kit-1)"></i><i style="background:var(--kit-2)"></i></div></td></tr>
-            <tr><th>Points for</th><td>412</td></tr>
-            <tr><th>Points against</th><td>377</td></tr>
-            <tr><th>Longest streak</th><td>4</td></tr>
-          </table>
-        </div>
-      </section>
-
-      <section class="block">
-        <h2>Last 10</h2>
-        <div class="body">
-          <div style="display:flex;gap:3px;flex-wrap:wrap">
-            <span class="res w">W</span><span class="res l">L</span>
-            <span class="res w">W</span><span class="res w">W</span>
-            <span class="res l">L</span><span class="res w">W</span>
-            <span class="res w">W</span><span class="res l">L</span>
-            <span class="res w">W</span><span class="res w">W</span>
-          </div>
-        </div>
-      </section>
-    </div>
-
-    <!-- RIGHT COLUMN -->
-    <div>
-      <section class="block about">
-        <h2>About Static Cling</h2>
-        <div class="body">
-          <p>Formed when three people who had all been cut from other teams
-             discovered they were, collectively, slightly better than any of
-             those teams. Play a slow, irritating, extremely effective game.</p>
-          <p>Will not be taking questions about week 6.</p>
-        </div>
-      </section>
-
-      <section class="block">
-        <h2>Top 3</h2>
-        <div class="body">
-          <div class="top3">
-            <article class="mate">
-              <div class="face">RO</div>
-              <div class="who">
-                <b>Rita Okonkwo</b>
-                <span>Captain</span>
-                <em>“I called it in preseason.”</em>
-              </div>
-            </article>
-            <article class="mate">
-              <div class="face">DV</div>
-              <div class="who">
-                <b>Dev Varma</b>
-                <span>Anchor</span>
-                <em>“No comment.”</em>
-              </div>
-            </article>
-            <article class="mate">
-              <div class="face">MB</div>
-              <div class="who">
-                <b>Marta Bell</b>
-                <span>Rotation</span>
-                <em>“Peaking at the right time.”</em>
-              </div>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section class="block">
-        <h2>Season</h2>
-        <div class="body">
-          <table class="fixtures">
-            <tr>
-              <td class="dt">FRI 12 SEP</td>
-              <td><div class="opp"><span class="res next">·</span><i class="chip" style="background:#7A1F3D"></i> Hot Bench</div></td>
-              <td class="sc">19:30</td>
-            </tr>
-            <tr>
-              <td class="dt">FRI 05 SEP</td>
-              <td><div class="opp"><span class="res w">W</span><i class="chip" style="background:#2E6F4E"></i> Green Room</div></td>
-              <td class="sc">44–38</td>
-            </tr>
-            <tr>
-              <td class="dt">FRI 29 AUG</td>
-              <td><div class="opp"><span class="res w">W</span><i class="chip" style="background:#C25A00"></i> Orange Julius</div></td>
-              <td class="sc">51–40</td>
-            </tr>
-            <tr>
-              <td class="dt">FRI 22 AUG</td>
-              <td><div class="opp"><span class="res l">L</span><i class="chip" style="background:#2B3A67"></i> Night Shift</div></td>
-              <td class="sc">33–47</td>
-            </tr>
-            <tr>
-              <td class="dt">FRI 15 AUG</td>
-              <td><div class="opp"><span class="res w">W</span><i class="chip" style="background:#8A6BBF"></i> Lavender Menace</div></td>
-              <td class="sc">40–36</td>
-            </tr>
-          </table>
-        </div>
-      </section>
-
-      <section class="block">
-        <h2>Guestbook</h2>
-        <div class="body">
-          <div class="post">
-            <div class="av" style="background:#2E6F4E">GR</div>
-            <div class="txt">
-              <b>Green Room</b><span class="stamp">6 Sep</span>
-              <p>good game. the mood status is a bit much though.</p>
-            </div>
-          </div>
-          <div class="post">
-            <div class="av" style="background:#7A1F3D">HB</div>
-            <div class="txt">
-              <b>Hot Bench</b><span class="stamp">4 Sep</span>
-              <p>see you friday. bringing the whole bench.</p>
-            </div>
-          </div>
-          <div class="post">
-            <div class="av" style="background:#2B3A67">NS</div>
-            <div class="txt">
-              <b>Night Shift</b><span class="stamp">23 Aug</span>
-              <p>still 1–0 vs you. framing the scoresheet.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
+<div class="numbers">
+  <div class="wrap">
+    <div><b>+4.2</b><span>Team avg to par</span></div>
+    <div><b>78.6</b><span>Scoring avg</span></div>
+    <div><b>41</b><span>Birdies</span></div>
+    <div><b>71</b><span>Low round</span></div>
+    <div><b>62%</b><span>Holes won</span></div>
   </div>
+</div>
 
-  <!-- DEMO ONLY -->
-  <div class="kits">
-    <span>Try another team's kit:</span>
-    <button data-a="#173F5F" data-b="#F6AE2D" aria-label="Static Cling kit"><i style="background:#173F5F"></i><i style="background:#F6AE2D"></i></button>
-    <button data-a="#7A1F3D" data-b="#F2E8DC" aria-label="Hot Bench kit"><i style="background:#7A1F3D"></i><i style="background:#F2E8DC"></i></button>
-    <button data-a="#2E6F4E" data-b="#D9E64A" aria-label="Green Room kit"><i style="background:#2E6F4E"></i><i style="background:#D9E64A"></i></button>
-    <button data-a="#2B3A67" data-b="#E0533D" aria-label="Night Shift kit"><i style="background:#2B3A67"></i><i style="background:#E0533D"></i></button>
-    <button data-a="#8A6BBF" data-b="#F5D0E0" aria-label="Lavender Menace kit"><i style="background:#8A6BBF"></i><i style="background:#F5D0E0"></i></button>
-  </div>
+<div class="wrap">
+
+  <section>
+    <div class="head"><h2>The Team</h2></div>
+    <div class="blurb">
+      <p>Formed when three people who had all been dropped from other rosters
+         discovered they were, collectively, slightly better than any of those
+         rosters. Play a slow, grinding, extremely irritating brand of golf and
+         will not apologise for it.</p>
+      <p>Not taking questions about week 6.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="head">
+      <h2>Roster</h2>
+      <span class="note">Handicap index updated weekly</span>
+    </div>
+    <div class="roster">
+      <article class="player">
+        <div class="idx">01 · CAPTAIN</div>
+        <h3>Rita Okonkwo</h3>
+        <div class="hcp">HCP 6.4</div>
+        <dl>
+          <dt>Scoring avg</dt><dd>76.2</dd>
+          <dt>Birdies</dt><dd>19</dd>
+          <dt>Low round</dt><dd>71</dd>
+          <dt>Holes won</dt><dd>68%</dd>
+        </dl>
+        <p class="said">“I called it in preseason.”</p>
+      </article>
+      <article class="player">
+        <div class="idx">02</div>
+        <h3>Dev Varma</h3>
+        <div class="hcp">HCP 11.8</div>
+        <dl>
+          <dt>Scoring avg</dt><dd>79.4</dd>
+          <dt>Birdies</dt><dd>12</dd>
+          <dt>Low round</dt><dd>74</dd>
+          <dt>Holes won</dt><dd>59%</dd>
+        </dl>
+        <p class="said">“No comment.”</p>
+      </article>
+      <article class="player">
+        <div class="idx">03</div>
+        <h3>Marta Bell</h3>
+        <div class="hcp">HCP 14.1</div>
+        <dl>
+          <dt>Scoring avg</dt><dd>80.3</dd>
+          <dt>Birdies</dt><dd>10</dd>
+          <dt>Low round</dt><dd>76</dd>
+          <dt>Holes won</dt><dd>58%</dd>
+        </dl>
+        <p class="said">“Peaking at the right time.”</p>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <div class="head">
+      <h2>Last Card</h2>
+      <span class="note">Wk 10 · Torrey Pines South · vs Green Room</span>
+    </div>
+    <div class="cardwrap">
+      <table class="sc">
+        <thead>
+          <tr>
+            <th class="who">Hole</th>
+            <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th>
+            <th class="sum">OUT</th>
+            <th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th>
+            <th class="sum">IN</th>
+            <th class="tot">TOT</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="par">
+            <td class="who" style="font-weight:400;color:var(--dim)">Par</td>
+            <td>4</td><td>4</td><td>3</td><td>5</td><td>4</td><td>4</td><td>3</td><td>4</td><td>5</td>
+            <td class="sum">36</td>
+            <td>4</td><td>3</td><td>4</td><td>5</td><td>4</td><td>4</td><td>3</td><td>4</td><td>5</td>
+            <td class="sum">36</td>
+            <td class="tot">72</td>
+          </tr>
+          <tr>
+            <td class="who">Okonkwo</td>
+            <td>4</td><td class="bird">3</td><td>3</td><td>5</td><td>4</td><td class="bog">5</td><td>3</td><td>4</td><td class="bird">4</td>
+            <td class="sum">35</td>
+            <td>4</td><td>3</td><td class="bog">5</td><td class="eag">3</td><td>4</td><td>4</td><td>3</td><td>4</td><td>5</td>
+            <td class="sum">35</td>
+            <td class="tot">70</td>
+          </tr>
+          <tr>
+            <td class="who">Varma</td>
+            <td class="bog">5</td><td>4</td><td>3</td><td class="bird">4</td><td>4</td><td>4</td><td class="bog">4</td><td>4</td><td>5</td>
+            <td class="sum">37</td>
+            <td>4</td><td class="bog">4</td><td>4</td><td>5</td><td>4</td><td class="bird">3</td><td>3</td><td class="bog">5</td><td>5</td>
+            <td class="sum">37</td>
+            <td class="tot">74</td>
+          </tr>
+          <tr>
+            <td class="who">Bell</td>
+            <td>4</td><td>4</td><td class="bog">4</td><td>5</td><td class="bird">3</td><td>4</td><td>3</td><td class="bog">5</td><td>5</td>
+            <td class="sum">37</td>
+            <td class="bog">5</td><td>3</td><td>4</td><td>5</td><td class="bird">3</td><td>4</td><td class="bog">4</td><td>4</td><td>5</td>
+            <td class="sum">37</td>
+            <td class="tot">74</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="head"><h2>Schedule</h2></div>
+    <table class="fix">
+      <tr>
+        <td class="when">FRI 12 SEP</td>
+        <td><div class="vs"><span class="badge up">NEXT</span><i class="chip" style="background:#7A1F3D"></i> Hot Bench</div></td>
+        <td class="score">19:30</td>
+      </tr>
+      <tr>
+        <td class="when">FRI 05 SEP</td>
+        <td><div class="vs"><span class="badge w">WON</span><i class="chip" style="background:#2E6F4E"></i> Green Room</div></td>
+        <td class="score">3–0</td>
+      </tr>
+      <tr>
+        <td class="when">FRI 29 AUG</td>
+        <td><div class="vs"><span class="badge w">WON</span><i class="chip" style="background:#C25A00"></i> Orange Julius</div></td>
+        <td class="score">2–1</td>
+      </tr>
+      <tr>
+        <td class="when">FRI 22 AUG</td>
+        <td><div class="vs"><span class="badge l">LOST</span><i class="chip" style="background:#2B3A67"></i> Night Shift</div></td>
+        <td class="score">0–3</td>
+      </tr>
+      <tr>
+        <td class="when">FRI 15 AUG</td>
+        <td><div class="vs"><span class="badge w">WON</span><i class="chip" style="background:#8A6BBF"></i> Lavender Menace</div></td>
+        <td class="score">2–1</td>
+      </tr>
+    </table>
+  </section>
+
+  <section>
+    <div class="head"><h2>Trash Talk</h2><span class="note">Visible to the whole league</span></div>
+    <div class="talk">
+      <div class="msg">
+        <i class="from" style="background:#2E6F4E"></i>
+        <div><b>Green Room</b><time>6 Sep</time>
+          <p>good match. the mood status is a bit much though.</p></div>
+      </div>
+      <div class="msg">
+        <i class="from" style="background:#7A1F3D"></i>
+        <div><b>Hot Bench</b><time>4 Sep</time>
+          <p>see you friday. bay 4 is our bay now.</p></div>
+      </div>
+      <div class="msg">
+        <i class="from" style="background:#2B3A67"></i>
+        <div><b>Night Shift</b><time>23 Aug</time>
+          <p>still 1–0 vs you. framed the card.</p></div>
+      </div>
+    </div>
+  </section>
 
 </div>
 
+<div class="demo">
+  <span>Team accent:</span>
+  <button style="background:#C2410C" data-c="#C2410C" aria-label="Rust"></button>
+  <button style="background:#7A1F3D" data-c="#7A1F3D" aria-label="Wine"></button>
+  <button style="background:#2B3A67" data-c="#2B3A67" aria-label="Navy"></button>
+  <button style="background:#8A6BBF" data-c="#8A6BBF" aria-label="Violet"></button>
+  <button style="background:#0F766E" data-c="#0F766E" aria-label="Teal"></button>
+  <span style="text-transform:none;letter-spacing:0">— demo only, delete before launch</span>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>X-Golf Friday League</span>
+    <span>15 teams · 3 players · 12 weeks</span>
+  </div>
+</footer>
+
 <script>
-/* Song button — visual state only in this prototype.
-   In production, point this at a hidden YouTube iframe (YT Player API)
-   or a Spotify embed. Autoplay is blocked, so click-to-play is required. */
 document.getElementById('play').addEventListener('click', function(){
   var on = document.getElementById('status').classList.toggle('playing');
   this.textContent = on ? '❚❚' : '▶';
   this.setAttribute('aria-pressed', on);
-  this.setAttribute('aria-label', on ? 'Pause team song' : 'Play team song');
+  this.setAttribute('aria-label', on ? 'Pause walk-up song' : 'Play walk-up song');
 });
-
-/* Kit switcher — demonstrates that theming is six CSS variables. */
-document.querySelectorAll('.kits button').forEach(function(b){
+document.querySelectorAll('.demo button').forEach(function(b){
   b.addEventListener('click', function(){
-    var a = b.dataset.a, s = b.dataset.b;
-    document.documentElement.style.setProperty('--kit-1', a);
-    document.documentElement.style.setProperty('--kit-2', s);
-    /* pick readable text on the primary */
-    var n = parseInt(a.slice(1),16);
-    var lum = (0.299*(n>>16) + 0.587*((n>>8)&255) + 0.114*(n&255));
-    document.documentElement.style.setProperty('--kit-ink', lum > 150 ? '#161A20' : '#FFFFFF');
+    document.documentElement.style.setProperty('--accent', b.dataset.c);
   });
 });
 </script>
