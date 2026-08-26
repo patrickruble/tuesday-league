@@ -9,10 +9,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,100..125,400..800&family=Instrument+Sans:wght@400;500;600&family=Martian+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --green:#007041;        /* X-Golf primary */
+  --green:#007041;
   --green-deep:#00522F;
   --green-line:#B4C9BC;
-  --lime:#B8EB7A;         /* X-Golf lime — live states only */
+  --lime:#B8EB7A;
 
   --field:#DCE1DC;
   --card:#FFFFFF;
@@ -20,7 +20,7 @@
   --dim:#5F6F66;
   --rule:#D2D8D2;
 
-  --accent:#C2410C;       /* per-team */
+  --accent:#C2410C;
 
   --display:'Archivo', 'Helvetica Neue', Arial, sans-serif;
   --body:'Instrument Sans', system-ui, sans-serif;
@@ -125,42 +125,35 @@ section + section{border-top:1px solid var(--green-line)}
 .player .said{margin:16px 0 0;padding-top:13px;border-top:1px solid var(--rule);font-size:13px;font-style:italic;color:var(--dim)}
 
 /* ============================================================
-   SCORECARD — scramble. One team score per hole, net drives
-   the Stableford points. The PTS row is the actual result.
+   SCORECARD — 9 holes. Fits without scrolling, even on phones.
    ============================================================ */
 .cardwrap{overflow-x:auto;border:1px solid var(--rule);background:var(--card)}
-table.sc{border-collapse:collapse;width:100%;min-width:880px;font-family:var(--data);font-size:11px}
+table.sc{border-collapse:collapse;width:100%;min-width:520px;font-family:var(--data);font-size:12px}
 table.sc th,table.sc td{
   border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);
-  padding:8px 0;text-align:center;width:3.5%;
+  padding:10px 0;text-align:center;width:7.3%;
 }
 table.sc .rowlab{
-  width:15%;text-align:left;padding-left:14px;font-family:var(--body);
+  width:22%;text-align:left;padding-left:14px;font-family:var(--body);
   font-size:12px;font-weight:600;white-space:nowrap;
 }
 table.sc thead th{background:var(--green);color:#fff;font-weight:400;border-color:rgba(255,255,255,.2)}
 table.sc thead .rowlab{background:var(--green);color:#fff}
-.sum{background:#EEF1EE;font-weight:600}
-.tot{background:var(--green-deep);color:#fff;font-weight:600;border-color:rgba(255,255,255,.25)}
+.tot{background:var(--green-deep);color:#fff;font-weight:600;border-color:rgba(255,255,255,.25);width:10%}
 tr.faint td,tr.faint .rowlab{color:var(--dim);background:#F7F9F7}
-tr.faint .sum{background:#EEF1EE}
 .stroke{position:relative}
 .stroke::before{
-  content:"";position:absolute;top:3px;right:3px;
-  width:4px;height:4px;border-radius:50%;background:var(--accent);
+  content:"";position:absolute;top:4px;right:5px;
+  width:5px;height:5px;border-radius:50%;background:var(--accent);
 }
 tr.pts td{background:#F2F7EE;font-weight:600}
 tr.pts .rowlab{background:#F2F7EE}
 tr.pts .p2{color:var(--green);background:#E4F2D6}
 tr.pts .p3{color:#fff;background:var(--accent)}
 tr.pts .p0{color:#AAB4AD}
-tr.pts .sum{background:#DDE9D3}
 table.sc tbody tr:last-child td{border-bottom:0}
 
-.legend{
-  display:flex;gap:20px;flex-wrap:wrap;margin-top:14px;
-  font-size:11px;color:var(--dim);align-items:center;
-}
+.legend{display:flex;gap:20px;flex-wrap:wrap;margin-top:14px;font-size:11px;color:var(--dim);align-items:center}
 .legend b{font-family:var(--data);color:var(--ink);font-weight:600}
 .legend .key{display:flex;align-items:center;gap:6px}
 .legend i{width:12px;height:12px;display:inline-block}
@@ -205,6 +198,8 @@ footer .wrap{padding:22px 24px;display:flex;gap:18px;flex-wrap:wrap}
   .numbers div:nth-child(even){border-left:1px solid var(--rule);padding-left:20px}
   .roster{grid-template-columns:1fr}
   section{padding:32px 0}
+  table.sc{font-size:11px;min-width:460px}
+  table.sc .rowlab{width:26%;padding-left:10px;font-size:11px}
 }
 </style>
 </head>
@@ -212,7 +207,7 @@ footer .wrap{padding:22px 24px;display:flex;gap:18px;flex-wrap:wrap}
 
 <header class="masthead">
   <div class="wrap">
-    <div class="mark">X-Golf <em>·</em> Friday League</div>
+    <div class="mark">X-Golf <em>·</em> Tuesday League</div>
     <nav>
       <a href="#">Leaderboard</a>
       <a href="#">Schedule</a>
@@ -228,10 +223,10 @@ footer .wrap{padding:22px 24px;display:flex;gap:18px;flex-wrap:wrap}
     <div>
       <div class="pos">3rd of 15 · Division B</div>
       <h1>Static Cling</h1>
-      <div class="meta">Bay 4 · Fridays 7:30 · Team handicap 8</div>
+      <div class="meta">Bay 4 · Tuesdays 7:30 · Team handicap 4</div>
     </div>
     <div class="tally">
-      <b>271</b>
+      <b>138</b>
       <span>SEASON POINTS · 7–3</span>
     </div>
   </div>
@@ -258,11 +253,11 @@ footer .wrap{padding:22px 24px;display:flex;gap:18px;flex-wrap:wrap}
 
 <div class="numbers">
   <div class="wrap">
-    <div><b>27.1</b><span>Points per round</span></div>
-    <div><b>30</b><span>Best round</span></div>
-    <div><b>8</b><span>Team handicap</span></div>
-    <div><b>47</b><span>Net birdies</span></div>
-    <div><b>9</b><span>Net eagles</span></div>
+    <div><b>13.8</b><span>Points per round</span></div>
+    <div><b>16</b><span>Best round</span></div>
+    <div><b>4</b><span>Team handicap</span></div>
+    <div><b>24</b><span>Net birdies</span></div>
+    <div><b>5</b><span>Net eagles</span></div>
   </div>
 </div>
 
@@ -282,7 +277,7 @@ footer .wrap{padding:22px 24px;display:flex;gap:18px;flex-wrap:wrap}
   <section>
     <div class="head">
       <h2>Roster</h2>
-      <span class="note">Minimum 4 drives per player per round</span>
+      <span class="note">Minimum 2 drives per player per round</span>
     </div>
     <div class="roster">
       <article class="player">
@@ -290,7 +285,7 @@ footer .wrap{padding:22px 24px;display:flex;gap:18px;flex-wrap:wrap}
         <h3>Rita Okonkwo</h3>
         <div class="hcp">HCP INDEX 6.4</div>
         <dl>
-          <dt>Drives used</dt><dd>8 / 18</dd>
+          <dt>Drives used</dt><dd>4 / 9</dd>
           <dt>Putts holed</dt><dd>31%</dd>
           <dt>Approaches used</dt><dd>44%</dd>
         </dl>
@@ -301,7 +296,7 @@ footer .wrap{padding:22px 24px;display:flex;gap:18px;flex-wrap:wrap}
         <h3>Dev Varma</h3>
         <div class="hcp">HCP INDEX 11.8</div>
         <dl>
-          <dt>Drives used</dt><dd>6 / 18</dd>
+          <dt>Drives used</dt><dd>3 / 9</dd>
           <dt>Putts holed</dt><dd>38%</dd>
           <dt>Approaches used</dt><dd>29%</dd>
         </dl>
@@ -312,7 +307,7 @@ footer .wrap{padding:22px 24px;display:flex;gap:18px;flex-wrap:wrap}
         <h3>Marta Bell</h3>
         <div class="hcp">HCP INDEX 14.1</div>
         <dl>
-          <dt>Drives used</dt><dd>4 / 18</dd>
+          <dt>Drives used</dt><dd>2 / 9</dd>
           <dt>Putts holed</dt><dd>31%</dd>
           <dt>Approaches used</dt><dd>27%</dd>
         </dl>
@@ -324,7 +319,7 @@ footer .wrap{padding:22px 24px;display:flex;gap:18px;flex-wrap:wrap}
   <section>
     <div class="head">
       <h2>Last Card</h2>
-      <span class="note">Wk 10 · Torrey Pines South · 3-man scramble · HCP 8</span>
+      <span class="note">Wk 10 · Torrey Pines South (front 9) · scramble · HCP 4</span>
     </div>
     <div class="cardwrap">
       <table class="sc">
@@ -332,9 +327,6 @@ footer .wrap{padding:22px 24px;display:flex;gap:18px;flex-wrap:wrap}
           <tr>
             <th class="rowlab">Hole</th>
             <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th>
-            <th class="sum">OUT</th>
-            <th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th>
-            <th class="sum">IN</th>
             <th class="tot">TOT</th>
           </tr>
         </thead>
@@ -342,42 +334,27 @@ footer .wrap{padding:22px 24px;display:flex;gap:18px;flex-wrap:wrap}
           <tr class="faint">
             <td class="rowlab">Par</td>
             <td>4</td><td>4</td><td>3</td><td>5</td><td>4</td><td>4</td><td>3</td><td>4</td><td>5</td>
-            <td class="sum">36</td>
-            <td>4</td><td>3</td><td>4</td><td>5</td><td>4</td><td>4</td><td>3</td><td>4</td><td>5</td>
-            <td class="sum">36</td>
-            <td class="tot">72</td>
+            <td class="tot">36</td>
           </tr>
           <tr class="faint">
             <td class="rowlab">Stroke index</td>
-            <td>7</td><td>3</td><td>15</td><td>1</td><td>11</td><td>5</td><td>17</td><td>9</td><td>13</td>
-            <td class="sum">—</td>
-            <td>8</td><td>16</td><td>4</td><td>2</td><td>12</td><td>6</td><td>18</td><td>10</td><td>14</td>
-            <td class="sum">—</td>
+            <td>4</td><td>2</td><td>8</td><td>1</td><td>6</td><td>3</td><td>9</td><td>5</td><td>7</td>
             <td class="tot">—</td>
           </tr>
           <tr>
             <td class="rowlab">Gross</td>
             <td class="stroke">4</td><td class="stroke">3</td><td>3</td><td class="stroke">4</td><td>5</td><td class="stroke">4</td><td>2</td><td>4</td><td>4</td>
-            <td class="sum">33</td>
-            <td class="stroke">4</td><td>4</td><td class="stroke">4</td><td class="stroke">4</td><td>5</td><td class="stroke">3</td><td>4</td><td>4</td><td>4</td>
-            <td class="sum">36</td>
-            <td class="tot">69</td>
+            <td class="tot">33</td>
           </tr>
           <tr>
             <td class="rowlab">Net</td>
             <td>3</td><td>2</td><td>3</td><td>3</td><td>5</td><td>3</td><td>2</td><td>4</td><td>4</td>
-            <td class="sum">29</td>
-            <td>3</td><td>4</td><td>3</td><td>3</td><td>5</td><td>2</td><td>4</td><td>4</td><td>4</td>
-            <td class="sum">32</td>
-            <td class="tot">61</td>
+            <td class="tot">29</td>
           </tr>
           <tr class="pts">
             <td class="rowlab">Points</td>
-            <td class="p2">2</td><td class="p3">3</td><td>1</td><td class="p3">3</td><td class="p0">0</td><td class="p2">2</td><td class="p2">2</td><td>1</td><td class="p3">3</td>
-            <td class="sum">17</td>
-            <td class="p2">2</td><td class="p0">0</td><td class="p2">2</td><td class="p3">3</td><td class="p0">0</td><td class="p3">3</td><td class="p0">0</td><td>1</td><td class="p2">2</td>
-            <td class="sum">13</td>
-            <td class="tot">30</td>
+            <td class="p2">2</td><td class="p3">3</td><td>1</td><td class="p3">3</td><td class="p0">0</td><td class="p2">2</td><td class="p2">2</td><td>1</td><td class="p2">2</td>
+            <td class="tot">16</td>
           </tr>
         </tbody>
       </table>
@@ -400,34 +377,34 @@ footer .wrap{padding:22px 24px;display:flex;gap:18px;flex-wrap:wrap}
     <div class="head"><h2>Schedule</h2></div>
     <table class="fix">
       <tr>
-        <td class="when">FRI 12 SEP</td>
+        <td class="when">TUE 01 SEP</td>
         <td><div class="vs"><span class="badge up">NEXT</span><i class="chip" style="background:#7A1F3D"></i>
-          <span>Hot Bench<br><span class="course">Pebble Beach</span></span></div></td>
+          <span>Hot Bench<br><span class="course">Pebble Beach · front 9</span></span></div></td>
         <td class="score">19:30</td>
       </tr>
       <tr>
-        <td class="when">FRI 05 SEP</td>
+        <td class="when">TUE 25 AUG</td>
         <td><div class="vs"><span class="badge w">WON</span><i class="chip" style="background:#2E6F4E"></i>
-          <span>Green Room<br><span class="course">Torrey Pines South</span></span></div></td>
-        <td class="score">30–24</td>
+          <span>Green Room<br><span class="course">Torrey Pines South · front 9</span></span></div></td>
+        <td class="score">16–12</td>
       </tr>
       <tr>
-        <td class="when">FRI 29 AUG</td>
+        <td class="when">TUE 18 AUG</td>
         <td><div class="vs"><span class="badge w">WON</span><i class="chip" style="background:#C25A00"></i>
-          <span>Orange Julius<br><span class="course">Bay Hill</span></span></div></td>
-        <td class="score">27–25</td>
+          <span>Orange Julius<br><span class="course">Bay Hill · back 9</span></span></div></td>
+        <td class="score">15–13</td>
       </tr>
       <tr>
-        <td class="when">FRI 22 AUG</td>
+        <td class="when">TUE 11 AUG</td>
         <td><div class="vs"><span class="badge l">LOST</span><i class="chip" style="background:#2B3A67"></i>
-          <span>Night Shift<br><span class="course">Kiawah Ocean</span></span></div></td>
-        <td class="score">22–29</td>
+          <span>Night Shift<br><span class="course">Kiawah Ocean · front 9</span></span></div></td>
+        <td class="score">11–17</td>
       </tr>
       <tr>
-        <td class="when">FRI 15 AUG</td>
+        <td class="when">TUE 04 AUG</td>
         <td><div class="vs"><span class="badge w">WON</span><i class="chip" style="background:#8A6BBF"></i>
-          <span>Lavender Menace<br><span class="course">Whistling Straits</span></span></div></td>
-        <td class="score">28–26</td>
+          <span>Lavender Menace<br><span class="course">Whistling Straits · front 9</span></span></div></td>
+        <td class="score">14–13</td>
       </tr>
     </table>
   </section>
@@ -437,17 +414,17 @@ footer .wrap{padding:22px 24px;display:flex;gap:18px;flex-wrap:wrap}
     <div class="talk">
       <div class="msg">
         <i class="from" style="background:#2E6F4E"></i>
-        <div><b>Green Room</b><time>6 Sep</time>
-          <p>six points off a handicap we did not agree to. congrats i guess.</p></div>
+        <div><b>Green Room</b><time>26 Aug</time>
+          <p>four points off a handicap we did not agree to. congrats i guess.</p></div>
       </div>
       <div class="msg">
         <i class="from" style="background:#7A1F3D"></i>
-        <div><b>Hot Bench</b><time>4 Sep</time>
-          <p>see you friday. bay 4 is our bay now.</p></div>
+        <div><b>Hot Bench</b><time>24 Aug</time>
+          <p>see you tuesday. bay 4 is our bay now.</p></div>
       </div>
       <div class="msg">
         <i class="from" style="background:#2B3A67"></i>
-        <div><b>Night Shift</b><time>23 Aug</time>
+        <div><b>Night Shift</b><time>12 Aug</time>
           <p>still 1–0 vs you. framed the card.</p></div>
       </div>
     </div>
@@ -467,8 +444,8 @@ footer .wrap{padding:22px 24px;display:flex;gap:18px;flex-wrap:wrap}
 
 <footer>
   <div class="wrap">
-    <span>X-Golf Friday League</span>
-    <span>15 teams · 3-man scramble · Stableford</span>
+    <span>X-Golf Tuesday League</span>
+    <span>15 teams · 9-hole scramble · Stableford</span>
   </div>
 </footer>
 
