@@ -1,0 +1,43 @@
+{
+  "slug": "static-cling",
+  "name": "Static Cling",
+  "monogram": "SC",
+  "founded": "2024-03",
+  "division": "B",
+  "captain": "R. Okonkwo",
+  "home": "Court 2, Fridays",
+
+  "kit": {
+    "primary": "#173F5F",
+    "secondary": "#F6AE2D"
+  },
+
+  "about": [
+    "Formed when three people who had all been cut from other teams discovered they were, collectively, slightly better than any of those teams.",
+    "Will not be taking questions about week 6."
+  ],
+
+  "mood": {
+    "text": "quietly furious about week 6 and not letting it go",
+    "updated": "2026-09-08T18:40:00Z"
+  },
+
+  "song": {
+    "title": "Cannonball",
+    "artist": "The Breeders",
+    "provider": "youtube",
+    "id": "0P8pyZmxU9k"
+  },
+
+  "roster": [
+    { "name": "Rita Okonkwo", "initials": "RO", "role": "Captain",  "quote": "I called it in preseason." },
+    { "name": "Dev Varma",    "initials": "DV", "role": "Anchor",   "quote": "No comment." },
+    { "name": "Marta Bell",   "initials": "MB", "role": "Rotation", "quote": "Peaking at the right time." }
+  ],
+
+  "_comment": "Fixtures live in a separate schedule file keyed by team slug, so the owner's schedule is the single source of truth and team files never go stale.",
+
+  "guestbook": [
+    { "from": "green-room", "at": "2026-09-06", "text": "good game. the mood status is a bit much though." }
+  ]
+}

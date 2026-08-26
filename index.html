@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Static Cling — League Profile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   THEME TOKENS
+   Everything team-specific lives here. Swapping these six
+   values is the entire per-team theming system.
+   ============================================================ */
+:root{
+  --kit-1:#173F5F;      /* team primary   */
+  --kit-2:#F6AE2D;      /* team secondary */
+  --kit-ink:#FFFFFF;    /* text on kit-1  */
+
+  --void:#2A2F3A;       /* page chrome, cool steel */
+  --panel:#EDEEF0;      /* profile paper, blue-tinted */
+  --ink:#161A20;
+  --dim:#68707C;
+  --rule:#B9BEC7;
+
+  --display:'Archivo Black', 'Haettenschweiler', 'Arial Black', sans-serif;
+  --chrome:Verdana, Geneva, Tahoma, sans-serif;   /* period-correct */
+  --data:'Space Mono', 'Courier New', monospace;
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--void);
+  background-image:
+    repeating-linear-gradient(135deg,
+      rgba(255,255,255,.022) 0 2px, transparent 2px 9px);
+  color:var(--ink);
+  font-family:var(--chrome);
+  font-size:12px;
+  line-height:1.55;
+}
+a{color:var(--kit-1);text-decoration:none;border-bottom:1px solid currentColor}
+a:hover{background:var(--kit-2);color:var(--ink);border-color:var(--ink)}
+:focus-visible{outline:3px solid var(--kit-2);outline-offset:2px}
+
+/* ============================================================
+   LEAGUE CHROME
+   ============================================================ */
+.bar{
+  background:var(--void);
+  border-bottom:1px solid rgba(255,255,255,.14);
+  padding:9px 16px;
+  display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+}
+.wordmark{
+  font-family:var(--display);
+  font-size:15px;letter-spacing:.06em;text-transform:uppercase;
+  color:#fff;
+}
+.wordmark span{color:var(--kit-2)}
+.bar nav{display:flex;gap:14px;margin-left:auto;flex-wrap:wrap}
+.bar nav a{
+  color:#AEB6C2;border:0;font-size:11px;
+  text-transform:uppercase;letter-spacing:.09em;
+}
+.bar nav a:hover{background:none;color:var(--kit-2)}
+
+.shell{max-width:940px;margin:0 auto;padding:22px 16px 60px}
+
+/* ============================================================
+   HERO — the kit block
+   ============================================================ */
+.hero{
+  background:var(--kit-1);
+  color:var(--kit-ink);
+  display:grid;
+  grid-template-columns:104px 1fr auto;
+  gap:18px;align-items:center;
+  padding:18px;
+  border:1px solid rgba(0,0,0,.4);
+  position:relative;overflow:hidden;
+}
+.hero::after{ /* kit stripe */
+  content:"";position:absolute;inset:0 0 0 auto;width:26px;
+  background:repeating-linear-gradient(180deg,
+    var(--kit-2) 0 10px, transparent 10px 20px);
+  opacity:.9;
+}
+.crest{
+  width:104px;height:104px;
+  background:var(--kit-2);
+  color:var(--kit-1);
+  font-family:var(--display);font-size:38px;
+  display:grid;place-items:center;
+  border:3px solid var(--kit-ink);
+  letter-spacing:-.02em;
+}
+.hero h1{
+  font-family:var(--display);
+  font-size:clamp(30px,6.4vw,52px);
+  line-height:.92;margin:0 0 6px;
+  text-transform:uppercase;letter-spacing:-.015em;
+}
+.hero .sub{
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  opacity:.78;
+}
+.record{
+  text-align:right;padding-right:34px;font-family:var(--data);
+}
+.record b{display:block;font-size:30px;line-height:1;font-weight:700}
+.record span{font-size:10px;letter-spacing:.1em;opacity:.72}
+
+/* ============================================================
+   STATUS STRIP — the signature element.
+   MySpace's real soul was the away message, not the glitter.
+   ============================================================ */
+.status{
+  display:grid;grid-template-columns:1fr auto;
+  gap:14px;align-items:center;
+  background:var(--panel);
+  border:1px solid rgba(0,0,0,.4);border-top:0;
+  padding:11px 14px;
+}
+.mood{display:flex;align-items:baseline;gap:9px;min-width:0}
+.mood .tag{
+  background:var(--kit-1);color:var(--kit-ink);
+  font-size:9px;letter-spacing:.13em;text-transform:uppercase;
+  padding:3px 7px;flex:none;
+}
+.mood q{font-size:13px;font-style:italic;quotes:'"' '"'}
+.mood .when{color:var(--dim);font-size:10px;flex:none}
+
+/* song player */
+.song{display:flex;align-items:center;gap:9px;flex:none}
+.play{
+  width:30px;height:30px;flex:none;cursor:pointer;
+  background:var(--kit-1);color:var(--kit-ink);
+  border:0;display:grid;place-items:center;font-size:11px;
+}
+.play:hover{background:var(--kit-2);color:var(--ink)}
+.song-meta{font-size:10px;line-height:1.35;max-width:190px}
+.song-meta b{display:block;font-size:11px}
+.song-meta span{color:var(--dim)}
+.eq{display:flex;gap:2px;align-items:flex-end;height:13px;flex:none}
+.eq i{width:3px;background:var(--kit-1);height:3px}
+.playing .eq i{animation:bounce .62s ease-in-out infinite}
+.playing .eq i:nth-child(2){animation-delay:.11s}
+.playing .eq i:nth-child(3){animation-delay:.22s}
+.playing .eq i:nth-child(4){animation-delay:.33s}
+@keyframes bounce{50%{height:13px}}
+@media (prefers-reduced-motion:reduce){.eq i{animation:none!important;height:8px}}
+
+/* ============================================================
+   TWO-COLUMN PROFILE — MySpace skeleton, built properly
+   ============================================================ */
+.cols{display:grid;grid-template-columns:236px 1fr;gap:14px;margin-top:14px}
+
+.block{background:var(--panel);border:1px solid rgba(0,0,0,.4)}
+.block > h2{
+  margin:0;padding:6px 11px;
+  background:var(--kit-1);color:var(--kit-ink);
+  font-family:var(--chrome);font-size:10px;font-weight:bold;
+  letter-spacing:.13em;text-transform:uppercase;
+}
+.block .body{padding:11px}
+.block + .block{margin-top:14px}
+
+/* details table */
+.facts{width:100%;border-collapse:collapse;font-size:11px}
+.facts th{
+  text-align:left;color:var(--dim);font-weight:normal;
+  padding:4px 0;width:42%;vertical-align:top;
+}
+.facts td{padding:4px 0;border-bottom:1px dotted var(--rule)}
+.facts tr:last-child td{border-bottom:0}
+.swatches{display:flex;gap:4px}
+.swatches i{width:15px;height:15px;border:1px solid rgba(0,0,0,.45)}
+
+/* about */
+.about p{margin:0 0 9px;font-size:12px}
+.about p:last-child{margin:0}
+
+/* ============================================================
+   TOP 3 — the roster. Fixed at three, so it can be a real
+   composition instead of a responsive grid that flexes.
+   ============================================================ */
+.top3{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}
+.mate{border:1px solid var(--rule);background:#fff}
+.mate .face{
+  aspect-ratio:1;display:grid;place-items:center;
+  background:var(--kit-1);color:var(--kit-2);
+  font-family:var(--display);font-size:30px;
+}
+.mate:nth-child(2) .face{background:var(--kit-2);color:var(--kit-1)}
+.mate .who{padding:7px 8px}
+.mate .who b{display:block;font-size:12px;line-height:1.25}
+.mate .who span{color:var(--dim);font-size:10px}
+.mate .who em{
+  display:block;margin-top:5px;font-size:10px;
+  border-top:1px dotted var(--rule);padding-top:5px;
+}
+
+/* ============================================================
+   SEASON
+   ============================================================ */
+.fixtures{width:100%;border-collapse:collapse;font-size:11px}
+.fixtures td{padding:6px 5px;border-bottom:1px dotted var(--rule)}
+.fixtures tr:last-child td{border-bottom:0}
+.fixtures .dt{color:var(--dim);font-family:var(--data);font-size:10px;white-space:nowrap;width:1%}
+.fixtures .sc{font-family:var(--data);text-align:right;white-space:nowrap;width:1%}
+.opp{display:flex;align-items:center;gap:7px}
+.chip{width:13px;height:13px;flex:none;border:1px solid rgba(0,0,0,.4)}
+.res{
+  font-family:var(--data);font-weight:700;font-size:10px;
+  width:17px;height:17px;display:grid;place-items:center;flex:none;
+}
+.res.w{background:var(--kit-1);color:var(--kit-ink)}
+.res.l{background:transparent;color:var(--dim);border:1px solid var(--rule)}
+.res.next{background:var(--kit-2);color:var(--ink)}
+
+/* ============================================================
+   GUESTBOOK
+   ============================================================ */
+.post{display:grid;grid-template-columns:34px 1fr;gap:9px;padding:9px 0;border-bottom:1px dotted var(--rule)}
+.post:first-child{padding-top:0}
+.post:last-child{border-bottom:0;padding-bottom:0}
+.post .av{width:34px;height:34px;display:grid;place-items:center;font-family:var(--display);font-size:13px;color:#fff}
+.post .txt b{font-size:11px}
+.post .txt .stamp{color:var(--dim);font-size:10px;margin-left:5px}
+.post .txt p{margin:2px 0 0;font-size:11px}
+
+/* ============================================================
+   DEMO-ONLY: kit switcher. Delete in production.
+   ============================================================ */
+.kits{
+  margin-top:26px;padding:11px 13px;
+  border:1px dashed rgba(255,255,255,.28);
+  display:flex;gap:11px;align-items:center;flex-wrap:wrap;
+  color:#98A1AE;font-size:10px;letter-spacing:.07em;text-transform:uppercase;
+}
+.kits button{
+  cursor:pointer;border:1px solid rgba(255,255,255,.3);background:none;
+  padding:0;width:42px;height:22px;display:flex;
+}
+.kits button i{flex:1}
+.kits button:hover{border-color:#fff}
+
+@media (max-width:720px){
+  .cols{grid-template-columns:1fr}
+  .hero{grid-template-columns:66px 1fr;padding:14px}
+  .crest{width:66px;height:66px;font-size:25px;border-width:2px}
+  .hero::after{width:12px}
+  .record{grid-column:1/-1;text-align:left;padding-right:0;
+          border-top:1px solid rgba(255,255,255,.22);padding-top:9px}
+  .record b{display:inline;font-size:20px}
+  .record span{margin-left:7px}
+  .status{grid-template-columns:1fr}
+  .song{border-top:1px dotted var(--rule);padding-top:9px}
+  .top3{grid-template-columns:1fr;gap:8px}
+  .mate{display:grid;grid-template-columns:62px 1fr}
+  .mate .face{font-size:22px}
+}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="wordmark">Sunday <span>/</span> League</div>
+  <nav>
+    <a href="#">Standings</a>
+    <a href="#">Fixtures</a>
+    <a href="#">Teams</a>
+    <a href="#">Rules</a>
+  </nav>
+</header>
+
+<div class="shell">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="crest">SC</div>
+    <div>
+      <h1>Static&nbsp;Cling</h1>
+      <div class="sub">Est. 2024 &nbsp;·&nbsp; Division B &nbsp;·&nbsp; 3rd of 15</div>
+    </div>
+    <div class="record">
+      <b>7–3</b>
+      <span>W–L · STREAK W2</span>
+    </div>
+  </div>
+
+  <!-- STATUS STRIP -->
+  <div class="status" id="status">
+    <div class="mood">
+      <span class="tag">Mood</span>
+      <q>quietly furious about week 6 and not letting it go</q>
+      <span class="when">2h ago</span>
+    </div>
+    <div class="song">
+      <button class="play" id="play" aria-pressed="false" aria-label="Play team song">▶</button>
+      <div class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      <div class="song-meta">
+        <b>Cannonball</b>
+        <span>The Breeders</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="cols">
+
+    <!-- LEFT RAIL -->
+    <div>
+      <section class="block">
+        <h2>Team Details</h2>
+        <div class="body">
+          <table class="facts">
+            <tr><th>Captain</th><td>R. Okonkwo</td></tr>
+            <tr><th>Founded</th><td>Mar 2024</td></tr>
+            <tr><th>Home</th><td>Court 2, Fridays</td></tr>
+            <tr><th>Kit</th><td><div class="swatches"><i style="background:var(--kit-1)"></i><i style="background:var(--kit-2)"></i></div></td></tr>
+            <tr><th>Points for</th><td>412</td></tr>
+            <tr><th>Points against</th><td>377</td></tr>
+            <tr><th>Longest streak</th><td>4</td></tr>
+          </table>
+        </div>
+      </section>
+
+      <section class="block">
+        <h2>Last 10</h2>
+        <div class="body">
+          <div style="display:flex;gap:3px;flex-wrap:wrap">
+            <span class="res w">W</span><span class="res l">L</span>
+            <span class="res w">W</span><span class="res w">W</span>
+            <span class="res l">L</span><span class="res w">W</span>
+            <span class="res w">W</span><span class="res l">L</span>
+            <span class="res w">W</span><span class="res w">W</span>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div>
+      <section class="block about">
+        <h2>About Static Cling</h2>
+        <div class="body">
+          <p>Formed when three people who had all been cut from other teams
+             discovered they were, collectively, slightly better than any of
+             those teams. Play a slow, irritating, extremely effective game.</p>
+          <p>Will not be taking questions about week 6.</p>
+        </div>
+      </section>
+
+      <section class="block">
+        <h2>Top 3</h2>
+        <div class="body">
+          <div class="top3">
+            <article class="mate">
+              <div class="face">RO</div>
+              <div class="who">
+                <b>Rita Okonkwo</b>
+                <span>Captain</span>
+                <em>“I called it in preseason.”</em>
+              </div>
+            </article>
+            <article class="mate">
+              <div class="face">DV</div>
+              <div class="who">
+                <b>Dev Varma</b>
+                <span>Anchor</span>
+                <em>“No comment.”</em>
+              </div>
+            </article>
+            <article class="mate">
+              <div class="face">MB</div>
+              <div class="who">
+                <b>Marta Bell</b>
+                <span>Rotation</span>
+                <em>“Peaking at the right time.”</em>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="block">
+        <h2>Season</h2>
+        <div class="body">
+          <table class="fixtures">
+            <tr>
+              <td class="dt">FRI 12 SEP</td>
+              <td><div class="opp"><span class="res next">·</span><i class="chip" style="background:#7A1F3D"></i> Hot Bench</div></td>
+              <td class="sc">19:30</td>
+            </tr>
+            <tr>
+              <td class="dt">FRI 05 SEP</td>
+              <td><div class="opp"><span class="res w">W</span><i class="chip" style="background:#2E6F4E"></i> Green Room</div></td>
+              <td class="sc">44–38</td>
+            </tr>
+            <tr>
+              <td class="dt">FRI 29 AUG</td>
+              <td><div class="opp"><span class="res w">W</span><i class="chip" style="background:#C25A00"></i> Orange Julius</div></td>
+              <td class="sc">51–40</td>
+            </tr>
+            <tr>
+              <td class="dt">FRI 22 AUG</td>
+              <td><div class="opp"><span class="res l">L</span><i class="chip" style="background:#2B3A67"></i> Night Shift</div></td>
+              <td class="sc">33–47</td>
+            </tr>
+            <tr>
+              <td class="dt">FRI 15 AUG</td>
+              <td><div class="opp"><span class="res w">W</span><i class="chip" style="background:#8A6BBF"></i> Lavender Menace</div></td>
+              <td class="sc">40–36</td>
+            </tr>
+          </table>
+        </div>
+      </section>
+
+      <section class="block">
+        <h2>Guestbook</h2>
+        <div class="body">
+          <div class="post">
+            <div class="av" style="background:#2E6F4E">GR</div>
+            <div class="txt">
+              <b>Green Room</b><span class="stamp">6 Sep</span>
+              <p>good game. the mood status is a bit much though.</p>
+            </div>
+          </div>
+          <div class="post">
+            <div class="av" style="background:#7A1F3D">HB</div>
+            <div class="txt">
+              <b>Hot Bench</b><span class="stamp">4 Sep</span>
+              <p>see you friday. bringing the whole bench.</p>
+            </div>
+          </div>
+          <div class="post">
+            <div class="av" style="background:#2B3A67">NS</div>
+            <div class="txt">
+              <b>Night Shift</b><span class="stamp">23 Aug</span>
+              <p>still 1–0 vs you. framing the scoresheet.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- DEMO ONLY -->
+  <div class="kits">
+    <span>Try another team's kit:</span>
+    <button data-a="#173F5F" data-b="#F6AE2D" aria-label="Static Cling kit"><i style="background:#173F5F"></i><i style="background:#F6AE2D"></i></button>
+    <button data-a="#7A1F3D" data-b="#F2E8DC" aria-label="Hot Bench kit"><i style="background:#7A1F3D"></i><i style="background:#F2E8DC"></i></button>
+    <button data-a="#2E6F4E" data-b="#D9E64A" aria-label="Green Room kit"><i style="background:#2E6F4E"></i><i style="background:#D9E64A"></i></button>
+    <button data-a="#2B3A67" data-b="#E0533D" aria-label="Night Shift kit"><i style="background:#2B3A67"></i><i style="background:#E0533D"></i></button>
+    <button data-a="#8A6BBF" data-b="#F5D0E0" aria-label="Lavender Menace kit"><i style="background:#8A6BBF"></i><i style="background:#F5D0E0"></i></button>
+  </div>
+
+</div>
+
+<script>
+/* Song button — visual state only in this prototype.
+   In production, point this at a hidden YouTube iframe (YT Player API)
+   or a Spotify embed. Autoplay is blocked, so click-to-play is required. */
+document.getElementById('play').addEventListener('click', function(){
+  var on = document.getElementById('status').classList.toggle('playing');
+  this.textContent = on ? '❚❚' : '▶';
+  this.setAttribute('aria-pressed', on);
+  this.setAttribute('aria-label', on ? 'Pause team song' : 'Play team song');
+});
+
+/* Kit switcher — demonstrates that theming is six CSS variables. */
+document.querySelectorAll('.kits button').forEach(function(b){
+  b.addEventListener('click', function(){
+    var a = b.dataset.a, s = b.dataset.b;
+    document.documentElement.style.setProperty('--kit-1', a);
+    document.documentElement.style.setProperty('--kit-2', s);
+    /* pick readable text on the primary */
+    var n = parseInt(a.slice(1),16);
+    var lum = (0.299*(n>>16) + 0.587*((n>>8)&255) + 0.114*(n&255));
+    document.documentElement.style.setProperty('--kit-ink', lum > 150 ? '#161A20' : '#FFFFFF');
+  });
+});
+</script>
+</body>
+</html>
