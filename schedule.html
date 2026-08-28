@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Schedule — X-Golf Tuesday League</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,100..125,400..800&family=Instrument+Sans:wght@400;500;600&family=Martian+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#007041;--green-deep:#00522F;--green-line:#B4C9BC;--lime:#B8EB7A;
+  --field:#DCE1DC;--card:#FFFFFF;--ink:#10221A;--dim:#5F6F66;--rule:#D2D8D2;
+  --display:'Archivo','Helvetica Neue',Arial,sans-serif;
+  --body:'Instrument Sans',system-ui,sans-serif;
+  --data:'Martian Mono','Courier New',monospace;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--field);color:var(--ink);font-family:var(--body);
+  font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2{margin:0;font-family:var(--display);font-weight:800;line-height:1}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 24px}
+
+.masthead{background:var(--green);color:#fff}
+.masthead .wrap{display:flex;align-items:center;gap:26px;padding-top:14px;padding-bottom:14px;flex-wrap:wrap}
+.mark{font-family:var(--display);font-weight:800;font-variation-settings:'wdth' 118;
+  font-size:15px;letter-spacing:.1em;text-transform:uppercase;color:#fff;text-decoration:none}
+.mark em{font-style:normal;color:var(--lime)}
+.masthead nav{display:flex;gap:22px;margin-left:auto;flex-wrap:wrap}
+.masthead nav a{color:rgba(255,255,255,.76);text-decoration:none;font-size:12px;
+  letter-spacing:.08em;text-transform:uppercase;font-weight:500}
+.masthead nav a:hover,.masthead nav a[aria-current]{color:var(--lime)}
+
+.title{background:var(--green);color:#fff;padding-bottom:30px}
+.title .wrap{display:flex;align-items:flex-end;gap:24px;flex-wrap:wrap}
+.title .eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--lime);font-weight:600;margin-bottom:10px}
+.title h1{font-size:clamp(38px,8vw,72px);font-variation-settings:'wdth' 112;
+  letter-spacing:-.025em;text-transform:uppercase}
+.ics{
+  margin-left:auto;background:var(--lime);color:var(--green-deep);
+  text-decoration:none;padding:11px 16px;font-size:12px;font-weight:600;
+  letter-spacing:.05em;text-transform:uppercase;
+}
+.ics:hover{background:#fff}
+
+/* ============================================================
+   WEEKS
+   ============================================================ */
+.week{margin-top:30px}
+.week:last-of-type{margin-bottom:50px}
+.whead{
+  display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;
+  padding-bottom:11px;border-bottom:2px solid var(--ink);
+}
+.whead h2{font-size:15px;letter-spacing:.14em;text-transform:uppercase;
+  font-variation-settings:'wdth' 105}
+.whead .date{font-family:var(--data);font-size:12px;color:var(--dim)}
+.whead .flag{
+  margin-left:auto;font-family:var(--data);font-size:9px;font-weight:600;
+  letter-spacing:.09em;padding:4px 8px;
+}
+.flag.next{background:var(--lime);color:var(--green-deep)}
+.flag.done{background:transparent;color:var(--dim);box-shadow:inset 0 0 0 1px var(--rule)}
+
+.match{
+  background:var(--card);border-bottom:1px solid var(--rule);
+  display:grid;grid-template-columns:56px 1fr 64px 1fr 76px;
+  gap:14px;align-items:center;padding:13px 16px;
+}
+.baytag{
+  font-family:var(--data);text-align:center;background:var(--green);color:#fff;
+  padding:6px 0;line-height:1;
+}
+.baytag b{display:block;font-size:17px;font-weight:600;letter-spacing:-.04em}
+.baytag span{display:block;font-size:7px;letter-spacing:.16em;margin-top:3px;opacity:.7}
+.team{display:flex;align-items:center;gap:10px;min-width:0;text-decoration:none;color:inherit}
+.team.away{justify-content:flex-end;text-align:right}
+.team i{width:8px;height:26px;flex:none;display:block}
+.team b{font-size:15px;font-weight:600;line-height:1.2}
+.team:hover b{text-decoration:underline;text-underline-offset:3px}
+.mid{text-align:center;font-family:var(--data);font-size:11px;color:var(--dim);line-height:1.4}
+.mid .sc{font-size:15px;font-weight:600;color:var(--ink)}
+.course{
+  text-align:right;font-size:11px;color:var(--dim);line-height:1.35;
+}
+.course b{display:block;color:var(--ink);font-weight:500;font-size:12px}
+
+.bye{
+  background:#EFF2EF;border-bottom:1px solid var(--rule);
+  padding:11px 16px;font-size:12px;color:var(--dim);
+  display:flex;align-items:center;gap:10px;
+}
+.bye i{width:8px;height:20px;flex:none;display:block}
+
+footer{background:var(--green);color:rgba(255,255,255,.55);font-size:12px}
+footer .wrap{padding:22px 24px;display:flex;gap:18px;flex-wrap:wrap}
+
+@media (max-width:760px){
+  .match{grid-template-columns:44px 1fr 56px 1fr;padding:11px 12px;gap:10px}
+  .course{display:none}
+  .team b{font-size:13px}
+  .team i{height:22px;width:6px}
+  .title .ics{margin-left:0}
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <a class="mark" href="index.html">X-Golf <em>·</em> Tuesday League</a>
+    <nav>
+      <a href="index.html">Leaderboard</a>
+      <a href="schedule.html" aria-current="page">Schedule</a>
+      <a href="teams.html">Teams</a>
+      <a href="records.html">Records</a>
+    </nav>
+  </div>
+</header>
+
+<div class="title">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">Season 3 · 12 weeks · 7 bays</div>
+      <h1>Schedule</h1>
+    </div>
+    <a class="ics" href="league.ics">Add to calendar</a>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ===================== NEXT ===================== -->
+  <section class="week">
+    <div class="whead">
+      <h2>Week 11</h2>
+      <span class="date">TUE 01 SEP · 7:30 PM</span>
+      <span class="flag next">NEXT UP</span>
+    </div>
+
+    <div class="match">
+      <div class="baytag"><b>1</b><span>BAY</span></div>
+      <a class="team" href="teams/bogey-nights.html"><i style="background:#A16207"></i><b>Bogey Nights</b></a>
+      <div class="mid">vs</div>
+      <a class="team away" href="teams/the-chunkers.html"><b>The Chunkers</b><i style="background:#57534E"></i></a>
+      <div class="course"><b>Pebble Beach</b>Front 9</div>
+    </div>
+
+    <div class="match">
+      <div class="baytag"><b>2</b><span>BAY</span></div>
+      <a class="team" href="teams/the-sandbaggers.html"><i style="background:#3F3F46"></i><b>The Sandbaggers</b></a>
+      <div class="mid">vs</div>
+      <a class="team away" href="teams/orange-julius.html"><b>Orange Julius</b><i style="background:#B45309"></i></a>
+      <div class="course"><b>Pebble Beach</b>Front 9</div>
+    </div>
+
+    <div class="match">
+      <div class="baytag"><b>3</b><span>BAY</span></div>
+      <a class="team" href="teams/static-cling.html"><i style="background:#C2410C"></i><b>Static Cling</b></a>
+      <div class="mid">vs</div>
+      <a class="team away" href="teams/hot-bench.html"><b>Hot Bench</b><i style="background:#7A1F3D"></i></a>
+      <div class="course"><b>Pebble Beach</b>Front 9</div>
+    </div>
+
+    <div class="match">
+      <div class="baytag"><b>4</b><span>BAY</span></div>
+      <a class="team" href="teams/night-shift.html"><i style="background:#2B3A67"></i><b>Night Shift</b></a>
+      <div class="mid">vs</div>
+      <a class="team away" href="teams/mulligan-stew.html"><b>Mulligan Stew</b><i style="background:#7C2D12"></i></a>
+      <div class="course"><b>Pebble Beach</b>Front 9</div>
+    </div>
+
+    <div class="match">
+      <div class="baytag"><b>5</b><span>BAY</span></div>
+      <a class="team" href="teams/shank-redemption.html"><i style="background:#6D28D9"></i><b>Shank Redemption</b></a>
+      <div class="mid">vs</div>
+      <a class="team away" href="teams/lavender-menace.html"><b>Lavender Menace</b><i style="background:#86198F"></i></a>
+      <div class="course"><b>Pebble Beach</b>Front 9</div>
+    </div>
+
+    <div class="match">
+      <div class="baytag"><b>6</b><span>BAY</span></div>
+      <a class="team" href="teams/cart-path-only.html"><i style="background:#0E7490"></i><b>Cart Path Only</b></a>
+      <div class="mid">vs</div>
+      <a class="team away" href="teams/fore-play.html"><b>Fore Play</b><i style="background:#DB2777"></i></a>
+      <div class="course"><b>Pebble Beach</b>Front 9</div>
+    </div>
+
+    <div class="match">
+      <div class="baytag"><b>7</b><span>BAY</span></div>
+      <a class="team" href="teams/grip-it-and-sip-it.html"><i style="background:#4D7C0F"></i><b>Grip It &amp; Sip It</b></a>
+      <div class="mid">vs</div>
+      <a class="team away" href="teams/green-room.html"><b>Green Room</b><i style="background:#0F766E"></i></a>
+      <div class="course"><b>Pebble Beach</b>Front 9</div>
+    </div>
+  </section>
+
+  <!-- ===================== PLAYED ===================== -->
+  <section class="week">
+    <div class="whead">
+      <h2>Week 10</h2>
+      <span class="date">TUE 25 AUG</span>
+      <span class="flag done">FINAL</span>
+    </div>
+
+    <div class="match">
+      <div class="baytag"><b>1</b><span>BAY</span></div>
+      <a class="team" href="teams/bogey-nights.html"><i style="background:#A16207"></i><b>Bogey Nights</b></a>
+      <div class="mid"><span class="sc">18–13</span></div>
+      <a class="team away" href="teams/fore-play.html"><b>Fore Play</b><i style="background:#DB2777"></i></a>
+      <div class="course"><b>Torrey Pines S.</b>Front 9</div>
+    </div>
+
+    <div class="match">
+      <div class="baytag"><b>2</b><span>BAY</span></div>
+      <a class="team" href="teams/static-cling.html"><i style="background:#C2410C"></i><b>Static Cling</b></a>
+      <div class="mid"><span class="sc">16–12</span></div>
+      <a class="team away" href="teams/green-room.html"><b>Green Room</b><i style="background:#0F766E"></i></a>
+      <div class="course"><b>Torrey Pines S.</b>Front 9</div>
+    </div>
+
+    <div class="match">
+      <div class="baytag"><b>3</b><span>BAY</span></div>
+      <a class="team" href="teams/the-sandbaggers.html"><i style="background:#3F3F46"></i><b>The Sandbaggers</b></a>
+      <div class="mid"><span class="sc">17–14</span></div>
+      <a class="team away" href="teams/cart-path-only.html"><b>Cart Path Only</b><i style="background:#0E7490"></i></a>
+      <div class="course"><b>Torrey Pines S.</b>Front 9</div>
+    </div>
+
+    <div class="match">
+      <div class="baytag"><b>4</b><span>BAY</span></div>
+      <a class="team" href="teams/night-shift.html"><i style="background:#2B3A67"></i><b>Night Shift</b></a>
+      <div class="mid"><span class="sc">15–15</span></div>
+      <a class="team away" href="teams/shank-redemption.html"><b>Shank Redemption</b><i style="background:#6D28D9"></i></a>
+      <div class="course"><b>Torrey Pines S.</b>Front 9</div>
+    </div>
+
+    <div class="match">
+      <div class="baytag"><b>5</b><span>BAY</span></div>
+      <a class="team" href="teams/hot-bench.html"><i style="background:#7A1F3D"></i><b>Hot Bench</b></a>
+      <div class="mid"><span class="sc">14–11</span></div>
+      <a class="team away" href="teams/orange-julius.html"><b>Orange Julius</b><i style="background:#B45309"></i></a>
+      <div class="course"><b>Torrey Pines S.</b>Front 9</div>
+    </div>
+
+    <div class="match">
+      <div class="baytag"><b>6</b><span>BAY</span></div>
+      <a class="team" href="teams/grip-it-and-sip-it.html"><i style="background:#4D7C0F"></i><b>Grip It &amp; Sip It</b></a>
+      <div class="mid"><span class="sc">16–10</span></div>
+      <a class="team away" href="teams/the-chunkers.html"><b>The Chunkers</b><i style="background:#57534E"></i></a>
+      <div class="course"><b>Torrey Pines S.</b>Front 9</div>
+    </div>
+
+    <div class="match">
+      <div class="baytag"><b>7</b><span>BAY</span></div>
+      <a class="team" href="teams/lavender-menace.html"><i style="background:#86198F"></i><b>Lavender Menace</b></a>
+      <div class="mid"><span class="sc">13–12</span></div>
+      <a class="team away" href="teams/mulligan-stew.html"><b>Mulligan Stew</b><i style="background:#7C2D12"></i></a>
+      <div class="course"><b>Torrey Pines S.</b>Front 9</div>
+    </div>
+  </section>
+
+  <section class="week">
+    <div class="whead">
+      <h2>Week 9</h2>
+      <span class="date">TUE 18 AUG</span>
+      <span class="flag done">FINAL</span>
+    </div>
+    <div class="match">
+      <div class="baytag"><b>1</b><span>BAY</span></div>
+      <a class="team" href="teams/the-sandbaggers.html"><i style="background:#3F3F46"></i><b>The Sandbaggers</b></a>
+      <div class="mid"><span class="sc">19–11</span></div>
+      <a class="team away" href="teams/mulligan-stew.html"><b>Mulligan Stew</b><i style="background:#7C2D12"></i></a>
+      <div class="course"><b>Bay Hill</b>Back 9</div>
+    </div>
+    <div class="match">
+      <div class="baytag"><b>2</b><span>BAY</span></div>
+      <a class="team" href="teams/static-cling.html"><i style="background:#C2410C"></i><b>Static Cling</b></a>
+      <div class="mid"><span class="sc">15–13</span></div>
+      <a class="team away" href="teams/orange-julius.html"><b>Orange Julius</b><i style="background:#B45309"></i></a>
+      <div class="course"><b>Bay Hill</b>Back 9</div>
+    </div>
+    <div class="match">
+      <div class="baytag"><b>3</b><span>BAY</span></div>
+      <a class="team" href="teams/bogey-nights.html"><i style="background:#A16207"></i><b>Bogey Nights</b></a>
+      <div class="mid"><span class="sc">17–16</span></div>
+      <a class="team away" href="teams/night-shift.html"><b>Night Shift</b><i style="background:#2B3A67"></i></a>
+      <div class="course"><b>Bay Hill</b>Back 9</div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>X-Golf Tuesday League</span>
+    <span>14 teams · 7 bays · 9-hole scramble</span>
+  </div>
+</footer>
+
+</body>
+</html>
