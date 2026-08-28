@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Edit your team — X-Golf Tuesday League</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,100..125,400..800&family=Instrument+Sans:wght@400;500;600&family=Martian+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#007041;--green-deep:#00522F;--lime:#B8EB7A;
+  --field:#DCE1DC;--card:#FFFFFF;--ink:#10221A;--dim:#5F6F66;--rule:#D2D8D2;
+  --accent:#C2410C;
+  --mood:#B8EB7A;                 /* set by the sentiment of the picked mood */
+  --display:'Archivo','Helvetica Neue',Arial,sans-serif;
+  --body:'Instrument Sans',system-ui,sans-serif;
+  --data:'Martian Mono','Courier New',monospace;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--field);color:var(--ink);font-family:var(--body);
+  font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;padding-bottom:80px}
+h1,h3{margin:0;font-family:var(--display);font-weight:800;line-height:1}
+:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+
+.masthead{background:var(--green);color:#fff}
+.masthead .inner{max-width:1040px;margin:0 auto;padding:14px 24px;
+  display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.mark{font-family:var(--display);font-weight:800;font-variation-settings:'wdth' 118;
+  font-size:15px;letter-spacing:.1em;text-transform:uppercase;color:#fff;text-decoration:none}
+.mark em{font-style:normal;color:var(--lime)}
+.masthead .me{margin-left:auto;font-size:12px;color:rgba(255,255,255,.7)}
+
+.page{max-width:1040px;margin:0 auto;padding:26px 24px;
+  display:grid;grid-template-columns:1fr 380px;gap:26px;align-items:start}
+
+/* PREVIEW */
+.preview{position:sticky;top:24px;order:2}
+.preview .lbl{font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--dim);font-weight:600;margin-bottom:9px}
+.card{border:1px solid var(--rule);overflow:hidden;background:var(--card)}
+.phero{background:var(--green);color:#fff;padding:16px}
+.pcrest{width:52px;height:52px;background:var(--accent);display:grid;place-items:center;
+  font-family:var(--display);font-weight:800;font-size:18px;color:#fff;
+  box-shadow:0 0 0 1px rgba(255,255,255,.25);margin-bottom:12px}
+.phero h3{font-size:30px;font-variation-settings:'wdth' 112;letter-spacing:-.025em;
+  text-transform:uppercase;line-height:.95}
+.phero .sub{font-size:11px;color:rgba(255,255,255,.65);margin-top:7px}
+
+.pstatus{background:var(--green-deep);color:#fff;padding:12px 16px}
+.moodline{display:flex;align-items:center;gap:9px}
+.moodline .tag{font-size:8px;letter-spacing:.16em;text-transform:uppercase;
+  color:rgba(255,255,255,.5);font-weight:600;flex:none}
+.moodline .dot{width:9px;height:9px;border-radius:50%;background:var(--mood);flex:none}
+.moodline b{
+  font-family:var(--display);font-weight:800;font-size:19px;
+  font-variation-settings:'wdth' 106;letter-spacing:-.01em;color:var(--mood);
+  text-transform:lowercase;
+}
+.psong{display:flex;align-items:center;gap:9px;margin-top:12px;
+  padding-top:11px;border-top:1px solid rgba(255,255,255,.15)}
+.psong .btn{width:26px;height:26px;border-radius:50%;background:var(--lime);
+  color:var(--green-deep);display:grid;place-items:center;font-size:9px;flex:none}
+.psong div{font-size:11px;line-height:1.3;min-width:0}
+.psong b{display:block}
+.psong span{color:rgba(255,255,255,.5)}
+.pbio{padding:14px 16px;font-size:13px;color:var(--dim);min-height:40px}
+
+/* FORM */
+.form{order:1;min-width:0}
+.form > h1{font-size:clamp(28px,5vw,42px);font-variation-settings:'wdth' 108;
+  letter-spacing:-.02em;text-transform:uppercase;margin-bottom:6px}
+.form > .intro{color:var(--dim);font-size:14px;margin:0 0 24px;max-width:52ch}
+
+fieldset{border:1px solid var(--rule);background:var(--card);padding:18px;margin:0 0 14px}
+legend{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);
+  font-weight:600;padding:0 7px}
+label{display:block;font-size:12px;font-weight:600;margin-bottom:6px}
+.hint{font-size:12px;color:var(--dim);font-weight:400;margin-top:5px}
+input[type=text],textarea,select{
+  width:100%;font-family:inherit;font-size:15px;padding:10px 12px;
+  border:1px solid var(--rule);background:#FBFCFB;color:var(--ink);
+}
+textarea{resize:vertical;min-height:90px;line-height:1.55}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--green);background:#fff}
+.count{font-family:var(--data);font-size:10px;color:var(--dim);float:right;font-weight:400}
+.field + .field{margin-top:18px}
+
+/* mood picker */
+.moodpick{display:flex;gap:12px;align-items:center}
+.moodpick select{
+  flex:1;font-family:var(--display);font-weight:800;font-size:19px;
+  text-transform:lowercase;font-variation-settings:'wdth' 104;
+}
+.moodchip{
+  flex:none;width:52px;height:52px;border:1px solid var(--rule);
+  display:grid;place-items:center;background:#FBFCFB;
+}
+.moodchip i{width:20px;height:20px;border-radius:50%;background:var(--mood);display:block}
+
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(42px,1fr));gap:7px}
+.sw{aspect-ratio:1;border:1px solid var(--rule);cursor:pointer;padding:0;position:relative}
+.sw[aria-pressed="true"]{box-shadow:0 0 0 2px var(--ink);border-color:var(--ink)}
+.sw[disabled]{cursor:not-allowed;opacity:.32}
+.sw[disabled]::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(45deg,transparent 46%,#fff 46% 54%,transparent 54%)}
+
+.mate{display:grid;grid-template-columns:110px 1fr;gap:12px;align-items:center}
+.mate + .mate{margin-top:12px;padding-top:12px;border-top:1px solid var(--rule)}
+.mate .nm{font-size:14px;font-weight:600}
+.mate .nm span{display:block;font-size:11px;color:var(--dim);font-weight:400}
+
+.savebar{position:fixed;left:0;right:0;bottom:0;background:var(--green-deep);color:#fff;
+  padding:12px 24px calc(12px + env(safe-area-inset-bottom))}
+.savebar .inner{max-width:1040px;margin:0 auto;display:flex;align-items:center;gap:16px}
+.savebar .state{flex:1;font-size:12px;color:rgba(255,255,255,.6)}
+.savebar button{background:var(--lime);color:var(--green-deep);border:0;padding:12px 22px;
+  font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
+.savebar button.ghost{background:transparent;color:rgba(255,255,255,.7);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)}
+
+@media (max-width:900px){
+  .page{grid-template-columns:1fr}
+  .preview{position:static;order:0;margin-bottom:8px}
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="inner">
+    <a class="mark" href="index.html">X-Golf <em>·</em> Tuesday League</a>
+    <span class="me">Rita Okonkwo · Static Cling</span>
+  </div>
+</header>
+
+<div class="page">
+
+  <aside class="preview">
+    <div class="lbl">Live preview</div>
+    <div class="card">
+      <div class="phero">
+        <div class="pcrest" id="pv-crest">SC</div>
+        <h3 id="pv-name">Static Cling</h3>
+        <div class="sub">Bay 4 · Tuesdays 7:30 · Team handicap 4</div>
+      </div>
+      <div class="pstatus">
+        <div class="moodline">
+          <span class="tag">Mood</span>
+          <i class="dot"></i>
+          <b id="pv-mood">sandbagging</b>
+        </div>
+        <div class="psong">
+          <span class="btn">▶</span>
+          <div><b id="pv-song">Cannonball</b><span id="pv-artist">The Breeders</span></div>
+        </div>
+      </div>
+      <div class="pbio" id="pv-bio">
+        Formed when three people who had all been dropped from other rosters
+        discovered they were, collectively, slightly better than any of those
+        rosters.
+      </div>
+    </div>
+  </aside>
+
+  <main class="form">
+    <h1>Your team page</h1>
+    <p class="intro">
+      Everything here shows on your public page. Change it as often as you like —
+      the mood especially. Nobody is checking.
+    </p>
+
+    <fieldset>
+      <legend>Mood</legend>
+      <div class="field">
+        <label for="mood">Your team is currently</label>
+        <div class="moodpick">
+          <div class="moodchip"><i></i></div>
+          <select id="mood">
+            <optgroup label="Golf">
+              <option data-s="hot">striping it</option>
+              <option data-s="hot">dialed</option>
+              <option data-s="hot">pured</option>
+              <option data-s="hot">due</option>
+              <option data-s="hot">streaky</option>
+              <option data-s="cold">rusty</option>
+              <option data-s="cold">shanking</option>
+              <option data-s="cold">chunking it</option>
+              <option data-s="cold">lipping out</option>
+              <option data-s="odd" selected>sandbagging</option>
+              <option data-s="hot">grinding</option>
+              <option data-s="cold">gassed</option>
+              <option data-s="cold">wristy</option>
+              <option data-s="odd">suspicious</option>
+            </optgroup>
+            <optgroup label="Good">
+              <option data-s="good">accomplished</option>
+              <option data-s="good">amped</option>
+              <option data-s="good">blissful</option>
+              <option data-s="good">bouncy</option>
+              <option data-s="good">chipper</option>
+              <option data-s="good">content</option>
+              <option data-s="good">ecstatic</option>
+              <option data-s="good">giddy</option>
+              <option data-s="good">grateful</option>
+              <option data-s="good">hopeful</option>
+              <option data-s="good">jubilant</option>
+              <option data-s="good">optimistic</option>
+              <option data-s="good">relaxed</option>
+              <option data-s="good">relieved</option>
+              <option data-s="good">smug</option>
+            </optgroup>
+            <optgroup label="Bad">
+              <option data-s="bad">aggravated</option>
+              <option data-s="bad">annoyed</option>
+              <option data-s="bad">bitter</option>
+              <option data-s="bad">blah</option>
+              <option data-s="bad">cranky</option>
+              <option data-s="bad">crushed</option>
+              <option data-s="bad">defeated</option>
+              <option data-s="bad">deflated</option>
+              <option data-s="bad">gloomy</option>
+              <option data-s="bad">grumpy</option>
+              <option data-s="bad">irate</option>
+              <option data-s="bad">jealous</option>
+              <option data-s="bad">moody</option>
+              <option data-s="bad">salty</option>
+              <option data-s="bad">sore</option>
+              <option data-s="bad">tilted</option>
+            </optgroup>
+            <optgroup label="Other">
+              <option data-s="odd">bewildered</option>
+              <option data-s="odd">confused</option>
+              <option data-s="odd">devious</option>
+              <option data-s="odd">dorky</option>
+              <option data-s="odd">feral</option>
+              <option data-s="odd">geeky</option>
+              <option data-s="odd">indescribable</option>
+              <option data-s="odd">mischievous</option>
+              <option data-s="odd">ominous</option>
+              <option data-s="odd">quixotic</option>
+              <option data-s="odd">restless</option>
+              <option data-s="odd">sneaky</option>
+              <option data-s="odd">unhinged</option>
+              <option data-s="odd">weird</option>
+            </optgroup>
+          </select>
+        </div>
+        <div class="hint">
+          One word, from the list. Ask Chris if you want one added.
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Identity</legend>
+      <div class="field">
+        <label for="crest">Crest</label>
+        <input type="text" id="crest" maxlength="2" value="SC" style="width:80px;text-align:center;
+          font-family:var(--display);font-size:20px;text-transform:uppercase">
+        <div class="hint">Two letters. Shows on the leaderboard and the schedule.</div>
+      </div>
+      <div class="field">
+        <label>Team colour</label>
+        <div class="swatches">
+          <button class="sw" style="background:#C2410C" data-c="#C2410C" aria-pressed="true"  aria-label="Rust"></button>
+          <button class="sw" style="background:#B91C1C" data-c="#B91C1C" aria-pressed="false" aria-label="Red"></button>
+          <button class="sw" style="background:#B45309" data-c="#B45309" aria-pressed="false" aria-label="Amber" disabled title="Taken by Orange Julius"></button>
+          <button class="sw" style="background:#A16207" data-c="#A16207" aria-pressed="false" aria-label="Mustard" disabled title="Taken by Bogey Nights"></button>
+          <button class="sw" style="background:#4D7C0F" data-c="#4D7C0F" aria-pressed="false" aria-label="Olive" disabled title="Taken by Grip It &amp; Sip It"></button>
+          <button class="sw" style="background:#0F766E" data-c="#0F766E" aria-pressed="false" aria-label="Teal" disabled title="Taken by Green Room"></button>
+          <button class="sw" style="background:#0E7490" data-c="#0E7490" aria-pressed="false" aria-label="Cyan" disabled title="Taken by Cart Path Only"></button>
+          <button class="sw" style="background:#1E3A8A" data-c="#1E3A8A" aria-pressed="false" aria-label="Royal"></button>
+          <button class="sw" style="background:#2B3A67" data-c="#2B3A67" aria-pressed="false" aria-label="Navy" disabled title="Taken by Night Shift"></button>
+          <button class="sw" style="background:#4338CA" data-c="#4338CA" aria-pressed="false" aria-label="Indigo"></button>
+          <button class="sw" style="background:#6D28D9" data-c="#6D28D9" aria-pressed="false" aria-label="Violet" disabled title="Taken by Shank Redemption"></button>
+          <button class="sw" style="background:#86198F" data-c="#86198F" aria-pressed="false" aria-label="Purple" disabled title="Taken by Lavender Menace"></button>
+          <button class="sw" style="background:#DB2777" data-c="#DB2777" aria-pressed="false" aria-label="Pink" disabled title="Taken by Fore Play"></button>
+          <button class="sw" style="background:#7A1F3D" data-c="#7A1F3D" aria-pressed="false" aria-label="Wine" disabled title="Taken by Hot Bench"></button>
+          <button class="sw" style="background:#7C2D12" data-c="#7C2D12" aria-pressed="false" aria-label="Brown" disabled title="Taken by Mulligan Stew"></button>
+          <button class="sw" style="background:#3F3F46" data-c="#3F3F46" aria-pressed="false" aria-label="Graphite" disabled title="Taken by The Sandbaggers"></button>
+          <button class="sw" style="background:#57534E" data-c="#57534E" aria-pressed="false" aria-label="Stone" disabled title="Taken by The Chunkers"></button>
+        </div>
+        <div class="hint">Greyed out means another team already has it.</div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Walk-up song</legend>
+      <div class="field">
+        <label for="url">Paste a YouTube or Spotify link</label>
+        <input type="text" id="url" value="https://www.youtube.com/watch?v=0P8pyZmxU9k">
+        <div class="hint" id="detect">Detected: YouTube · 0P8pyZmxU9k</div>
+      </div>
+      <div class="field">
+        <label for="song">Track</label>
+        <input type="text" id="song" value="Cannonball">
+      </div>
+      <div class="field">
+        <label for="artist">Artist</label>
+        <input type="text" id="artist" value="The Breeders">
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>About the team</legend>
+      <div class="field">
+        <label for="bio">Blurb <span class="count" id="c-bio">0/400</span></label>
+        <textarea id="bio" maxlength="400">Formed when three people who had all been dropped from other rosters discovered they were, collectively, slightly better than any of those rosters. Take the safe tee shot every time, make everything inside six feet, and will not apologise for either.</textarea>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Roster quotes</legend>
+      <div class="mate">
+        <div class="nm">Rita Okonkwo<span>Captain · HCP 6.4</span></div>
+        <input type="text" maxlength="70" value="I called it in preseason.">
+      </div>
+      <div class="mate">
+        <div class="nm">Dev Varma<span>HCP 11.8</span></div>
+        <input type="text" maxlength="70" value="No comment.">
+      </div>
+      <div class="mate">
+        <div class="nm">Marta Bell<span>HCP 14.1</span></div>
+        <input type="text" maxlength="70" value="Peaking at the right time.">
+      </div>
+    </fieldset>
+
+  </main>
+</div>
+
+<div class="savebar">
+  <div class="inner">
+    <span class="state" id="state">No changes yet</span>
+    <button type="button" class="ghost">Discard</button>
+    <button type="button" id="save">Save changes</button>
+  </div>
+</div>
+
+<script>
+/* sentiment drives the colour of the mood word and its dot */
+var SENTIMENT = {
+  hot : '#B8EB7A',   /* league lime — playing well  */
+  good: '#7EBED7',   /* X-Golf blue — happy         */
+  cold: '#E8A87C',   /* warm grey-orange — off form */
+  bad : '#9AA5A0',   /* muted — miserable           */
+  odd : '#C9A0DC'    /* violet — strange            */
+};
+
+var dirty = false;
+function touch(){
+  if(!dirty){ dirty = true; document.getElementById('state').textContent = 'Unsaved changes'; }
+}
+
+var mood = document.getElementById('mood');
+function paintMood(){
+  var opt = mood.options[mood.selectedIndex];
+  document.getElementById('pv-mood').textContent = opt.text;
+  document.documentElement.style.setProperty('--mood', SENTIMENT[opt.dataset.s] || '#B8EB7A');
+}
+mood.addEventListener('change', function(){ paintMood(); touch(); });
+paintMood();
+
+function bind(id, target, fallback){
+  var el = document.getElementById(id);
+  el.addEventListener('input', function(){
+    document.getElementById(target).textContent = el.value || fallback;
+    touch();
+  });
+}
+bind('song','pv-song','—');
+bind('artist','pv-artist','');
+bind('bio','pv-bio','');
+
+document.getElementById('crest').addEventListener('input', function(){
+  document.getElementById('pv-crest').textContent = this.value.toUpperCase() || '··';
+  touch();
+});
+
+var bio = document.getElementById('bio'), cbio = document.getElementById('c-bio');
+function updBio(){ cbio.textContent = bio.value.length + '/400'; }
+bio.addEventListener('input', updBio); updBio();
+
+document.querySelectorAll('.sw').forEach(function(b){
+  if(b.disabled) return;
+  b.addEventListener('click', function(){
+    document.querySelectorAll('.sw').forEach(function(x){ x.setAttribute('aria-pressed','false') });
+    b.setAttribute('aria-pressed','true');
+    document.documentElement.style.setProperty('--accent', b.dataset.c);
+    touch();
+  });
+});
+
+document.getElementById('url').addEventListener('input', function(){
+  var v = this.value.trim(), out = document.getElementById('detect'), m;
+  if((m = v.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})/))){
+    out.textContent = 'Detected: YouTube · ' + m[1];
+  } else if((m = v.match(/spotify\.com\/track\/([A-Za-z0-9]+)/))){
+    out.textContent = 'Detected: Spotify · ' + m[1];
+  } else if(v === ''){
+    out.textContent = 'Paste a link and we\u2019ll work out the rest.';
+  } else {
+    out.textContent = 'That doesn\u2019t look like a YouTube or Spotify link.';
+  }
+  touch();
+});
+
+document.querySelectorAll('.mate input').forEach(function(i){
+  i.addEventListener('input', touch);
+});
+
+document.getElementById('save').addEventListener('click', function(){
+  dirty = false;
+  document.getElementById('state').textContent = 'Saved just now';
+});
+</script>
+</body>
+</html>
