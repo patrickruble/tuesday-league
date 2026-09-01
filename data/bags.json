@@ -1,0 +1,59 @@
+{
+  "_comment": "What's in the bag, keyed by player slug. Anything with forSale:true also shows in the clubhouse classifieds. Players edit this themselves once the editor is wired up.",
+
+  "rita-okonkwo": [
+    { "category": "Driver", "brand": "Titleist", "model": "TSR3", "spec": "9°, Ventus Black 6X" },
+    { "category": "Wood",   "brand": "TaylorMade", "model": "Stealth 2", "spec": "15°" },
+    { "category": "Irons",  "brand": "Mizuno", "model": "JPX 923 Tour", "spec": "4–PW" },
+    { "category": "Wedges", "brand": "Vokey", "model": "SM9", "spec": "50 / 54 / 58" },
+    { "category": "Putter", "brand": "Scotty Cameron", "model": "Newport 2", "spec": "34\"" },
+    { "category": "Ball",   "brand": "Titleist", "model": "Pro V1x" }
+  ],
+
+  "dev-varma": [
+    { "category": "Driver", "brand": "Ping", "model": "G430 Max", "spec": "10.5°, regular" },
+    { "category": "Hybrid", "brand": "Ping", "model": "G430", "spec": "19° and 22°" },
+    { "category": "Irons",  "brand": "Ping", "model": "G430", "spec": "5–PW" },
+    { "category": "Wedges", "brand": "Cleveland", "model": "RTX 6", "spec": "52 / 58" },
+    { "category": "Putter", "brand": "Odyssey", "model": "White Hot OG #7", "spec": "35\"",
+      "note": "Bought it in a panic after three-putting nine straight. Kept it." },
+    { "category": "Ball",   "brand": "Srixon", "model": "Q-Star Tour" }
+  ],
+
+  "marta-bell": [
+    { "category": "Driver", "brand": "Callaway", "model": "Paradym", "spec": "12°, ladies flex" },
+    { "category": "Wood",   "brand": "Callaway", "model": "Rogue ST", "spec": "18°",
+      "forSale": true, "asking": 90,
+      "note": "Barely used. Never got on with it." },
+    { "category": "Irons",  "brand": "Callaway", "model": "Big Bertha REVA", "spec": "6–SW" },
+    { "category": "Putter", "brand": "TaylorMade", "model": "Spider GT", "spec": "33\"" },
+    { "category": "Ball",   "brand": "Callaway", "model": "Supersoft" }
+  ],
+
+  "jide-abara": [
+    { "category": "Driver", "brand": "Cobra", "model": "Darkspeed LS", "spec": "8.5°, stiff" },
+    { "category": "Irons",  "brand": "Srixon", "model": "ZX7 Mk II", "spec": "4–PW" },
+    { "category": "Wedges", "brand": "Vokey", "model": "SM9", "spec": "54 / 58",
+      "forSale": true, "asking": 140,
+      "note": "Bought a full set, these are surplus. Grooves still sharp." },
+    { "category": "Putter", "brand": "L.A.B.", "model": "DF3", "spec": "35\"" },
+    { "category": "Ball",   "brand": "Bridgestone", "model": "Tour B X" }
+  ],
+
+  "petra-kowal": [
+    { "category": "Driver", "brand": "Wilson", "model": "Dynapower", "spec": "10.5°" },
+    { "category": "Irons",  "brand": "Wilson", "model": "D9", "spec": "5–SW" },
+    { "category": "Putter", "brand": "Bettinardi", "model": "BB1", "spec": "34\"" },
+    { "category": "Ball",   "brand": "Vice", "model": "Pro Plus",
+      "note": "Looking for a 3-wood, stiff shaft. Ask me Tuesday." }
+  ],
+
+  "tomas-ferreira": [
+    { "category": "Driver", "brand": "PXG", "model": "0311 GEN6", "spec": "9°" },
+    { "category": "Irons",  "brand": "PXG", "model": "0311 P", "spec": "5–PW" },
+    { "category": "Wedges", "brand": "Ping", "model": "Glide 4.0", "spec": "50 / 56 / 60",
+      "note": "The 60 has done a lot of work this season." },
+    { "category": "Putter", "brand": "Scotty Cameron", "model": "Phantom 11", "spec": "34\"" },
+    { "category": "Ball",   "brand": "Titleist", "model": "Pro V1" }
+  ]
+}

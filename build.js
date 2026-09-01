@@ -28,6 +28,14 @@ const teams    = DATA('teams.json');
 const schedule = DATA('schedule.json');
 const bySlug   = Object.fromEntries(teams.map(t => [t.slug, t]));
 
+/* optional data files — the site works without them */
+const optional = f => {
+  try { return DATA(f); } catch { return {}; }
+};
+const bags     = optional('bags.json');
+const moodLog  = optional('mood-history.json');
+const sponsors = optional('sponsors.json');
+
 /* ---------- helpers ---------- */
 const esc = s => String(s == null ? '' : s)
   .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -81,6 +89,24 @@ if (nextWeek) for (const m of nextWeek.matches) {
 }
 
 /* ---------- layout ---------- */
+function sponsorFooter() {
+  const list = sponsors.supporters || [];
+  if (!list.length && !sponsors.title) return '';
+
+  const one = s => s.url
+    ? `<a href="${esc(s.url)}" rel="noopener">${esc(s.name)}</a>${s.blurb ? ` <span>${esc(s.blurb)}</span>` : ''}`
+    : `<b>${esc(s.name)}</b>${s.blurb ? ` <span>${esc(s.blurb)}</span>` : ''}`;
+
+  return `
+<div class="sponsors">
+  <div class="inner">
+    <span class="lede">${sponsors.title ? 'Presented by' : 'Supported by'}</span>
+    ${sponsors.title ? `<div class="slot title">${one(sponsors.title)}</div>` : ''}
+    ${list.map(s => `<div class="slot">${one(s)}</div>`).join('')}
+  </div>
+</div>`;
+}
+
 function layout({ title, current, depth = 0, head = '', body }) {
   const up = depth ? '../' : '';
   const nav = league.nav.map(n =>
@@ -117,6 +143,8 @@ ${head}
 </header>
 
 ${body}
+
+${sponsorFooter(up)}
 
 <footer>
   <div class="inner">
@@ -406,12 +434,33 @@ function buildTeamPage(t) {
       </div>`;
   }).join('');
 
+  const runs = moodLog[t.slug] || [];
+  const run  = runs[0];
+  const moodExtra = run && run.days >= 7
+    ? ` <span class="runfor">for ${run.days} days</span>` : '';
+
+  const moodStrip = runs.length > 1 ? `
+    <section>
+      <div class="head"><h2>Mood history</h2>
+        <span class="note">Since the season started</span></div>
+      <div class="moodruns">${runs.map(r => `
+        <div class="run s-${r.sentiment}">
+          <b>${esc(r.word)}</b>
+          <span>${r.days} day${r.days === 1 ? '' : 's'}</span>
+        </div>`).join('')}
+      </div>
+    </section>` : '';
+
+  const crest = t.crestUrl
+    ? `<img src="../${esc(t.crestUrl)}" alt="${esc(t.name)} crest">`
+    : esc(t.crest);
+
   return layout({
     title:t.name, current:'teams.html', depth:1, head,
     body:`
 <div class="hero">
   <div class="inner">
-    <div class="crest-lg">${esc(t.crest)}</div>
+    <div class="crest-lg${t.crestUrl ? ' has-img' : ''}">${crest}</div>
     <div>
       <div class="eyebrow">${ordinal(t.rank)} of ${teams.length}</div>
       <h1>${esc(t.name)}</h1>
@@ -423,7 +472,7 @@ function buildTeamPage(t) {
 
 <div class="status">
   <div class="inner">
-    <div class="moodline"><span class="lbl">Mood</span><i class="dot2"></i><b>${esc(t.mood)}</b></div>
+    <div class="moodline"><span class="lbl">Mood</span><i class="dot2"></i><b>${esc(t.mood)}</b>${moodExtra}</div>
     <div class="song">
       <span class="lbl">Walk-up</span>
       <button class="play" id="play" aria-label="Play walk-up song">▶</button>
@@ -454,6 +503,7 @@ function buildTeamPage(t) {
       </div>
     </section>
 ${h2hBlock}
+${moodStrip}
     <section>
       <div class="head"><h2>Results</h2></div>
       ${results}
@@ -478,6 +528,24 @@ function buildPlayerPage(p) {
         <div class="mini">${initials(m.name)}</div>
         <div><b>${esc(m.name)}</b><span>HCP ${m.hcp}</span></div>
       </a>`).join('');
+
+  const kit = bags[p.slug] || [];
+  const bagBlock = kit.length ? `
+  <section>
+    <div class="head"><h2>What's in the bag</h2>
+      <span class="note">${kit.filter(i => i.forSale).length ? 'Something here is for sale' : ''}</span></div>
+    <div class="bag">${kit.map(i => `
+      <div class="item${i.forSale ? ' selling' : ''}">
+        <div class="cat">${esc(i.category)}</div>
+        <div class="what">
+          <b>${esc([i.brand, i.model].filter(Boolean).join(' '))}</b>
+          ${i.spec ? `<span>${esc(i.spec)}</span>` : ''}
+          ${i.note ? `<p>${esc(i.note)}</p>` : ''}
+        </div>
+        ${i.forSale ? `<div class="tag">FOR SALE${i.asking ? ` · $${i.asking}` : ''}</div>` : ''}
+      </div>`).join('')}
+    </div>
+  </section>` : '';
 
   return layout({
     title:p.name, current:'teams.html', depth:1,
@@ -514,6 +582,7 @@ function buildPlayerPage(p) {
     </div>
   </section>
 
+${bagBlock}
   <section>
     <div class="head"><h2>Teammates</h2></div>
     <div class="teammates">${mates}

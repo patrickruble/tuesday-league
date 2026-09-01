@@ -1,0 +1,31 @@
+{
+  "_comment": "Mood changes, newest first, keyed by team slug. Once the editor is wired this comes from the mood_history table instead — the trigger is already logging it.",
+
+  "static-cling": [
+    { "word": "tilted",      "sentiment": "bad",  "since": "2026-08-26", "days": 6 },
+    { "word": "salty",       "sentiment": "bad",  "since": "2026-08-19", "days": 7 },
+    { "word": "smug",        "sentiment": "good", "since": "2026-08-12", "days": 7 },
+    { "word": "grinding",    "sentiment": "hot",  "since": "2026-08-05", "days": 7 }
+  ],
+  "bogey-nights": [
+    { "word": "smug",        "sentiment": "good", "since": "2026-08-05", "days": 27 },
+    { "word": "dialed",      "sentiment": "hot",  "since": "2026-07-29", "days": 7 }
+  ],
+  "the-chunkers": [
+    { "word": "unhinged",    "sentiment": "odd",  "since": "2026-07-15", "days": 48 }
+  ],
+  "night-shift": [
+    { "word": "grinding",    "sentiment": "hot",  "since": "2026-08-25", "days": 7 },
+    { "word": "due",         "sentiment": "hot",  "since": "2026-08-11", "days": 14 }
+  ],
+  "green-room": [
+    { "word": "annoyed",     "sentiment": "bad",  "since": "2026-08-26", "days": 6 },
+    { "word": "hopeful",     "sentiment": "good", "since": "2026-08-12", "days": 14 }
+  ],
+  "hot-bench": [
+    { "word": "salty",       "sentiment": "bad",  "since": "2026-08-19", "days": 13 }
+  ],
+  "mulligan-stew": [
+    { "word": "deflated",    "sentiment": "bad",  "since": "2026-08-04", "days": 28 }
+  ]
+}

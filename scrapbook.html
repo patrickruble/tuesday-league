@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scrapbook — Katy Golf League</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#007041">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=Instrument+Sans:wght@400;500;600&family=Martian+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/extra.css">
+<style>
+.zoom{position:fixed;inset:0;background:rgba(8,18,13,.94);display:none;
+  place-items:center;padding:24px;z-index:30;cursor:zoom-out}
+.zoom.on{display:grid}
+.zoom figure{margin:0;max-width:100%;max-height:100%;display:grid;gap:12px}
+.zoom img{max-width:100%;max-height:78vh;object-fit:contain;display:block}
+.zoom figcaption{color:rgba(255,255,255,.7);font-size:13px;text-align:center;
+  font-family:var(--data)}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="inner">
+    <a class="mark" href="index.html">Katy <em>·</em> Golf League</a>
+    <button class="navtoggle" id="navtoggle" aria-expanded="false" aria-controls="nav">MENU</button>
+    <nav id="nav">
+      <a href="index.html">Leaderboard</a>
+      <a href="schedule.html">Schedule</a>
+      <a href="teams.html">Teams</a>
+      <a href="clubhouse.html">Clubhouse</a>
+      <a href="playlist.html">Playlist</a>
+      <a href="records.html">Records</a>
+    </nav>
+  </div>
+</header>
+
+<div class="title">
+  <div class="inner">
+    <div>
+      <div class="eyebrow">Every card, every week</div>
+      <h1>Scrapbook</h1>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div id="shelves">
+    <div class="empty" style="margin:28px 0 50px">
+      <b>Loading</b>
+      Pulling the season's cards together.
+    </div>
+  </div>
+</div>
+
+<div class="zoom" id="zoom">
+  <figure><img alt=""><figcaption></figcaption></figure>
+</div>
+
+<footer>
+  <div class="inner">
+    <span>Katy Golf League</span>
+    <span>Every scorecard photo is kept. Nothing gets deleted.</span>
+  </div>
+</footer>
+
+<script type="module">
+import { supabase } from './assets/db.js';
+
+const shelves = document.getElementById('shelves');
+const zoom    = document.getElementById('zoom');
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c =>
+  ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+
+const fmt = d => new Date(d).toLocaleDateString(undefined,
+  { weekday:'short', day:'numeric', month:'short' });
+
+async function load() {
+  const { data, error } = await supabase
+    .from('scrapbook').select('*').limit(400);
+
+  if (error) {
+    shelves.innerHTML = `<div class="empty" style="margin:28px 0 50px">
+      <b>Couldn't load the archive</b>${esc(error.message)}</div>`;
+    return;
+  }
+
+  if (!data || !data.length) {
+    shelves.innerHTML = `<div class="empty" style="margin:28px 0 50px">
+      <b>Nothing here yet</b>
+      Every scorecard photo submitted this season shows up here, newest first.
+      The first one lands after week&nbsp;1.
+    </div>`;
+    return;
+  }
+
+  /* group by week, newest first */
+  const weeks = new Map();
+  for (const p of data) {
+    if (!weeks.has(p.week)) weeks.set(p.week, []);
+    weeks.get(p.week).push(p);
+  }
+
+  shelves.innerHTML = [...weeks.entries()]
+    .sort((a,b) => b[0] - a[0])
+    .map(([week, snaps]) => {
+      const first = snaps[0];
+      return `
+      <section class="shelf">
+        <h2>Week ${week}
+          <span>${esc(first.course_name)} ${esc(first.nine)} · ${fmt(first.played_on)} · ${snaps.length} card${snaps.length===1?'':'s'}</span>
+        </h2>
+        <div class="snaps">${snaps.map(s => {
+          const url = supabase.storage.from('scorecards')
+                        .getPublicUrl(s.storage_path).data.publicUrl;
+          return `
+          <button class="snap" style="border-bottom-color:${s.accent}"
+                  data-full="${esc(url)}"
+                  data-cap="${esc(s.team_name)} — week ${week}${s.caption ? ' — ' + esc(s.caption) : ''}">
+            <img src="${esc(url)}" alt="${esc(s.team_name)} scorecard, week ${week}" loading="lazy">
+            <div class="cap">
+              <b>${esc(s.team_name)}</b>
+              <span>${s.uploaded_by ? esc(s.uploaded_by) : ''}</span>
+              ${s.caption ? `<div style="margin-top:5px">${esc(s.caption)}</div>` : ''}
+            </div>
+          </button>`;
+        }).join('')}
+        </div>
+      </section>`;
+    }).join('');
+
+  shelves.querySelectorAll('.snap').forEach(b =>
+    b.addEventListener('click', () => {
+      zoom.querySelector('img').src = b.dataset.full;
+      zoom.querySelector('figcaption').textContent = b.dataset.cap;
+      zoom.classList.add('on');
+    }));
+}
+
+zoom.addEventListener('click', () => zoom.classList.remove('on'));
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') zoom.classList.remove('on');
+});
+
+document.getElementById('navtoggle').addEventListener('click', function(){
+  const n = document.getElementById('nav');
+  const open = n.classList.toggle('open');
+  this.setAttribute('aria-expanded', open);
+  this.textContent = open ? 'CLOSE' : 'MENU';
+});
+
+load();
+</script>
+</body>
+</html>
