@@ -55,6 +55,25 @@ const slugify = s => s.toLowerCase().normalize('NFD')
 
 const initials = s => s.split(/\s+/).map(w => w[0]).join('').slice(0,2).toUpperCase();
 
+/* Build the right embed for whichever service a team picked.
+   Spotify only plays full tracks for listeners signed into
+   Spotify — everyone else gets a 30 second preview. YouTube
+   plays the whole thing for anyone, so it's the safer default. */
+function embedUrl(song) {
+  if (!song || !song.id) return null;
+  switch (song.provider) {
+    case 'spotify':
+      return `https://open.spotify.com/embed/track/${song.id}?utm_source=generator&theme=0`;
+    case 'soundcloud':
+      return `https://w.soundcloud.com/player/?url=${encodeURIComponent(song.id)}&color=%23007041&auto_play=true&show_artwork=false`;
+    default:
+      return `https://www.youtube.com/embed/${song.id}?autoplay=1`;
+  }
+}
+
+const providerName = p =>
+  p === 'spotify' ? 'Spotify' : p === 'soundcloud' ? 'SoundCloud' : 'YouTube';
+
 /* ---------- derived data ---------- */
 const standings = [...teams].sort((a,b) => b.points - a.points || b.bestRound - a.bestRound);
 standings.forEach((t,i) => { t.rank = i + 1; });
@@ -286,19 +305,31 @@ function buildSchedule() {
 /* ============================================================ */
 function buildPlaylist() {
   const tracks = standings.filter(t => t.song && t.song.id).map((t,i) => `
-    <div class="match" style="--c:${t.accent};grid-template-columns:44px 46px 1fr auto"
-         data-id="${esc(t.song.id)}">
-      <div class="pld" style="text-align:center">${String(i+1).padStart(2,'0')}</div>
-      <button class="play" style="background:${t.accent}" aria-label="Play">▶</button>
-      <div>
-        <b style="display:block;font-family:var(--display);font-weight:800;font-size:16px">${esc(t.song.title)}</b>
-        <span style="font-size:13px;color:var(--dim)">${esc(t.song.artist)}</span>
+    <div class="track" style="--c:${t.accent}"
+         data-src="${esc(embedUrl(t.song))}"
+         data-h="${t.song.provider === 'spotify' ? 152 : 80}">
+      <div class="num">${String(i+1).padStart(2,'0')}</div>
+      <button class="play" style="background:${t.accent}"
+              aria-label="Play ${esc(t.song.title)}">▶</button>
+      <div class="info">
+        <b>${esc(t.song.title)}</b>
+        <span>${esc(t.song.artist)}</span>
       </div>
-      <div style="text-align:right">
-        <a href="teams/${t.slug}.html" style="color:${t.accent};text-decoration:none;font-weight:600;font-size:12px">${esc(t.name)}</a>
-        <span style="display:block;font-family:var(--data);font-size:10px;color:var(--dim)">${ordinal(t.rank).toUpperCase()}</span>
+      <div class="by">
+        <a href="teams/${t.slug}.html" style="color:${t.accent}">${esc(t.name)}</a>
+        <span>${providerName(t.song.provider)}</span>
       </div>
     </div>`).join('');
+
+  const leaguePlaylist = league.spotifyPlaylist ? `
+  <div class="wholething">
+    <div class="head"><h2>The whole thing</h2>
+      <span class="note">Every walk-up song in one playlist</span></div>
+    <iframe src="https://open.spotify.com/embed/playlist/${esc(league.spotifyPlaylist)}?utm_source=generator&theme=0"
+            width="100%" height="352" frameborder="0" loading="lazy"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            title="League playlist"></iframe>
+  </div>` : '';
 
   return layout({
     title:'Playlist', current:'playlist.html',
@@ -309,25 +340,41 @@ function buildPlaylist() {
   </div>
 </div>
 <div class="wrap narrow">
-  <div style="margin:26px 0 50px;border:1px solid var(--rule);background:var(--card)">${tracks}
+  ${leaguePlaylist}
+  <div class="head" style="margin-top:34px"><h2>By team</h2>
+    <span class="note">In league order</span></div>
+  <div class="tracklist">${tracks}
   </div>
+  <p class="fineprint">
+    Spotify plays the full track if you're signed in, and a 30 second preview
+    if you're not. YouTube plays the lot either way. Change your team's song
+    on your <a href="edit-team.html">team page</a>.
+  </p>
 </div>
-<div id="player" style="position:fixed;left:0;right:0;bottom:0;background:var(--green-deep);
-     transform:translateY(100%);transition:transform .2s ease">
-  <div style="max-width:820px;margin:0 auto;padding:10px 24px">
-    <iframe id="frame" style="width:100%;height:80px;border:0;display:block" allow="autoplay" title="Player"></iframe>
+<div id="player" class="dock">
+  <div class="dockinner">
+    <button id="closedock" aria-label="Stop">✕</button>
+    <iframe id="frame" allow="autoplay; encrypted-media" title="Player"></iframe>
   </div>
 </div>
 <script>
-var frame=document.getElementById('frame'),player=document.getElementById('player'),cur=null;
-document.querySelectorAll('[data-id]').forEach(function(t){
+var frame=document.getElementById('frame'),
+    dock=document.getElementById('player'),cur=null;
+function stop(){
+  frame.src='';dock.classList.remove('up');
+  if(cur){cur.querySelector('.play').textContent='▶';cur.classList.remove('on');cur=null;}
+}
+document.getElementById('closedock').addEventListener('click',stop);
+document.querySelectorAll('.track').forEach(function(t){
   t.querySelector('.play').addEventListener('click',function(){
-    if(cur===t){frame.src='';player.style.transform='translateY(100%)';
-      t.querySelector('.play').textContent='▶';cur=null;return;}
-    if(cur) cur.querySelector('.play').textContent='▶';
+    if(cur===t){stop();return;}
+    if(cur){cur.querySelector('.play').textContent='▶';cur.classList.remove('on');}
+    t.classList.add('on');
     t.querySelector('.play').textContent='❚❚';
-    frame.src='https://www.youtube.com/embed/'+t.dataset.id+'?autoplay=1';
-    player.style.transform='translateY(0)';cur=t;
+    frame.style.height=t.dataset.h+'px';
+    frame.src=t.dataset.src;
+    dock.classList.add('up');
+    cur=t;
   });
 });
 </script>`
@@ -481,6 +528,13 @@ function buildTeamPage(t) {
   </div>
 </div>
 
+<div id="player" class="dock">
+  <div class="dockinner">
+    <button id="closedock" aria-label="Stop">✕</button>
+    <iframe id="frame" allow="autoplay; encrypted-media" title="Walk-up song"></iframe>
+  </div>
+</div>
+
 <div class="numbers">
   <div class="inner">
     <div><b>${(t.points/t.played).toFixed(1)}</b><span>Points per round</span></div>
@@ -513,9 +567,27 @@ ${moodStrip}
 </div>
 
 <script>
-document.getElementById('play').addEventListener('click',function(){
-  this.textContent = this.textContent === '▶' ? '❚❚' : '▶';
-});
+(function(){
+  var b=document.getElementById('play'),
+      dock=document.getElementById('player'),
+      frame=document.getElementById('frame'),
+      src=${JSON.stringify(embedUrl(t.song) || '')},
+      h=${t.song && t.song.provider === 'spotify' ? 152 : 80},
+      on=false;
+
+  function stop(){ frame.src=''; dock.classList.remove('up'); b.textContent='▶'; on=false; }
+  document.getElementById('closedock').addEventListener('click',stop);
+
+  b.addEventListener('click',function(){
+    if(!src) return;
+    if(on){ stop(); return; }
+    frame.style.height=h+'px';
+    frame.src=src;
+    dock.classList.add('up');
+    b.textContent='❚❚';
+    on=true;
+  });
+})();
 </script>`
   });
 }

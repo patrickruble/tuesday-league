@@ -66,6 +66,13 @@
   </div>
 </div>
 
+<div id="player" class="dock">
+  <div class="dockinner">
+    <button id="closedock" aria-label="Stop">✕</button>
+    <iframe id="frame" allow="autoplay; encrypted-media" title="Walk-up song"></iframe>
+  </div>
+</div>
+
 <div class="numbers">
   <div class="inner">
     <div><b>9.9</b><span>Points per round</span></div>
@@ -141,9 +148,27 @@
 </div>
 
 <script>
-document.getElementById('play').addEventListener('click',function(){
-  this.textContent = this.textContent === '▶' ? '❚❚' : '▶';
-});
+(function(){
+  var b=document.getElementById('play'),
+      dock=document.getElementById('player'),
+      frame=document.getElementById('frame'),
+      src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1",
+      h=80,
+      on=false;
+
+  function stop(){ frame.src=''; dock.classList.remove('up'); b.textContent='▶'; on=false; }
+  document.getElementById('closedock').addEventListener('click',stop);
+
+  b.addEventListener('click',function(){
+    if(!src) return;
+    if(on){ stop(); return; }
+    frame.style.height=h+'px';
+    frame.src=src;
+    dock.classList.add('up');
+    b.textContent='❚❚';
+    on=true;
+  });
+})();
 </script>
 
 

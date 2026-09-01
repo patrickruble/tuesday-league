@@ -14,6 +14,9 @@
   "scoringNote": "Bogey or worse 0 · Par 1 · Birdie 2 · Eagle 3",
   "tiebreak": "Ties broken by head-to-head, then best single round",
 
+  "_spotifyPlaylist": "Make a public Spotify playlist with every team's walk-up song, then paste its id here. It's the string after /playlist/ in the share link. Leave null to hide the section.",
+  "spotifyPlaylist": null,
+
   "nav": [
     { "label": "Leaderboard", "href": "index.html" },
     { "label": "Schedule",    "href": "schedule.html" },
