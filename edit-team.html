@@ -284,6 +284,22 @@ input[disabled],textarea[disabled]{opacity:.55;cursor:not-allowed}
     </fieldset>
 
     <fieldset>
+      <legend>Your photo</legend>
+      <div class="mugshot">
+        <div class="mug" id="mug">—</div>
+        <div>
+          <label class="upl">Upload a photo
+            <input type="file" id="avatarfile" accept="image/png,image/jpeg,image/webp">
+          </label>
+          <div class="hint" id="avatarhint">
+            Shows on your team's roster and your player page. Square works best.
+            Leave it and you get your initials on the team colour.
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
       <legend>Roster quotes</legend>
       <div id="roster"></div>
       <div class="hint">You can only change your own.</div>
@@ -344,12 +360,14 @@ const draft = {};
     mood: team.mood, typeface: team.typeface, backdrop: team.backdrop,
     accent: team.accent, crest: team.crest, bio: team.bio || '',
     song_title: team.song_title || '', song_artist: team.song_artist || '',
-    song_provider: team.song_provider, song_id: team.song_id, crest_url: team.crest_url
+    song_provider: team.song_provider, song_id: team.song_id, crest_url: team.crest_url,
+    avatar_url: profile.avatar_url || null
   });
 
   paintMoods(); paintBgs(); paintSwatches(); paintRoster(mates.data || []);
   fillForm();
   applyLook();
+  paintMug();
 
   $('loading').hidden = true;
   $('page').hidden = false;
@@ -520,6 +538,57 @@ $('crestfile').addEventListener('change', async e => {
   touch(); applyLook();
 });
 
+/* ---------- your photo ---------- */
+const publicAvatar = p => supabase.storage.from('avatars').getPublicUrl(p).data.publicUrl;
+
+function paintMug() {
+  $('mug').innerHTML = draft.avatar_url
+    ? `<img src="${publicAvatar(draft.avatar_url)}" alt="">`
+    : (profile.full_name || '?').split(/\s+/).map(w => w[0]).join('').slice(0,2).toUpperCase();
+}
+
+/* Shrink before upload. A phone photo is 4 MB; this makes it
+   about 60 KB, which is plenty for a 200px roster tile. */
+function shrink(file, size = 512) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      const s = Math.min(img.width, img.height);
+      const c = document.createElement('canvas');
+      c.width = c.height = size;
+      const g = c.getContext('2d');
+      g.drawImage(img, (img.width - s) / 2, (img.height - s) / 2, s, s, 0, 0, size, size);
+      c.toBlob(b => b ? resolve(b) : reject(new Error('Could not process that image')),
+               'image/jpeg', 0.85);
+    };
+    img.onerror = () => reject(new Error('That file isn\u2019t an image we can read'));
+    img.src = URL.createObjectURL(file);
+  });
+}
+
+$('avatarfile').addEventListener('change', async e => {
+  const f = e.target.files[0];
+  if (!f) return;
+  $('avatarhint').textContent = 'Processing…';
+
+  let blob;
+  try { blob = await shrink(f); }
+  catch (err) { $('avatarhint').textContent = err.message; return; }
+
+  $('avatarhint').textContent = 'Uploading…';
+  const path = `${profile.id}/avatar-${Date.now()}.jpg`;
+  const { error } = await supabase.storage.from('avatars')
+    .upload(path, blob, { upsert: true, contentType: 'image/jpeg' });
+
+  if (error) { $('avatarhint').textContent = 'Upload failed: ' + error.message; return; }
+
+  draft.avatar_url = path;
+  $('avatarhint').textContent =
+    `Uploaded, ${Math.round(blob.size / 1024)} KB. Save to make it live.`;
+  paintMug();
+  touch();
+});
+
 /* ---------- save ---------- */
 $('save').addEventListener('click', async () => {
   if (saving) return;
@@ -537,8 +606,13 @@ $('save').addEventListener('click', async () => {
 
   const { error } = await supabase.from('teams').update(patch).eq('id', team.id);
 
-  if (!error && draft.quote !== undefined) {
-    await supabase.from('profiles').update({ quote: draft.quote }).eq('id', profile.id);
+  if (!error) {
+    const mine = {};
+    if (draft.quote !== undefined)      mine.quote = draft.quote;
+    if (draft.avatar_url !== undefined) mine.avatar_url = draft.avatar_url;
+    if (Object.keys(mine).length) {
+      await supabase.from('profiles').update(mine).eq('id', profile.id);
+    }
   }
 
   saving = false;

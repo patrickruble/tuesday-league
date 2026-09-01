@@ -185,7 +185,7 @@ ${sponsorFooter(up)}
 })();
 </script>
 <script type="module">
-  import { paintAuthSlot } from '${up || './'}assets/db.js';
+  import { paintAuthSlot } from '${up}assets/db.js';
   paintAuthSlot(${depth});
 </script>
 </body>
@@ -448,6 +448,10 @@ function buildTeamPage(t) {
 
   const roster = t.roster.map((p,i) => `
       <article class="player">
+        <div class="face${p.photo ? ' has-img' : ''}">${
+          p.photo ? `<img src="../${esc(p.photo)}" alt="${esc(p.name)}" loading="lazy">`
+                  : esc(initials(p.name))
+        }</div>
         <div class="idx">${String(i+1).padStart(2,'0')}${i===0?' · CAPTAIN':''}</div>
         <h3><a href="../players/${p.slug}.html" style="color:inherit;text-decoration:none">${esc(p.name)}</a></h3>
         <div class="hcp">HCP INDEX ${p.hcp}</div>
@@ -602,7 +606,9 @@ function buildPlayerPage(p) {
   const t = p.team;
   const mates = t.roster.filter(m => m.slug !== p.slug).map(m => `
       <a href="${m.slug}.html">
-        <div class="mini">${initials(m.name)}</div>
+        <div class="mini${m.photo ? ' has-img' : ''}">${
+          m.photo ? `<img src="../${esc(m.photo)}" alt="" loading="lazy">` : initials(m.name)
+        }</div>
         <div><b>${esc(m.name)}</b><span>HCP ${m.hcp}</span></div>
       </a>`).join('');
 
@@ -630,7 +636,9 @@ function buildPlayerPage(p) {
     body:`
 <div class="phead">
   <div class="inner">
-    <div class="avatar">${esc(p.initials)}</div>
+    <div class="avatar${p.photo ? ' has-img' : ''}">${
+      p.photo ? `<img src="../${esc(p.photo)}" alt="${esc(p.name)}">` : esc(p.initials)
+    }</div>
     <div>
       <div class="eyebrow">Player ${String(p.order).padStart(2,'0')}${p.order===1?' · Captain':''}</div>
       <h1>${esc(p.name)}</h1>
@@ -680,4 +688,3 @@ OUT('records.html',  buildRecords());
 teams.forEach(t   => OUT(`teams/${t.slug}.html`,   buildTeamPage(t)));
 players.forEach(p => OUT(`players/${p.slug}.html`, buildPlayerPage(p)));
 console.log(`Done. ${5 + teams.length + players.length} pages.`);
-
