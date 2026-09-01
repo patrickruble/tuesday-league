@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=Instrument+Sans:wght@400;500;600&family=Martian+Mono:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/site.css">
+<link rel="stylesheet" href="../assets/extra.css">
 
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&display=swap" rel="stylesheet">
 <style>
@@ -25,7 +26,8 @@
 <header class="masthead">
   <div class="inner">
     <a class="mark" href="../index.html">Katy <em>·</em> Golf League</a>
-    <nav>
+    <button class="navtoggle" id="navtoggle" aria-expanded="false" aria-controls="nav">MENU</button>
+    <nav id="nav">
       <a href="../index.html">Leaderboard</a>
       <a href="../schedule.html">Schedule</a>
       <a href="../teams.html" aria-current="page">Teams</a>
@@ -49,11 +51,9 @@
   </div>
 </div>
 
-<div class="status" id="status">
+<div class="status">
   <div class="inner">
-    <div class="moodline">
-      <span class="lbl">Mood</span><i class="dot2"></i><b>content</b>
-    </div>
+    <div class="moodline"><span class="lbl">Mood</span><i class="dot2"></i><b>content</b></div>
     <div class="song">
       <span class="lbl">Walk-up</span>
       <button class="play" id="play" aria-label="Play walk-up song">▶</button>
@@ -78,56 +78,55 @@
       <div class="head"><h2>The Team</h2></div>
       <div class="panel blurb">A simulator league means never having to hear those three words again. We named ourselves after the thing we escaped.</div>
     </section>
-
     <section>
       <div class="head"><h2>Roster</h2></div>
       <div class="roster">
       <article class="player">
         <div class="idx">01 · CAPTAIN</div>
-        <h3>Nora Brennan</h3>
+        <h3><a href="../players/nora-brennan.html" style="color:inherit;text-decoration:none">Nora Brennan</a></h3>
         <div class="hcp">HCP INDEX 7.8</div>
         <p class="said">“No cart, no path, no problem.”</p>
       </article>
       <article class="player">
         <div class="idx">02</div>
-        <h3>Beto Sotelo</h3>
+        <h3><a href="../players/beto-sotelo.html" style="color:inherit;text-decoration:none">Beto Sotelo</a></h3>
         <div class="hcp">HCP INDEX 10.9</div>
         <p class="said">“Indoor golf is real golf.”</p>
       </article>
       <article class="player">
         <div class="idx">03</div>
-        <h3>Anil Iyer</h3>
+        <h3><a href="../players/anil-iyer.html" style="color:inherit;text-decoration:none">Anil Iyer</a></h3>
         <div class="hcp">HCP INDEX 14.5</div>
         <p class="said">“Climate controlled and proud.”</p>
       </article>
       </div>
     </section>
 
-  <section>
-    <div class="head"><h2>Next up</h2>
-      <span class="note">TUE 08 SEP · Bay 6 · Pebble Beach</span>
-    </div>
-    <div class="h2h">
-      <i style="background:#DB2777"></i>
-      <div class="txt">
-        <b>Fore Play</b>
-        First meeting of the season
+    <section>
+      <div class="head"><h2>Next up</h2>
+        <span class="note">TUE 08 SEP · Bay 6 · Pebble Beach</span>
       </div>
-      
-    </div>
-  </section>
+      <div class="h2h">
+        <i style="background:#DB2777"></i>
+        <div class="txt"><b>Fore Play</b>
+          First meeting of the season</div>
+        
+      </div>
+    </section>
     <section>
       <div class="head"><h2>Results</h2></div>
       
       <div class="match" style="grid-template-columns:74px 1fr auto">
         <div class="pld">TUE 25 AUG</div>
-        <div class="vs"><i style="background:#3F3F46"></i><b>The Sandbaggers</b></div>
+        <div class="vs"><i style="background:#3F3F46"></i>
+          <b><a href="the-sandbaggers.html" style="color:inherit;text-decoration:none">The Sandbaggers</a></b></div>
         <div class="mid"><span class="sc">14–17</span>
           <span style="font-size:9px;display:block">LOST</span></div>
       </div>
       <div class="match" style="grid-template-columns:74px 1fr auto">
         <div class="pld">TUE 18 AUG</div>
-        <div class="vs"><i style="background:#86198F"></i><b>Lavender Menace</b></div>
+        <div class="vs"><i style="background:#86198F"></i>
+          <b><a href="lavender-menace.html" style="color:inherit;text-decoration:none">Lavender Menace</a></b></div>
         <div class="mid"><span class="sc">16–12</span>
           <span style="font-size:9px;display:block">WON</span></div>
       </div>
@@ -149,5 +148,16 @@ document.getElementById('play').addEventListener('click',function(){
   </div>
 </footer>
 
+<script>
+(function(){
+  var b=document.getElementById('navtoggle'),n=document.getElementById('nav');
+  if(!b) return;
+  b.addEventListener('click',function(){
+    var open=n.classList.toggle('open');
+    b.setAttribute('aria-expanded',open);
+    b.textContent=open?'CLOSE':'MENU';
+  });
+})();
+</script>
 </body>
 </html>

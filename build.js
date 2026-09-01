@@ -5,19 +5,18 @@
      node build.js
 
    Reads  data/league.json, data/teams.json, data/schedule.json
-   Writes index.html, teams.html, schedule.html, playlist.html,
-          records.html and teams/<slug>.html for every team.
+   Writes every page in the site.
 
-   Nothing else in the repo should be hand-edited. Change the
-   data, run this, push.
+   Nothing generated should be hand-edited. Change the data,
+   run this, push.
    ============================================================ */
 
 const fs   = require('fs');
 const path = require('path');
 
-const ROOT  = __dirname;
-const DATA  = p => JSON.parse(fs.readFileSync(path.join(ROOT,'data',p),'utf8'));
-const OUT   = (p, html) => {
+const ROOT = __dirname;
+const DATA = p => JSON.parse(fs.readFileSync(path.join(ROOT,'data',p),'utf8'));
+const OUT  = (p, html) => {
   const full = path.join(ROOT, p);
   fs.mkdirSync(path.dirname(full), { recursive: true });
   fs.writeFileSync(full, html.trim() + '\n');
@@ -27,15 +26,14 @@ const OUT   = (p, html) => {
 const league   = DATA('league.json');
 const teams    = DATA('teams.json');
 const schedule = DATA('schedule.json');
-
-const bySlug = Object.fromEntries(teams.map(t => [t.slug, t]));
+const bySlug   = Object.fromEntries(teams.map(t => [t.slug, t]));
 
 /* ---------- helpers ---------- */
 const esc = s => String(s == null ? '' : s)
   .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 
-const rgba = (hex, a) => {
-  const n = parseInt(hex.slice(1), 16);
+const rgba = (hex,a) => {
+  const n = parseInt(hex.slice(1),16);
   return `rgba(${n>>16},${(n>>8)&255},${n&255},${a})`;
 };
 
@@ -44,19 +42,28 @@ const ordinal = n => {
   return n + (s[(v-20)%10] || s[v] || s[0]);
 };
 
-/* standings, derived rather than stored */
-const standings = [...teams].sort((a,b) =>
-  b.points - a.points || b.bestRound - a.bestRound);
+const slugify = s => s.toLowerCase().normalize('NFD')
+  .replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+
+const initials = s => s.split(/\s+/).map(w => w[0]).join('').slice(0,2).toUpperCase();
+
+/* ---------- derived data ---------- */
+const standings = [...teams].sort((a,b) => b.points - a.points || b.bestRound - a.bestRound);
 standings.forEach((t,i) => { t.rank = i + 1; });
 
-/* head to head, derived from played matches */
+const players = [];
+teams.forEach(t => t.roster.forEach((p,i) => {
+  p.slug = slugify(p.name);
+  players.push({ ...p, team: t, order: i + 1, initials: initials(p.name) });
+}));
+
 const h2h = {};
 for (const wk of schedule) {
   if (wk.status !== 'final') continue;
   for (const m of wk.matches) {
     const pair = (a,b,af,bf) => {
       h2h[a] ??= {};
-      h2h[a][b] ??= { w:0, l:0, t:0, for:0, against:0, met:0 };
+      h2h[a][b] ??= { w:0,l:0,t:0,for:0,against:0,met:0 };
       const r = h2h[a][b];
       r.met++; r.for += af; r.against += bf;
       if (af > bf) r.w++; else if (af < bf) r.l++; else r.t++;
@@ -66,7 +73,6 @@ for (const wk of schedule) {
   }
 }
 
-/* next opponent for each team */
 const nextWeek = schedule.find(w => w.status === 'next');
 const nextOpp = {};
 if (nextWeek) for (const m of nextWeek.matches) {
@@ -75,15 +81,12 @@ if (nextWeek) for (const m of nextWeek.matches) {
 }
 
 /* ---------- layout ---------- */
-function nav(current, depth) {
+function layout({ title, current, depth = 0, head = '', body }) {
   const up = depth ? '../' : '';
-  return league.nav.map(n =>
+  const nav = league.nav.map(n =>
     `<a href="${up}${n.href}"${n.href === current ? ' aria-current="page"' : ''}>${esc(n.label)}</a>`
   ).join('\n      ');
-}
 
-function layout({ title, current, depth = 0, head = '', body, bodyClass = '' }) {
-  const up = depth ? '../' : '';
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -94,15 +97,17 @@ function layout({ title, current, depth = 0, head = '', body, bodyClass = '' }) 
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=Instrument+Sans:wght@400;500;600&family=Martian+Mono:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="${up}assets/site.css">
+<link rel="stylesheet" href="${up}assets/extra.css">
 ${head}
 </head>
-<body${bodyClass ? ` class="${bodyClass}"` : ''}>
+<body>
 
 <header class="masthead">
   <div class="inner">
     <a class="mark" href="${up}index.html">${esc(league.wordmark[0])} <em>·</em> ${esc(league.wordmark[1])}</a>
-    <nav>
-      ${nav(current, depth)}
+    <button class="navtoggle" id="navtoggle" aria-expanded="false" aria-controls="nav">MENU</button>
+    <nav id="nav">
+      ${nav}
     </nav>
   </div>
 </header>
@@ -116,13 +121,22 @@ ${body}
   </div>
 </footer>
 
+<script>
+(function(){
+  var b=document.getElementById('navtoggle'),n=document.getElementById('nav');
+  if(!b) return;
+  b.addEventListener('click',function(){
+    var open=n.classList.toggle('open');
+    b.setAttribute('aria-expanded',open);
+    b.textContent=open?'CLOSE':'MENU';
+  });
+})();
+</script>
 </body>
 </html>`;
 }
 
-/* ============================================================
-   LEADERBOARD
-   ============================================================ */
+/* ============================================================ */
 function buildLeaderboard() {
   const rows = standings.map(t => `
   <a class="team" style="--c:${t.accent}" href="teams/${t.slug}.html">
@@ -133,27 +147,23 @@ function buildLeaderboard() {
         <div class="players">${t.roster.map(p => esc(p.name.split(' ').pop())).join(' · ')}</div></div>
       <div class="pld">${t.played}</div>
       <div class="pts">${t.points}</div>
-      <div class="form">${t.form.map(f => `<i class="dot${f ? ' w' : ''}"></i>`).join('')}</div>
+      <div class="form">${t.form.map(f => `<i class="dot${f?' w':''}"></i>`).join('')}</div>
       <div class="go">→</div>
     </div>
   </a>`).join('');
 
   return layout({
-    title: 'Leaderboard', current: 'index.html',
-    body: `
+    title:'Leaderboard', current:'index.html',
+    body:`
 <div class="title">
   <div class="inner">
-    <div>
-      <div class="eyebrow">${esc(league.season)} · Stableford</div>
-      <h1>Leaderboard</h1>
-    </div>
+    <div><div class="eyebrow">${esc(league.season)} · Stableford</div><h1>Leaderboard</h1></div>
     <div class="aside">
       THROUGH <b>WEEK ${league.currentWeek}</b> OF ${league.weeks}<br>
       ${nextWeek ? `NEXT ROUND <b>${esc(nextWeek.label)}</b> · ${esc(league.teeTime)}` : ''}
     </div>
   </div>
 </div>
-
 <div class="colhead">
   <div class="row">
     <span>POS</span><span></span><span>TEAM</span>
@@ -161,10 +171,8 @@ function buildLeaderboard() {
     <span class="c-hide">LAST 5</span><span class="c-hide"></span>
   </div>
 </div>
-
 <div class="board">${rows}
 </div>
-
 <div class="notes">
   <div class="inner">
     <span>${esc(league.scoringNote)}</span>
@@ -175,16 +183,12 @@ function buildLeaderboard() {
   });
 }
 
-/* ============================================================
-   TEAMS GRID
-   ============================================================ */
+/* ============================================================ */
 function buildTeams() {
   const cards = [...teams].sort((a,b) => a.name.localeCompare(b.name)).map(t => `
     <a class="card" style="--c:${t.accent}" href="teams/${t.slug}.html">
       <div class="cap"><div class="tile">${esc(t.crest)}</div><b>${esc(t.name)}</b></div>
-      <div class="body"><div class="who">${
-        t.roster.map(p => `<span>${esc(p.name)}</span>`).join('')
-      }</div></div>
+      <div class="body"><div class="who">${t.roster.map(p => `<span>${esc(p.name)}</span>`).join('')}</div></div>
       <div class="foot">
         <span class="pts">${t.points}</span>
         <span style="color:var(--dim)">${t.won}–${t.lost}</span>
@@ -193,14 +197,11 @@ function buildTeams() {
     </a>`).join('');
 
   return layout({
-    title: 'Teams', current: 'teams.html',
-    body: `
+    title:'Teams', current:'teams.html',
+    body:`
 <div class="title">
   <div class="inner">
-    <div>
-      <div class="eyebrow">${teams.length} teams · ${teams.length * 3} players</div>
-      <h1>Teams</h1>
-    </div>
+    <div><div class="eyebrow">${teams.length} teams · ${players.length} players</div><h1>Teams</h1></div>
   </div>
 </div>
 <div class="wrap"><div class="grid">${cards}
@@ -209,9 +210,7 @@ function buildTeams() {
   });
 }
 
-/* ============================================================
-   SCHEDULE
-   ============================================================ */
+/* ============================================================ */
 function buildSchedule() {
   const weeks = schedule.map(wk => {
     const matches = wk.matches.map(m => {
@@ -231,21 +230,19 @@ function buildSchedule() {
   <section class="week">
     <div class="whead">
       <h2>Week ${wk.week}</h2>
-      <span class="date">${esc(wk.label)}${wk.status === 'next' ? ' · ' + esc(league.teeTime) : ''}</span>
-      <span class="flag ${wk.status === 'next' ? 'next">NEXT UP' : 'done">FINAL'}</span>
+      <span class="date">${esc(wk.label)}${wk.status==='next' ? ' · '+esc(league.teeTime) : ''}</span>
+      <span class="flag ${wk.status==='next' ? 'next">NEXT UP' : 'done">FINAL'}</span>
     </div>${matches}
   </section>`;
   }).join('');
 
   return layout({
-    title: 'Schedule', current: 'schedule.html',
-    body: `
+    title:'Schedule', current:'schedule.html',
+    body:`
 <div class="title">
   <div class="inner">
-    <div>
-      <div class="eyebrow">${esc(league.season)} · ${league.weeks} weeks · ${league.bays} bays</div>
-      <h1>Schedule</h1>
-    </div>
+    <div><div class="eyebrow">${esc(league.season)} · ${league.weeks} weeks · ${league.bays} bays</div>
+    <h1>Schedule</h1></div>
   </div>
 </div>
 <div class="wrap">${weeks}
@@ -254,9 +251,7 @@ function buildSchedule() {
   });
 }
 
-/* ============================================================
-   PLAYLIST
-   ============================================================ */
+/* ============================================================ */
 function buildPlaylist() {
   const tracks = standings.filter(t => t.song && t.song.id).map((t,i) => `
     <div class="match" style="--c:${t.accent};grid-template-columns:44px 46px 1fr auto"
@@ -274,14 +269,11 @@ function buildPlaylist() {
     </div>`).join('');
 
   return layout({
-    title: 'Playlist', current: 'playlist.html',
-    body: `
+    title:'Playlist', current:'playlist.html',
+    body:`
 <div class="title">
   <div class="inner">
-    <div>
-      <div class="eyebrow">${teams.length} teams · ${teams.length} songs</div>
-      <h1>The Playlist</h1>
-    </div>
+    <div><div class="eyebrow">${teams.length} teams · ${teams.length} songs</div><h1>The Playlist</h1></div>
   </div>
 </div>
 <div class="wrap narrow">
@@ -291,8 +283,7 @@ function buildPlaylist() {
 <div id="player" style="position:fixed;left:0;right:0;bottom:0;background:var(--green-deep);
      transform:translateY(100%);transition:transform .2s ease">
   <div style="max-width:820px;margin:0 auto;padding:10px 24px">
-    <iframe id="frame" style="width:100%;height:80px;border:0;display:block"
-            allow="autoplay" title="Player"></iframe>
+    <iframe id="frame" style="width:100%;height:80px;border:0;display:block" allow="autoplay" title="Player"></iframe>
   </div>
 </div>
 <script>
@@ -311,42 +302,38 @@ document.querySelectorAll('[data-id]').forEach(function(t){
   });
 }
 
-/* ============================================================
-   RECORDS
-   ============================================================ */
+/* ============================================================ */
 function buildRecords() {
   const best   = [...teams].sort((a,b) => b.bestRound - a.bestRound)[0];
-  const streak = standings[0];
-  const worst  = standings[standings.length - 1];
+  const top    = standings[0];
+  const worst  = standings[standings.length-1];
+  const lowHcp = [...teams].sort((a,b) => a.handicap - b.handicap)[0];
+  const lowIdx = [...players].sort((a,b) => a.hcp - b.hcp)[0];
 
-  const card = (label, value, who, accent) => `
+  const card = (label,value,who,accent,href) => `
     <div style="background:var(--card);border:1px solid var(--rule);padding:20px;
          border-left:5px solid ${accent}">
       <div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)">${esc(label)}</div>
-      <div style="font-family:var(--data);font-size:34px;font-weight:600;letter-spacing:-.04em;
-           margin:8px 0 4px">${esc(value)}</div>
-      <div style="font-size:13px">${esc(who)}</div>
+      <div style="font-family:var(--data);font-size:34px;font-weight:600;letter-spacing:-.04em;margin:8px 0 4px">${esc(value)}</div>
+      <div style="font-size:13px">${href ? `<a href="${href}" style="color:inherit">${esc(who)}</a>` : esc(who)}</div>
     </div>`;
 
   return layout({
-    title: 'Records', current: 'records.html',
-    body: `
+    title:'Records', current:'records.html',
+    body:`
 <div class="title">
   <div class="inner">
-    <div>
-      <div class="eyebrow">${esc(league.season)} · through week ${league.currentWeek}</div>
-      <h1>Records</h1>
-    </div>
+    <div><div class="eyebrow">${esc(league.season)} · through week ${league.currentWeek}</div><h1>Records</h1></div>
   </div>
 </div>
 <div class="wrap">
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
-       gap:14px;margin:28px 0 50px">
-    ${card('Best round', best.bestRound + ' pts', best.name, best.accent)}
-    ${card('Most points', streak.points, streak.name, streak.accent)}
-    ${card('Best record', streak.won + '–' + streak.lost, streak.name, streak.accent)}
-    ${card('Lowest handicap', Math.min(...teams.map(t => t.handicap)), teams.find(t => t.handicap === Math.min(...teams.map(x => x.handicap))).name, '#007041')}
-    ${card('Still trying', worst.won + '–' + worst.lost, worst.name, worst.accent)}
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin:28px 0 20px">
+    ${card('Best round', best.bestRound+' pts', best.name, best.accent, 'teams/'+best.slug+'.html')}
+    ${card('Most points', top.points, top.name, top.accent, 'teams/'+top.slug+'.html')}
+    ${card('Best record', top.won+'–'+top.lost, top.name, top.accent, 'teams/'+top.slug+'.html')}
+    ${card('Lowest team handicap', lowHcp.handicap, lowHcp.name, lowHcp.accent, 'teams/'+lowHcp.slug+'.html')}
+    ${card('Lowest index', lowIdx.hcp, lowIdx.name, lowIdx.team.accent, 'players/'+lowIdx.slug+'.html')}
+    ${card('Still trying', worst.won+'–'+worst.lost, worst.name, worst.accent, 'teams/'+worst.slug+'.html')}
   </div>
   <p style="color:var(--dim);font-size:13px;max-width:56ch;padding-bottom:50px">
     Closest to the pin, long putt and chip-in records appear here once side
@@ -356,21 +343,19 @@ function buildRecords() {
   });
 }
 
-/* ============================================================
-   TEAM PAGES — each with its own typeface and backdrop
-   ============================================================ */
+/* ============================================================ */
 function buildTeamPage(t) {
   const face = league.typefaces[t.typeface] || league.typefaces.archivo;
   const mood = league.moodSentiment[t.moodSentiment] || '#B8EB7A';
   const opp  = nextOpp[t.slug] ? bySlug[nextOpp[t.slug].slug] : null;
-  const rec  = opp ? (h2h[t.slug]?.[opp.slug]) : null;
+  const rec  = opp && h2h[t.slug] ? h2h[t.slug][opp.slug] : null;
 
   const head = `
 <link href="https://fonts.googleapis.com/css2?family=${face.google}&display=swap" rel="stylesheet">
 <style>
   :root{
     --accent:${t.accent};
-    --pat:${rgba(t.accent, .15)};
+    --pat:${rgba(t.accent,.15)};
     --mood:${mood};
     --team-display:${face.stack};
     --team-wdth:${face.wdth};
@@ -379,29 +364,28 @@ function buildTeamPage(t) {
 
   const roster = t.roster.map((p,i) => `
       <article class="player">
-        <div class="idx">${String(i+1).padStart(2,'0')}${i === 0 ? ' · CAPTAIN' : ''}</div>
-        <h3>${esc(p.name)}</h3>
+        <div class="idx">${String(i+1).padStart(2,'0')}${i===0?' · CAPTAIN':''}</div>
+        <h3><a href="../players/${p.slug}.html" style="color:inherit;text-decoration:none">${esc(p.name)}</a></h3>
         <div class="hcp">HCP INDEX ${p.hcp}</div>
         <p class="said">“${esc(p.quote)}”</p>
       </article>`).join('');
 
   const h2hBlock = opp ? `
-  <section>
-    <div class="head"><h2>Next up</h2>
-      <span class="note">${esc(nextWeek.label)} · Bay ${nextOpp[t.slug].bay} · ${esc(nextWeek.course)}</span>
-    </div>
-    <div class="h2h">
-      <i style="background:${opp.accent}"></i>
-      <div class="txt">
-        <b>${esc(opp.name)}</b>
-        ${rec ? `${rec.met} previous meeting${rec.met === 1 ? '' : 's'}` : 'First meeting of the season'}
+    <section>
+      <div class="head"><h2>Next up</h2>
+        <span class="note">${esc(nextWeek.label)} · Bay ${nextOpp[t.slug].bay} · ${esc(nextWeek.course)}</span>
       </div>
-      ${rec ? `<div class="rec" style="margin-left:auto">${rec.w}–${rec.l}${rec.t ? '–' + rec.t : ''}</div>` : ''}
-    </div>
-  </section>` : '';
+      <div class="h2h">
+        <i style="background:${opp.accent}"></i>
+        <div class="txt"><b>${esc(opp.name)}</b>
+          ${rec ? `${rec.met} previous meeting${rec.met===1?'':'s'} · ${rec.for} pts for, ${rec.against} against`
+                : 'First meeting of the season'}</div>
+        ${rec ? `<div class="rec" style="margin-left:auto">${rec.w}–${rec.l}${rec.t?'–'+rec.t:''}</div>` : ''}
+      </div>
+    </section>` : '';
 
-  const results = schedule.filter(w => w.status === 'final').map(wk => {
-    const m = wk.matches.find(x => x.home === t.slug || x.away === t.slug);
+  const results = schedule.filter(w => w.status==='final').map(wk => {
+    const m = wk.matches.find(x => x.home===t.slug || x.away===t.slug);
     if (!m) return '';
     const home = m.home === t.slug;
     const other = bySlug[home ? m.away : m.home];
@@ -411,15 +395,16 @@ function buildTeamPage(t) {
     return `
       <div class="match" style="grid-template-columns:74px 1fr auto">
         <div class="pld">${esc(wk.label)}</div>
-        <div class="vs"><i style="background:${other.accent}"></i><b>${esc(other.name)}</b></div>
+        <div class="vs"><i style="background:${other.accent}"></i>
+          <b><a href="${other.slug}.html" style="color:inherit;text-decoration:none">${esc(other.name)}</a></b></div>
         <div class="mid"><span class="sc">${mine}–${theirs}</span>
           <span style="font-size:9px;display:block">${tag}</span></div>
       </div>`;
   }).join('');
 
   return layout({
-    title: t.name, current: 'teams.html', depth: 1, head,
-    body: `
+    title:t.name, current:'teams.html', depth:1, head,
+    body:`
 <div class="hero">
   <div class="inner">
     <div class="crest-lg">${esc(t.crest)}</div>
@@ -432,11 +417,9 @@ function buildTeamPage(t) {
   </div>
 </div>
 
-<div class="status" id="status">
+<div class="status">
   <div class="inner">
-    <div class="moodline">
-      <span class="lbl">Mood</span><i class="dot2"></i><b>${esc(t.mood)}</b>
-    </div>
+    <div class="moodline"><span class="lbl">Mood</span><i class="dot2"></i><b>${esc(t.mood)}</b></div>
     <div class="song">
       <span class="lbl">Walk-up</span>
       <button class="play" id="play" aria-label="Play walk-up song">▶</button>
@@ -447,7 +430,7 @@ function buildTeamPage(t) {
 
 <div class="numbers">
   <div class="inner">
-    <div><b>${(t.points / t.played).toFixed(1)}</b><span>Points per round</span></div>
+    <div><b>${(t.points/t.played).toFixed(1)}</b><span>Points per round</span></div>
     <div><b>${t.bestRound}</b><span>Best round</span></div>
     <div><b>${t.handicap}</b><span>Team handicap</span></div>
     <div><b>${t.played}</b><span>Rounds played</span></div>
@@ -461,7 +444,6 @@ function buildTeamPage(t) {
       <div class="head"><h2>The Team</h2></div>
       <div class="panel blurb">${esc(t.bio)}</div>
     </section>
-
     <section>
       <div class="head"><h2>Roster</h2></div>
       <div class="roster">${roster}
@@ -484,14 +466,67 @@ document.getElementById('play').addEventListener('click',function(){
   });
 }
 
-/* ============================================================
-   RUN
-   ============================================================ */
+/* ============================================================ */
+function buildPlayerPage(p) {
+  const t = p.team;
+  const mates = t.roster.filter(m => m.slug !== p.slug).map(m => `
+      <a href="${m.slug}.html">
+        <div class="mini">${initials(m.name)}</div>
+        <div><b>${esc(m.name)}</b><span>HCP ${m.hcp}</span></div>
+      </a>`).join('');
+
+  return layout({
+    title:p.name, current:'teams.html', depth:1,
+    head:`<style>:root{--accent:${t.accent}}</style>`,
+    body:`
+<div class="phead">
+  <div class="inner">
+    <div class="avatar">${esc(p.initials)}</div>
+    <div>
+      <div class="eyebrow">Player ${String(p.order).padStart(2,'0')}${p.order===1?' · Captain':''}</div>
+      <h1>${esc(p.name)}</h1>
+      <div class="team">Plays for <a href="../teams/${t.slug}.html">${esc(t.name)}</a>
+        · Bay ${t.bay} · ${ordinal(t.rank)} of ${teams.length}</div>
+    </div>
+    <div class="idxbox"><b>${p.hcp}</b><span>HANDICAP INDEX</span></div>
+  </div>
+</div>
+
+<div class="quotebar">
+  <div class="inner"><span class="lbl">Says</span><q>${esc(p.quote)}</q></div>
+</div>
+
+<div class="wrap">
+  <section>
+    <div class="head"><h2>This season</h2>
+      <span class="note">Scramble — most stats belong to the team</span></div>
+    <div class="statgrid">
+      <div><b>—</b><span>Drives used</span><small>Recorded from week 1</small></div>
+      <div><b>—</b><span>Closest to pin</span><small>Side contest wins</small></div>
+      <div><b>—</b><span>Long putts</span><small>Side contest wins</small></div>
+      <div><b>—</b><span>Chip-ins</span><small>From off the green</small></div>
+      <div><b>${t.played}</b><span>Rounds</span><small>With ${esc(t.name)}</small></div>
+      <div><b>${p.hcp}</b><span>Index</span><small>Updated weekly</small></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="head"><h2>Teammates</h2></div>
+    <div class="teammates">${mates}
+    </div>
+  </section>
+  <div style="height:40px"></div>
+</div>`
+  });
+}
+
+/* ============================================================ */
 console.log('Building', league.name);
 OUT('index.html',    buildLeaderboard());
 OUT('teams.html',    buildTeams());
 OUT('schedule.html', buildSchedule());
 OUT('playlist.html', buildPlaylist());
 OUT('records.html',  buildRecords());
-teams.forEach(t => OUT(`teams/${t.slug}.html`, buildTeamPage(t)));
-console.log(`Done. ${5 + teams.length} pages.`);
+teams.forEach(t   => OUT(`teams/${t.slug}.html`,   buildTeamPage(t)));
+players.forEach(p => OUT(`players/${p.slug}.html`, buildPlayerPage(p)));
+console.log(`Done. ${5 + teams.length + players.length} pages.`);

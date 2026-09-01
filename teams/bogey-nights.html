@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=Instrument+Sans:wght@400;500;600&family=Martian+Mono:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/site.css">
+<link rel="stylesheet" href="../assets/extra.css">
 
 <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
 <style>
@@ -25,7 +26,8 @@
 <header class="masthead">
   <div class="inner">
     <a class="mark" href="../index.html">Katy <em>·</em> Golf League</a>
-    <nav>
+    <button class="navtoggle" id="navtoggle" aria-expanded="false" aria-controls="nav">MENU</button>
+    <nav id="nav">
       <a href="../index.html">Leaderboard</a>
       <a href="../schedule.html">Schedule</a>
       <a href="../teams.html" aria-current="page">Teams</a>
@@ -49,11 +51,9 @@
   </div>
 </div>
 
-<div class="status" id="status">
+<div class="status">
   <div class="inner">
-    <div class="moodline">
-      <span class="lbl">Mood</span><i class="dot2"></i><b>smug</b>
-    </div>
+    <div class="moodline"><span class="lbl">Mood</span><i class="dot2"></i><b>smug</b></div>
     <div class="song">
       <span class="lbl">Walk-up</span>
       <button class="play" id="play" aria-label="Play walk-up song">▶</button>
@@ -78,56 +78,55 @@
       <div class="head"><h2>The Team</h2></div>
       <div class="panel blurb">Named before anyone on the team had actually made a bogey. Now it is a promise rather than a joke.</div>
     </section>
-
     <section>
       <div class="head"><h2>Roster</h2></div>
       <div class="roster">
       <article class="player">
         <div class="idx">01 · CAPTAIN</div>
-        <h3>Kate Halloran</h3>
+        <h3><a href="../players/kate-halloran.html" style="color:inherit;text-decoration:none">Kate Halloran</a></h3>
         <div class="hcp">HCP INDEX 4.2</div>
         <p class="said">“We peak in November.”</p>
       </article>
       <article class="player">
         <div class="idx">02</div>
-        <h3>Sam Pyke</h3>
+        <h3><a href="../players/sam-pyke.html" style="color:inherit;text-decoration:none">Sam Pyke</a></h3>
         <div class="hcp">HCP INDEX 9.6</div>
         <p class="said">“I only hit driver.”</p>
       </article>
       <article class="player">
         <div class="idx">03</div>
-        <h3>Tomas Ferreira</h3>
+        <h3><a href="../players/tomas-ferreira.html" style="color:inherit;text-decoration:none">Tomas Ferreira</a></h3>
         <div class="hcp">HCP INDEX 12.4</div>
         <p class="said">“Third chip-in this season, thanks for asking.”</p>
       </article>
       </div>
     </section>
 
-  <section>
-    <div class="head"><h2>Next up</h2>
-      <span class="note">TUE 08 SEP · Bay 1 · Pebble Beach</span>
-    </div>
-    <div class="h2h">
-      <i style="background:#57534E"></i>
-      <div class="txt">
-        <b>The Chunkers</b>
-        First meeting of the season
+    <section>
+      <div class="head"><h2>Next up</h2>
+        <span class="note">TUE 08 SEP · Bay 1 · Pebble Beach</span>
       </div>
-      
-    </div>
-  </section>
+      <div class="h2h">
+        <i style="background:#57534E"></i>
+        <div class="txt"><b>The Chunkers</b>
+          First meeting of the season</div>
+        
+      </div>
+    </section>
     <section>
       <div class="head"><h2>Results</h2></div>
       
       <div class="match" style="grid-template-columns:74px 1fr auto">
         <div class="pld">TUE 25 AUG</div>
-        <div class="vs"><i style="background:#DB2777"></i><b>Fore Play</b></div>
+        <div class="vs"><i style="background:#DB2777"></i>
+          <b><a href="fore-play.html" style="color:inherit;text-decoration:none">Fore Play</a></b></div>
         <div class="mid"><span class="sc">18–13</span>
           <span style="font-size:9px;display:block">WON</span></div>
       </div>
       <div class="match" style="grid-template-columns:74px 1fr auto">
         <div class="pld">TUE 18 AUG</div>
-        <div class="vs"><i style="background:#2B3A67"></i><b>Night Shift</b></div>
+        <div class="vs"><i style="background:#2B3A67"></i>
+          <b><a href="night-shift.html" style="color:inherit;text-decoration:none">Night Shift</a></b></div>
         <div class="mid"><span class="sc">17–16</span>
           <span style="font-size:9px;display:block">WON</span></div>
       </div>
@@ -149,5 +148,16 @@ document.getElementById('play').addEventListener('click',function(){
   </div>
 </footer>
 
+<script>
+(function(){
+  var b=document.getElementById('navtoggle'),n=document.getElementById('nav');
+  if(!b) return;
+  b.addEventListener('click',function(){
+    var open=n.classList.toggle('open');
+    b.setAttribute('aria-expanded',open);
+    b.textContent=open?'CLOSE':'MENU';
+  });
+})();
+</script>
 </body>
 </html>

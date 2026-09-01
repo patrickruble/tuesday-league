@@ -1,0 +1,83 @@
+/* ============================================================
+   Katy Golf League — additions
+   Loaded after site.css. Mobile nav and player pages.
+   ============================================================ */
+
+/* ---------- collapsible nav ---------- */
+.navtoggle{
+  display:none;margin-left:auto;background:transparent;cursor:pointer;
+  border:1px solid rgba(255,255,255,.3);color:#fff;
+  font-family:var(--data);font-size:10px;letter-spacing:.12em;
+  padding:7px 11px;
+}
+.navtoggle:hover{border-color:var(--lime);color:var(--lime)}
+
+@media (max-width:760px){
+  .masthead .inner{gap:12px}
+  .navtoggle{display:block}
+  .masthead nav{
+    order:3;width:100%;margin-left:0;
+    display:none;flex-direction:column;gap:0;
+    border-top:1px solid rgba(255,255,255,.16);
+    margin-top:4px;padding-top:4px;
+  }
+  .masthead nav.open{display:flex}
+  .masthead nav a{
+    padding:11px 2px;font-size:13px;letter-spacing:.06em;
+    border-bottom:1px solid rgba(255,255,255,.09);
+  }
+  .masthead nav a:last-child{border-bottom:0}
+}
+
+/* ---------- player pages ---------- */
+.phead{background:var(--green);color:#fff;padding-bottom:30px}
+.phead .inner{max-width:1040px;margin:0 auto;padding:0 24px;
+  display:grid;grid-template-columns:auto 1fr auto;gap:24px;align-items:end}
+.avatar{
+  width:72px;height:72px;background:var(--accent);display:grid;place-items:center;
+  font-family:var(--display);font-weight:800;font-size:25px;color:#fff;
+  box-shadow:0 0 0 1px rgba(255,255,255,.25);
+}
+.phead h1{font-size:clamp(32px,7vw,60px);font-variation-settings:'wdth' 108;
+  letter-spacing:-.02em;text-transform:uppercase}
+.phead .team{margin-top:9px;font-size:13px}
+.phead .team a{color:var(--lime);text-decoration:none;font-weight:600}
+.phead .team a:hover{text-decoration:underline;text-underline-offset:3px}
+.idxbox{text-align:right;font-family:var(--data);white-space:nowrap}
+.idxbox b{display:block;font-size:30px;font-weight:600;letter-spacing:-.04em}
+.idxbox span{font-size:10px;letter-spacing:.1em;color:rgba(255,255,255,.6)}
+
+.quotebar{background:var(--green-deep);color:#fff}
+.quotebar .inner{max-width:1040px;margin:0 auto;padding:14px 24px;
+  display:flex;align-items:center;gap:12px}
+.quotebar q{font-size:16px;font-style:italic;quotes:'“' '”'}
+
+.statgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+  gap:1px;background:var(--rule);border:1px solid var(--rule);margin-bottom:14px}
+.statgrid > div{background:var(--card);padding:18px}
+.statgrid b{display:block;font-family:var(--data);font-size:26px;font-weight:600;
+  letter-spacing:-.045em;line-height:1}
+.statgrid span{display:block;margin-top:7px;font-size:10px;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--dim)}
+.statgrid small{display:block;margin-top:4px;font-size:11px;color:var(--dim);
+  font-family:var(--body);letter-spacing:0;text-transform:none}
+
+.teammates{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.teammates a{
+  background:var(--card);border:1px solid var(--rule);padding:14px 16px;
+  text-decoration:none;color:inherit;display:flex;align-items:center;gap:12px;
+}
+.teammates a:hover{border-color:var(--accent)}
+.teammates .mini{width:34px;height:34px;flex:none;background:var(--accent);color:#fff;
+  display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:11px}
+.teammates b{display:block;font-size:14px;line-height:1.25}
+.teammates span{font-size:11px;color:var(--dim);font-family:var(--data)}
+
+@media (max-width:760px){
+  .phead .inner{grid-template-columns:auto 1fr;gap:16px}
+  .avatar{width:54px;height:54px;font-size:19px}
+  .idxbox{grid-column:1/-1;text-align:left;padding-top:12px;
+    border-top:1px solid rgba(255,255,255,.2)}
+  .idxbox b{display:inline;font-size:22px}
+  .idxbox span{margin-left:10px}
+}

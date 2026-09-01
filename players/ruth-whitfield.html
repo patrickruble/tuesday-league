@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ruth Whitfield — Katy Golf League</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=Instrument+Sans:wght@400;500;600&family=Martian+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+<link rel="stylesheet" href="../assets/extra.css">
+<style>:root{--accent:#3F3F46}</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="inner">
+    <a class="mark" href="../index.html">Katy <em>·</em> Golf League</a>
+    <button class="navtoggle" id="navtoggle" aria-expanded="false" aria-controls="nav">MENU</button>
+    <nav id="nav">
+      <a href="../index.html">Leaderboard</a>
+      <a href="../schedule.html">Schedule</a>
+      <a href="../teams.html" aria-current="page">Teams</a>
+      <a href="../clubhouse.html">Clubhouse</a>
+      <a href="../playlist.html">Playlist</a>
+      <a href="../records.html">Records</a>
+    </nav>
+  </div>
+</header>
+
+
+<div class="phead">
+  <div class="inner">
+    <div class="avatar">RW</div>
+    <div>
+      <div class="eyebrow">Player 03</div>
+      <h1>Ruth Whitfield</h1>
+      <div class="team">Plays for <a href="../teams/the-sandbaggers.html">The Sandbaggers</a>
+        · Bay 2 · 2nd of 14</div>
+    </div>
+    <div class="idxbox"><b>13.8</b><span>HANDICAP INDEX</span></div>
+  </div>
+</div>
+
+<div class="quotebar">
+  <div class="inner"><span class="lbl">Says</span><q>Improving naturally.</q></div>
+</div>
+
+<div class="wrap">
+  <section>
+    <div class="head"><h2>This season</h2>
+      <span class="note">Scramble — most stats belong to the team</span></div>
+    <div class="statgrid">
+      <div><b>—</b><span>Drives used</span><small>Recorded from week 1</small></div>
+      <div><b>—</b><span>Closest to pin</span><small>Side contest wins</small></div>
+      <div><b>—</b><span>Long putts</span><small>Side contest wins</small></div>
+      <div><b>—</b><span>Chip-ins</span><small>From off the green</small></div>
+      <div><b>10</b><span>Rounds</span><small>With The Sandbaggers</small></div>
+      <div><b>13.8</b><span>Index</span><small>Updated weekly</small></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="head"><h2>Teammates</h2></div>
+    <div class="teammates">
+      <a href="wei-ng.html">
+        <div class="mini">WN</div>
+        <div><b>Wei Ng</b><span>HCP 7.1</span></div>
+      </a>
+      <a href="yves-delacroix.html">
+        <div class="mini">YD</div>
+        <div><b>Yves Delacroix</b><span>HCP 10.3</span></div>
+      </a>
+    </div>
+  </section>
+  <div style="height:40px"></div>
+</div>
+
+<footer>
+  <div class="inner">
+    <span>Katy Golf League</span>
+    <span>14 teams · 9-hole scramble · Stableford</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var b=document.getElementById('navtoggle'),n=document.getElementById('nav');
+  if(!b) return;
+  b.addEventListener('click',function(){
+    var open=n.classList.toggle('open');
+    b.setAttribute('aria-expanded',open);
+    b.textContent=open?'CLOSE':'MENU';
+  });
+})();
+</script>
+</body>
+</html>

@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=Instrument+Sans:wght@400;500;600&family=Martian+Mono:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/site.css">
+<link rel="stylesheet" href="../assets/extra.css">
 
 <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
 <style>
@@ -25,7 +26,8 @@
 <header class="masthead">
   <div class="inner">
     <a class="mark" href="../index.html">Katy <em>·</em> Golf League</a>
-    <nav>
+    <button class="navtoggle" id="navtoggle" aria-expanded="false" aria-controls="nav">MENU</button>
+    <nav id="nav">
       <a href="../index.html">Leaderboard</a>
       <a href="../schedule.html">Schedule</a>
       <a href="../teams.html" aria-current="page">Teams</a>
@@ -49,11 +51,9 @@
   </div>
 </div>
 
-<div class="status" id="status">
+<div class="status">
   <div class="inner">
-    <div class="moodline">
-      <span class="lbl">Mood</span><i class="dot2"></i><b>giddy</b>
-    </div>
+    <div class="moodline"><span class="lbl">Mood</span><i class="dot2"></i><b>giddy</b></div>
     <div class="song">
       <span class="lbl">Walk-up</span>
       <button class="play" id="play" aria-label="Play walk-up song">▶</button>
@@ -78,56 +78,55 @@
       <div class="head"><h2>The Team</h2></div>
       <div class="panel blurb">The name was funnier before we had to say it out loud to the commissioner. We are keeping it.</div>
     </section>
-
     <section>
       <div class="head"><h2>Roster</h2></div>
       <div class="roster">
       <article class="player">
         <div class="idx">01 · CAPTAIN</div>
-        <h3>Rosa Castellan</h3>
+        <h3><a href="../players/rosa-castellan.html" style="color:inherit;text-decoration:none">Rosa Castellan</a></h3>
         <div class="hcp">HCP INDEX 10.7</div>
         <p class="said">“Committed to the bit.”</p>
       </article>
       <article class="player">
         <div class="idx">02</div>
-        <h3>Dani Ruiz</h3>
+        <h3><a href="../players/dani-ruiz.html" style="color:inherit;text-decoration:none">Dani Ruiz</a></h3>
         <div class="hcp">HCP INDEX 14.2</div>
         <p class="said">“It is a good name.”</p>
       </article>
       <article class="player">
         <div class="idx">03</div>
-        <h3>Ben Aldridge</h3>
+        <h3><a href="../players/ben-aldridge.html" style="color:inherit;text-decoration:none">Ben Aldridge</a></h3>
         <div class="hcp">HCP INDEX 18.1</div>
         <p class="said">“My mother asked about the name.”</p>
       </article>
       </div>
     </section>
 
-  <section>
-    <div class="head"><h2>Next up</h2>
-      <span class="note">TUE 08 SEP · Bay 6 · Pebble Beach</span>
-    </div>
-    <div class="h2h">
-      <i style="background:#0E7490"></i>
-      <div class="txt">
-        <b>Cart Path Only</b>
-        First meeting of the season
+    <section>
+      <div class="head"><h2>Next up</h2>
+        <span class="note">TUE 08 SEP · Bay 6 · Pebble Beach</span>
       </div>
-      
-    </div>
-  </section>
+      <div class="h2h">
+        <i style="background:#0E7490"></i>
+        <div class="txt"><b>Cart Path Only</b>
+          First meeting of the season</div>
+        
+      </div>
+    </section>
     <section>
       <div class="head"><h2>Results</h2></div>
       
       <div class="match" style="grid-template-columns:74px 1fr auto">
         <div class="pld">TUE 25 AUG</div>
-        <div class="vs"><i style="background:#A16207"></i><b>Bogey Nights</b></div>
+        <div class="vs"><i style="background:#A16207"></i>
+          <b><a href="bogey-nights.html" style="color:inherit;text-decoration:none">Bogey Nights</a></b></div>
         <div class="mid"><span class="sc">13–18</span>
           <span style="font-size:9px;display:block">LOST</span></div>
       </div>
       <div class="match" style="grid-template-columns:74px 1fr auto">
         <div class="pld">TUE 18 AUG</div>
-        <div class="vs"><i style="background:#0F766E"></i><b>Green Room</b></div>
+        <div class="vs"><i style="background:#0F766E"></i>
+          <b><a href="green-room.html" style="color:inherit;text-decoration:none">Green Room</a></b></div>
         <div class="mid"><span class="sc">14–14</span>
           <span style="font-size:9px;display:block">TIED</span></div>
       </div>
@@ -149,5 +148,16 @@ document.getElementById('play').addEventListener('click',function(){
   </div>
 </footer>
 
+<script>
+(function(){
+  var b=document.getElementById('navtoggle'),n=document.getElementById('nav');
+  if(!b) return;
+  b.addEventListener('click',function(){
+    var open=n.classList.toggle('open');
+    b.setAttribute('aria-expanded',open);
+    b.textContent=open?'CLOSE':'MENU';
+  });
+})();
+</script>
 </body>
 </html>

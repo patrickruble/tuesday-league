@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=Instrument+Sans:wght@400;500;600&family=Martian+Mono:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/extra.css">
 
 </head>
 <body>
@@ -15,7 +16,8 @@
 <header class="masthead">
   <div class="inner">
     <a class="mark" href="index.html">Katy <em>·</em> Golf League</a>
-    <nav>
+    <button class="navtoggle" id="navtoggle" aria-expanded="false" aria-controls="nav">MENU</button>
+    <nav id="nav">
       <a href="index.html">Leaderboard</a>
       <a href="schedule.html">Schedule</a>
       <a href="teams.html">Teams</a>
@@ -29,54 +31,52 @@
 
 <div class="title">
   <div class="inner">
-    <div>
-      <div class="eyebrow">Season 3 · through week 10</div>
-      <h1>Records</h1>
-    </div>
+    <div><div class="eyebrow">Season 3 · through week 10</div><h1>Records</h1></div>
   </div>
 </div>
 <div class="wrap">
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
-       gap:14px;margin:28px 0 50px">
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin:28px 0 20px">
     
     <div style="background:var(--card);border:1px solid var(--rule);padding:20px;
          border-left:5px solid #A16207">
       <div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)">Best round</div>
-      <div style="font-family:var(--data);font-size:34px;font-weight:600;letter-spacing:-.04em;
-           margin:8px 0 4px">18 pts</div>
-      <div style="font-size:13px">Bogey Nights</div>
+      <div style="font-family:var(--data);font-size:34px;font-weight:600;letter-spacing:-.04em;margin:8px 0 4px">18 pts</div>
+      <div style="font-size:13px"><a href="teams/bogey-nights.html" style="color:inherit">Bogey Nights</a></div>
     </div>
     
     <div style="background:var(--card);border:1px solid var(--rule);padding:20px;
          border-left:5px solid #A16207">
       <div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)">Most points</div>
-      <div style="font-family:var(--data);font-size:34px;font-weight:600;letter-spacing:-.04em;
-           margin:8px 0 4px">152</div>
-      <div style="font-size:13px">Bogey Nights</div>
+      <div style="font-family:var(--data);font-size:34px;font-weight:600;letter-spacing:-.04em;margin:8px 0 4px">152</div>
+      <div style="font-size:13px"><a href="teams/bogey-nights.html" style="color:inherit">Bogey Nights</a></div>
     </div>
     
     <div style="background:var(--card);border:1px solid var(--rule);padding:20px;
          border-left:5px solid #A16207">
       <div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)">Best record</div>
-      <div style="font-family:var(--data);font-size:34px;font-weight:600;letter-spacing:-.04em;
-           margin:8px 0 4px">9–1</div>
-      <div style="font-size:13px">Bogey Nights</div>
+      <div style="font-family:var(--data);font-size:34px;font-weight:600;letter-spacing:-.04em;margin:8px 0 4px">9–1</div>
+      <div style="font-size:13px"><a href="teams/bogey-nights.html" style="color:inherit">Bogey Nights</a></div>
     </div>
     
     <div style="background:var(--card);border:1px solid var(--rule);padding:20px;
-         border-left:5px solid #007041">
-      <div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)">Lowest handicap</div>
-      <div style="font-family:var(--data);font-size:34px;font-weight:600;letter-spacing:-.04em;
-           margin:8px 0 4px">3</div>
-      <div style="font-size:13px">Bogey Nights</div>
+         border-left:5px solid #A16207">
+      <div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)">Lowest team handicap</div>
+      <div style="font-family:var(--data);font-size:34px;font-weight:600;letter-spacing:-.04em;margin:8px 0 4px">3</div>
+      <div style="font-size:13px"><a href="teams/bogey-nights.html" style="color:inherit">Bogey Nights</a></div>
+    </div>
+    
+    <div style="background:var(--card);border:1px solid var(--rule);padding:20px;
+         border-left:5px solid #A16207">
+      <div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)">Lowest index</div>
+      <div style="font-family:var(--data);font-size:34px;font-weight:600;letter-spacing:-.04em;margin:8px 0 4px">4.2</div>
+      <div style="font-size:13px"><a href="players/kate-halloran.html" style="color:inherit">Kate Halloran</a></div>
     </div>
     
     <div style="background:var(--card);border:1px solid var(--rule);padding:20px;
          border-left:5px solid #57534E">
       <div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)">Still trying</div>
-      <div style="font-family:var(--data);font-size:34px;font-weight:600;letter-spacing:-.04em;
-           margin:8px 0 4px">1–9</div>
-      <div style="font-size:13px">The Chunkers</div>
+      <div style="font-family:var(--data);font-size:34px;font-weight:600;letter-spacing:-.04em;margin:8px 0 4px">1–9</div>
+      <div style="font-size:13px"><a href="teams/the-chunkers.html" style="color:inherit">The Chunkers</a></div>
     </div>
   </div>
   <p style="color:var(--dim);font-size:13px;max-width:56ch;padding-bottom:50px">
@@ -92,5 +92,16 @@
   </div>
 </footer>
 
+<script>
+(function(){
+  var b=document.getElementById('navtoggle'),n=document.getElementById('nav');
+  if(!b) return;
+  b.addEventListener('click',function(){
+    var open=n.classList.toggle('open');
+    b.setAttribute('aria-expanded',open);
+    b.textContent=open?'CLOSE':'MENU';
+  });
+})();
+</script>
 </body>
 </html>
