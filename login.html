@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sign in — Katy Golf League</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=Instrument+Sans:wght@400;500;600&family=Martian+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/extra.css">
+<style>
+body{display:flex;flex-direction:column;min-height:100vh}
+main{flex:1;display:grid;place-items:start center;padding:36px 24px 60px}
+.box{width:100%;max-width:392px}
+.box h1{font-size:34px;letter-spacing:-.02em;text-transform:uppercase;
+  font-variation-settings:'wdth' 110;margin-bottom:8px}
+.box .sub{color:var(--dim);font-size:14px;margin:0 0 22px}
+
+.pane{display:none}
+.pane.on{display:block}
+
+fieldset{border:1px solid var(--rule);background:var(--card);padding:20px;margin:0}
+legend{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);
+  font-weight:600;padding:0 7px}
+label{display:block;font-size:12px;font-weight:600;margin-bottom:6px}
+input{width:100%;font-family:inherit;font-size:16px;padding:11px 12px;
+  border:1px solid var(--rule);background:#FBFCFB;color:var(--ink)}
+input:focus{outline:none;border-color:var(--green);background:#fff}
+.field + .field{margin-top:16px}
+.hint{font-size:12px;color:var(--dim);margin-top:6px}
+
+.go{width:100%;margin-top:20px;background:var(--green);color:#fff;border:0;
+  padding:14px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit}
+.go:hover{background:var(--green-deep)}
+.go[disabled]{opacity:.55;cursor:default}
+
+.alt{margin-top:16px;font-size:13px;color:var(--dim);text-align:center;line-height:1.9}
+.alt button{background:none;border:0;padding:0;cursor:pointer;font-family:inherit;
+  font-size:13px;color:var(--green);font-weight:600;text-decoration:underline;
+  text-underline-offset:3px}
+
+.msg{margin-top:16px;padding:12px 14px;font-size:13px;line-height:1.45;display:none}
+.msg.on{display:block}
+.msg.bad{background:#FBE4E4;color:#8C1A1A;border-left:4px solid #B91C1C}
+.msg.good{background:#E4F2D6;color:#2F5314;border-left:4px solid var(--green)}
+
+/* roster claim */
+.spots{border:1px solid var(--rule);background:var(--card);max-height:340px;overflow-y:auto}
+.spot{display:grid;grid-template-columns:8px 1fr auto;gap:12px;align-items:center;
+  padding:12px 14px;cursor:pointer;border:0;background:none;width:100%;
+  font-family:inherit;text-align:left}
+.spot + .spot{border-top:1px solid var(--rule)}
+.spot:hover{background:#F5F9F3}
+.spot i{width:8px;height:30px;display:block;align-self:stretch}
+.spot b{display:block;font-size:15px;font-weight:600;line-height:1.2}
+.spot span{font-size:11px;color:var(--dim)}
+.spot .tk{font-family:var(--data);font-size:10px;color:var(--dim)}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="inner">
+    <a class="mark" href="index.html">Katy <em>·</em> Golf League</a>
+    <nav>
+      <a href="index.html">Leaderboard</a>
+      <a href="schedule.html">Schedule</a>
+      <a href="teams.html">Teams</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="box">
+
+    <!-- ============ SIGN IN ============ -->
+    <div class="pane on" id="p-in">
+      <h1>Sign in</h1>
+      <p class="sub">To set your mood, pick a walk-up song, or enter a card.</p>
+      <fieldset>
+        <legend>Your account</legend>
+        <div class="field">
+          <label for="in-email">Email</label>
+          <input type="email" id="in-email" autocomplete="email" inputmode="email">
+        </div>
+        <div class="field">
+          <label for="in-pw">Password</label>
+          <input type="password" id="in-pw" autocomplete="current-password">
+        </div>
+        <button class="go" id="do-in">Sign in</button>
+      </fieldset>
+      <p class="alt">
+        <button data-go="p-up">Need an account?</button><br>
+        <button data-go="p-forgot">Forgotten your password?</button>
+      </p>
+    </div>
+
+    <!-- ============ SIGN UP ============ -->
+    <div class="pane" id="p-up">
+      <h1>Create account</h1>
+      <p class="sub">Use the email Chris has for you and you'll land on your team automatically.</p>
+      <fieldset>
+        <legend>New account</legend>
+        <div class="field">
+          <label for="up-name">Your name</label>
+          <input type="text" id="up-name" autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="up-email">Email</label>
+          <input type="email" id="up-email" autocomplete="email" inputmode="email">
+        </div>
+        <div class="field">
+          <label for="up-pw">Password</label>
+          <input type="password" id="up-pw" autocomplete="new-password">
+          <div class="hint">At least 6 characters.</div>
+        </div>
+        <button class="go" id="do-up">Create account</button>
+      </fieldset>
+      <p class="alt"><button data-go="p-in">Already have one? Sign in</button></p>
+    </div>
+
+    <!-- ============ FORGOT ============ -->
+    <div class="pane" id="p-forgot">
+      <h1>Reset password</h1>
+      <p class="sub">We'll email you a link. It expires in an hour.</p>
+      <fieldset>
+        <legend>Send a link</legend>
+        <div class="field">
+          <label for="fg-email">Email</label>
+          <input type="email" id="fg-email" autocomplete="email" inputmode="email">
+        </div>
+        <button class="go" id="do-forgot">Email me a link</button>
+      </fieldset>
+      <p class="alt"><button data-go="p-in">Back to sign in</button></p>
+    </div>
+
+    <!-- ============ SET NEW PASSWORD ============ -->
+    <div class="pane" id="p-reset">
+      <h1>New password</h1>
+      <p class="sub">Pick something you'll remember. You're signed in already.</p>
+      <fieldset>
+        <legend>Choose a password</legend>
+        <div class="field">
+          <label for="rs-pw">New password</label>
+          <input type="password" id="rs-pw" autocomplete="new-password">
+          <div class="hint">At least 6 characters.</div>
+        </div>
+        <button class="go" id="do-reset">Save password</button>
+      </fieldset>
+    </div>
+
+    <!-- ============ CLAIM A SPOT ============ -->
+    <div class="pane" id="p-claim">
+      <h1>Which one are you?</h1>
+      <p class="sub">We couldn't match your email to the roster. Find your name below.</p>
+      <div class="spots" id="spotlist"></div>
+      <p class="alt">Not listed? Ask Chris to add you.</p>
+    </div>
+
+    <div class="msg" id="msg"></div>
+  </div>
+</main>
+
+<footer>
+  <div class="inner">
+    <span>Katy Golf League</span>
+    <span>14 teams · 9-hole scramble · Stableford</span>
+  </div>
+</footer>
+
+<script type="module">
+import { supabase, signIn, signUp, sendReset, setPassword,
+         me, openSpots, claimSpot, getSession } from './assets/db.js';
+
+const $   = id => document.getElementById(id);
+const msg = $('msg');
+
+const show = id => {
+  document.querySelectorAll('.pane').forEach(p => p.classList.toggle('on', p.id === id));
+  msg.classList.remove('on');
+};
+const say = (text, good = false) => {
+  msg.textContent = text;
+  msg.className = 'msg on ' + (good ? 'good' : 'bad');
+};
+const busy = (btn, on, label) => {
+  btn.disabled = on;
+  btn.textContent = on ? 'One moment…' : label;
+};
+
+document.querySelectorAll('[data-go]').forEach(b =>
+  b.addEventListener('click', () => show(b.dataset.go)));
+
+/* where to send people once they're in */
+const params = new URLSearchParams(location.search);
+const next = params.get('next') || 'edit-team.html';
+
+/* Supabase sends people back here with a recovery token in the
+   hash. detectSessionInUrl consumes it, then we show the reset pane. */
+if (params.get('mode') === 'reset' || location.hash.includes('type=recovery')) {
+  show('p-reset');
+}
+
+/* already signed in? either finish claiming, or move along */
+(async () => {
+  const session = await getSession();
+  if (!session) return;
+  if (params.get('mode') === 'reset' || location.hash.includes('type=recovery')) return;
+
+  const p = await me();
+  if (p && !p.team_id) { await paintSpots(); show('p-claim'); return; }
+  location.replace(next);
+})();
+
+/* ---------- sign in ---------- */
+$('do-in').addEventListener('click', async () => {
+  const b = $('do-in');
+  busy(b, true);
+  const r = await signIn($('in-email').value, $('in-pw').value);
+  busy(b, false, 'Sign in');
+  if (!r.ok) return say(r.error);
+
+  const p = await me({ fresh: true });
+  if (p && !p.team_id) { await paintSpots(); show('p-claim'); return; }
+  location.replace(next);
+});
+
+/* ---------- sign up ---------- */
+$('do-up').addEventListener('click', async () => {
+  const b = $('do-up');
+  if (!$('up-name').value.trim()) return say('We need your name.');
+  busy(b, true);
+  const r = await signUp($('up-email').value, $('up-pw').value, $('up-name').value);
+  busy(b, false, 'Create account');
+  if (!r.ok) return say(r.error);
+  say('Account made. Check your email for a confirmation link, then come back and sign in.', true);
+});
+
+/* ---------- forgot ---------- */
+$('do-forgot').addEventListener('click', async () => {
+  const b = $('do-forgot');
+  busy(b, true);
+  const r = await sendReset($('fg-email').value);
+  busy(b, false, 'Email me a link');
+  if (!r.ok) return say(r.error);
+  say('Link sent. Check your email — it works for an hour.', true);
+});
+
+/* ---------- set new password ---------- */
+$('do-reset').addEventListener('click', async () => {
+  const b = $('do-reset');
+  busy(b, true);
+  const r = await setPassword($('rs-pw').value);
+  busy(b, false, 'Save password');
+  if (!r.ok) return say(r.error);
+  say('Password saved. Sending you on…', true);
+  setTimeout(() => location.replace(next), 900);
+});
+
+/* ---------- claim a roster spot ---------- */
+async function paintSpots() {
+  const spots = await openSpots();
+  const list = $('spotlist');
+  if (!spots.length) {
+    list.innerHTML = '<div style="padding:16px;font-size:13px;color:var(--dim)">' +
+      'Every roster spot is taken. Ask Chris to sort it out.</div>';
+    return;
+  }
+  list.innerHTML = spots.map(s => `
+    <button class="spot" data-id="${s.id}">
+      <i style="background:${s.accent}"></i>
+      <div><b>${s.full_name}</b><span>${s.team_name}</span></div>
+      <span class="tk">${s.hcp_index ?? ''}</span>
+    </button>`).join('');
+
+  list.querySelectorAll('.spot').forEach(el =>
+    el.addEventListener('click', async () => {
+      el.disabled = true;
+      const r = await claimSpot(el.dataset.id);
+      if (!r.ok) { el.disabled = false; return say(r.error); }
+      say('Got it. Taking you to your team page…', true);
+      setTimeout(() => location.replace(next), 800);
+    }));
+}
+
+/* keep the page honest if the session changes in another tab */
+supabase.auth.onAuthStateChange((event) => {
+  if (event === 'SIGNED_OUT') show('p-in');
+});
+</script>
+</body>
+</html>
