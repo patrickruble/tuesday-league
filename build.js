@@ -185,7 +185,7 @@ ${sponsorFooter(up)}
 })();
 </script>
 <script type="module">
-  import { paintAuthSlot } from '${up}assets/db.js';
+  import { paintAuthSlot } from '${up || './'}assets/db.js';
   paintAuthSlot(${depth});
 </script>
 </body>
@@ -680,3 +680,4 @@ OUT('records.html',  buildRecords());
 teams.forEach(t   => OUT(`teams/${t.slug}.html`,   buildTeamPage(t)));
 players.forEach(p => OUT(`players/${p.slug}.html`, buildPlayerPage(p)));
 console.log(`Done. ${5 + teams.length + players.length} pages.`);
+
