@@ -38,6 +38,7 @@
       <a href="../clubhouse.html">Clubhouse</a>
       <a href="../playlist.html">Playlist</a>
       <a href="../records.html">Records</a>
+      <span id="authslot" class="authslot"></span>
     </nav>
   </div>
 </header>
@@ -211,6 +212,10 @@
     b.textContent=open?'CLOSE':'MENU';
   });
 })();
+</script>
+<script type="module">
+  import { paintAuthSlot } from '../assets/db.js';
+  paintAuthSlot(1);
 </script>
 </body>
 </html>

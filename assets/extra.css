@@ -212,3 +212,33 @@
   .dockinner{padding:10px 16px}
   #closedock{right:16px}
 }
+
+/* ============================================================
+   AUTH SLOT — sits at the end of the nav
+   ============================================================ */
+.authslot{display:flex;align-items:center;gap:14px}
+.authslot:not(:empty){
+  padding-left:16px;margin-left:2px;
+  border-left:1px solid rgba(255,255,255,.22);
+}
+.authslot a{
+  color:var(--lime);text-decoration:none;font-size:12px;font-weight:600;
+  letter-spacing:.06em;text-transform:uppercase;max-width:150px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.authslot a:hover{color:#fff;text-decoration:underline;text-underline-offset:3px}
+.authslot button{
+  background:none;border:0;padding:0;cursor:pointer;font-family:inherit;
+  color:rgba(255,255,255,.5);font-size:11px;letter-spacing:.06em;
+  text-transform:uppercase;
+}
+.authslot button:hover{color:#fff}
+
+@media (max-width:760px){
+  .authslot{
+    width:100%;padding:12px 2px 4px;margin-left:0;
+    border-left:0;border-top:1px solid rgba(255,255,255,.16);
+    justify-content:space-between;
+  }
+  .authslot a{font-size:13px;max-width:none}
+}

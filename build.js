@@ -157,6 +157,7 @@ ${head}
     <button class="navtoggle" id="navtoggle" aria-expanded="false" aria-controls="nav">MENU</button>
     <nav id="nav">
       ${nav}
+      <span id="authslot" class="authslot"></span>
     </nav>
   </div>
 </header>
@@ -182,6 +183,10 @@ ${sponsorFooter(up)}
     b.textContent=open?'CLOSE':'MENU';
   });
 })();
+</script>
+<script type="module">
+  import { paintAuthSlot } from '${up}assets/db.js';
+  paintAuthSlot(${depth});
 </script>
 </body>
 </html>`;
