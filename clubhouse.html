@@ -112,6 +112,36 @@
 .empty2 b{display:block;color:var(--ink);font-size:17px;margin-bottom:7px;
   font-family:var(--display);font-weight:800}
 .hide{display:none}
+
+/* ---------- GIFs ---------- */
+.gifbtn{background:#FBFCFB;border:1px solid var(--rule);padding:8px 12px;cursor:pointer;
+  font-family:var(--data);font-size:10px;letter-spacing:.07em;color:var(--dim);flex:none}
+.gifbtn:hover{border-color:var(--green);color:var(--green)}
+.gifbtn[aria-pressed="true"]{background:var(--green);color:#fff;border-color:var(--green)}
+
+.gifpanel{display:none;border:1px solid var(--rule);background:#FBFCFB;
+  margin-bottom:10px;padding:10px}
+.gifpanel.on{display:block}
+.gifpanel .srch{display:flex;gap:8px;margin-bottom:9px}
+.gifpanel .srch input{flex:1;margin:0}
+.gifgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));
+  gap:6px;max-height:236px;overflow-y:auto}
+.gifgrid button{border:1px solid var(--rule);background:#EEF1EE;padding:0;cursor:pointer;
+  aspect-ratio:1;overflow:hidden;display:block}
+.gifgrid button:hover{border-color:var(--green)}
+.gifgrid img{width:100%;height:100%;object-fit:cover;display:block}
+.gifnote{font-size:10px;color:var(--dim);margin-top:8px;font-family:var(--data);
+  letter-spacing:.05em;display:flex;align-items:center;gap:6px}
+
+.gifpick{display:none;margin-bottom:10px;position:relative;max-width:230px}
+.gifpick.on{display:block}
+.gifpick img{width:100%;display:block;border:1px solid var(--rule)}
+.gifpick button{position:absolute;top:5px;right:5px;width:24px;height:24px;border:0;
+  border-radius:50%;background:rgba(0,0,0,.66);color:#fff;cursor:pointer;font-size:11px;
+  display:grid;place-items:center;font-family:inherit}
+
+.post .gif,.reply .gif{margin-top:10px;max-width:290px}
+.post .gif img,.reply .gif img{width:100%;display:block;border:1px solid var(--rule)}
 </style>
 </head>
 <body>
@@ -167,7 +197,7 @@
 </footer>
 
 <script type="module">
-import { supabase, me, getSession, paintAuthSlot } from './assets/db.js';
+import { supabase, me, getSession, paintAuthSlot, searchGifs, GIPHY_KEY } from './assets/db.js';
 
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c =>
@@ -230,6 +260,18 @@ function paintComposer() {
       </div>
       <input type="text" id="c-title" placeholder="Title (optional)" maxlength="120">
       <textarea id="c-body" placeholder="What's on your mind?" maxlength="2000"></textarea>
+
+      <div class="gifpick" id="c-gifpick">
+        <img id="c-gifimg" alt="">
+        <button type="button" id="c-gifclear" aria-label="Remove GIF">✕</button>
+      </div>
+      <div class="gifpanel" id="c-gifpanel">
+        <div class="srch">
+          <input type="text" id="c-gifq" placeholder="Search GIFs">
+        </div>
+        <div class="gifgrid" id="c-gifgrid"></div>
+        <div class="gifnote">POWERED BY GIPHY</div>
+      </div>
       <div class="extras" id="extras">
         <input type="text" id="c-price" placeholder="Price" inputmode="decimal">
         <select id="c-cond">
@@ -245,6 +287,7 @@ function paintComposer() {
         ${teams.map(t => `<option value="${t.id}">${esc(t.name)}</option>`).join('')}
       </select>
       <div class="actions">
+        <button class="gifbtn" id="c-gifbtn" aria-pressed="false">GIF</button>
         <span class="note" id="c-note"></span>
         <button class="cancel" id="c-cancel">Cancel</button>
         <button class="send" id="c-send">Post</button>
@@ -268,6 +311,62 @@ function paintComposer() {
     }));
 
   $('c-send').addEventListener('click', submit);
+  wireGifPicker('c', g => { chosenGif = g; });
+}
+
+/* ---------- GIF picker, reusable ---------- */
+let chosenGif = null;
+
+function wireGifPicker(prefix, onPick) {
+  const btn   = $(prefix + '-gifbtn');
+  const panel = $(prefix + '-gifpanel');
+  const grid  = $(prefix + '-gifgrid');
+  const q     = $(prefix + '-gifq');
+  const pick  = $(prefix + '-gifpick');
+  const img   = $(prefix + '-gifimg');
+  const clear = $(prefix + '-gifclear');
+
+  if (!btn) return;
+  if (!GIPHY_KEY) { btn.remove(); return; }
+
+  let timer = null, loaded = false;
+
+  const paint = async () => {
+    grid.innerHTML = '<p style="font-size:12px;color:var(--dim)">Looking…</p>';
+    const gifs = await searchGifs(q.value);
+    if (!gifs.length) {
+      grid.innerHTML = '<p style="font-size:12px;color:var(--dim)">Nothing found.</p>';
+      return;
+    }
+    grid.innerHTML = gifs.map(g =>
+      `<button type="button" data-full="${g.full}" data-alt="${g.alt.replace(/"/g,'&quot;')}"
+               data-id="${g.id}"><img src="${g.thumb}" alt="" loading="lazy"></button>`).join('');
+    grid.querySelectorAll('button').forEach(b =>
+      b.addEventListener('click', () => {
+        const g = { url: b.dataset.full, alt: b.dataset.alt, id: b.dataset.id };
+        onPick(g);
+        img.src = g.url; img.alt = g.alt;
+        pick.classList.add('on');
+        panel.classList.remove('on');
+        btn.setAttribute('aria-pressed', 'false');
+      }));
+  };
+
+  btn.addEventListener('click', async () => {
+    const open = panel.classList.toggle('on');
+    btn.setAttribute('aria-pressed', open);
+    if (open && !loaded) { loaded = true; await paint(); q.focus(); }
+  });
+
+  q.addEventListener('input', () => {
+    clearTimeout(timer);
+    timer = setTimeout(paint, 350);
+  });
+
+  clear.addEventListener('click', () => {
+    onPick(null);
+    pick.classList.remove('on');
+  });
 }
 
 function syncKind() {
@@ -285,7 +384,11 @@ function syncKind() {
 async function submit() {
   const body = $('c-body').value.trim();
   const note = $('c-note');
-  if (!body) { note.textContent = 'Say something first.'; note.className = 'note err'; return; }
+  if (!body && !chosenGif) {
+    note.textContent = 'Say something, or pick a GIF.';
+    note.className = 'note err';
+    return;
+  }
 
   $('c-send').disabled = true;
   note.textContent = 'Posting…'; note.className = 'note';
@@ -295,8 +398,14 @@ async function submit() {
     team_id: profile.team_id,
     kind,
     title: $('c-title').value.trim() || null,
-    body
+    body: body || null
   };
+  if (chosenGif) {
+    row.gif_url = chosenGif.url;
+    row.gif_id = chosenGif.id;
+    row.gif_alt = chosenGif.alt;
+    row.gif_provider = 'giphy';
+  }
   if (kind === 'for_sale') {
     const p = parseFloat($('c-price').value);
     if (!isNaN(p)) row.price = p;
@@ -311,6 +420,8 @@ async function submit() {
 
   $('c-body').value = ''; $('c-title').value = '';
   $('c-price').value = ''; $('c-cond').value = '';
+  chosenGif = null;
+  $('c-gifpick').classList.remove('on');
   note.textContent = '';
   $('compose').classList.remove('open');
   await loadFeed();
@@ -356,7 +467,8 @@ function paintFeed() {
           <time>${ago(p.created_at)}</time>
         </div>
         ${p.title ? `<h2>${esc(p.title)}</h2>` : ''}
-        <p>${linkTeams(p)}</p>
+        ${p.body ? `<p>${linkTeams(p)}</p>` : ''}
+        ${p.gif_url ? `<div class="gif"><img src="${esc(p.gif_url)}" alt="${esc(p.gif_alt||'')}" loading="lazy"></div>` : ''}
         ${p.price != null ? `<span class="price">$${p.price}</span>` : ''}
         ${p.condition ? `<span class="cond">${p.condition.replace('_',' ')}${p.sold ? ' · SOLD' : ''}</span>` : ''}
         <div class="foot2">
@@ -397,18 +509,28 @@ async function toggleReplies(id) {
 
   const { data } = await supabase
     .from('post_replies')
-    .select('id,body,created_at,author_id,profiles(full_name)')
+    .select('id,body,gif_url,gif_alt,created_at,author_id,profiles(full_name)')
     .eq('post_id', id).order('created_at');
 
   box.innerHTML = (data || []).map(r => `
     <div class="reply">
       <div class="av">${esc(initials(r.profiles?.full_name))}</div>
       <div><b>${esc(r.profiles?.full_name || 'Someone')}</b><time>${ago(r.created_at)}</time>
-        <p>${esc(r.body)}</p></div>
+        ${r.body ? `<p>${esc(r.body)}</p>` : ''}
+        ${r.gif_url ? `<div class="gif"><img src="${esc(r.gif_url)}" alt="${esc(r.gif_alt||'')}" loading="lazy"></div>` : ''}
+      </div>
     </div>`).join('') +
     (profile ? `
+    <div class="gifpick" id="r-gifpick"><img id="r-gifimg" alt="">
+      <button type="button" id="r-gifclear" aria-label="Remove GIF">✕</button></div>
+    <div class="gifpanel" id="r-gifpanel">
+      <div class="srch"><input type="text" id="r-gifq" placeholder="Search GIFs"></div>
+      <div class="gifgrid" id="r-gifgrid"></div>
+      <div class="gifnote">POWERED BY GIPHY</div>
+    </div>
     <div class="replybox">
       <input type="text" placeholder="Say something" maxlength="1000" data-rin="${id}">
+      <button class="gifbtn" id="r-gifbtn" aria-pressed="false">GIF</button>
       <button data-rsend="${id}">Send</button>
     </div>` : `
     <p style="font-size:13px;color:var(--dim);margin-top:10px">
@@ -416,16 +538,24 @@ async function toggleReplies(id) {
 
   const send = box.querySelector('[data-rsend]');
   if (!send) return;
+
+  let replyGif = null;
+  wireGifPicker('r', g => { replyGif = g; });
+
   const input = box.querySelector('[data-rin]');
   const go = async () => {
     const body = input.value.trim();
-    if (!body) return;
+    if (!body && !replyGif) return;
     send.disabled = true;
-    const { error } = await supabase.from('post_replies')
-      .insert({ post_id: id, author_id: profile.id, body });
+    const row = { post_id: id, author_id: profile.id, body: body || null };
+    if (replyGif) {
+      row.gif_url = replyGif.url; row.gif_id = replyGif.id;
+      row.gif_alt = replyGif.alt; row.gif_provider = 'giphy';
+    }
+    const { error } = await supabase.from('post_replies').insert(row);
     send.disabled = false;
     if (error) { alert(error.message); return; }
-    input.value = '';
+    input.value = ''; replyGif = null;
     await loadFeed();
     toggleReplies(id);
   };

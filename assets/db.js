@@ -22,6 +22,42 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
 });
 
 /* ------------------------------------------------------------
+   Giphy
+   Get a free key at developers.giphy.com — create an account,
+   create an app, pick the API option rather than the SDK. The
+   key is public by design; it's rate limited, not secret.
+
+   Leave it empty and the GIF buttons simply don't appear.
+
+   Rating is capped at pg-13. Giphy's terms also require their
+   attribution mark to be shown wherever results appear, which
+   the picker does.
+------------------------------------------------------------ */
+export const GIPHY_KEY = '';
+export const GIPHY_RATING = 'pg-13';
+
+export async function searchGifs(query, limit = 24) {
+  if (!GIPHY_KEY) return [];
+  const base = query.trim()
+    ? `https://api.giphy.com/v1/gifs/search?q=${encodeURIComponent(query)}&`
+    : `https://api.giphy.com/v1/gifs/trending?`;
+  const url = `${base}api_key=${GIPHY_KEY}&limit=${limit}&rating=${GIPHY_RATING}&bundle=messaging_non_clips`;
+  try {
+    const r = await fetch(url);
+    if (!r.ok) return [];
+    const j = await r.json();
+    return (j.data || []).map(g => ({
+      id: g.id,
+      alt: g.title || 'GIF',
+      thumb: g.images?.fixed_width_downsampled?.url || g.images?.fixed_width?.url,
+      full:  g.images?.downsized_medium?.url || g.images?.original?.url
+    })).filter(g => g.thumb && g.full);
+  } catch {
+    return [];
+  }
+}
+
+/* ------------------------------------------------------------
    Session
 ------------------------------------------------------------ */
 export async function getSession() {
