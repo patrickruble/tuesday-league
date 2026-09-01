@@ -30,10 +30,10 @@ input:focus{outline:none;border-color:var(--green);background:#fff}
 .field + .field{margin-top:16px}
 .hint{font-size:12px;color:var(--dim);margin-top:6px}
 
-.go{width:100%;margin-top:20px;background:var(--green);color:#fff;border:0;
+.btn{width:100%;margin-top:20px;background:var(--green);color:#fff;border:0;
   padding:14px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit}
-.go:hover{background:var(--green-deep)}
-.go[disabled]{opacity:.55;cursor:default}
+.btn:hover{background:var(--green-deep)}
+.btn[disabled]{opacity:.55;cursor:default}
 
 .alt{margin-top:16px;font-size:13px;color:var(--dim);text-align:center;line-height:1.9}
 .alt button{background:none;border:0;padding:0;cursor:pointer;font-family:inherit;
@@ -88,7 +88,7 @@ input:focus{outline:none;border-color:var(--green);background:#fff}
           <label for="in-pw">Password</label>
           <input type="password" id="in-pw" autocomplete="current-password">
         </div>
-        <button class="go" id="do-in">Sign in</button>
+        <button class="btn" id="do-in">Sign in</button>
       </fieldset>
       <p class="alt">
         <button data-go="p-up">Need an account?</button><br>
@@ -115,7 +115,7 @@ input:focus{outline:none;border-color:var(--green);background:#fff}
           <input type="password" id="up-pw" autocomplete="new-password">
           <div class="hint">At least 6 characters.</div>
         </div>
-        <button class="go" id="do-up">Create account</button>
+        <button class="btn" id="do-up">Create account</button>
       </fieldset>
       <p class="alt"><button data-go="p-in">Already have one? Sign in</button></p>
     </div>
@@ -130,7 +130,7 @@ input:focus{outline:none;border-color:var(--green);background:#fff}
           <label for="fg-email">Email</label>
           <input type="email" id="fg-email" autocomplete="email" inputmode="email">
         </div>
-        <button class="go" id="do-forgot">Email me a link</button>
+        <button class="btn" id="do-forgot">Email me a link</button>
       </fieldset>
       <p class="alt"><button data-go="p-in">Back to sign in</button></p>
     </div>
@@ -146,7 +146,7 @@ input:focus{outline:none;border-color:var(--green);background:#fff}
           <input type="password" id="rs-pw" autocomplete="new-password">
           <div class="hint">At least 6 characters.</div>
         </div>
-        <button class="go" id="do-reset">Save password</button>
+        <button class="btn" id="do-reset">Save password</button>
       </fieldset>
     </div>
 
@@ -285,9 +285,22 @@ async function paintSpots() {
 }
 
 /* keep the page honest if the session changes in another tab */
+/* Enter submits whichever pane is showing */
+document.querySelectorAll('input').forEach(function(i){
+  i.addEventListener('keydown', function(e){
+    if(e.key !== 'Enter') return;
+    e.preventDefault();
+    var pane = i.closest('.pane');
+    var b = pane && pane.querySelector('.btn');
+    if(b && !b.disabled) b.click();
+  });
+});
+
 supabase.auth.onAuthStateChange((event) => {
   if (event === 'SIGNED_OUT') show('p-in');
 });
 </script>
 </body>
 </html>
+
+
