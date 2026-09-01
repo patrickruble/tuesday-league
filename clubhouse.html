@@ -3,67 +3,61 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Clubhouse — X-Golf Tuesday League</title>
+<title>Clubhouse — Katy Golf League</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#007041">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,100..125,400..800&family=Instrument+Sans:wght@400;500;600&family=Martian+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=Instrument+Sans:wght@400;500;600&family=Martian+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/extra.css">
 <style>
-:root{
-  --green:#007041;--green-deep:#00522F;--green-line:#B4C9BC;--lime:#B8EB7A;
-  --field:#DCE1DC;--card:#FFFFFF;--ink:#10221A;--dim:#5F6F66;--rule:#D2D8D2;
-  --display:'Archivo','Helvetica Neue',Arial,sans-serif;
-  --body:'Instrument Sans',system-ui,sans-serif;
-  --data:'Martian Mono','Courier New',monospace;
-}
-*{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--field);color:var(--ink);font-family:var(--body);
-  font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
-h1,h2{margin:0;font-family:var(--display);font-weight:800;line-height:1}
-:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
-.wrap{max-width:760px;margin:0 auto;padding:0 24px}
+.feedwrap{max-width:760px;margin:0 auto;padding:0 24px}
 
-.masthead{background:var(--green);color:#fff}
-.masthead .inner{max-width:1040px;margin:0 auto;padding:14px 24px;
-  display:flex;align-items:center;gap:26px;flex-wrap:wrap}
-.mark{font-family:var(--display);font-weight:800;font-variation-settings:'wdth' 118;
-  font-size:15px;letter-spacing:.1em;text-transform:uppercase;color:#fff;text-decoration:none}
-.mark em{font-style:normal;color:var(--lime)}
-.masthead nav{display:flex;gap:20px;margin-left:auto;flex-wrap:wrap}
-.masthead nav a{color:rgba(255,255,255,.76);text-decoration:none;font-size:12px;
-  letter-spacing:.08em;text-transform:uppercase;font-weight:500}
-.masthead nav a:hover,.masthead nav a[aria-current]{color:var(--lime)}
-
-.title{background:var(--green);color:#fff;padding-bottom:26px}
-.title .eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;
-  color:var(--lime);font-weight:600;margin-bottom:10px}
-.title h1{font-size:clamp(38px,8vw,68px);font-variation-settings:'wdth' 112;
-  letter-spacing:-.025em;text-transform:uppercase}
-
-/* filter chips */
-.filters{background:var(--green-deep);position:sticky;top:0;z-index:5}
-.filters .wrap{display:flex;gap:7px;padding-top:11px;padding-bottom:11px;
-  overflow-x:auto;-webkit-overflow-scrolling:touch}
-.chip{
-  flex:none;background:transparent;color:rgba(255,255,255,.65);
+/* filters */
+.filters{background:var(--green-deep);position:sticky;top:0;z-index:10}
+.filters .inner{max-width:760px;margin:0 auto;display:flex;gap:7px;
+  padding:11px 24px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.chip{flex:none;background:transparent;color:rgba(255,255,255,.65);
   border:1px solid rgba(255,255,255,.25);padding:6px 12px;cursor:pointer;
-  font-family:var(--data);font-size:10px;letter-spacing:.07em;white-space:nowrap;
-}
+  font-family:var(--data);font-size:10px;letter-spacing:.07em;white-space:nowrap}
 .chip[aria-pressed="true"]{background:var(--lime);color:var(--green-deep);border-color:var(--lime)}
 
-/* compose */
-.compose{background:var(--card);margin-top:22px;border:1px solid var(--rule);padding:15px 17px;
-  display:flex;align-items:center;gap:13px}
-.compose .av{width:36px;height:36px;flex:none;background:#C2410C;color:#fff;
+/* composer */
+.compose{background:var(--card);margin-top:22px;border:1px solid var(--rule)}
+.compose .row1{display:flex;align-items:center;gap:13px;padding:15px 17px}
+.compose .av{width:36px;height:36px;flex:none;background:var(--dim);color:#fff;
   display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:12px}
-.compose input{flex:1;border:0;font-family:inherit;font-size:14px;color:var(--dim);
-  background:none;min-width:0}
-.compose input:focus{outline:none;color:var(--ink)}
-.compose button{flex:none;background:var(--green);color:#fff;border:0;padding:9px 15px;
-  font-size:12px;font-weight:600;cursor:pointer;letter-spacing:.05em}
+.compose .prompt{flex:1;border:0;font-family:inherit;font-size:14px;color:var(--dim);
+  background:none;min-width:0;text-align:left;cursor:pointer;padding:0}
+.compose.open .prompt{display:none}
+.composer{display:none;padding:0 17px 15px}
+.compose.open .composer{display:block}
+.kinds{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.kind{border:1px solid var(--rule);background:#FBFCFB;padding:6px 11px;cursor:pointer;
+  font-family:var(--data);font-size:10px;letter-spacing:.06em;color:var(--dim)}
+.kind[aria-pressed="true"]{background:var(--green);color:#fff;border-color:var(--green)}
+.composer input,.composer textarea,.composer select{width:100%;font-family:inherit;
+  font-size:15px;padding:10px 12px;border:1px solid var(--rule);background:#FBFCFB;
+  color:var(--ink);margin-bottom:9px}
+.composer textarea{min-height:88px;resize:vertical;line-height:1.5}
+.composer input:focus,.composer textarea:focus,.composer select:focus{
+  outline:none;border-color:var(--green);background:#fff}
+.extras{display:none;gap:9px}
+.extras.on{display:grid;grid-template-columns:1fr 1fr}
+.composer .actions{display:flex;gap:9px;align-items:center;margin-top:4px}
+.composer .actions .note{flex:1;font-size:12px;color:var(--dim)}
+.composer .actions .note.err{color:#B91C1C}
+.composer button.send{background:var(--green);color:#fff;border:0;padding:10px 18px;
+  font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
+.composer button.send[disabled]{opacity:.45;cursor:default}
+.composer button.cancel{background:none;border:0;color:var(--dim);cursor:pointer;
+  font-family:inherit;font-size:13px}
 
 /* posts */
-.feed{margin:16px 0 50px}
+.feed{margin:16px 0 60px}
 .post{background:var(--card);border:1px solid var(--rule);margin-bottom:12px;
   display:grid;grid-template-columns:5px 1fr}
 .post .stripe{background:var(--c,#CBD2CB)}
@@ -74,32 +68,49 @@ h1,h2{margin:0;font-family:var(--display);font-weight:800;line-height:1}
 .meta .nm b{font-size:13px;display:block;line-height:1.25}
 .meta .nm span{font-size:11px;color:var(--dim)}
 .meta time{margin-left:auto;font-family:var(--data);font-size:10px;color:var(--dim)}
-.kind{
-  font-family:var(--data);font-size:8px;font-weight:600;letter-spacing:.11em;
-  padding:3px 6px;flex:none;
-}
+.kindtag{font-family:var(--data);font-size:8px;font-weight:600;letter-spacing:.11em;
+  padding:3px 6px;flex:none}
 .k-talk{background:#F2E8EC;color:#7A1F3D}
 .k-for_sale{background:#E4F2D6;color:#3F6212}
 .k-wanted{background:#E0EEF4;color:#0E5E75}
 .k-sub_needed{background:#FDECD8;color:#9A4A0B}
+.k-question{background:#EEF1EE;color:#4B5A52}
 .k-announcement{background:var(--green);color:#fff}
 .k-brag{background:#EDE4F7;color:#5B21B6}
 .pin{background:var(--lime);color:var(--green-deep)}
-
-.post h2{font-size:17px;margin-bottom:6px;font-variation-settings:'wdth' 104;
-  letter-spacing:-.015em}
-.post p{margin:0;font-size:15px}
-.at{color:var(--t);font-weight:600}
+.post h2{font-size:17px;margin:0 0 6px;font-family:var(--display);font-weight:800;
+  font-variation-settings:'wdth' 104;letter-spacing:-.015em}
+.post p{margin:0;font-size:15px;white-space:pre-wrap}
+.at{font-weight:600}
 .price{font-family:var(--data);font-size:17px;font-weight:600;margin-top:10px;display:block}
 .cond{font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.08em}
-.foot{margin-top:12px;padding-top:11px;border-top:1px solid var(--rule);
+.foot2{margin-top:12px;padding-top:11px;border-top:1px solid var(--rule);
   display:flex;gap:16px;align-items:center;font-size:12px;color:var(--dim)}
-.foot button{background:none;border:0;padding:0;cursor:pointer;color:var(--dim);
+.foot2 button{background:none;border:0;padding:0;cursor:pointer;color:var(--dim);
   font-family:inherit;font-size:12px}
-.foot button:hover{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.foot2 button:hover{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
 
-footer{background:var(--green);color:rgba(255,255,255,.55);font-size:12px}
-footer .inner{max-width:1040px;margin:0 auto;padding:22px 24px;display:flex;gap:18px;flex-wrap:wrap}
+/* replies */
+.replies{display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--rule)}
+.replies.on{display:block}
+.reply{display:grid;grid-template-columns:26px 1fr;gap:10px;padding:8px 0}
+.reply + .reply{border-top:1px dotted var(--rule)}
+.reply .av{width:26px;height:26px;background:var(--dim);color:#fff;display:grid;
+  place-items:center;font-family:var(--display);font-weight:800;font-size:9px}
+.reply b{font-size:12px}
+.reply time{font-size:10px;color:var(--dim);margin-left:7px;font-family:var(--data)}
+.reply p{margin:2px 0 0;font-size:14px}
+.replybox{display:flex;gap:8px;margin-top:11px}
+.replybox input{flex:1;font-family:inherit;font-size:14px;padding:9px 11px;
+  border:1px solid var(--rule);background:#FBFCFB;min-width:0}
+.replybox input:focus{outline:none;border-color:var(--green);background:#fff}
+.replybox button{background:var(--green);color:#fff;border:0;padding:9px 14px;
+  font-size:13px;cursor:pointer;font-family:inherit;flex:none}
+
+.empty2{background:var(--card);border:1px dashed var(--rule);padding:44px 24px;
+  text-align:center;color:var(--dim);font-size:14px;line-height:1.6}
+.empty2 b{display:block;color:var(--ink);font-size:17px;margin-bottom:7px;
+  font-family:var(--display);font-weight:800}
 .hide{display:none}
 </style>
 </head>
@@ -107,27 +118,31 @@ footer .inner{max-width:1040px;margin:0 auto;padding:22px 24px;display:flex;gap:
 
 <header class="masthead">
   <div class="inner">
-    <a class="mark" href="index.html">X-Golf <em>·</em> Tuesday League</a>
-    <nav>
+    <a class="mark" href="index.html">Katy <em>·</em> Golf League</a>
+    <button class="navtoggle" id="navtoggle" aria-expanded="false" aria-controls="nav">MENU</button>
+    <nav id="nav">
       <a href="index.html">Leaderboard</a>
       <a href="schedule.html">Schedule</a>
       <a href="teams.html">Teams</a>
       <a href="clubhouse.html" aria-current="page">Clubhouse</a>
       <a href="playlist.html">Playlist</a>
       <a href="records.html">Records</a>
+      <span id="authslot" class="authslot"></span>
     </nav>
   </div>
 </header>
 
 <div class="title">
-  <div class="wrap">
-    <div class="eyebrow">Talk · Gear · Subs · Announcements</div>
-    <h1>Clubhouse</h1>
+  <div class="inner">
+    <div>
+      <div class="eyebrow">Talk · Gear · Subs · Announcements</div>
+      <h1>Clubhouse</h1>
+    </div>
   </div>
 </div>
 
 <div class="filters">
-  <div class="wrap">
+  <div class="inner" id="filters">
     <button class="chip" data-f="all" aria-pressed="true">EVERYTHING</button>
     <button class="chip" data-f="talk" aria-pressed="false">TRASH TALK</button>
     <button class="chip" data-f="for_sale" aria-pressed="false">FOR SALE</button>
@@ -135,154 +150,302 @@ footer .inner{max-width:1040px;margin:0 auto;padding:22px 24px;display:flex;gap:
     <button class="chip" data-f="sub_needed" aria-pressed="false">SUBS</button>
     <button class="chip" data-f="announcement" aria-pressed="false">LEAGUE</button>
     <button class="chip" data-f="brag" aria-pressed="false">BRAGS</button>
+    <button class="chip" data-f="question" aria-pressed="false">QUESTIONS</button>
   </div>
 </div>
 
-<div class="wrap">
-
-  <div class="compose">
-    <div class="av">RO</div>
-    <input type="text" placeholder="Selling something? Need a sub? Got something to say?">
-    <button type="button">Post</button>
-  </div>
-
-  <div class="feed">
-
-    <article class="post" data-k="announcement" style="--c:#007041">
-      <div class="stripe"></div>
-      <div class="in">
-        <div class="meta">
-          <div class="av" style="--c:#007041">CH</div>
-          <div class="nm"><b>Chris H.</b><span>Commissioner</span></div>
-          <span class="kind pin">PINNED</span>
-          <time>2h</time>
-        </div>
-        <h2>Week 11 is Pebble front 9</h2>
-        <p>Bay assignments are up on the schedule page. Same tee time, 7:30.
-           If your team is short, post here by Monday and someone will cover.</p>
-        <div class="foot"><button>3 replies</button><button>Reply</button></div>
-      </div>
-    </article>
-
-    <article class="post" data-k="for_sale" style="--c:#2B3A67">
-      <div class="stripe"></div>
-      <div class="in">
-        <div class="meta">
-          <div class="av" style="--c:#2B3A67">JA</div>
-          <div class="nm"><b>Jide Abara</b><span>Night Shift</span></div>
-          <span class="kind k-for_sale">FOR SALE</span>
-          <time>5h</time>
-        </div>
-        <h2>Vokey SM9 — 54° and 58°</h2>
-        <p>Bought a full set and these are surplus. Grooves are still sharp,
-           couple of bag chatter marks on the 58. Would rather they went to
-           someone in league than to a trade-in counter.</p>
-        <span class="price">$140 for the pair</span>
-        <span class="cond">Good condition · find me Tuesdays, bay 4</span>
-        <div class="foot"><button>2 replies</button><button>Reply</button></div>
-      </div>
-    </article>
-
-    <article class="post" data-k="talk" style="--c:#0F766E">
-      <div class="stripe"></div>
-      <div class="in">
-        <div class="meta">
-          <div class="av" style="--c:#0F766E">MH</div>
-          <div class="nm"><b>Marc Haddad</b><span>Green Room</span></div>
-          <span class="kind k-talk">TRASH TALK</span>
-          <time>1d</time>
-        </div>
-        <p>Four points off a handicap they did not agree to and
-           <span class="at" style="--t:#C2410C">Static Cling</span> are acting
-           like they broke the course record. Framed the card, did you?</p>
-        <div class="foot"><button>7 replies</button><button>Reply</button></div>
-      </div>
-    </article>
-
-    <article class="post" data-k="sub_needed" style="--c:#B45309">
-      <div class="stripe"></div>
-      <div class="in">
-        <div class="meta">
-          <div class="av" style="--c:#B45309">DS</div>
-          <div class="nm"><b>Dani Salgado</b><span>Orange Julius</span></div>
-          <span class="kind k-sub_needed">SUB NEEDED</span>
-          <time>1d</time>
-        </div>
-        <h2>Need one for week 11</h2>
-        <p>Whitmore is out of town. Anyone free Tuesday 7:30, bay 2? Handicap
-           doesn't matter much, we're not exactly chasing the title.</p>
-        <div class="foot"><button>4 replies</button><button>Reply</button></div>
-      </div>
-    </article>
-
-    <article class="post" data-k="brag" style="--c:#A16207">
-      <div class="stripe"></div>
-      <div class="in">
-        <div class="meta">
-          <div class="av" style="--c:#A16207">TF</div>
-          <div class="nm"><b>Tomas Ferreira</b><span>Bogey Nights</span></div>
-          <span class="kind k-brag">BRAG</span>
-          <time>2d</time>
-        </div>
-        <p>Chipped in on 6 from the back fringe. Third one this season.
-           Two more and I'm getting the Houdini badge, so please clap.</p>
-        <div class="foot"><button>9 replies</button><button>Reply</button></div>
-      </div>
-    </article>
-
-    <article class="post" data-k="wanted" style="--c:#6D28D9">
-      <div class="stripe"></div>
-      <div class="in">
-        <div class="meta">
-          <div class="av" style="--c:#6D28D9">PK</div>
-          <div class="nm"><b>Petra Kowal</b><span>Shank Redemption</span></div>
-          <span class="kind k-wanted">WANTED</span>
-          <time>3d</time>
-        </div>
-        <h2>Looking for a 3-wood, stiff shaft</h2>
-        <p>Nothing fancy, just something that isn't fifteen years old.
-           Happy to pay fair money or trade — I have a spare 4-hybrid.</p>
-        <div class="foot"><button>1 reply</button><button>Reply</button></div>
-      </div>
-    </article>
-
-    <article class="post" data-k="talk" style="--c:#57534E">
-      <div class="stripe"></div>
-      <div class="in">
-        <div class="meta">
-          <div class="av" style="--c:#57534E">RV</div>
-          <div class="nm"><b>Rae Vogel</b><span>The Chunkers</span></div>
-          <span class="kind k-talk">TRASH TALK</span>
-          <time>4d</time>
-        </div>
-        <p>Last place and still the best team name in the league. I'd rather
-           lose as The Chunkers than win as
-           <span class="at" style="--t:#4D7C0F">Grip It &amp; Sip It</span>.</p>
-        <div class="foot"><button>12 replies</button><button>Reply</button></div>
-      </div>
-    </article>
-
-  </div>
+<div class="feedwrap">
+  <div id="composewrap"></div>
+  <div class="feed" id="feed"><div class="empty2"><b>Loading</b>Fetching the feed.</div></div>
 </div>
 
 <footer>
   <div class="inner">
-    <span>X-Golf Tuesday League</span>
+    <span>Katy Golf League</span>
     <span>Be decent. Chris reads this.</span>
   </div>
 </footer>
 
-<script>
-document.querySelectorAll('.chip').forEach(function(c){
-  c.addEventListener('click', function(){
-    document.querySelectorAll('.chip').forEach(function(x){
-      x.setAttribute('aria-pressed', x === c ? 'true' : 'false');
-    });
-    var f = c.dataset.f;
-    document.querySelectorAll('.post').forEach(function(p){
-      p.classList.toggle('hide', f !== 'all' && p.dataset.k !== f);
-    });
+<script type="module">
+import { supabase, me, getSession, paintAuthSlot } from './assets/db.js';
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c =>
+  ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+
+const KINDS = {
+  talk:'TRASH TALK', for_sale:'FOR SALE', wanted:'WANTED', sub_needed:'SUB NEEDED',
+  question:'QUESTION', announcement:'ANNOUNCEMENT', brag:'BRAG'
+};
+
+const initials = n => (n||'?').split(/\s+/).map(w=>w[0]).join('').slice(0,2).toUpperCase();
+
+function ago(iso) {
+  const s = (Date.now() - new Date(iso)) / 1000;
+  if (s < 60)     return 'now';
+  if (s < 3600)   return Math.floor(s/60) + 'm';
+  if (s < 86400)  return Math.floor(s/3600) + 'h';
+  if (s < 604800) return Math.floor(s/86400) + 'd';
+  return new Date(iso).toLocaleDateString([], { day:'numeric', month:'short' });
+}
+
+let profile = null, teams = [], posts = [], filter = 'all', kind = 'talk';
+
+(async () => {
+  paintAuthSlot(0);
+  const session = await getSession();
+  if (session) profile = await me();
+
+  const { data: ts } = await supabase.from('teams').select('id,name,accent,crest').order('name');
+  teams = ts || [];
+
+  paintComposer();
+  await loadFeed();
+})();
+
+/* ---------- composer ---------- */
+function paintComposer() {
+  const wrap = $('composewrap');
+
+  if (!profile) {
+    wrap.innerHTML = `<div class="compose"><div class="row1">
+      <div class="av">?</div>
+      <span style="flex:1;font-size:14px;color:var(--dim)">
+        <a href="login.html" style="color:var(--green);font-weight:600">Sign in</a>
+        to post, reply, or sell something.</span>
+    </div></div>`;
+    return;
+  }
+
+  wrap.innerHTML = `
+  <div class="compose" id="compose">
+    <div class="row1">
+      <div class="av" style="background:${profile.accent || 'var(--dim)'}">${esc(initials(profile.full_name))}</div>
+      <button class="prompt" id="openc">Selling something? Need a sub? Got something to say?</button>
+    </div>
+    <div class="composer">
+      <div class="kinds" id="kinds">
+        ${Object.entries(KINDS).filter(([k]) => k !== 'announcement' || profile.is_admin)
+          .map(([k,l]) => `<button class="kind" data-k="${k}" aria-pressed="${k==='talk'}">${l}</button>`).join('')}
+      </div>
+      <input type="text" id="c-title" placeholder="Title (optional)" maxlength="120">
+      <textarea id="c-body" placeholder="What's on your mind?" maxlength="2000"></textarea>
+      <div class="extras" id="extras">
+        <input type="text" id="c-price" placeholder="Price" inputmode="decimal">
+        <select id="c-cond">
+          <option value="">Condition…</option>
+          <option value="new">New</option>
+          <option value="like_new">Like new</option>
+          <option value="good">Good</option>
+          <option value="beat_up">Beat up</option>
+        </select>
+      </div>
+      <select id="c-target" class="hide">
+        <option value="">Aimed at… (optional)</option>
+        ${teams.map(t => `<option value="${t.id}">${esc(t.name)}</option>`).join('')}
+      </select>
+      <div class="actions">
+        <span class="note" id="c-note"></span>
+        <button class="cancel" id="c-cancel">Cancel</button>
+        <button class="send" id="c-send">Post</button>
+      </div>
+    </div>
+  </div>`;
+
+  $('openc').addEventListener('click', () => {
+    $('compose').classList.add('open');
+    $('c-body').focus();
+    syncKind();
   });
+  $('c-cancel').addEventListener('click', () => $('compose').classList.remove('open'));
+
+  $('kinds').querySelectorAll('.kind').forEach(b =>
+    b.addEventListener('click', () => {
+      kind = b.dataset.k;
+      $('kinds').querySelectorAll('.kind').forEach(x =>
+        x.setAttribute('aria-pressed', x === b));
+      syncKind();
+    }));
+
+  $('c-send').addEventListener('click', submit);
+}
+
+function syncKind() {
+  $('extras').classList.toggle('on', kind === 'for_sale');
+  $('c-target').classList.toggle('hide', kind !== 'talk');
+  $('c-body').placeholder =
+    kind === 'for_sale'   ? 'What is it, what shape is it in, where do they find you?' :
+    kind === 'wanted'     ? 'What are you after?' :
+    kind === 'sub_needed' ? 'Which week, which bay, any requirements?' :
+    kind === 'talk'       ? 'Say it to their face. Or here.' :
+    kind === 'brag'       ? 'Go on then.' :
+                            "What's on your mind?";
+}
+
+async function submit() {
+  const body = $('c-body').value.trim();
+  const note = $('c-note');
+  if (!body) { note.textContent = 'Say something first.'; note.className = 'note err'; return; }
+
+  $('c-send').disabled = true;
+  note.textContent = 'Posting…'; note.className = 'note';
+
+  const row = {
+    author_id: profile.id,
+    team_id: profile.team_id,
+    kind,
+    title: $('c-title').value.trim() || null,
+    body
+  };
+  if (kind === 'for_sale') {
+    const p = parseFloat($('c-price').value);
+    if (!isNaN(p)) row.price = p;
+    if ($('c-cond').value) row.condition = $('c-cond').value;
+  }
+  if (kind === 'talk' && $('c-target').value) row.target_team = $('c-target').value;
+
+  const { error } = await supabase.from('clubhouse_posts').insert(row);
+  $('c-send').disabled = false;
+
+  if (error) { note.textContent = error.message; note.className = 'note err'; return; }
+
+  $('c-body').value = ''; $('c-title').value = '';
+  $('c-price').value = ''; $('c-cond').value = '';
+  note.textContent = '';
+  $('compose').classList.remove('open');
+  await loadFeed();
+}
+
+/* ---------- feed ---------- */
+async function loadFeed() {
+  const { data, error } = await supabase.from('clubhouse_feed').select('*').limit(150);
+
+  if (error) {
+    $('feed').innerHTML = `<div class="empty2"><b>Couldn't load the feed</b>${esc(error.message)}</div>`;
+    return;
+  }
+  posts = data || [];
+  paintFeed();
+}
+
+function paintFeed() {
+  const shown = posts.filter(p => filter === 'all' || p.kind === filter);
+
+  if (!shown.length) {
+    $('feed').innerHTML = `<div class="empty2">
+      <b>${filter === 'all' ? 'Nothing here yet' : 'Nothing in that category'}</b>
+      ${filter === 'all'
+        ? 'Trash talk, gear for sale, sub requests and league notices all land here.'
+        : 'Try another filter.'}</div>`;
+    return;
+  }
+
+  $('feed').innerHTML = shown.map(p => {
+    const accent = p.team_accent || '#5F6F66';
+    const mine = profile && p.author_id === profile.id;
+    return `
+    <article class="post" style="--c:${accent}" data-id="${p.id}">
+      <div class="stripe"></div>
+      <div class="in">
+        <div class="meta">
+          <div class="av" style="--c:${accent}">${esc(initials(p.author_name))}</div>
+          <div class="nm"><b>${esc(p.author_name)}</b>
+            <span>${esc(p.team_name || 'No team')}</span></div>
+          <span class="kindtag ${p.pinned ? 'pin' : 'k-' + p.kind}">
+            ${p.pinned ? 'PINNED' : KINDS[p.kind] || p.kind}</span>
+          <time>${ago(p.created_at)}</time>
+        </div>
+        ${p.title ? `<h2>${esc(p.title)}</h2>` : ''}
+        <p>${linkTeams(p)}</p>
+        ${p.price != null ? `<span class="price">$${p.price}</span>` : ''}
+        ${p.condition ? `<span class="cond">${p.condition.replace('_',' ')}${p.sold ? ' · SOLD' : ''}</span>` : ''}
+        <div class="foot2">
+          <button data-toggle="${p.id}">${p.reply_count
+            ? p.reply_count + ' repl' + (p.reply_count === 1 ? 'y' : 'ies')
+            : 'Reply'}</button>
+          ${mine ? `<button data-del="${p.id}">Delete</button>` : ''}
+        </div>
+        <div class="replies" id="r-${p.id}"></div>
+      </div>
+    </article>`;
+  }).join('');
+
+  $('feed').querySelectorAll('[data-toggle]').forEach(b =>
+    b.addEventListener('click', () => toggleReplies(b.dataset.toggle)));
+  $('feed').querySelectorAll('[data-del]').forEach(b =>
+    b.addEventListener('click', async () => {
+      if (!confirm('Delete this post?')) return;
+      await supabase.from('clubhouse_posts').delete().eq('id', b.dataset.del);
+      loadFeed();
+    }));
+}
+
+/* trash talk aimed at a team shows that team's name in their colour */
+function linkTeams(p) {
+  let body = esc(p.body);
+  if (p.target_name) {
+    body += `\n\n— aimed at <span class="at" style="color:${p.target_accent}">${esc(p.target_name)}</span>`;
+  }
+  return body;
+}
+
+async function toggleReplies(id) {
+  const box = $('r-' + id);
+  if (box.classList.contains('on')) { box.classList.remove('on'); return; }
+  box.classList.add('on');
+  box.innerHTML = '<p style="font-size:13px;color:var(--dim)">Loading…</p>';
+
+  const { data } = await supabase
+    .from('post_replies')
+    .select('id,body,created_at,author_id,profiles(full_name)')
+    .eq('post_id', id).order('created_at');
+
+  box.innerHTML = (data || []).map(r => `
+    <div class="reply">
+      <div class="av">${esc(initials(r.profiles?.full_name))}</div>
+      <div><b>${esc(r.profiles?.full_name || 'Someone')}</b><time>${ago(r.created_at)}</time>
+        <p>${esc(r.body)}</p></div>
+    </div>`).join('') +
+    (profile ? `
+    <div class="replybox">
+      <input type="text" placeholder="Say something" maxlength="1000" data-rin="${id}">
+      <button data-rsend="${id}">Send</button>
+    </div>` : `
+    <p style="font-size:13px;color:var(--dim);margin-top:10px">
+      <a href="login.html" style="color:var(--green);font-weight:600">Sign in</a> to reply.</p>`);
+
+  const send = box.querySelector('[data-rsend]');
+  if (!send) return;
+  const input = box.querySelector('[data-rin]');
+  const go = async () => {
+    const body = input.value.trim();
+    if (!body) return;
+    send.disabled = true;
+    const { error } = await supabase.from('post_replies')
+      .insert({ post_id: id, author_id: profile.id, body });
+    send.disabled = false;
+    if (error) { alert(error.message); return; }
+    input.value = '';
+    await loadFeed();
+    toggleReplies(id);
+  };
+  send.addEventListener('click', go);
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
+}
+
+/* ---------- filters ---------- */
+$('filters').querySelectorAll('.chip').forEach(c =>
+  c.addEventListener('click', () => {
+    filter = c.dataset.f;
+    $('filters').querySelectorAll('.chip').forEach(x =>
+      x.setAttribute('aria-pressed', x === c));
+    paintFeed();
+  }));
+
+$('navtoggle').addEventListener('click', function(){
+  const n = $('nav'), open = n.classList.toggle('open');
+  this.setAttribute('aria-expanded', open);
+  this.textContent = open ? 'CLOSE' : 'MENU';
 });
 </script>
 </body>
