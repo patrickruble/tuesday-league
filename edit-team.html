@@ -3,175 +3,136 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Edit your team — Katy Golf League</title>
+<title>Your team — Katy Golf League</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#007041">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=Anton&family=DM+Serif+Display&family=Space+Mono:wght@400;700&family=Bungee&family=UnifrakturCook:wght@700&family=Instrument+Sans:wght@400;500;600&family=Martian+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/extra.css">
 <style>
-:root{
-  --green:#007041;--green-deep:#00522F;--lime:#B8EB7A;
-  --field:#DCE1DC;--card:#FFFFFF;--ink:#10221A;--dim:#5F6F66;--rule:#D2D8D2;
-  --accent:#C2410C;
-  --pat:rgba(194,65,12,.14);        /* accent at low alpha, set by script */
-  --mood:#C9A0DC;
-  --team-display:'Archivo','Helvetica Neue',Arial,sans-serif;
-  --team-wdth:112;
-
-  --body:'Instrument Sans',system-ui,sans-serif;
-  --data:'Martian Mono','Courier New',monospace;
-  --ui:'Archivo','Helvetica Neue',Arial,sans-serif;
-}
-*{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--field);color:var(--ink);font-family:var(--body);
-  font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;padding-bottom:80px}
-h1{margin:0;font-family:var(--ui);font-weight:800;line-height:1}
-:focus-visible{outline:2px solid var(--green);outline-offset:2px}
-
-.masthead{background:var(--green);color:#fff}
-.masthead .inner{max-width:1080px;margin:0 auto;padding:14px 24px;
-  display:flex;align-items:center;gap:20px;flex-wrap:wrap}
-.mark{font-family:var(--ui);font-weight:800;font-variation-settings:'wdth' 118;
-  font-size:15px;letter-spacing:.1em;text-transform:uppercase;color:#fff;text-decoration:none}
-.mark em{font-style:normal;color:var(--lime)}
-.masthead .me{margin-left:auto;font-size:12px;color:rgba(255,255,255,.7)}
-
+:root{--mood:#C9A0DC;--team-display:var(--display);--team-wdth:112}
+body{padding-bottom:88px}
 .page{max-width:1080px;margin:0 auto;padding:26px 24px;
-  display:grid;grid-template-columns:1fr 392px;gap:26px;align-items:start}
+  display:grid;grid-template-columns:1fr 384px;gap:26px;align-items:start}
 
-/* ============================================================
-   BACKGROUND PATTERNS
-   Built from gradients so they tint with the team colour and
-   never need an image file.
-   ============================================================ */
-.bg-none{background-image:none}
-.bg-pinstripe{background-image:
-  repeating-linear-gradient(90deg,var(--pat) 0 1px,transparent 1px 11px)}
-.bg-argyle{background-image:
-  repeating-linear-gradient(45deg,var(--pat) 0 1px,transparent 1px 26px),
-  repeating-linear-gradient(-45deg,var(--pat) 0 1px,transparent 1px 26px)}
-.bg-plaid{background-image:
-  repeating-linear-gradient(0deg,var(--pat) 0 4px,transparent 4px 20px),
-  repeating-linear-gradient(90deg,var(--pat) 0 4px,transparent 4px 20px)}
-.bg-dots{background-image:radial-gradient(var(--pat) 1.6px,transparent 1.7px);
-  background-size:15px 15px}
-.bg-grid{background-image:
-  repeating-linear-gradient(0deg,var(--pat) 0 1px,transparent 1px 22px),
-  repeating-linear-gradient(90deg,var(--pat) 0 1px,transparent 1px 22px)}
-.bg-diagonal{background-image:
-  repeating-linear-gradient(135deg,var(--pat) 0 3px,transparent 3px 14px)}
-.bg-check{background-image:
-  repeating-conic-gradient(var(--pat) 0% 25%,transparent 0% 50%);
-  background-size:22px 22px}
-.bg-turf{background-image:
-  repeating-linear-gradient(90deg,var(--pat) 0 34px,transparent 34px 68px)}
-
-/* ============================================================
-   PREVIEW
-   ============================================================ */
+/* preview */
 .preview{position:sticky;top:24px;order:2}
-.preview .lbl{font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+.preview .lbl2{font-size:10px;letter-spacing:.16em;text-transform:uppercase;
   color:var(--dim);font-weight:600;margin-bottom:9px}
-.card{border:1px solid var(--rule);overflow:hidden}
-.phero{background:var(--green);color:#fff;padding:16px}
-.pcrest{width:52px;height:52px;background:var(--accent);display:grid;place-items:center;
+.pcard{border:1px solid var(--rule);overflow:hidden}
+.phero2{background:var(--green);color:#fff;padding:16px}
+.pcrest{width:54px;height:54px;background:var(--accent);display:grid;place-items:center;
   font-family:var(--team-display);font-weight:800;font-size:18px;color:#fff;
-  box-shadow:0 0 0 1px rgba(255,255,255,.25);margin-bottom:12px}
-.phero h3{
-  margin:0;font-family:var(--team-display);font-weight:800;font-size:32px;
-  font-variation-settings:'wdth' var(--team-wdth);
-  letter-spacing:-.02em;text-transform:uppercase;line-height:.95;
-}
-.phero .sub{font-size:11px;color:rgba(255,255,255,.65);margin-top:8px}
+  box-shadow:0 0 0 1px rgba(255,255,255,.25);margin-bottom:12px;overflow:hidden}
+.pcrest img{width:100%;height:100%;object-fit:cover;display:block}
+.phero2 h3{margin:0;font-family:var(--team-display);font-weight:800;font-size:31px;
+  font-variation-settings:'wdth' var(--team-wdth);letter-spacing:-.02em;
+  text-transform:uppercase;line-height:.95}
+.phero2 .sub{font-size:11px;color:rgba(255,255,255,.65);margin-top:8px}
 .pstatus{background:var(--green-deep);color:#fff;padding:12px 16px}
-.moodline{display:flex;align-items:center;gap:9px}
-.moodline .tag{font-size:8px;letter-spacing:.16em;text-transform:uppercase;
-  color:rgba(255,255,255,.5);font-weight:600;flex:none}
-.moodline .dot{width:9px;height:9px;border-radius:50%;background:var(--mood);flex:none}
-.moodline b{font-family:var(--team-display);font-weight:800;font-size:19px;
+.pmood{display:flex;align-items:center;gap:9px}
+.pmood .tag{font-size:8px;letter-spacing:.16em;text-transform:uppercase;
+  color:rgba(255,255,255,.5);font-weight:600}
+.pmood .dot{width:9px;height:9px;border-radius:50%;background:var(--mood)}
+.pmood b{font-family:var(--team-display);font-weight:800;font-size:19px;
   color:var(--mood);text-transform:lowercase}
-.psong{display:flex;align-items:center;gap:9px;margin-top:12px;
-  padding-top:11px;border-top:1px solid rgba(255,255,255,.15)}
-.psong .btn{width:26px;height:26px;border-radius:50%;background:var(--lime);
+.psong{display:flex;align-items:center;gap:9px;margin-top:12px;padding-top:11px;
+  border-top:1px solid rgba(255,255,255,.15);font-size:11px;line-height:1.3}
+.psong .btn2{width:26px;height:26px;border-radius:50%;background:var(--lime);
   color:var(--green-deep);display:grid;place-items:center;font-size:9px;flex:none}
-.psong div{font-size:11px;line-height:1.3;min-width:0}
 .psong b{display:block}
 .psong span{color:rgba(255,255,255,.5)}
-
-/* the patterned area — this is what the pickers change */
 .pbody{background-color:var(--card);padding:16px}
-.pbody h4{margin:0 0 8px;font-family:var(--team-display);font-weight:800;
-  font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
-.pbody p{margin:0;font-size:13px;color:var(--dim);
-  background:rgba(255,255,255,.82);padding:9px;border:1px solid var(--rule)}
+.pbody h4{margin:0 0 8px;font-family:var(--team-display);font-weight:800;font-size:13px;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.pbody p{margin:0;font-size:13px;color:var(--dim);background:rgba(255,255,255,.85);
+  padding:9px;border:1px solid var(--rule)}
 
-/* ============================================================
-   FORM
-   ============================================================ */
+/* form */
 .form{order:1;min-width:0}
 .form > h1{font-size:clamp(28px,5vw,42px);font-variation-settings:'wdth' 108;
   letter-spacing:-.02em;text-transform:uppercase;margin-bottom:6px}
-.form > .intro{color:var(--dim);font-size:14px;margin:0 0 24px;max-width:52ch}
-
+.form > .intro{color:var(--dim);font-size:14px;margin:0 0 22px;max-width:52ch}
 fieldset{border:1px solid var(--rule);background:var(--card);padding:18px;margin:0 0 14px}
 legend{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);
   font-weight:600;padding:0 7px}
 label{display:block;font-size:12px;font-weight:600;margin-bottom:6px}
 .hint{font-size:12px;color:var(--dim);font-weight:400;margin-top:7px}
-input[type=text],textarea,select{
-  width:100%;font-family:inherit;font-size:15px;padding:10px 12px;
-  border:1px solid var(--rule);background:#FBFCFB;color:var(--ink)}
-textarea{resize:vertical;min-height:80px;line-height:1.55}
+input[type=text],textarea,select{width:100%;font-family:inherit;font-size:15px;
+  padding:10px 12px;border:1px solid var(--rule);background:#FBFCFB;color:var(--ink)}
+textarea{resize:vertical;min-height:82px;line-height:1.55}
 input:focus,textarea:focus,select:focus{outline:none;border-color:var(--green);background:#fff}
+input[disabled],textarea[disabled]{opacity:.55;cursor:not-allowed}
 .field + .field{margin-top:18px}
 .count{font-family:var(--data);font-size:10px;color:var(--dim);float:right;font-weight:400}
 
-/* font picker */
-.fonts{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:8px}
-.fnt{
-  border:1px solid var(--rule);background:#FBFCFB;cursor:pointer;
-  padding:14px 10px 10px;text-align:center;
-}
+.fonts{display:grid;grid-template-columns:repeat(auto-fill,minmax(146px,1fr));gap:8px}
+.fnt{border:1px solid var(--rule);background:#FBFCFB;cursor:pointer;
+  padding:14px 10px 10px;text-align:center;font-family:inherit}
 .fnt[aria-pressed="true"]{box-shadow:0 0 0 2px var(--ink);border-color:var(--ink);background:#fff}
-.fnt .sample{font-size:23px;line-height:1;display:block;margin-bottom:7px;
+.fnt .sample{font-size:22px;line-height:1;display:block;margin-bottom:7px;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .fnt .nm{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
 
-/* background picker */
-.bgs{display:grid;grid-template-columns:repeat(auto-fill,minmax(94px,1fr));gap:8px}
-.bgo{border:1px solid var(--rule);cursor:pointer;padding:0;background:#fff}
+.bgs{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px}
+.bgo{border:1px solid var(--rule);cursor:pointer;padding:0;background:#fff;font-family:inherit}
 .bgo[aria-pressed="true"]{box-shadow:0 0 0 2px var(--ink);border-color:var(--ink)}
-.bgo .sw{height:52px;background-color:#fff;display:block}
+.bgo .sw{height:50px;background-color:#fff;display:block}
 .bgo .nm{font-size:9px;letter-spacing:.09em;text-transform:uppercase;color:var(--dim);
   padding:6px 0;display:block;border-top:1px solid var(--rule)}
 
 .swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(40px,1fr));gap:7px}
 .sw2{aspect-ratio:1;border:1px solid var(--rule);cursor:pointer;padding:0;position:relative}
 .sw2[aria-pressed="true"]{box-shadow:0 0 0 2px var(--ink);border-color:var(--ink)}
-.sw2[disabled]{cursor:not-allowed;opacity:.32}
+.sw2[disabled]{cursor:not-allowed;opacity:.3}
 .sw2[disabled]::after{content:"";position:absolute;inset:0;
   background:linear-gradient(45deg,transparent 46%,#fff 46% 54%,transparent 54%)}
 
 .moodpick{display:flex;gap:12px;align-items:center}
-.moodpick select{flex:1;font-family:var(--ui);font-weight:800;font-size:18px;
+.moodpick select{flex:1;font-family:var(--display);font-weight:800;font-size:18px;
   text-transform:lowercase}
 .moodchip{flex:none;width:50px;height:50px;border:1px solid var(--rule);
   display:grid;place-items:center;background:#FBFCFB}
 .moodchip i{width:19px;height:19px;border-radius:50%;background:var(--mood);display:block}
 
-.mate{display:grid;grid-template-columns:112px 1fr;gap:12px;align-items:center}
+.crestrow{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.crestbox{width:64px;height:64px;background:var(--accent);display:grid;place-items:center;
+  font-family:var(--display);font-weight:800;font-size:20px;color:#fff;flex:none;
+  overflow:hidden;border:1px solid var(--rule)}
+.crestbox img{width:100%;height:100%;object-fit:cover}
+.upl{border:1px solid var(--rule);background:#FBFCFB;padding:9px 14px;font-size:13px;
+  cursor:pointer;font-family:inherit}
+.upl:hover{border-color:var(--green)}
+.upl input{display:none}
+
+.mate{display:grid;grid-template-columns:120px 1fr;gap:12px;align-items:center}
 .mate + .mate{margin-top:12px;padding-top:12px;border-top:1px solid var(--rule)}
 .mate .nm{font-size:14px;font-weight:600}
 .mate .nm span{display:block;font-size:11px;color:var(--dim);font-weight:400}
 
 .savebar{position:fixed;left:0;right:0;bottom:0;background:var(--green-deep);color:#fff;
-  padding:12px 24px calc(12px + env(safe-area-inset-bottom))}
-.savebar .inner{max-width:1080px;margin:0 auto;display:flex;align-items:center;gap:16px}
-.savebar .state{flex:1;font-size:12px;color:rgba(255,255,255,.6)}
+  padding:12px 24px calc(12px + env(safe-area-inset-bottom));z-index:20}
+.savebar .inner2{max-width:1080px;margin:0 auto;display:flex;align-items:center;gap:14px}
+.savebar .state{flex:1;font-size:12px;color:rgba(255,255,255,.62)}
+.savebar .state.err{color:#FFB4B4}
+.savebar .state.ok{color:var(--lime)}
 .savebar button{background:var(--lime);color:var(--green-deep);border:0;padding:12px 22px;
   font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
-.savebar button.ghost{background:transparent;color:rgba(255,255,255,.7);
+.savebar button[disabled]{opacity:.45;cursor:default}
+.savebar .ghost{background:transparent;color:rgba(255,255,255,.7);
   box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)}
+
+.loading{padding:60px 24px;text-align:center;color:var(--dim)}
+.noteam{max-width:520px;margin:40px auto;background:var(--card);
+  border:1px solid var(--rule);padding:28px;text-align:center}
+.noteam h2{font-size:22px;margin-bottom:9px}
+.noteam p{color:var(--dim);font-size:14px;margin:0 0 16px}
+.noteam a{display:inline-block;background:var(--green);color:#fff;text-decoration:none;
+  padding:11px 18px;font-size:14px;font-weight:600}
 
 @media (max-width:940px){
   .page{grid-template-columns:1fr}
@@ -184,107 +145,55 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--green);b
 <header class="masthead">
   <div class="inner">
     <a class="mark" href="index.html">Katy <em>·</em> Golf League</a>
-    <span class="me">Rita Okonkwo · Static Cling</span>
+    <button class="navtoggle" id="navtoggle" aria-expanded="false" aria-controls="nav">MENU</button>
+    <nav id="nav">
+      <a href="index.html">Leaderboard</a>
+      <a href="schedule.html">Schedule</a>
+      <a href="teams.html">Teams</a>
+      <a href="clubhouse.html">Clubhouse</a>
+      <a href="playlist.html">Playlist</a>
+    </nav>
   </div>
 </header>
 
-<div class="page">
+<div id="loading" class="loading">Loading your team…</div>
+
+<div id="noteam" class="noteam" hidden>
+  <h2>You're not on a team yet</h2>
+  <p>Once Chris has you on a roster you'll be able to edit your team's page here.</p>
+  <a href="login.html">Claim your spot</a>
+</div>
+
+<div class="page" id="page" hidden>
 
   <aside class="preview">
-    <div class="lbl">Live preview</div>
-    <div class="card">
-      <div class="phero">
+    <div class="lbl2">Live preview</div>
+    <div class="pcard">
+      <div class="phero2">
         <div class="pcrest" id="pv-crest">SC</div>
-        <h3 id="pv-name">Static Cling</h3>
-        <div class="sub">Bay 4 · Tuesdays 7:30 · Team handicap 4</div>
+        <h3 id="pv-name">Team</h3>
+        <div class="sub" id="pv-sub">Bay — · Tuesdays 7:30</div>
       </div>
       <div class="pstatus">
-        <div class="moodline">
-          <span class="tag">Mood</span><i class="dot"></i>
-          <b id="pv-mood">sandbagging</b>
-        </div>
+        <div class="pmood"><span class="tag">Mood</span><i class="dot"></i><b id="pv-mood">—</b></div>
         <div class="psong">
-          <span class="btn">▶</span>
-          <div><b id="pv-song">Cannonball</b><span id="pv-artist">The Breeders</span></div>
+          <span class="btn2">▶</span>
+          <div><b id="pv-song">—</b><span id="pv-artist"></span></div>
         </div>
       </div>
-      <div class="pbody bg-argyle" id="pv-body">
+      <div class="pbody bg-none" id="pv-body">
         <h4>The Team</h4>
-        <p id="pv-bio">Formed when three people who had all been dropped from
-          other rosters discovered they were, collectively, slightly better
-          than any of those rosters.</p>
+        <p id="pv-bio">—</p>
       </div>
     </div>
   </aside>
 
   <main class="form">
-    <h1>Your team page</h1>
+    <h1 id="title">Your team page</h1>
     <p class="intro">
-      This is your page. Make it look like your team and not like everyone
-      else's. Nothing here affects scoring, so go nuts.
+      This is your page. Everything here is public. Nothing here affects
+      scoring, so go nuts.
     </p>
-
-    <fieldset>
-      <legend>Typeface</legend>
-      <div class="fonts" id="fonts">
-        <button class="fnt" aria-pressed="true" data-f="'Archivo','Helvetica Neue',Arial,sans-serif" data-w="112">
-          <span class="sample" style="font-family:'Archivo';font-weight:800;font-variation-settings:'wdth' 112">Static Cling</span>
-          <span class="nm">Archivo</span>
-        </button>
-        <button class="fnt" aria-pressed="false" data-f="'Anton',Impact,sans-serif" data-w="100">
-          <span class="sample" style="font-family:'Anton'">Static Cling</span>
-          <span class="nm">Anton</span>
-        </button>
-        <button class="fnt" aria-pressed="false" data-f="'DM Serif Display',Georgia,serif" data-w="100">
-          <span class="sample" style="font-family:'DM Serif Display'">Static Cling</span>
-          <span class="nm">DM Serif</span>
-        </button>
-        <button class="fnt" aria-pressed="false" data-f="'Space Mono','Courier New',monospace" data-w="100">
-          <span class="sample" style="font-family:'Space Mono';font-weight:700;font-size:18px">Static Cling</span>
-          <span class="nm">Space Mono</span>
-        </button>
-        <button class="fnt" aria-pressed="false" data-f="'Bungee',sans-serif" data-w="100">
-          <span class="sample" style="font-family:'Bungee';font-size:17px">Static Cling</span>
-          <span class="nm">Bungee</span>
-        </button>
-        <button class="fnt" aria-pressed="false" data-f="'UnifrakturCook',serif" data-w="100">
-          <span class="sample" style="font-family:'UnifrakturCook';font-weight:700">Static Cling</span>
-          <span class="nm">Blackletter</span>
-        </button>
-      </div>
-      <div class="hint">
-        Changes your team name, crest and headings. Body text stays as it is so
-        the page is still readable.
-      </div>
-    </fieldset>
-
-    <fieldset>
-      <legend>Background</legend>
-      <div class="bgs" id="bgs">
-        <button class="bgo" aria-pressed="false" data-b="bg-none">
-          <span class="sw bg-none"></span><span class="nm">Plain</span></button>
-        <button class="bgo" aria-pressed="true" data-b="bg-argyle">
-          <span class="sw bg-argyle"></span><span class="nm">Argyle</span></button>
-        <button class="bgo" aria-pressed="false" data-b="bg-plaid">
-          <span class="sw bg-plaid"></span><span class="nm">Plaid</span></button>
-        <button class="bgo" aria-pressed="false" data-b="bg-pinstripe">
-          <span class="sw bg-pinstripe"></span><span class="nm">Pinstripe</span></button>
-        <button class="bgo" aria-pressed="false" data-b="bg-dots">
-          <span class="sw bg-dots"></span><span class="nm">Dots</span></button>
-        <button class="bgo" aria-pressed="false" data-b="bg-grid">
-          <span class="sw bg-grid"></span><span class="nm">Grid</span></button>
-        <button class="bgo" aria-pressed="false" data-b="bg-diagonal">
-          <span class="sw bg-diagonal"></span><span class="nm">Diagonal</span></button>
-        <button class="bgo" aria-pressed="false" data-b="bg-check">
-          <span class="sw bg-check"></span><span class="nm">Check</span></button>
-        <button class="bgo" aria-pressed="false" data-b="bg-turf">
-          <span class="sw bg-turf"></span><span class="nm">Mow lines</span></button>
-      </div>
-      <div class="hint">
-        Patterns take your team colour automatically. They sit behind the text
-        at low contrast so nothing gets hard to read.
-      </div>
-    </fieldset>
 
     <fieldset>
       <legend>Mood</legend>
@@ -292,108 +201,65 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--green);b
         <label for="mood">Your team is currently</label>
         <div class="moodpick">
           <div class="moodchip"><i></i></div>
-          <select id="mood">
-            <optgroup label="Golf">
-              <option data-s="hot">striping it</option>
-              <option data-s="hot">dialed</option>
-              <option data-s="hot">pured</option>
-              <option data-s="hot">due</option>
-              <option data-s="hot">streaky</option>
-              <option data-s="hot">grinding</option>
-              <option data-s="cold">rusty</option>
-              <option data-s="cold">shanking</option>
-              <option data-s="cold">chunking it</option>
-              <option data-s="cold">lipping out</option>
-              <option data-s="cold">gassed</option>
-              <option data-s="cold">wristy</option>
-              <option data-s="odd" selected>sandbagging</option>
-              <option data-s="odd">suspicious</option>
-            </optgroup>
-            <optgroup label="Good">
-              <option data-s="good">accomplished</option>
-              <option data-s="good">amped</option>
-              <option data-s="good">blissful</option>
-              <option data-s="good">bouncy</option>
-              <option data-s="good">chipper</option>
-              <option data-s="good">content</option>
-              <option data-s="good">ecstatic</option>
-              <option data-s="good">giddy</option>
-              <option data-s="good">grateful</option>
-              <option data-s="good">hopeful</option>
-              <option data-s="good">jubilant</option>
-              <option data-s="good">optimistic</option>
-              <option data-s="good">relaxed</option>
-              <option data-s="good">relieved</option>
-              <option data-s="good">smug</option>
-            </optgroup>
-            <optgroup label="Bad">
-              <option data-s="bad">aggravated</option>
-              <option data-s="bad">annoyed</option>
-              <option data-s="bad">bitter</option>
-              <option data-s="bad">blah</option>
-              <option data-s="bad">cranky</option>
-              <option data-s="bad">crushed</option>
-              <option data-s="bad">defeated</option>
-              <option data-s="bad">deflated</option>
-              <option data-s="bad">gloomy</option>
-              <option data-s="bad">grumpy</option>
-              <option data-s="bad">irate</option>
-              <option data-s="bad">jealous</option>
-              <option data-s="bad">moody</option>
-              <option data-s="bad">salty</option>
-              <option data-s="bad">sore</option>
-              <option data-s="bad">tilted</option>
-            </optgroup>
-            <optgroup label="Other">
-              <option data-s="odd">bewildered</option>
-              <option data-s="odd">confused</option>
-              <option data-s="odd">devious</option>
-              <option data-s="odd">dorky</option>
-              <option data-s="odd">feral</option>
-              <option data-s="odd">geeky</option>
-              <option data-s="odd">indescribable</option>
-              <option data-s="odd">mischievous</option>
-              <option data-s="odd">ominous</option>
-              <option data-s="odd">quixotic</option>
-              <option data-s="odd">restless</option>
-              <option data-s="odd">sneaky</option>
-              <option data-s="odd">unhinged</option>
-              <option data-s="odd">weird</option>
-            </optgroup>
-          </select>
+          <select id="mood"></select>
         </div>
+        <div class="hint">One word, from the list. Ask Chris if you want one added.</div>
       </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Typeface</legend>
+      <div class="fonts" id="fonts">
+        <button class="fnt" data-k="archivo" data-f="'Archivo','Helvetica Neue',Arial,sans-serif" data-w="112">
+          <span class="sample" style="font-family:'Archivo';font-weight:800">Aa</span>
+          <span class="nm">Archivo</span></button>
+        <button class="fnt" data-k="anton" data-f="'Anton',Impact,sans-serif" data-w="100">
+          <span class="sample" style="font-family:'Anton'">Aa</span>
+          <span class="nm">Anton</span></button>
+        <button class="fnt" data-k="dm-serif" data-f="'DM Serif Display',Georgia,serif" data-w="100">
+          <span class="sample" style="font-family:'DM Serif Display'">Aa</span>
+          <span class="nm">DM Serif</span></button>
+        <button class="fnt" data-k="space-mono" data-f="'Space Mono','Courier New',monospace" data-w="100">
+          <span class="sample" style="font-family:'Space Mono';font-weight:700">Aa</span>
+          <span class="nm">Space Mono</span></button>
+        <button class="fnt" data-k="bungee" data-f="'Bungee',sans-serif" data-w="100">
+          <span class="sample" style="font-family:'Bungee'">Aa</span>
+          <span class="nm">Bungee</span></button>
+        <button class="fnt" data-k="blackletter" data-f="'UnifrakturCook',serif" data-w="100">
+          <span class="sample" style="font-family:'UnifrakturCook';font-weight:700">Aa</span>
+          <span class="nm">Blackletter</span></button>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Background</legend>
+      <div class="bgs" id="bgs"></div>
+      <div class="hint">Patterns take your team colour automatically.</div>
     </fieldset>
 
     <fieldset>
       <legend>Colour &amp; crest</legend>
       <div class="field">
-        <label for="crest">Crest</label>
-        <input type="text" id="crest" maxlength="2" value="SC"
-          style="width:80px;text-align:center;font-size:20px;text-transform:uppercase">
+        <label>Team colour</label>
+        <div class="swatches" id="swatches"></div>
+        <div class="hint">Crossed out means another team already has it.</div>
       </div>
       <div class="field">
-        <label>Team colour</label>
-        <div class="swatches">
-          <button class="sw2" style="background:#C2410C" data-c="#C2410C" aria-pressed="true"  aria-label="Rust"></button>
-          <button class="sw2" style="background:#B91C1C" data-c="#B91C1C" aria-pressed="false" aria-label="Red"></button>
-          <button class="sw2" style="background:#B45309" data-c="#B45309" aria-pressed="false" aria-label="Amber" disabled title="Taken"></button>
-          <button class="sw2" style="background:#A16207" data-c="#A16207" aria-pressed="false" aria-label="Mustard" disabled title="Taken"></button>
-          <button class="sw2" style="background:#4D7C0F" data-c="#4D7C0F" aria-pressed="false" aria-label="Olive" disabled title="Taken"></button>
-          <button class="sw2" style="background:#0F766E" data-c="#0F766E" aria-pressed="false" aria-label="Teal" disabled title="Taken"></button>
-          <button class="sw2" style="background:#0E7490" data-c="#0E7490" aria-pressed="false" aria-label="Cyan" disabled title="Taken"></button>
-          <button class="sw2" style="background:#1E3A8A" data-c="#1E3A8A" aria-pressed="false" aria-label="Royal"></button>
-          <button class="sw2" style="background:#2B3A67" data-c="#2B3A67" aria-pressed="false" aria-label="Navy" disabled title="Taken"></button>
-          <button class="sw2" style="background:#4338CA" data-c="#4338CA" aria-pressed="false" aria-label="Indigo"></button>
-          <button class="sw2" style="background:#6D28D9" data-c="#6D28D9" aria-pressed="false" aria-label="Violet" disabled title="Taken"></button>
-          <button class="sw2" style="background:#86198F" data-c="#86198F" aria-pressed="false" aria-label="Purple" disabled title="Taken"></button>
-          <button class="sw2" style="background:#DB2777" data-c="#DB2777" aria-pressed="false" aria-label="Pink" disabled title="Taken"></button>
-          <button class="sw2" style="background:#7A1F3D" data-c="#7A1F3D" aria-pressed="false" aria-label="Wine" disabled title="Taken"></button>
-          <button class="sw2" style="background:#7C2D12" data-c="#7C2D12" aria-pressed="false" aria-label="Brown" disabled title="Taken"></button>
-          <button class="sw2" style="background:#3F3F46" data-c="#3F3F46" aria-pressed="false" aria-label="Graphite" disabled title="Taken"></button>
-          <button class="sw2" style="background:#57534E" data-c="#57534E" aria-pressed="false" aria-label="Stone" disabled title="Taken"></button>
+        <label>Crest</label>
+        <div class="crestrow">
+          <div class="crestbox" id="crestbox">—</div>
+          <div>
+            <label class="upl">Upload an image
+              <input type="file" id="crestfile" accept="image/png,image/jpeg,image/webp,image/svg+xml">
+            </label>
+            <div class="hint" id="cresthint">Square works best. Under 2 MB.</div>
+          </div>
+          <div style="flex:1;min-width:130px">
+            <label for="crest">Or two letters</label>
+            <input type="text" id="crest" maxlength="2"
+              style="text-align:center;font-size:19px;text-transform:uppercase">
+          </div>
         </div>
-        <div class="hint">Crossed out means another team has it already.</div>
       </div>
     </fieldset>
 
@@ -401,140 +267,298 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--green);b
       <legend>Walk-up song</legend>
       <div class="field">
         <label for="url">Paste a YouTube or Spotify link</label>
-        <input type="text" id="url" value="https://www.youtube.com/watch?v=0P8pyZmxU9k">
-        <div class="hint" id="detect">Detected: YouTube · 0P8pyZmxU9k</div>
+        <input type="text" id="url" placeholder="https://www.youtube.com/watch?v=…">
+        <div class="hint" id="detect">YouTube plays in full for everyone. Spotify gives
+          a 30 second preview unless the listener is signed in.</div>
       </div>
-      <div class="field">
-        <label for="song">Track</label>
-        <input type="text" id="song" value="Cannonball">
-      </div>
-      <div class="field">
-        <label for="artist">Artist</label>
-        <input type="text" id="artist" value="The Breeders">
-      </div>
+      <div class="field"><label for="song">Track</label><input type="text" id="song"></div>
+      <div class="field"><label for="artist">Artist</label><input type="text" id="artist"></div>
     </fieldset>
 
     <fieldset>
       <legend>About the team</legend>
       <div class="field">
         <label for="bio">Blurb <span class="count" id="c-bio">0/400</span></label>
-        <textarea id="bio" maxlength="400">Formed when three people who had all been dropped from other rosters discovered they were, collectively, slightly better than any of those rosters.</textarea>
+        <textarea id="bio" maxlength="400"></textarea>
       </div>
     </fieldset>
 
     <fieldset>
       <legend>Roster quotes</legend>
-      <div class="mate"><div class="nm">Rita Okonkwo<span>Captain · HCP 6.4</span></div>
-        <input type="text" maxlength="70" value="I called it in preseason."></div>
-      <div class="mate"><div class="nm">Dev Varma<span>HCP 11.8</span></div>
-        <input type="text" maxlength="70" value="No comment."></div>
-      <div class="mate"><div class="nm">Marta Bell<span>HCP 14.1</span></div>
-        <input type="text" maxlength="70" value="Peaking at the right time."></div>
+      <div id="roster"></div>
+      <div class="hint">You can only change your own.</div>
     </fieldset>
 
   </main>
 </div>
 
-<div class="savebar">
-  <div class="inner">
+<div class="savebar" id="savebar" hidden>
+  <div class="inner2">
     <span class="state" id="state">No changes yet</span>
-    <button type="button" class="ghost">Discard</button>
-    <button type="button" id="save">Save changes</button>
+    <button type="button" class="ghost" id="discard">Discard</button>
+    <button type="button" id="save" disabled>Save changes</button>
   </div>
 </div>
 
-<script>
-var SENTIMENT = {hot:'#B8EB7A',good:'#7EBED7',cold:'#E8A87C',bad:'#9AA5A0',odd:'#C9A0DC'};
-var BGS = ['bg-none','bg-argyle','bg-plaid','bg-pinstripe','bg-dots',
-           'bg-grid','bg-diagonal','bg-check','bg-turf'];
+<script type="module">
+import { supabase, requireAuth, me } from './assets/db.js';
 
-var dirty = false;
-function touch(){
-  if(!dirty){ dirty = true; document.getElementById('state').textContent = 'Unsaved changes'; }
+const $ = id => document.getElementById(id);
+const SENT = { hot:'#B8EB7A', good:'#7EBED7', cold:'#E8A87C', bad:'#9AA5A0', odd:'#C9A0DC' };
+const BGS = ['none','argyle','plaid','pinstripe','dots','grid','diagonal','check','turf'];
+const BGLABEL = { none:'Plain', argyle:'Argyle', plaid:'Plaid', pinstripe:'Pinstripe',
+  dots:'Dots', grid:'Grid', diagonal:'Diagonal', check:'Check', turf:'Mow lines' };
+const PALETTE = ['#C2410C','#B91C1C','#B45309','#A16207','#4D7C0F','#0F766E','#0E7490',
+  '#1E3A8A','#2B3A67','#4338CA','#6D28D9','#86198F','#DB2777','#7A1F3D','#7C2D12',
+  '#3F3F46','#57534E'];
+
+let team = null, profile = null, moods = [], taken = {}, dirty = false, saving = false;
+const draft = {};
+
+/* ---------- boot ---------- */
+(async () => {
+  const session = await requireAuth();
+  if (!session) return;
+
+  profile = await me();
+  if (!profile) { fail('Could not load your profile.'); return; }
+  if (!profile.team_id) {
+    $('loading').hidden = true;
+    $('noteam').hidden = false;
+    return;
+  }
+
+  const [t, m, all, mates] = await Promise.all([
+    supabase.from('teams').select('*').eq('id', profile.team_id).single(),
+    supabase.from('moods').select('*').order('sort'),
+    supabase.from('teams').select('id,name,accent'),
+    supabase.from('profiles').select('id,full_name,hcp_index,quote').eq('team_id', profile.team_id)
+  ]);
+
+  if (t.error) { fail(t.error.message); return; }
+  team  = t.data;
+  moods = m.data || [];
+  (all.data || []).forEach(x => { if (x.id !== team.id) taken[x.accent] = x.name; });
+
+  Object.assign(draft, {
+    mood: team.mood, typeface: team.typeface, backdrop: team.backdrop,
+    accent: team.accent, crest: team.crest, bio: team.bio || '',
+    song_title: team.song_title || '', song_artist: team.song_artist || '',
+    song_provider: team.song_provider, song_id: team.song_id, crest_url: team.crest_url
+  });
+
+  paintMoods(); paintBgs(); paintSwatches(); paintRoster(mates.data || []);
+  fillForm();
+  applyLook();
+
+  $('loading').hidden = true;
+  $('page').hidden = false;
+  $('savebar').hidden = false;
+  $('title').textContent = team.name;
+})();
+
+function fail(msg) {
+  $('loading').innerHTML = `<b style="color:#B91C1C">${msg}</b>`;
 }
 
-/* accent drives the pattern tint too */
-function setAccent(hex){
-  document.documentElement.style.setProperty('--accent', hex);
-  var n = parseInt(hex.slice(1),16);
+/* ---------- painting the pickers ---------- */
+function paintMoods() {
+  const groups = {};
+  moods.forEach(m => (groups[m.sentiment] ??= []).push(m));
+  const order = [['hot','Playing well'],['good','Good'],['cold','Off form'],
+                 ['bad','Bad'],['odd','Other']];
+  $('mood').innerHTML = order.filter(([k]) => groups[k]).map(([k,label]) =>
+    `<optgroup label="${label}">` +
+    groups[k].map(m => `<option value="${m.word}" data-s="${m.sentiment}">${m.word}</option>`).join('') +
+    `</optgroup>`).join('');
+}
+
+function paintBgs() {
+  $('bgs').innerHTML = BGS.map(b =>
+    `<button class="bgo" data-b="${b}"><span class="sw bg-${b}"></span>
+     <span class="nm">${BGLABEL[b]}</span></button>`).join('');
+  $('bgs').querySelectorAll('.bgo').forEach(b =>
+    b.addEventListener('click', () => { draft.backdrop = b.dataset.b; touch(); applyLook(); }));
+}
+
+function paintSwatches() {
+  $('swatches').innerHTML = PALETTE.map(c => {
+    const who = taken[c];
+    return `<button class="sw2" style="background:${c}" data-c="${c}"
+            ${who ? `disabled title="Taken by ${who}"` : ''} aria-label="${c}"></button>`;
+  }).join('');
+  $('swatches').querySelectorAll('.sw2').forEach(b => {
+    if (b.disabled) return;
+    b.addEventListener('click', () => { draft.accent = b.dataset.c; touch(); applyLook(); });
+  });
+}
+
+function paintRoster(mates) {
+  $('roster').innerHTML = mates.map(p => {
+    const mine = p.id === profile.id;
+    return `<div class="mate">
+      <div class="nm">${p.full_name}<span>${p.hcp_index != null ? 'HCP ' + p.hcp_index : ''}${mine ? ' · you' : ''}</span></div>
+      <input type="text" maxlength="70" data-pid="${p.id}"
+             value="${(p.quote || '').replace(/"/g,'&quot;')}" ${mine ? '' : 'disabled'}>
+    </div>`;
+  }).join('');
+  $('roster').querySelectorAll('input:not([disabled])').forEach(i =>
+    i.addEventListener('input', () => { draft.quote = i.value; touch(); }));
+}
+
+/* ---------- form state ---------- */
+function fillForm() {
+  $('mood').value  = draft.mood || '';
+  $('crest').value = draft.crest || '';
+  $('song').value  = draft.song_title;
+  $('artist').value = draft.song_artist;
+  $('bio').value   = draft.bio;
+  if (draft.song_id) {
+    $('url').value = draft.song_provider === 'spotify'
+      ? `https://open.spotify.com/track/${draft.song_id}`
+      : `https://www.youtube.com/watch?v=${draft.song_id}`;
+  }
+  countBio();
+}
+
+function applyLook() {
+  const face = $('fonts').querySelector(`[data-k="${draft.typeface}"]`)
+            || $('fonts').querySelector('[data-k="archivo"]');
+  $('fonts').querySelectorAll('.fnt').forEach(b =>
+    b.setAttribute('aria-pressed', b === face));
+  document.documentElement.style.setProperty('--team-display', face.dataset.f);
+  document.documentElement.style.setProperty('--team-wdth', face.dataset.w);
+
+  $('bgs').querySelectorAll('.bgo').forEach(b =>
+    b.setAttribute('aria-pressed', b.dataset.b === draft.backdrop));
+  BGS.forEach(c => $('pv-body').classList.remove('bg-' + c));
+  $('pv-body').classList.add('bg-' + draft.backdrop);
+
+  $('swatches').querySelectorAll('.sw2').forEach(b =>
+    b.setAttribute('aria-pressed', b.dataset.c === draft.accent));
+
+  const n = parseInt(draft.accent.slice(1), 16);
+  document.documentElement.style.setProperty('--accent', draft.accent);
   document.documentElement.style.setProperty('--pat',
-    'rgba('+(n>>16)+','+((n>>8)&255)+','+(n&255)+',.15)');
+    `rgba(${n>>16},${(n>>8)&255},${n&255},.15)`);
+
+  const m = moods.find(x => x.word === draft.mood);
+  document.documentElement.style.setProperty('--mood', SENT[m?.sentiment] || '#B8EB7A');
+
+  $('pv-name').textContent   = team.name;
+  $('pv-sub').textContent    = `Team handicap ${team.handicap} · Tuesdays 7:30`;
+  $('pv-mood').textContent   = draft.mood || '—';
+  $('pv-song').textContent   = draft.song_title || '—';
+  $('pv-artist').textContent = draft.song_artist || '';
+  $('pv-bio').textContent    = draft.bio || '—';
+
+  const mark = draft.crest_url
+    ? `<img src="${publicCrest(draft.crest_url)}" alt="">`
+    : (draft.crest || '—');
+  $('pv-crest').innerHTML = mark;
+  $('crestbox').innerHTML = mark;
 }
 
-document.querySelectorAll('.sw2').forEach(function(b){
-  if(b.disabled) return;
-  b.addEventListener('click', function(){
-    document.querySelectorAll('.sw2').forEach(function(x){ x.setAttribute('aria-pressed','false') });
-    b.setAttribute('aria-pressed','true');
-    setAccent(b.dataset.c);
-    touch();
-  });
-});
+const publicCrest = p => supabase.storage.from('crests').getPublicUrl(p).data.publicUrl;
 
-/* fonts */
-document.querySelectorAll('.fnt').forEach(function(b){
-  b.addEventListener('click', function(){
-    document.querySelectorAll('.fnt').forEach(function(x){ x.setAttribute('aria-pressed','false') });
-    b.setAttribute('aria-pressed','true');
-    document.documentElement.style.setProperty('--team-display', b.dataset.f);
-    document.documentElement.style.setProperty('--team-wdth', b.dataset.w);
-    touch();
-  });
-});
-
-/* backgrounds */
-var pvBody = document.getElementById('pv-body');
-document.querySelectorAll('.bgo').forEach(function(b){
-  b.addEventListener('click', function(){
-    document.querySelectorAll('.bgo').forEach(function(x){ x.setAttribute('aria-pressed','false') });
-    b.setAttribute('aria-pressed','true');
-    BGS.forEach(function(c){ pvBody.classList.remove(c) });
-    pvBody.classList.add(b.dataset.b);
-    touch();
-  });
-});
-
-/* mood */
-var mood = document.getElementById('mood');
-function paintMood(){
-  var o = mood.options[mood.selectedIndex];
-  document.getElementById('pv-mood').textContent = o.text;
-  document.documentElement.style.setProperty('--mood', SENTIMENT[o.dataset.s]);
+function touch() {
+  dirty = true;
+  $('save').disabled = false;
+  setState('Unsaved changes');
 }
-mood.addEventListener('change', function(){ paintMood(); touch(); });
-paintMood();
+function setState(t, cls = '') { const s = $('state'); s.textContent = t; s.className = 'state ' + cls; }
 
-function bind(id,target,fb){
-  var el = document.getElementById(id);
-  el.addEventListener('input', function(){
-    document.getElementById(target).textContent = el.value || fb; touch();
-  });
-}
-bind('song','pv-song','—'); bind('artist','pv-artist',''); bind('bio','pv-bio','');
-
-document.getElementById('crest').addEventListener('input', function(){
-  document.getElementById('pv-crest').textContent = this.value.toUpperCase() || '··'; touch();
+/* ---------- inputs ---------- */
+$('mood').addEventListener('change', e => { draft.mood = e.target.value; touch(); applyLook(); });
+$('crest').addEventListener('input', e => {
+  draft.crest = e.target.value.toUpperCase(); touch(); applyLook();
 });
+$('song').addEventListener('input', e => { draft.song_title = e.target.value; touch(); applyLook(); });
+$('artist').addEventListener('input', e => { draft.song_artist = e.target.value; touch(); applyLook(); });
+$('bio').addEventListener('input', e => { draft.bio = e.target.value; countBio(); touch(); applyLook(); });
 
-var bio = document.getElementById('bio'), cb = document.getElementById('c-bio');
-function ub(){ cb.textContent = bio.value.length + '/400' } bio.addEventListener('input',ub); ub();
+function countBio(){ $('c-bio').textContent = $('bio').value.length + '/400'; }
 
-document.getElementById('url').addEventListener('input', function(){
-  var v=this.value.trim(), out=document.getElementById('detect'), m;
-  if((m=v.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})/))) out.textContent='Detected: YouTube · '+m[1];
-  else if((m=v.match(/spotify\.com\/track\/([A-Za-z0-9]+)/)))          out.textContent='Detected: Spotify · '+m[1];
-  else if(v==='')                                                      out.textContent='Paste a link and we\u2019ll work out the rest.';
-  else                                                                 out.textContent='That doesn\u2019t look like a YouTube or Spotify link.';
+$('fonts').querySelectorAll('.fnt').forEach(b =>
+  b.addEventListener('click', () => { draft.typeface = b.dataset.k; touch(); applyLook(); }));
+
+$('url').addEventListener('input', e => {
+  const v = e.target.value.trim();
+  let m;
+  if ((m = v.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})/))) {
+    draft.song_provider = 'youtube'; draft.song_id = m[1];
+    $('detect').textContent = 'YouTube · ' + m[1] + ' — plays in full for everyone.';
+  } else if ((m = v.match(/spotify\.com\/track\/([A-Za-z0-9]+)/))) {
+    draft.song_provider = 'spotify'; draft.song_id = m[1];
+    $('detect').textContent = 'Spotify · ' + m[1] + ' — 30 second preview unless signed in.';
+  } else if (v === '') {
+    draft.song_provider = null; draft.song_id = null;
+    $('detect').textContent = 'Paste a link and we\u2019ll work out the rest.';
+  } else {
+    $('detect').textContent = 'That doesn\u2019t look like a YouTube or Spotify link.';
+  }
   touch();
 });
 
-document.querySelectorAll('.mate input').forEach(function(i){ i.addEventListener('input', touch) });
+/* ---------- crest upload ---------- */
+$('crestfile').addEventListener('change', async e => {
+  const f = e.target.files[0];
+  if (!f) return;
+  if (f.size > 2 * 1024 * 1024) { $('cresthint').textContent = 'That file is over 2 MB.'; return; }
 
-document.getElementById('save').addEventListener('click', function(){
-  dirty = false; document.getElementById('state').textContent = 'Saved just now';
+  $('cresthint').textContent = 'Uploading…';
+  const ext  = (f.name.split('.').pop() || 'png').toLowerCase();
+  const path = `${team.id}/crest-${Date.now()}.${ext}`;
+
+  const { error } = await supabase.storage.from('crests')
+    .upload(path, f, { upsert: true, contentType: f.type });
+
+  if (error) { $('cresthint').textContent = 'Upload failed: ' + error.message; return; }
+
+  draft.crest_url = path;
+  $('cresthint').textContent = 'Uploaded. Save to make it live.';
+  touch(); applyLook();
 });
 
-setAccent('#C2410C');
+/* ---------- save ---------- */
+$('save').addEventListener('click', async () => {
+  if (saving) return;
+  saving = true;
+  $('save').disabled = true;
+  setState('Saving…');
+
+  const patch = {
+    mood: draft.mood, typeface: draft.typeface, backdrop: draft.backdrop,
+    accent: draft.accent, crest: draft.crest, bio: draft.bio,
+    song_title: draft.song_title || null, song_artist: draft.song_artist || null,
+    song_provider: draft.song_provider, song_id: draft.song_id,
+    crest_url: draft.crest_url
+  };
+
+  const { error } = await supabase.from('teams').update(patch).eq('id', team.id);
+
+  if (!error && draft.quote !== undefined) {
+    await supabase.from('profiles').update({ quote: draft.quote }).eq('id', profile.id);
+  }
+
+  saving = false;
+  if (error) { setState('Didn\u2019t save: ' + error.message, 'err'); $('save').disabled = false; return; }
+
+  dirty = false;
+  setState('Saved. It\u2019s live on your team page.', 'ok');
+});
+
+$('discard').addEventListener('click', () => { if (dirty) location.reload(); });
+
+window.addEventListener('beforeunload', e => {
+  if (dirty && !saving) { e.preventDefault(); e.returnValue = ''; }
+});
+
+$('navtoggle').addEventListener('click', function(){
+  const n = $('nav'), open = n.classList.toggle('open');
+  this.setAttribute('aria-expanded', open);
+  this.textContent = open ? 'CLOSE' : 'MENU';
+});
 </script>
 </body>
 </html>
