@@ -1,0 +1,41 @@
+[
+  {
+    "week": 11, "date": "2026-09-08", "label": "TUE 08 SEP",
+    "course": "Pebble Beach", "nine": "Front 9", "status": "next",
+    "matches": [
+      { "bay": 1, "home": "bogey-nights",      "away": "the-chunkers" },
+      { "bay": 2, "home": "the-sandbaggers",   "away": "orange-julius" },
+      { "bay": 3, "home": "static-cling",      "away": "hot-bench" },
+      { "bay": 4, "home": "night-shift",       "away": "mulligan-stew" },
+      { "bay": 5, "home": "shank-redemption",  "away": "lavender-menace" },
+      { "bay": 6, "home": "cart-path-only",    "away": "fore-play" },
+      { "bay": 7, "home": "grip-it-and-sip-it","away": "green-room" }
+    ]
+  },
+  {
+    "week": 10, "date": "2026-08-25", "label": "TUE 25 AUG",
+    "course": "Torrey Pines South", "nine": "Front 9", "status": "final",
+    "matches": [
+      { "bay": 1, "home": "bogey-nights",      "away": "fore-play",        "homeScore": 18, "awayScore": 13 },
+      { "bay": 2, "home": "static-cling",      "away": "green-room",       "homeScore": 16, "awayScore": 12 },
+      { "bay": 3, "home": "the-sandbaggers",   "away": "cart-path-only",   "homeScore": 17, "awayScore": 14 },
+      { "bay": 4, "home": "night-shift",       "away": "shank-redemption", "homeScore": 15, "awayScore": 15 },
+      { "bay": 5, "home": "hot-bench",         "away": "orange-julius",    "homeScore": 14, "awayScore": 11 },
+      { "bay": 6, "home": "grip-it-and-sip-it","away": "the-chunkers",     "homeScore": 16, "awayScore": 10 },
+      { "bay": 7, "home": "lavender-menace",   "away": "mulligan-stew",    "homeScore": 13, "awayScore": 12 }
+    ]
+  },
+  {
+    "week": 9, "date": "2026-08-18", "label": "TUE 18 AUG",
+    "course": "Bay Hill", "nine": "Back 9", "status": "final",
+    "matches": [
+      { "bay": 1, "home": "the-sandbaggers",   "away": "mulligan-stew",    "homeScore": 19, "awayScore": 11 },
+      { "bay": 2, "home": "static-cling",      "away": "orange-julius",    "homeScore": 15, "awayScore": 13 },
+      { "bay": 3, "home": "bogey-nights",      "away": "night-shift",      "homeScore": 17, "awayScore": 16 },
+      { "bay": 4, "home": "hot-bench",         "away": "the-chunkers",     "homeScore": 15, "awayScore": 9  },
+      { "bay": 5, "home": "green-room",        "away": "fore-play",        "homeScore": 14, "awayScore": 14 },
+      { "bay": 6, "home": "cart-path-only",    "away": "lavender-menace",  "homeScore": 16, "awayScore": 12 },
+      { "bay": 7, "home": "grip-it-and-sip-it","away": "shank-redemption", "homeScore": 13, "awayScore": 15 }
+    ]
+  }
+]

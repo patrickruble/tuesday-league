@@ -3,391 +3,234 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Leaderboard — X-Golf Tuesday League</title>
+<title>Leaderboard — Katy Golf League</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,100..125,400..800&family=Instrument+Sans:wght@400;500;600&family=Martian+Mono:wght@400;600&display=swap" rel="stylesheet">
-<style>
-:root{
-  --green:#007041;
-  --green-deep:#00522F;
-  --green-line:#B4C9BC;
-  --lime:#B8EB7A;
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=Instrument+Sans:wght@400;500;600&family=Martian+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
 
-  --field:#DCE1DC;
-  --card:#FFFFFF;
-  --ink:#10221A;
-  --dim:#5F6F66;
-  --rule:#D2D8D2;
-
-  --display:'Archivo', 'Helvetica Neue', Arial, sans-serif;
-  --body:'Instrument Sans', system-ui, sans-serif;
-  --data:'Martian Mono', 'Courier New', monospace;
-}
-
-*{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
-body{
-  margin:0;background:var(--field);color:var(--ink);
-  font-family:var(--body);font-size:15px;line-height:1.6;
-  -webkit-font-smoothing:antialiased;
-}
-h1,h2{margin:0;font-family:var(--display);font-weight:800;line-height:1}
-:focus-visible{outline:2px solid var(--ink);outline-offset:-3px}
-.wrap{max-width:1040px;margin:0 auto;padding:0 24px}
-
-/* MASTHEAD */
-.masthead{background:var(--green);color:#fff}
-.masthead .wrap{display:flex;align-items:center;gap:26px;padding-top:14px;padding-bottom:14px;flex-wrap:wrap}
-.mark{
-  font-family:var(--display);font-weight:800;
-  font-variation-settings:'wdth' 118;
-  font-size:15px;letter-spacing:.1em;text-transform:uppercase;
-}
-.mark em{font-style:normal;color:var(--lime)}
-.masthead nav{display:flex;gap:22px;margin-left:auto;flex-wrap:wrap}
-.masthead nav a{
-  color:rgba(255,255,255,.76);text-decoration:none;
-  font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:500;
-}
-.masthead nav a:hover,.masthead nav a[aria-current]{color:var(--lime)}
-
-/* TITLE */
-.title{background:var(--green);color:#fff;padding-bottom:32px}
-.title .wrap{display:flex;align-items:flex-end;gap:26px;flex-wrap:wrap}
-.title .eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--lime);font-weight:600;margin-bottom:10px}
-.title h1{font-size:clamp(38px,8vw,72px);font-variation-settings:'wdth' 112;letter-spacing:-.025em;text-transform:uppercase}
-.title .thru{
-  margin-left:auto;text-align:right;font-family:var(--data);font-size:11px;
-  color:rgba(255,255,255,.65);line-height:1.7;
-}
-.title .thru b{color:#fff;font-weight:600}
-
-/* COLUMN HEADS */
-.colhead{
-  background:var(--green-deep);color:rgba(255,255,255,.6);
-  font-family:var(--data);font-size:9px;letter-spacing:.12em;
-}
-.colhead .row{padding-top:9px;padding-bottom:9px}
-
-/* ============================================================
-   BOARD
-   Each row is one anchor. Accent shows as an edge and crest at
-   rest; on hover the whole row floods with it.
-   ============================================================ */
-.board{background:var(--card);border-top:1px solid var(--rule)}
-.row{
-  display:grid;
-  grid-template-columns:52px 62px 1fr 74px 74px 96px 46px;
-  align-items:center;gap:0;
-  max-width:1040px;margin:0 auto;padding:0 24px;
-}
-a.team{
-  display:block;text-decoration:none;color:inherit;
-  border-bottom:1px solid var(--rule);
-  position:relative;transition:background .13s ease;
-}
-a.team::before{
-  content:"";position:absolute;left:0;top:0;bottom:0;width:6px;
-  background:var(--c);
-}
-a.team .row{padding-top:13px;padding-bottom:13px}
-a.team:hover,a.team:focus-visible{background:var(--c);color:#fff}
-a.team:hover .crest,a.team:focus-visible .crest{background:rgba(255,255,255,.18);color:#fff}
-a.team:hover .pos,a.team:hover .pld,a.team:hover .avg,
-a.team:focus-visible .pos,a.team:focus-visible .pld,a.team:focus-visible .avg{color:rgba(255,255,255,.75)}
-a.team:hover .players,a.team:focus-visible .players{color:rgba(255,255,255,.7)}
-a.team:hover .dot,a.team:focus-visible .dot{background:rgba(255,255,255,.35)}
-a.team:hover .dot.w,a.team:focus-visible .dot.w{background:#fff}
-a.team:hover .pts,a.team:focus-visible .pts{color:#fff}
-a.team:hover .go,a.team:focus-visible .go{opacity:1;transform:translateX(0)}
-
-.pos{font-family:var(--data);font-size:17px;font-weight:600;color:var(--dim);letter-spacing:-.05em}
-.crest{
-  width:42px;height:42px;background:var(--c);color:#fff;
-  display:grid;place-items:center;
-  font-family:var(--display);font-weight:800;font-size:15px;letter-spacing:-.02em;
-}
-.name{min-width:0;padding-right:16px}
-.name b{
-  display:block;font-family:var(--display);font-weight:800;font-size:19px;
-  font-variation-settings:'wdth' 106;letter-spacing:-.015em;line-height:1.15;
-}
-.players{font-size:11px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.pld,.avg{font-family:var(--data);font-size:12px;color:var(--dim)}
-.pts{font-family:var(--data);font-size:20px;font-weight:600;letter-spacing:-.04em}
-.form{display:flex;gap:3px}
-.dot{width:8px;height:8px;background:var(--rule);border-radius:50%}
-.dot.w{background:var(--green)}
-.go{
-  font-family:var(--data);font-size:14px;text-align:right;
-  opacity:0;transform:translateX(-4px);transition:.13s ease;
-}
-
-/* movement marker sits with position */
-.pos i{
-  font-style:normal;font-size:9px;display:block;line-height:1;
-  margin-top:2px;color:var(--dim);
-}
-.pos i.up{color:var(--green)}
-.pos i.dn{color:#B91C1C}
-a.team:hover .pos i,a.team:focus-visible .pos i{color:rgba(255,255,255,.75)}
-
-/* NOTES */
-.notes{padding:30px 0 50px;font-size:12px;color:var(--dim)}
-.notes .wrap{display:flex;gap:26px;flex-wrap:wrap}
-.notes b{font-family:var(--data);color:var(--ink);font-weight:600}
-
-footer{background:var(--green);color:rgba(255,255,255,.55);font-size:12px}
-footer .wrap{padding:22px 24px;display:flex;gap:18px;flex-wrap:wrap}
-
-@media (max-width:860px){
-  .row{grid-template-columns:38px 44px 1fr 64px;padding-left:16px;padding-right:16px}
-  .crest{width:34px;height:34px;font-size:12px}
-  .name b{font-size:16px}
-  .players{display:none}
-  .pld,.avg,.form,.go{display:none}
-  .title .thru{margin-left:0;text-align:left;width:100%}
-  .colhead .c-pld,.colhead .c-avg,.colhead .c-form,.colhead .c-go{display:none}
-}
-</style>
 </head>
 <body>
 
 <header class="masthead">
-  <div class="wrap">
-    <div class="mark">X-Golf <em>·</em> Tuesday League</div>
+  <div class="inner">
+    <a class="mark" href="index.html">Katy <em>·</em> Golf League</a>
     <nav>
       <a href="index.html" aria-current="page">Leaderboard</a>
       <a href="schedule.html">Schedule</a>
       <a href="teams.html">Teams</a>
+      <a href="clubhouse.html">Clubhouse</a>
+      <a href="playlist.html">Playlist</a>
       <a href="records.html">Records</a>
     </nav>
   </div>
 </header>
 
+
 <div class="title">
-  <div class="wrap">
+  <div class="inner">
     <div>
       <div class="eyebrow">Season 3 · Stableford</div>
       <h1>Leaderboard</h1>
     </div>
-    <div class="thru">
+    <div class="aside">
       THROUGH <b>WEEK 10</b> OF 12<br>
-      NEXT ROUND <b>TUE 01 SEP</b> · 19:30
+      NEXT ROUND <b>TUE 08 SEP</b> · 7:30
     </div>
   </div>
 </div>
 
 <div class="colhead">
   <div class="row">
-    <span>POS</span>
-    <span></span>
-    <span>TEAM</span>
-    <span class="c-pld">PLAYED</span>
-    <span>POINTS</span>
-    <span class="c-form">LAST 5</span>
-    <span class="c-go"></span>
+    <span>POS</span><span></span><span>TEAM</span>
+    <span class="c-hide">PLAYED</span><span>POINTS</span>
+    <span class="c-hide">LAST 5</span><span class="c-hide"></span>
   </div>
 </div>
 
-<!-- Each row links to teams/{slug}.html -->
 <div class="board">
-
   <a class="team" style="--c:#A16207" href="teams/bogey-nights.html">
     <div class="row">
-      <div class="pos">1<i class="up">▲ 1</i></div>
+      <div class="pos">1</div>
       <div><div class="crest">BN</div></div>
-      <div class="name"><b>Bogey Nights</b><div class="players">Halloran · Pyke · Ferreira</div></div>
+      <div class="name"><b>Bogey Nights</b>
+        <div class="players">Halloran · Pyke · Ferreira</div></div>
       <div class="pld">10</div>
       <div class="pts">152</div>
       <div class="form"><i class="dot w"></i><i class="dot w"></i><i class="dot w"></i><i class="dot"></i><i class="dot w"></i></div>
       <div class="go">→</div>
     </div>
   </a>
-
   <a class="team" style="--c:#3F3F46" href="teams/the-sandbaggers.html">
     <div class="row">
-      <div class="pos">2<i class="dn">▼ 1</i></div>
+      <div class="pos">2</div>
       <div><div class="crest">SB</div></div>
-      <div class="name"><b>The Sandbaggers</b><div class="players">Ng · Delacroix · Whitfield</div></div>
+      <div class="name"><b>The Sandbaggers</b>
+        <div class="players">Ng · Delacroix · Whitfield</div></div>
       <div class="pld">10</div>
       <div class="pts">147</div>
       <div class="form"><i class="dot w"></i><i class="dot"></i><i class="dot w"></i><i class="dot w"></i><i class="dot w"></i></div>
       <div class="go">→</div>
     </div>
   </a>
-
   <a class="team" style="--c:#C2410C" href="teams/static-cling.html">
     <div class="row">
-      <div class="pos">3<i>—</i></div>
+      <div class="pos">3</div>
       <div><div class="crest">SC</div></div>
-      <div class="name"><b>Static Cling</b><div class="players">Okonkwo · Varma · Bell</div></div>
+      <div class="name"><b>Static Cling</b>
+        <div class="players">Okonkwo · Varma · Bell</div></div>
       <div class="pld">10</div>
       <div class="pts">138</div>
       <div class="form"><i class="dot w"></i><i class="dot w"></i><i class="dot"></i><i class="dot w"></i><i class="dot w"></i></div>
       <div class="go">→</div>
     </div>
   </a>
-
   <a class="team" style="--c:#2B3A67" href="teams/night-shift.html">
     <div class="row">
-      <div class="pos">4<i class="up">▲ 2</i></div>
+      <div class="pos">4</div>
       <div><div class="crest">NS</div></div>
-      <div class="name"><b>Night Shift</b><div class="players">Abara · Lindqvist · Roy</div></div>
+      <div class="name"><b>Night Shift</b>
+        <div class="players">Abara · Lindqvist · Roy</div></div>
       <div class="pld">10</div>
       <div class="pts">136</div>
       <div class="form"><i class="dot w"></i><i class="dot w"></i><i class="dot w"></i><i class="dot w"></i><i class="dot"></i></div>
       <div class="go">→</div>
     </div>
   </a>
-
   <a class="team" style="--c:#6D28D9" href="teams/shank-redemption.html">
     <div class="row">
-      <div class="pos">5<i class="dn">▼ 1</i></div>
+      <div class="pos">5</div>
       <div><div class="crest">SR</div></div>
-      <div class="name"><b>Shank Redemption</b><div class="players">Marchetti · Osei · Kowal</div></div>
+      <div class="name"><b>Shank Redemption</b>
+        <div class="players">Marchetti · Osei · Kowal</div></div>
       <div class="pld">10</div>
       <div class="pts">131</div>
       <div class="form"><i class="dot"></i><i class="dot w"></i><i class="dot w"></i><i class="dot"></i><i class="dot w"></i></div>
       <div class="go">→</div>
     </div>
   </a>
-
   <a class="team" style="--c:#0E7490" href="teams/cart-path-only.html">
     <div class="row">
-      <div class="pos">6<i>—</i></div>
+      <div class="pos">6</div>
       <div><div class="crest">CP</div></div>
-      <div class="name"><b>Cart Path Only</b><div class="players">Brennan · Sotelo · Iyer</div></div>
+      <div class="name"><b>Cart Path Only</b>
+        <div class="players">Brennan · Sotelo · Iyer</div></div>
       <div class="pld">10</div>
       <div class="pts">128</div>
       <div class="form"><i class="dot w"></i><i class="dot"></i><i class="dot w"></i><i class="dot w"></i><i class="dot"></i></div>
       <div class="go">→</div>
     </div>
   </a>
-
   <a class="team" style="--c:#4D7C0F" href="teams/grip-it-and-sip-it.html">
     <div class="row">
-      <div class="pos">7<i class="up">▲ 3</i></div>
+      <div class="pos">7</div>
       <div><div class="crest">GS</div></div>
-      <div class="name"><b>Grip It &amp; Sip It</b><div class="players">Tanaka · Mbeki · Vance</div></div>
+      <div class="name"><b>Grip It &amp; Sip It</b>
+        <div class="players">Tanaka · Mbeki · Vance</div></div>
       <div class="pld">10</div>
       <div class="pts">125</div>
       <div class="form"><i class="dot w"></i><i class="dot w"></i><i class="dot w"></i><i class="dot"></i><i class="dot"></i></div>
       <div class="go">→</div>
     </div>
   </a>
-
   <a class="team" style="--c:#7A1F3D" href="teams/hot-bench.html">
     <div class="row">
-      <div class="pos">8<i class="dn">▼ 2</i></div>
+      <div class="pos">8</div>
       <div><div class="crest">HB</div></div>
-      <div class="name"><b>Hot Bench</b><div class="players">Quill · Amaro · Stenson</div></div>
+      <div class="name"><b>Hot Bench</b>
+        <div class="players">Quill · Amaro · Stenson</div></div>
       <div class="pld">10</div>
       <div class="pts">122</div>
       <div class="form"><i class="dot"></i><i class="dot w"></i><i class="dot"></i><i class="dot w"></i><i class="dot w"></i></div>
       <div class="go">→</div>
     </div>
   </a>
-
   <a class="team" style="--c:#0F766E" href="teams/green-room.html">
     <div class="row">
-      <div class="pos">9<i>—</i></div>
+      <div class="pos">9</div>
       <div><div class="crest">GR</div></div>
-      <div class="name"><b>Green Room</b><div class="players">Haddad · Prosser · Lin</div></div>
+      <div class="name"><b>Green Room</b>
+        <div class="players">Haddad · Prosser · Lin</div></div>
       <div class="pld">10</div>
       <div class="pts">119</div>
       <div class="form"><i class="dot w"></i><i class="dot"></i><i class="dot"></i><i class="dot w"></i><i class="dot"></i></div>
       <div class="go">→</div>
     </div>
   </a>
-
-  <a class="team" style="--c:#4338CA" href="teams/casual-water.html">
-    <div class="row">
-      <div class="pos">10<i class="up">▲ 1</i></div>
-      <div><div class="crest">CW</div></div>
-      <div class="name"><b>Casual Water</b><div class="players">Duarte · Nkemelu · Fisk</div></div>
-      <div class="pld">10</div>
-      <div class="pts">115</div>
-      <div class="form"><i class="dot"></i><i class="dot w"></i><i class="dot"></i><i class="dot"></i><i class="dot w"></i></div>
-      <div class="go">→</div>
-    </div>
-  </a>
-
   <a class="team" style="--c:#DB2777" href="teams/fore-play.html">
     <div class="row">
-      <div class="pos">11<i class="dn">▼ 1</i></div>
+      <div class="pos">10</div>
       <div><div class="crest">FP</div></div>
-      <div class="name"><b>Fore Play</b><div class="players">Castellan · Ruiz · Aldridge</div></div>
+      <div class="name"><b>Fore Play</b>
+        <div class="players">Castellan · Ruiz · Aldridge</div></div>
       <div class="pld">10</div>
       <div class="pts">112</div>
       <div class="form"><i class="dot"></i><i class="dot"></i><i class="dot w"></i><i class="dot w"></i><i class="dot"></i></div>
       <div class="go">→</div>
     </div>
   </a>
-
   <a class="team" style="--c:#86198F" href="teams/lavender-menace.html">
     <div class="row">
-      <div class="pos">12<i>—</i></div>
+      <div class="pos">11</div>
       <div><div class="crest">LM</div></div>
-      <div class="name"><b>Lavender Menace</b><div class="players">Oyelaran · Beck · Trujillo</div></div>
+      <div class="name"><b>Lavender Menace</b>
+        <div class="players">Oyelaran · Beck · Trujillo</div></div>
       <div class="pld">10</div>
       <div class="pts">108</div>
       <div class="form"><i class="dot w"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot w"></i></div>
       <div class="go">→</div>
     </div>
   </a>
-
   <a class="team" style="--c:#7C2D12" href="teams/mulligan-stew.html">
     <div class="row">
-      <div class="pos">13<i class="up">▲ 1</i></div>
+      <div class="pos">12</div>
       <div><div class="crest">MS</div></div>
-      <div class="name"><b>Mulligan Stew</b><div class="players">Faraday · Choudhury · Reyes</div></div>
+      <div class="name"><b>Mulligan Stew</b>
+        <div class="players">Faraday · Choudhury · Reyes</div></div>
       <div class="pld">10</div>
       <div class="pts">104</div>
       <div class="form"><i class="dot"></i><i class="dot w"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i></div>
       <div class="go">→</div>
     </div>
   </a>
-
   <a class="team" style="--c:#B45309" href="teams/orange-julius.html">
     <div class="row">
-      <div class="pos">14<i class="dn">▼ 1</i></div>
+      <div class="pos">13</div>
       <div><div class="crest">OJ</div></div>
-      <div class="name"><b>Orange Julius</b><div class="players">Salgado · Whitmore · Pak</div></div>
+      <div class="name"><b>Orange Julius</b>
+        <div class="players">Salgado · Whitmore · Pak</div></div>
       <div class="pld">10</div>
       <div class="pts">99</div>
       <div class="form"><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot w"></i><i class="dot"></i></div>
       <div class="go">→</div>
     </div>
   </a>
-
   <a class="team" style="--c:#57534E" href="teams/the-chunkers.html">
     <div class="row">
-      <div class="pos">15<i>—</i></div>
+      <div class="pos">14</div>
       <div><div class="crest">TC</div></div>
-      <div class="name"><b>The Chunkers</b><div class="players">Vogel · Anand · Broussard</div></div>
+      <div class="name"><b>The Chunkers</b>
+        <div class="players">Vogel · Anand · Broussard</div></div>
       <div class="pld">10</div>
       <div class="pts">91</div>
       <div class="form"><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i></div>
       <div class="go">→</div>
     </div>
   </a>
-
 </div>
 
 <div class="notes">
-  <div class="wrap">
-    <span>Bogey or worse <b>0</b> · Par <b>1</b> · Birdie <b>2</b> · Eagle <b>3</b></span>
-    <span>9-hole scramble off team handicap</span>
+  <div class="inner">
+    <span>Bogey or worse 0 · Par 1 · Birdie 2 · Eagle 3</span>
+    <span>9-hole scramble · Stableford off team handicap</span>
     <span>Ties broken by head-to-head, then best single round</span>
   </div>
 </div>
 
 <footer>
-  <div class="wrap">
-    <span>X-Golf Tuesday League</span>
-    <span>15 teams · 9-hole scramble · Stableford</span>
+  <div class="inner">
+    <span>Katy Golf League</span>
+    <span>14 teams · 9-hole scramble · Stableford</span>
   </div>
 </footer>
 

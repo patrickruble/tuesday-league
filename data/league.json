@@ -1,0 +1,39 @@
+{
+  "name": "Katy Golf League",
+  "wordmark": ["Katy", "Golf League"],
+  "domain": "katygolfleague.com",
+  "season": "Season 3",
+  "format": "9-hole scramble · Stableford",
+  "night": "Tuesdays",
+  "teeTime": "7:30",
+  "bays": 7,
+  "weeks": 12,
+  "currentWeek": 10,
+
+  "scoring": { "-2": 3, "-1": 2, "0": 1, "1": 0 },
+  "scoringNote": "Bogey or worse 0 · Par 1 · Birdie 2 · Eagle 3",
+  "tiebreak": "Ties broken by head-to-head, then best single round",
+
+  "nav": [
+    { "label": "Leaderboard", "href": "index.html" },
+    { "label": "Schedule",    "href": "schedule.html" },
+    { "label": "Teams",       "href": "teams.html" },
+    { "label": "Clubhouse",   "href": "clubhouse.html" },
+    { "label": "Playlist",    "href": "playlist.html" },
+    { "label": "Records",     "href": "records.html" }
+  ],
+
+  "typefaces": {
+    "archivo":     { "stack": "'Archivo','Helvetica Neue',Arial,sans-serif", "google": "Archivo:wdth,wght@100..125,400..800", "wdth": 112 },
+    "anton":       { "stack": "'Anton',Impact,sans-serif",                   "google": "Anton",                              "wdth": 100 },
+    "dm-serif":    { "stack": "'DM Serif Display',Georgia,serif",            "google": "DM+Serif+Display",                   "wdth": 100 },
+    "space-mono":  { "stack": "'Space Mono','Courier New',monospace",        "google": "Space+Mono:wght@400;700",            "wdth": 100 },
+    "bungee":      { "stack": "'Bungee',sans-serif",                         "google": "Bungee",                             "wdth": 100 },
+    "blackletter": { "stack": "'UnifrakturCook',serif",                      "google": "UnifrakturCook:wght@700",            "wdth": 100 }
+  },
+
+  "moodSentiment": {
+    "hot": "#B8EB7A", "good": "#7EBED7", "cold": "#E8A87C",
+    "bad": "#9AA5A0", "odd": "#C9A0DC"
+  }
+}
