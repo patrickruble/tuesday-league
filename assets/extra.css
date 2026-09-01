@@ -242,3 +242,12 @@
   }
   .authslot a{font-size:13px;max-width:none}
 }
+
+/* keep the nav on one baseline, auth slot included */
+.masthead nav{align-items:center}
+.masthead .inner{align-items:center}
+.authslot{line-height:1}
+.authslot a,.authslot button{line-height:1;display:inline-block}
+@media (max-width:760px){
+  .masthead nav{align-items:stretch}
+}

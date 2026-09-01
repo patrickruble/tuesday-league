@@ -4,54 +4,31 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Commissioner — Katy Golf League</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#007041">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=Instrument+Sans:wght@400;500;600&family=Martian+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/extra.css">
 <style>
-:root{
-  --green:#007041;--green-deep:#00522F;--lime:#B8EB7A;
-  --field:#DCE1DC;--card:#FFFFFF;--ink:#10221A;--dim:#5F6F66;--rule:#D2D8D2;
-  --wait:#B45309;--bad:#B91C1C;
-  --display:'Archivo','Helvetica Neue',Arial,sans-serif;
-  --body:'Instrument Sans',system-ui,sans-serif;
-  --data:'Martian Mono','Courier New',monospace;
-}
-*{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--field);color:var(--ink);font-family:var(--body);
-  font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
-h1,h2{margin:0;font-family:var(--display);font-weight:800;line-height:1}
-button{font-family:inherit}
-:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
-.wrap{max-width:1000px;margin:0 auto;padding:0 24px}
-
-.masthead{background:var(--green);color:#fff}
-.masthead .inner{max-width:1000px;margin:0 auto;padding:14px 24px;
-  display:flex;align-items:center;gap:20px;flex-wrap:wrap}
-.mark{font-family:var(--display);font-weight:800;font-variation-settings:'wdth' 118;
-  font-size:15px;letter-spacing:.1em;text-transform:uppercase;color:#fff;text-decoration:none}
-.mark em{font-style:normal;color:var(--lime)}
+:root{--wait:#B45309;--bad:#B91C1C}
 .tagged{margin-left:auto;font-family:var(--data);font-size:9px;letter-spacing:.12em;
   background:var(--lime);color:var(--green-deep);padding:4px 8px}
+.weekpick{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.3);
+  font-family:var(--data);font-size:11px;padding:7px 10px;margin-left:auto}
+.weekpick option{color:var(--ink)}
 
-.title{background:var(--green);color:#fff;padding-bottom:26px}
-.title .inner{max-width:1000px;margin:0 auto;padding:0 24px;
-  display:flex;align-items:flex-end;gap:20px;flex-wrap:wrap}
-.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--lime);
-  font-weight:600;margin-bottom:9px}
-.title h1{font-size:clamp(32px,7vw,56px);font-variation-settings:'wdth' 110;
-  letter-spacing:-.025em;text-transform:uppercase}
-
-/* progress summary */
-.tally{background:var(--green-deep);color:#fff}
-.tally .inner{max-width:1000px;margin:0 auto;padding:16px 24px;
+.tallybar{background:var(--green-deep);color:#fff}
+.tallybar .inner{max-width:1040px;margin:0 auto;padding:16px 24px;
   display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.tally b{display:block;font-family:var(--data);font-size:28px;font-weight:600;letter-spacing:-.04em}
-.tally span{display:block;font-size:9px;letter-spacing:.13em;text-transform:uppercase;
+.tallybar b{display:block;font-family:var(--data);font-size:28px;font-weight:600;letter-spacing:-.04em}
+.tallybar span{display:block;font-size:9px;letter-spacing:.13em;text-transform:uppercase;
   color:rgba(255,255,255,.55);margin-top:5px}
-.tally .warn b{color:var(--lime)}
+.tallybar .hot b{color:var(--lime)}
 
-/* bays */
 .bays{margin:24px 0 20px}
 .bay{background:var(--card);border:1px solid var(--rule);margin-bottom:10px;
   display:grid;grid-template-columns:52px 1fr;overflow:hidden}
@@ -59,47 +36,37 @@ button{font-family:inherit}
   font-family:var(--data);line-height:1;padding:12px 0}
 .baynum b{display:block;font-size:19px;font-weight:600;letter-spacing:-.04em}
 .baynum span{display:block;font-size:7px;letter-spacing:.15em;margin-top:4px;opacity:.7}
-.baybody{padding:0}
 .entry{display:grid;grid-template-columns:8px 1fr auto auto;gap:12px;align-items:center;
   padding:12px 14px}
 .entry + .entry{border-top:1px solid var(--rule)}
 .entry i{width:8px;height:30px;display:block;align-self:stretch}
 .nm b{display:block;font-size:15px;font-weight:600;line-height:1.2}
 .nm span{font-size:11px;color:var(--dim);font-family:var(--data)}
-.state{font-family:var(--data);font-size:9px;font-weight:600;letter-spacing:.08em;
+.st{font-family:var(--data);font-size:9px;font-weight:600;letter-spacing:.08em;
   padding:4px 8px;white-space:nowrap}
 .s-in{background:var(--green);color:#fff}
 .s-wait{background:#FDECD8;color:var(--wait)}
 .s-none{background:transparent;color:var(--dim);box-shadow:inset 0 0 0 1px var(--rule)}
 .s-bad{background:#FBE4E4;color:var(--bad)}
 .act{background:transparent;border:1px solid var(--rule);padding:7px 11px;font-size:12px;
-  cursor:pointer;color:var(--dim);white-space:nowrap}
+  cursor:pointer;color:var(--dim);white-space:nowrap;font-family:inherit;text-decoration:none}
 .act:hover{border-color:var(--ink);color:var(--ink)}
 .act.go{background:var(--green);border-color:var(--green);color:#fff}
 .act.go:hover{background:var(--green-deep)}
 .act[disabled]{opacity:.35;cursor:default}
 
-.section-head{display:flex;align-items:baseline;gap:14px;margin:30px 0 14px;flex-wrap:wrap}
-.section-head h2{font-size:13px;letter-spacing:.15em;text-transform:uppercase}
-.section-head .note{font-size:12px;color:var(--dim);margin-left:auto}
-
-.nudge{background:var(--card);border:1px solid var(--rule);padding:16px 18px;
+.chase{background:var(--card);border:1px solid var(--rule);padding:16px 18px;
   display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:40px}
-.nudge .txt{flex:1;min-width:200px;font-size:13px;color:var(--dim);line-height:1.45}
-.nudge .txt b{display:block;color:var(--ink);font-size:14px;margin-bottom:2px}
-.nudge button{background:var(--green);color:#fff;border:0;padding:11px 18px;
-  font-size:13px;font-weight:600;cursor:pointer}
-.nudge button:hover{background:var(--green-deep)}
+.chase .txt{flex:1;min-width:220px;font-size:13px;color:var(--dim);line-height:1.45}
+.chase .txt b{display:block;color:var(--ink);font-size:14px;margin-bottom:3px}
+.chase button{background:var(--green);color:#fff;border:0;padding:11px 18px;
+  font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.chase button:hover{background:var(--green-deep)}
 
-footer{background:var(--green);color:rgba(255,255,255,.55);font-size:12px}
-footer .inner{max-width:1000px;margin:0 auto;padding:20px 24px;display:flex;gap:18px;flex-wrap:wrap}
-
-@media (max-width:680px){
-  .tally .inner{grid-template-columns:repeat(2,1fr);gap:14px}
-  .entry{grid-template-columns:8px 1fr;row-gap:9px}
-  .entry .state{grid-column:2}
-  .entry .act{grid-column:2;justify-self:start}
-}
+.gate{max-width:520px;margin:60px auto;background:var(--card);border:1px solid var(--rule);
+  padding:30px;text-align:center}
+.gate h2{font-size:22px;margin:0 0 9px}
+.gate p{color:var(--dim);font-size:14px;margin:0}
 </style>
 </head>
 <body>
@@ -107,197 +74,214 @@ footer .inner{max-width:1000px;margin:0 auto;padding:20px 24px;display:flex;gap:
 <header class="masthead">
   <div class="inner">
     <a class="mark" href="index.html">Katy <em>·</em> Golf League</a>
-    <span class="tagged">COMMISSIONER</span>
+    <button class="navtoggle" id="navtoggle" aria-expanded="false" aria-controls="nav">MENU</button>
+    <nav id="nav">
+      <a href="index.html">Leaderboard</a>
+      <a href="schedule.html">Schedule</a>
+      <a href="teams.html">Teams</a>
+      <a href="scrapbook.html">Scrapbook</a>
+      <span id="authslot" class="authslot"></span>
+    </nav>
   </div>
 </header>
 
-<div class="title">
-  <div class="inner">
-    <div>
-      <div class="eyebrow">Week 11 · Tue 08 Sep · Pebble Beach front 9</div>
-      <h1>Tonight</h1>
+<div id="gate" class="gate" hidden>
+  <h2>Commissioner only</h2>
+  <p>This page shows who has and hasn't turned in a card. Ask Chris if you need access.</p>
+</div>
+
+<div id="app" hidden>
+  <div class="title">
+    <div class="inner">
+      <div>
+        <div class="eyebrow" id="sub">—</div>
+        <h1>Tonight</h1>
+      </div>
+      <select class="weekpick" id="weekpick"></select>
     </div>
+  </div>
+
+  <div class="tallybar">
+    <div class="inner">
+      <div><b id="t-in">0</b><span>Cards in</span></div>
+      <div class="hot"><b id="t-wait">0</b><span>Awaiting sign-off</span></div>
+      <div><b id="t-none">0</b><span>Not started</span></div>
+      <div><b id="t-bad">0</b><span>Disputed</span></div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="bays" id="bays"></div>
+    <div id="chase"></div>
   </div>
 </div>
 
-<div class="tally">
-  <div class="inner">
-    <div><b>9</b><span>Cards in</span></div>
-    <div class="warn"><b>3</b><span>Awaiting sign-off</span></div>
-    <div><b>1</b><span>Not started</span></div>
-    <div><b>1</b><span>Disputed</span></div>
-  </div>
-</div>
-
-<div class="wrap">
-
-  <div class="bays">
-
-    <div class="bay">
-      <div class="baynum"><b>1</b><span>BAY</span></div>
-      <div class="baybody">
-        <div class="entry">
-          <i style="background:#A16207"></i>
-          <div class="nm"><b>Bogey Nights</b><span>18 PTS · 9:02 PM</span></div>
-          <span class="state s-in">CONFIRMED</span>
-          <button class="act" disabled>Done</button>
-        </div>
-        <div class="entry">
-          <i style="background:#57534E"></i>
-          <div class="nm"><b>The Chunkers</b><span>11 PTS · 9:05 PM</span></div>
-          <span class="state s-in">CONFIRMED</span>
-          <button class="act" disabled>Done</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="bay">
-      <div class="baynum"><b>2</b><span>BAY</span></div>
-      <div class="baybody">
-        <div class="entry">
-          <i style="background:#3F3F46"></i>
-          <div class="nm"><b>The Sandbaggers</b><span>17 PTS · 9:11 PM</span></div>
-          <span class="state s-wait">WAITING ON ORANGE JULIUS</span>
-          <button class="act">Nudge</button>
-        </div>
-        <div class="entry">
-          <i style="background:#B45309"></i>
-          <div class="nm"><b>Orange Julius</b><span>13 PTS · 9:12 PM</span></div>
-          <span class="state s-wait">WAITING ON SANDBAGGERS</span>
-          <button class="act">Nudge</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="bay">
-      <div class="baynum"><b>3</b><span>BAY</span></div>
-      <div class="baybody">
-        <div class="entry">
-          <i style="background:#C2410C"></i>
-          <div class="nm"><b>Static Cling</b><span>16 PTS · 9:14 PM</span></div>
-          <span class="state s-bad">DISPUTED BY HOT BENCH</span>
-          <button class="act go">Review</button>
-        </div>
-        <div class="entry">
-          <i style="background:#7A1F3D"></i>
-          <div class="nm"><b>Hot Bench</b><span>14 PTS · 9:16 PM</span></div>
-          <span class="state s-in">CONFIRMED</span>
-          <button class="act" disabled>Done</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="bay">
-      <div class="baynum"><b>4</b><span>BAY</span></div>
-      <div class="baybody">
-        <div class="entry">
-          <i style="background:#2B3A67"></i>
-          <div class="nm"><b>Night Shift</b><span>15 PTS · 8:58 PM</span></div>
-          <span class="state s-in">CONFIRMED</span>
-          <button class="act" disabled>Done</button>
-        </div>
-        <div class="entry">
-          <i style="background:#7C2D12"></i>
-          <div class="nm"><b>Mulligan Stew</b><span>No card yet</span></div>
-          <span class="state s-none">NOT STARTED</span>
-          <button class="act">Nudge</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="bay">
-      <div class="baynum"><b>5</b><span>BAY</span></div>
-      <div class="baybody">
-        <div class="entry">
-          <i style="background:#6D28D9"></i>
-          <div class="nm"><b>Shank Redemption</b><span>14 PTS · 9:07 PM</span></div>
-          <span class="state s-in">CONFIRMED</span>
-          <button class="act" disabled>Done</button>
-        </div>
-        <div class="entry">
-          <i style="background:#86198F"></i>
-          <div class="nm"><b>Lavender Menace</b><span>15 PTS · 9:08 PM</span></div>
-          <span class="state s-in">CONFIRMED</span>
-          <button class="act" disabled>Done</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="bay">
-      <div class="baynum"><b>6</b><span>BAY</span></div>
-      <div class="baybody">
-        <div class="entry">
-          <i style="background:#0E7490"></i>
-          <div class="nm"><b>Cart Path Only</b><span>16 PTS · 9:19 PM</span></div>
-          <span class="state s-wait">WAITING ON FORE PLAY</span>
-          <button class="act">Nudge</button>
-        </div>
-        <div class="entry">
-          <i style="background:#DB2777"></i>
-          <div class="nm"><b>Fore Play</b><span>12 PTS · 9:21 PM</span></div>
-          <span class="state s-in">CONFIRMED</span>
-          <button class="act" disabled>Done</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="bay">
-      <div class="baynum"><b>7</b><span>BAY</span></div>
-      <div class="baybody">
-        <div class="entry">
-          <i style="background:#4D7C0F"></i>
-          <div class="nm"><b>Grip It &amp; Sip It</b><span>13 PTS · 9:03 PM</span></div>
-          <span class="state s-in">CONFIRMED</span>
-          <button class="act" disabled>Done</button>
-        </div>
-        <div class="entry">
-          <i style="background:#0F766E"></i>
-          <div class="nm"><b>Green Room</b><span>15 PTS · 9:04 PM</span></div>
-          <span class="state s-in">CONFIRMED</span>
-          <button class="act" disabled>Done</button>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="section-head">
-    <h2>Chase list</h2>
-    <span class="note">Nothing posts to the leaderboard until it's confirmed</span>
-  </div>
-
-  <div class="nudge">
-    <div class="txt">
-      <b>4 teams need a poke</b>
-      Mulligan Stew haven't entered a card. Sandbaggers, Orange Julius and
-      Cart Path Only are waiting on the other team to sign off.
-    </div>
-    <button type="button" id="nudgeall">Nudge all four</button>
-  </div>
-
-</div>
+<div id="loading" class="gate"><p>Loading tonight…</p></div>
 
 <footer>
   <div class="inner">
     <span>Katy Golf League</span>
-    <span>Commissioner view — only you can see this</span>
+    <span>Commissioner view</span>
   </div>
 </footer>
 
-<script>
-document.querySelectorAll('.act').forEach(function(b){
-  if(b.disabled || b.classList.contains('go')) return;
-  b.addEventListener('click', function(){
-    b.textContent = 'Nudged';
-    b.disabled = true;
-  });
-});
-document.getElementById('nudgeall').addEventListener('click', function(){
-  this.textContent = 'Nudges sent';
-  this.disabled = true;
-  document.querySelectorAll('.act').forEach(function(b){
-    if(!b.disabled && !b.classList.contains('go')){ b.textContent='Nudged'; b.disabled=true; }
-  });
+<script type="module">
+import { supabase, requireAuth, me, paintAuthSlot } from './assets/db.js';
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c =>
+  ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+
+let teams = {}, weeks = [], current = null;
+
+(async () => {
+  const session = await requireAuth();
+  if (!session) return;
+  paintAuthSlot(0);
+
+  const p = await me();
+  if (!p || !p.is_admin) {
+    $('loading').hidden = true;
+    $('gate').hidden = false;
+    return;
+  }
+
+  const { data: ts } = await supabase.from('teams').select('id,name,crest,accent');
+  teams = Object.fromEntries((ts||[]).map(t => [t.id, t]));
+
+  const { data: ms } = await supabase.from('matches')
+    .select('week,played_on').order('week', { ascending: false });
+
+  if (!ms || !ms.length) {
+    $('loading').innerHTML = '<h2>No matches yet</h2>' +
+      '<p>Once the schedule is in the database, this page fills itself in.</p>';
+    return;
+  }
+
+  weeks = [...new Map(ms.map(m => [m.week, m.played_on])).entries()];
+  $('weekpick').innerHTML = weeks.map(([w,d]) =>
+    `<option value="${w}">Week ${w} · ${new Date(d).toLocaleDateString([], {day:'numeric',month:'short'})}</option>`
+  ).join('');
+  $('weekpick').addEventListener('change', e => load(+e.target.value));
+
+  await load(weeks[0][0]);
+  $('loading').hidden = true;
+  $('app').hidden = false;
+})();
+
+async function load(week) {
+  current = week;
+
+  const { data: matches } = await supabase.from('matches')
+    .select('id,week,played_on,bay,home_team,away_team,course_id')
+    .eq('week', week).order('bay');
+
+  const ids = (matches||[]).map(m => m.id);
+  const { data: rounds } = await supabase.from('rounds')
+    .select('id,match_id,team_id,status,submitted_at,dispute_note')
+    .in('match_id', ids.length ? ids : ['00000000-0000-0000-0000-000000000000']);
+
+  const { data: scores } = await supabase.from('round_scores')
+    .select('id,total_points')
+    .in('match_id', ids.length ? ids : ['00000000-0000-0000-0000-000000000000']);
+  const points = Object.fromEntries((scores||[]).map(s => [s.id, s.total_points]));
+
+  const byMatch = {};
+  (rounds||[]).forEach(r => (byMatch[r.match_id] ??= []).push(r));
+
+  let nIn = 0, nWait = 0, nNone = 0, nBad = 0;
+  const chase = [];
+
+  $('bays').innerHTML = (matches||[]).map(m => {
+    const rs = byMatch[m.id] || [];
+    const row = teamId => {
+      const t = teams[teamId] || { name:'—', crest:'—', accent:'#5F6F66' };
+      const r = rs.find(x => x.team_id === teamId);
+      const other = rs.find(x => x.team_id !== teamId);
+
+      let cls, label, action = '';
+      if (!r || r.status === 'draft') {
+        cls='s-none'; label='NOT STARTED'; nNone++;
+        chase.push(`${t.name} haven't entered a card`);
+        action = `<button class="act" data-copy="${esc(t.name)}">Copy nudge</button>`;
+      } else if (r.status === 'submitted') {
+        const opp = teams[other ? other.team_id : null];
+        cls='s-wait'; label = 'WAITING ON ' + (opp ? opp.name.toUpperCase() : 'OPPONENT'); nWait++;
+        chase.push(`${opp ? opp.name : 'Someone'} still to sign ${t.name}'s card`);
+        action = `<a class="act go" href="verify.html?round=${r.id}">Open</a>`;
+      } else if (r.status === 'disputed') {
+        cls='s-bad'; label='DISPUTED'; nBad++;
+        chase.push(`${t.name}'s card is disputed`);
+        action = `<a class="act go" href="verify.html?round=${r.id}">Review</a>`;
+      } else {
+        cls='s-in'; label='CONFIRMED'; nIn++;
+        action = `<button class="act" disabled>Done</button>`;
+      }
+
+      const when = r?.submitted_at
+        ? new Date(r.submitted_at).toLocaleTimeString([], {hour:'numeric',minute:'2-digit'})
+        : 'No card yet';
+      const pts = r && points[r.id] != null ? points[r.id] + ' PTS · ' : '';
+
+      return `<div class="entry">
+        <i style="background:${t.accent}"></i>
+        <div class="nm"><b>${esc(t.name)}</b><span>${pts}${when}</span></div>
+        <span class="st ${cls}">${esc(label)}</span>
+        ${action}
+      </div>`;
+    };
+
+    return `<div class="bay">
+      <div class="baynum"><b>${m.bay ?? '—'}</b><span>BAY</span></div>
+      <div>${row(m.home_team)}${row(m.away_team)}</div>
+    </div>`;
+  }).join('');
+
+  $('t-in').textContent = nIn;
+  $('t-wait').textContent = nWait;
+  $('t-none').textContent = nNone;
+  $('t-bad').textContent = nBad;
+
+  const wk = weeks.find(w => w[0] === week);
+  $('sub').textContent = `Week ${week} · ` +
+    new Date(wk[1]).toLocaleDateString([], {weekday:'long',day:'numeric',month:'long'});
+
+  $('chase').innerHTML = chase.length ? `
+    <div class="chase">
+      <div class="txt"><b>${chase.length} thing${chase.length===1?'':'s'} outstanding</b>
+        ${esc(chase.slice(0,3).join('. '))}${chase.length>3 ? ` and ${chase.length-3} more.` : '.'}</div>
+      <button type="button" id="copyall">Copy a message for the group chat</button>
+    </div>` : `
+    <div class="chase"><div class="txt"><b>Week ${week} is done</b>
+      Every card is in and signed off.</div></div>`;
+
+  if (chase.length) {
+    $('copyall').addEventListener('click', async function(){
+      const text = `Week ${week} — still outstanding:\n` +
+        chase.map(c => '· ' + c).join('\n') +
+        `\n\n${location.origin}${location.pathname.replace(/admin\.html$/,'')}`;
+      try { await navigator.clipboard.writeText(text); this.textContent = 'Copied'; }
+      catch { this.textContent = 'Copy failed'; }
+      this.disabled = true;
+    });
+  }
+
+  document.querySelectorAll('[data-copy]').forEach(b =>
+    b.addEventListener('click', async function(){
+      try {
+        await navigator.clipboard.writeText(
+          `${this.dataset.copy} — your week ${week} card still isn't in. ` +
+          `${location.origin}${location.pathname.replace(/admin\.html$/,'')}enter-scores.html`);
+        this.textContent = 'Copied';
+      } catch { this.textContent = 'Copy failed'; }
+      this.disabled = true;
+    }));
+}
+
+$('navtoggle').addEventListener('click', function(){
+  const n = $('nav'), open = n.classList.toggle('open');
+  this.setAttribute('aria-expanded', open);
+  this.textContent = open ? 'CLOSE' : 'MENU';
 });
 </script>
 </body>
