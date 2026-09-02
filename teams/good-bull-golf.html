@@ -13,15 +13,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=Instrument+Sans:wght@400;500;600&family=Martian+Mono:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/site.css">
 <link rel="stylesheet" href="../assets/extra.css">
+<link rel="stylesheet" href="../assets/patterns.css">
 
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&display=swap" rel="stylesheet">
 <style>
   :root{
     --accent:#B91C1C;
     --pat:rgba(185,28,28,0.15);
     --mood:#7EBED7;
-    --team-display:'DM Serif Display',Georgia,serif;
-    --team-wdth:100;
+    --team-display:'Archivo','Helvetica Neue',Arial,sans-serif;
+    --team-wdth:112;
   }
 
 
@@ -53,7 +54,7 @@
     <div>
       <div class="eyebrow">Season Season 3</div>
       <h1>Good Bull Golf</h1>
-      <div class="meta">Bay 2 · Tuesdays 7:30 · Team handicap 5</div>
+      <div class="meta">Bay 2 · Tuesdays 7:30</div>
     </div>
     <div class="tally"><b>—</b><span>SEASON POINTS</span></div>
   </div>
@@ -79,13 +80,13 @@
   <div class="inner">
     <div><b>—</b><span>Points per round</span></div>
     <div><b>—</b><span>Best round</span></div>
-    <div><b>5</b><span>Team handicap</span></div>
+    <div><b>—</b><span>Team handicap</span></div>
     <div><b>—</b><span>Rounds played</span></div>
     <div><b>—</b><span>Standing</span></div>
   </div>
 </div>
 
-<div class="sheet bg-turf">
+<div class="sheet bg-none">
   <div class="wrap">
     
     <section>
@@ -156,6 +157,29 @@
     b.textContent='❚❚';on=true;
   });
 })();
+</script>
+<script type="module">
+/* The mood is the one thing that should be current rather than
+   whatever it was at build time. Everything else on the page is
+   already rendered, so this just swaps a word. */
+import { supabase } from '../assets/db.js';
+const SENT = {"hot":"#B8EB7A","good":"#7EBED7","cold":"#E8A87C","bad":"#9AA5A0","odd":"#C9A0DC"};
+try {
+  const { data } = await supabase.from('teams')
+    .select('mood, moods(sentiment)')
+    .eq('slug', "good-bull-golf")
+    .maybeSingle();
+  if (data && data.mood) {
+    const el = document.querySelector('.moodline b');
+    if (el && el.textContent !== data.mood) {
+      el.textContent = data.mood;
+      const s = data.moods && data.moods.sentiment;
+      if (s && SENT[s]) document.documentElement.style.setProperty('--mood', SENT[s]);
+      const run = document.querySelector('.runfor');
+      if (run) run.remove();          // the count is stale once it changes
+    }
+  }
+} catch (e) { /* the page is fine without this */ }
 </script>
 
 

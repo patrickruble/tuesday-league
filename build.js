@@ -22,15 +22,37 @@ const OUT  = (p, html) => {
   console.log('  wrote', p);
 };
 
-const league   = DATA('league.json');
-const teams    = DATA('teams.json');
-const schedule = DATA('schedule.json');
-const bySlug   = Object.fromEntries(teams.map(t => [t.slug, t]));
+/* node build.js --from-db  refreshes data/teams.json from
+   Supabase first, so the pages carry whatever teams have set
+   for themselves. Without the flag it builds from the file as
+   it stands, which is faster and works offline. */
+async function refresh() {
+  if (!process.argv.includes('--from-db')) return;
+  const { pull } = require('./tools/pull-db.js');
+  await pull();
+  console.log('');
+}
 
-const optional = f => { try { return DATA(f); } catch { return {}; } };
-const bags     = optional('bags.json');
-const moodLog  = optional('mood-history.json');
-const sponsors = optional('sponsors.json');
+
+let league, teams, schedule, bySlug, bags, moodLog, sponsors;
+
+function loadData() {
+  league   = DATA('league.json');
+  teams    = DATA('teams.json');
+  schedule = DATA('schedule.json');
+  bySlug   = Object.fromEntries(teams.map(t => [t.slug, t]));
+
+  const optional = f => { try { return DATA(f); } catch { return {}; } };
+
+  /* typefaces, patterns and the palette live in one shared file
+     so the editor and the generator always agree */
+  const looks = optional('looks.json');
+  if (looks.typefaces) league.typefaces = looks.typefaces;
+
+  bags     = optional('bags.json');
+  moodLog  = optional('mood-history.json');
+  sponsors = optional('sponsors.json');
+}
 
 /* ---------- helpers ---------- */
 const esc = s => String(s == null ? '' : s)
@@ -55,10 +77,27 @@ const initials = s => s.split(/\s+/).map(w => w[0]).join('').slice(0,2).toUpperC
 
 /* A dark background needs the text panels turned up so nothing
    becomes hard to read. */
+/* Photos from the database are absolute Supabase URLs; ones
+   from teams.json are repo-relative. Handle both. */
+function assetUrl(p, depth = 1) {
+  if (!p) return null;
+  return /^https?:\/\//.test(p) ? p : '../'.repeat(depth) + p;
+}
+
 function isDark(hex) {
   const n = parseInt(hex.slice(1), 16);
   const lum = 0.299*(n>>16) + 0.587*((n>>8)&255) + 0.114*(n&255);
   return lum < 128;
+}
+
+/* Accent colours are all dark enough to carry white text, which
+   makes them unreadable as headings on a dark page. Mix toward
+   white so the team colour still reads as theirs. */
+function lighten(hex, amount = 0.5) {
+  const n = parseInt(hex.slice(1), 16);
+  const mix = c => Math.round(c + (255 - c) * amount);
+  const r = mix(n>>16), g = mix((n>>8)&255), b = mix(n&255);
+  return '#' + [r,g,b].map(v => v.toString(16).padStart(2,'0')).join('');
 }
 
 function embedUrl(song) {
@@ -70,31 +109,33 @@ function embedUrl(song) {
 const providerName = p => p === 'spotify' ? 'Spotify' : 'YouTube';
 
 /* ---------- derived ---------- */
-const played = teams.some(t => t.played > 0);
+let played, standings, players, nextWeek, bayOf, partnerOf;
 
-/* Standings: total points, then average, then best round. */
-const standings = [...teams].sort((a,b) =>
-  (b.points||0) - (a.points||0) ||
-  (b.played ? b.points/b.played : 0) - (a.played ? a.points/a.played : 0) ||
-  (b.bestRound||0) - (a.bestRound||0) ||
-  a.name.localeCompare(b.name));
-standings.forEach((t,i) => { t.rank = i + 1; });
+function derive() {
+  played = teams.some(t => t.played > 0);
 
-/* players, with slugs */
-const players = [];
-teams.forEach(t => t.roster.forEach((p,i) => {
-  p.slug = slugify(p.name);
-  players.push({ ...p, team: t, order: i + 1, initials: initials(p.name) });
-}));
+  standings = [...teams].sort((a,b) =>
+    (b.points||0) - (a.points||0) ||
+    (b.played ? b.points/b.played : 0) - (a.played ? a.points/a.played : 0) ||
+    (b.bestRound||0) - (a.bestRound||0) ||
+    a.name.localeCompare(b.name));
+  standings.forEach((t,i) => { t.rank = i + 1; });
 
-/* who shares a bay with whom, next week */
-const nextWeek = schedule.find(w => w.status === 'next') || schedule[0];
-const bayOf = {}, partnerOf = {};
-if (nextWeek) for (const b of nextWeek.bays || []) {
-  for (const slug of b.teams) {
-    bayOf[slug] = b.bay;
-    const other = b.teams.find(s => s !== slug);
-    if (other) partnerOf[slug] = other;
+  players = [];
+  teams.forEach(t => t.roster.forEach((p,i) => {
+    p.slug = slugify(p.name);
+    players.push({ ...p, team: t, order: i + 1, initials: initials(p.name) });
+  }));
+
+  nextWeek  = schedule.find(w => w.status === 'next') || schedule[0];
+  bayOf     = {};
+  partnerOf = {};
+  if (nextWeek) for (const b of nextWeek.bays || []) {
+    for (const slug of b.teams) {
+      bayOf[slug] = b.bay;
+      const other = b.teams.find(s => s !== slug);
+      if (other) partnerOf[slug] = other;
+    }
   }
 }
 
@@ -150,6 +191,7 @@ function layout({ title, current, depth = 0, head = '', body }) {
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=Instrument+Sans:wght@400;500;600&family=Martian+Mono:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="${up}assets/site.css">
 <link rel="stylesheet" href="${up}assets/extra.css">
+<link rel="stylesheet" href="${up}assets/patterns.css">
 ${head}
 </head>
 <body>
@@ -490,22 +532,43 @@ function buildTeamPage(t) {
   }
 ${t.backdropColor ? `  .sheet{background-color:${t.backdropColor}}` : ''}
 ${t.backdropImage ? `  .sheet{
-    background-image:${t.backdrop && t.backdrop !== 'none' ? 'var(--pattern),' : ''}url("../${t.backdropImage}");
+    background-image:${t.backdrop && t.backdrop !== 'none' ? 'var(--pattern),' : ''}url("${assetUrl(t.backdropImage)}");
     background-repeat:${t.backdropMode === 'tile' ? 'repeat' : 'no-repeat'};
     background-size:${t.backdropMode === 'tile' ? 'auto' : 'cover'};
     background-position:center;
     background-attachment:${t.backdropMode === 'fixed' ? 'fixed' : 'scroll'};
   }` : ''}
 ${t.backdropColor && isDark(t.backdropColor) ? `
-  .sheet .head h2{color:${t.accent}}
-  .sheet .panel,.sheet .h2h,.sheet .player,.sheet .match{background:rgba(255,255,255,.94)}
-  .sheet .run{background:rgba(255,255,255,.94)}` : ''}
+  /* dark background — invert the type rather than floating
+     white boxes on it */
+  .sheet{
+    --ink:#F3F5F3;
+    --dim:rgba(255,255,255,.56);
+    --rule:rgba(255,255,255,.15);
+    --card:rgba(255,255,255,.055);
+    --pat:${rgba(lighten(t.accent,.35), .18)};
+    color:#F3F5F3;
+  }
+  .sheet .panel,.sheet .h2h,.sheet .player,.sheet .match,
+  .sheet .run,.sheet .statgrid > div,.sheet .bag,.sheet .item{
+    background:rgba(255,255,255,.055);
+    border-color:rgba(255,255,255,.15);
+    color:#F3F5F3;
+  }
+  .sheet .roster{background:rgba(255,255,255,.15)}
+  .sheet .head h2{color:${lighten(t.accent,.45)}}
+  .sheet .hcp{color:${lighten(t.accent,.45)}}
+  .sheet .said,.sheet .idx,.sheet .pld,.sheet .note,
+  .sheet .course,.sheet small{color:rgba(255,255,255,.56)}
+  .sheet .mid .sc{color:#F3F5F3}
+  .sheet a{color:${lighten(t.accent,.5)}}
+  .sheet section + section{border-top-color:rgba(255,255,255,.14)}` : ''}
 </style>`;
 
   const roster = t.roster.map((p,i) => `
       <article class="player">
         <div class="face${p.photo ? ' has-img' : ''}">${
-          p.photo ? `<img src="../${esc(p.photo)}" alt="${esc(p.name)}" loading="lazy">` : esc(initials(p.name))
+          p.photo ? `<img src="${esc(assetUrl(p.photo))}" alt="${esc(p.name)}" loading="lazy">` : esc(initials(p.name))
         }</div>
         <div class="idx">${String(i+1).padStart(2,'0')}${i===0?' · CAPTAIN':''}</div>
         <h3><a href="../players/${p.slug}.html" style="color:inherit;text-decoration:none">${esc(p.name)}</a></h3>
@@ -570,7 +633,7 @@ ${t.backdropColor && isDark(t.backdropColor) ? `
     </section>` : '';
 
   const crest = t.crestUrl
-    ? `<img src="../${esc(t.crestUrl)}" alt="${esc(t.name)} crest">` : esc(t.crest);
+    ? `<img src="${esc(assetUrl(t.crestUrl))}" alt="${esc(t.name)} crest">` : esc(t.crest);
 
   return layout({
     title:t.name, current:'teams.html', depth:1, head,
@@ -650,6 +713,29 @@ ${nextBlock}${moodStrip}${results}${last}
     b.textContent='❚❚';on=true;
   });
 })();
+</script>
+<script type="module">
+/* The mood is the one thing that should be current rather than
+   whatever it was at build time. Everything else on the page is
+   already rendered, so this just swaps a word. */
+import { supabase } from '../assets/db.js';
+const SENT = ${JSON.stringify(league.moodSentiment)};
+try {
+  const { data } = await supabase.from('teams')
+    .select('mood, moods(sentiment)')
+    .eq('slug', ${JSON.stringify(t.slug)})
+    .maybeSingle();
+  if (data && data.mood) {
+    const el = document.querySelector('.moodline b');
+    if (el && el.textContent !== data.mood) {
+      el.textContent = data.mood;
+      const s = data.moods && data.moods.sentiment;
+      if (s && SENT[s]) document.documentElement.style.setProperty('--mood', SENT[s]);
+      const run = document.querySelector('.runfor');
+      if (run) run.remove();          // the count is stale once it changes
+    }
+  }
+} catch (e) { /* the page is fine without this */ }
 </script>`
   });
 }
@@ -662,7 +748,7 @@ function buildPlayerPage(p) {
   const mates = t.roster.filter(m => m.slug !== p.slug).map(m => `
       <a href="${m.slug}.html">
         <div class="mini${m.photo ? ' has-img' : ''}">${
-          m.photo ? `<img src="../${esc(m.photo)}" alt="" loading="lazy">` : initials(m.name)
+          m.photo ? `<img src="${esc(assetUrl(m.photo))}" alt="" loading="lazy">` : initials(m.name)
         }</div>
         <div><b>${esc(m.name)}</b><span>${m.hcp ? 'HCP ' + m.hcp : 'index TBC'}</span></div>
       </a>`).join('');
@@ -692,7 +778,7 @@ function buildPlayerPage(p) {
 <div class="phead">
   <div class="inner">
     <div class="avatar${p.photo ? ' has-img' : ''}">${
-      p.photo ? `<img src="../${esc(p.photo)}" alt="${esc(p.name)}">` : esc(p.initials)
+      p.photo ? `<img src="${esc(assetUrl(p.photo))}" alt="${esc(p.name)}">` : esc(p.initials)
     }</div>
     <div>
       <div class="eyebrow">Player ${String(p.order).padStart(2,'0')}${p.order===1?' · Captain':''}</div>
@@ -728,7 +814,24 @@ ${bagBlock}
 }
 
 /* ============================================================ */
+main();
+
+async function main() {
+await refresh();
+loadData();
+derive();
+
 console.log('Building', league.name);
+
+/* clear generated pages so renamed or departed teams don't linger */
+for (const dir of ['teams','players']) {
+  const d = path.join(ROOT, dir);
+  if (fs.existsSync(d)) {
+    fs.readdirSync(d).filter(f => f.endsWith('.html'))
+      .forEach(f => fs.unlinkSync(path.join(d, f)));
+  }
+}
+
 OUT('index.html',    buildLeaderboard());
 OUT('teams.html',    buildTeams());
 OUT('schedule.html', buildSchedule());
@@ -737,3 +840,4 @@ OUT('records.html',  buildRecords());
 teams.forEach(t   => OUT(`teams/${t.slug}.html`,   buildTeamPage(t)));
 players.forEach(p => OUT(`players/${p.slug}.html`, buildPlayerPage(p)));
 console.log(`Done. ${5 + teams.length + players.length} pages.`);
+}

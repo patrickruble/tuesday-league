@@ -13,6 +13,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=Anton&family=DM+Serif+Display&family=Space+Mono:wght@400;700&family=Bungee&family=UnifrakturCook:wght@700&family=Instrument+Sans:wght@400;500;600&family=Martian+Mono:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/site.css">
 <link rel="stylesheet" href="assets/extra.css">
+<link rel="stylesheet" href="assets/patterns.css">
 <style>
 :root{--mood:#C9A0DC;--team-display:var(--display);--team-wdth:112}
 body{padding-bottom:88px}
@@ -209,26 +210,7 @@ input[disabled],textarea[disabled]{opacity:.55;cursor:not-allowed}
 
     <fieldset>
       <legend>Typeface</legend>
-      <div class="fonts" id="fonts">
-        <button class="fnt" data-k="archivo" data-f="'Archivo','Helvetica Neue',Arial,sans-serif" data-w="112">
-          <span class="sample" style="font-family:'Archivo';font-weight:800">Aa</span>
-          <span class="nm">Archivo</span></button>
-        <button class="fnt" data-k="anton" data-f="'Anton',Impact,sans-serif" data-w="100">
-          <span class="sample" style="font-family:'Anton'">Aa</span>
-          <span class="nm">Anton</span></button>
-        <button class="fnt" data-k="dm-serif" data-f="'DM Serif Display',Georgia,serif" data-w="100">
-          <span class="sample" style="font-family:'DM Serif Display'">Aa</span>
-          <span class="nm">DM Serif</span></button>
-        <button class="fnt" data-k="space-mono" data-f="'Space Mono','Courier New',monospace" data-w="100">
-          <span class="sample" style="font-family:'Space Mono';font-weight:700">Aa</span>
-          <span class="nm">Space Mono</span></button>
-        <button class="fnt" data-k="bungee" data-f="'Bungee',sans-serif" data-w="100">
-          <span class="sample" style="font-family:'Bungee'">Aa</span>
-          <span class="nm">Bungee</span></button>
-        <button class="fnt" data-k="blackletter" data-f="'UnifrakturCook',serif" data-w="100">
-          <span class="sample" style="font-family:'UnifrakturCook';font-weight:700">Aa</span>
-          <span class="nm">Blackletter</span></button>
-      </div>
+      <div class="fonts" id="fonts"></div>
     </fieldset>
 
     <fieldset>
@@ -355,12 +337,11 @@ import { supabase, requireAuth, me } from './assets/db.js';
 
 const $ = id => document.getElementById(id);
 const SENT = { hot:'#B8EB7A', good:'#7EBED7', cold:'#E8A87C', bad:'#9AA5A0', odd:'#C9A0DC' };
-const BGS = ['none','argyle','plaid','pinstripe','dots','grid','diagonal','check','turf'];
-const BGLABEL = { none:'Plain', argyle:'Argyle', plaid:'Plaid', pinstripe:'Pinstripe',
-  dots:'Dots', grid:'Grid', diagonal:'Diagonal', check:'Check', turf:'Mow lines' };
-const PALETTE = ['#C2410C','#B91C1C','#B45309','#A16207','#4D7C0F','#0F766E','#0E7490',
-  '#1E3A8A','#2B3A67','#4338CA','#6D28D9','#86198F','#DB2777','#7A1F3D','#7C2D12',
-  '#3F3F46','#57534E'];
+
+/* Everything pickable comes from one file, so the editor and
+   the site can't drift apart. */
+const LOOKS = await fetch('data/looks.json').then(r => r.json());
+const BGS = LOOKS.patterns.map(p => p.key);
 
 let team = null, profile = null, moods = [], taken = {}, dirty = false, saving = false;
 const draft = {};
@@ -401,7 +382,7 @@ const draft = {};
     avatar_url: profile.avatar_url || null
   });
 
-  paintMoods(); paintBgs(); paintSwatches(); paintBgColors();
+  paintMoods(); paintFonts(); paintBgs(); paintSwatches(); paintBgColors();
   paintRoster(mates.data || []);
   fillForm();
   applyLook();
@@ -431,18 +412,48 @@ function paintMoods() {
 }
 
 function paintBgs() {
-  $('bgs').innerHTML = BGS.map(b =>
-    `<button class="bgo" data-b="${b}"><span class="sw bg-${b}"></span>
-     <span class="nm">${BGLABEL[b]}</span></button>`).join('');
+  const groups = {};
+  LOOKS.patterns.forEach(p => (groups[p.group || ''] ??= []).push(p));
+  $('bgs').innerHTML = Object.entries(groups).map(([g, list]) =>
+    (g ? `<div class="grouplbl">${g}</div>` : '') +
+    `<div class="bgrow">` + list.map(p =>
+      `<button class="bgo" data-b="${p.key}" title="${p.label}">
+        <span class="sw bg-${p.key}"></span><span class="nm">${p.label}</span></button>`
+    ).join('') + `</div>`
+  ).join('');
   $('bgs').querySelectorAll('.bgo').forEach(b =>
     b.addEventListener('click', () => { draft.backdrop = b.dataset.b; touch(); applyLook(); }));
 }
 
+function paintFonts() {
+  const groups = {};
+  Object.entries(LOOKS.typefaces).forEach(([k,f]) => (groups[f.group || ''] ??= []).push([k,f]));
+
+  /* load only the faces the picker shows, in one request */
+  const fams = Object.values(LOOKS.typefaces).map(f => 'family=' + f.google).join('&');
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = 'https://fonts.googleapis.com/css2?' + fams + '&display=swap';
+  document.head.appendChild(link);
+
+  $('fonts').innerHTML = Object.entries(groups).map(([g, list]) =>
+    `<div class="grouplbl">${g}</div><div class="fontrow">` +
+    list.map(([k,f]) =>
+      `<button class="fnt" data-k="${k}" data-f="${f.stack.replace(/"/g,'&quot;')}" data-w="${f.wdth}">
+        <span class="sample" style="font-family:${f.stack.replace(/"/g,'&quot;')}">Aa</span>
+        <span class="nm">${f.label}</span></button>`).join('') +
+    `</div>`).join('');
+
+  $('fonts').querySelectorAll('.fnt').forEach(b =>
+    b.addEventListener('click', () => { draft.typeface = b.dataset.k; touch(); applyLook(); }));
+}
+
 function paintSwatches() {
-  $('swatches').innerHTML = PALETTE.map(c => {
-    const who = taken[c];
-    return `<button class="sw2" style="background:${c}" data-c="${c}"
-            ${who ? `disabled title="Taken by ${who}"` : ''} aria-label="${c}"></button>`;
+  $('swatches').innerHTML = LOOKS.palette.map(({hex,name}) => {
+    const who = taken[hex];
+    return `<button class="sw2" style="background:${hex}" data-c="${hex}"
+            ${who ? `disabled title="${name} — taken by ${who}"` : `title="${name}"`}
+            aria-label="${name}"></button>`;
   }).join('');
   $('swatches').querySelectorAll('.sw2').forEach(b => {
     if (b.disabled) return;
@@ -508,6 +519,21 @@ function applyLook() {
     body.style.backgroundSize = '';
   }
 
+  /* dark background: invert the preview's type instead of
+     leaving dark text on a dark panel */
+  const dark = isDark(draft.backdrop_color);
+  body.classList.toggle('darkbg', dark);
+  if (dark) {
+    body.style.setProperty('--pv-ink', '#F3F5F3');
+    body.style.setProperty('--pv-dim', 'rgba(255,255,255,.56)');
+    body.style.setProperty('--pv-head', lighten(draft.accent, .45));
+    body.style.setProperty('--pv-panel', 'rgba(255,255,255,.07)');
+    body.style.setProperty('--pv-rule', 'rgba(255,255,255,.16)');
+  } else {
+    ['--pv-ink','--pv-dim','--pv-head','--pv-panel','--pv-rule']
+      .forEach(v => body.style.removeProperty(v));
+  }
+
   $('bgcolors').querySelectorAll('.sw2').forEach(b =>
     b.setAttribute('aria-pressed', b.dataset.c === draft.backdrop_color));
   $('bgmode').value = draft.backdrop_mode || 'tile';
@@ -542,6 +568,19 @@ const publicCrest = p => supabase.storage.from('crests').getPublicUrl(p).data.pu
 /* When there's an uploaded image we have to build the pattern
    as an inline gradient, because a CSS class would replace the
    image rather than layer over it. */
+function isDark(hex) {
+  if (!hex) return false;
+  const n = parseInt(hex.slice(1),16);
+  return (0.299*(n>>16) + 0.587*((n>>8)&255) + 0.114*(n&255)) < 128;
+}
+
+function lighten(hex, amount = 0.5) {
+  const n = parseInt(hex.slice(1),16);
+  const mix = c => Math.round(c + (255-c)*amount);
+  return '#' + [mix(n>>16), mix((n>>8)&255), mix(n&255)]
+    .map(v => v.toString(16).padStart(2,'0')).join('');
+}
+
 function patternLayer(kind) {
   const pat = getComputedStyle(document.documentElement).getPropertyValue('--pat').trim();
   switch (kind) {
@@ -619,19 +658,12 @@ $('crestfile').addEventListener('change', async e => {
 });
 
 /* ---------- background colour and image ---------- */
-const BGCOLORS = [
-  ['#DCE1DC','League default'], ['#FFFFFF','White'],   ['#F4F1EA','Cream'],
-  ['#E8EDE6','Fairway'],        ['#E4EAF2','Sky'],     ['#F2E8EC','Blush'],
-  ['#EDE9F5','Lilac'],          ['#F5EFE0','Sand'],    ['#E6EFEF','Mist'],
-  ['#2A2F3A','Slate'],          ['#1B2621','Deep'],    ['#3B2A2A','Oxblood']
-];
-
 const publicBackdrop = p => supabase.storage.from('backdrops').getPublicUrl(p).data.publicUrl;
 
 function paintBgColors() {
-  $('bgcolors').innerHTML = BGCOLORS.map(([c,label]) =>
-    `<button class="sw2" style="background:${c}" data-c="${c}" title="${label}"
-      aria-label="${label}"></button>`).join('');
+  $('bgcolors').innerHTML = LOOKS.backgrounds.map(({hex,name}) =>
+    `<button class="sw2" style="background:${hex}" data-c="${hex}" title="${name}"
+      aria-label="${name}"></button>`).join('');
   $('bgcolors').querySelectorAll('.sw2').forEach(b =>
     b.addEventListener('click', () => {
       draft.backdrop_color = b.dataset.c;
@@ -808,5 +840,30 @@ $('navtoggle').addEventListener('click', function(){
   this.textContent = open ? 'CLOSE' : 'MENU';
 });
 </script>
+<style>
+.pbody.darkbg{color:var(--pv-ink)}
+.pbody.darkbg h4{color:var(--pv-head)}
+.pbody.darkbg p{
+  background:var(--pv-panel);
+  border-color:var(--pv-rule);
+  color:var(--pv-ink);
+}
+</style>
+<style>
+.page{display:grid!important;grid-template-columns:1fr 384px!important;gap:26px!important;
+      align-items:start!important;max-width:1080px;margin:0 auto;padding:26px 24px}
+.form{display:block!important;min-width:0!important;width:auto!important;order:1}
+.form>*{display:block!important;float:none!important;width:auto!important}
+.form fieldset{display:block!important;width:auto!important;margin:0 0 14px!important}
+.preview{order:2;position:sticky;top:24px}
+.fonts,.bgs{display:block!important}
+.fontrow{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(126px,1fr))!important;gap:7px!important}
+.bgrow{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(82px,1fr))!important;gap:7px!important}
+.grouplbl{display:block!important;margin:16px 0 7px}
+.swatches{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(34px,1fr))!important;gap:5px!important}
+[hidden]{display:none!important}
+@media (max-width:940px){.page{grid-template-columns:1fr!important}.preview{position:static;order:0}}
+</style>
 </body>
 </html>
+

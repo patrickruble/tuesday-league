@@ -1,0 +1,149 @@
+{
+  "_comment": "Everything a team can pick. One source of truth — the editor builds its pickers from this file and the generator reads the same one. Add a colour or a pattern here and both sides get it.",
+
+  "typefaces": {
+    "archivo":     { "label": "Archivo",     "stack": "'Archivo','Helvetica Neue',Arial,sans-serif", "google": "Archivo:wdth,wght@100..125,400..800", "wdth": 112, "group": "Modern" },
+    "anton":       { "label": "Anton",       "stack": "'Anton',Impact,sans-serif",                   "google": "Anton",                  "wdth": 100, "group": "Condensed" },
+    "bebas":       { "label": "Bebas Neue",  "stack": "'Bebas Neue',Impact,sans-serif",              "google": "Bebas+Neue",             "wdth": 100, "group": "Condensed" },
+    "staatliches": { "label": "Staatliches", "stack": "'Staatliches',Impact,sans-serif",             "google": "Staatliches",            "wdth": 100, "group": "Condensed" },
+    "fjalla":      { "label": "Fjalla One",  "stack": "'Fjalla One',Impact,sans-serif",              "google": "Fjalla+One",             "wdth": 100, "group": "Condensed" },
+    "oswald":      { "label": "Oswald",      "stack": "'Oswald',Impact,sans-serif",                  "google": "Oswald:wght@700",        "wdth": 100, "group": "Condensed" },
+
+    "dm-serif":    { "label": "DM Serif",    "stack": "'DM Serif Display',Georgia,serif",            "google": "DM+Serif+Display",       "wdth": 100, "group": "Serif" },
+    "playfair":    { "label": "Playfair",    "stack": "'Playfair Display',Georgia,serif",            "google": "Playfair+Display:wght@700..900", "wdth": 100, "group": "Serif" },
+    "alfa-slab":   { "label": "Alfa Slab",   "stack": "'Alfa Slab One',Georgia,serif",               "google": "Alfa+Slab+One",          "wdth": 100, "group": "Serif" },
+    "bree":        { "label": "Bree Serif",  "stack": "'Bree Serif',Georgia,serif",                  "google": "Bree+Serif",             "wdth": 100, "group": "Serif" },
+
+    "space-mono":  { "label": "Space Mono",  "stack": "'Space Mono','Courier New',monospace",        "google": "Space+Mono:wght@400;700","wdth": 100, "group": "Machine" },
+    "rubik-mono":  { "label": "Rubik Mono",  "stack": "'Rubik Mono One',monospace",                  "google": "Rubik+Mono+One",         "wdth": 100, "group": "Machine" },
+    "press-start": { "label": "Pixel",       "stack": "'Press Start 2P',monospace",                  "google": "Press+Start+2P",         "wdth": 100, "group": "Machine" },
+    "silkscreen":  { "label": "Silkscreen",  "stack": "'Silkscreen',monospace",                      "google": "Silkscreen:wght@700",    "wdth": 100, "group": "Machine" },
+
+    "bungee":      { "label": "Bungee",      "stack": "'Bungee',sans-serif",                         "google": "Bungee",                 "wdth": 100, "group": "Loud" },
+    "righteous":   { "label": "Righteous",   "stack": "'Righteous',sans-serif",                      "google": "Righteous",              "wdth": 100, "group": "Loud" },
+    "monoton":     { "label": "Monoton",     "stack": "'Monoton',sans-serif",                        "google": "Monoton",                "wdth": 100, "group": "Loud" },
+    "bowlby":      { "label": "Bowlby",      "stack": "'Bowlby One SC',sans-serif",                  "google": "Bowlby+One+SC",          "wdth": 100, "group": "Loud" },
+    "lobster":     { "label": "Lobster",     "stack": "'Lobster',cursive",                           "google": "Lobster",                "wdth": 100, "group": "Loud" },
+
+    "blackletter": { "label": "Blackletter", "stack": "'UnifrakturCook',serif",                      "google": "UnifrakturCook:wght@700","wdth": 100, "group": "Gothic" },
+    "pirata":      { "label": "Pirata",      "stack": "'Pirata One',serif",                          "google": "Pirata+One",             "wdth": 100, "group": "Gothic" }
+  },
+
+  "patterns": [
+    { "key": "none",        "label": "Plain" },
+
+    { "key": "pinstripe",   "label": "Pinstripe",   "group": "Lines" },
+    { "key": "hstripe",     "label": "Rows",        "group": "Lines" },
+    { "key": "diagonal",    "label": "Diagonal",    "group": "Lines" },
+    { "key": "crosshatch",  "label": "Crosshatch",  "group": "Lines" },
+    { "key": "grid",        "label": "Grid",        "group": "Lines" },
+    { "key": "graph",       "label": "Graph",       "group": "Lines" },
+    { "key": "turf",        "label": "Mow lines",   "group": "Lines" },
+
+    { "key": "argyle",      "label": "Argyle",      "group": "Cloth" },
+    { "key": "plaid",       "label": "Plaid",       "group": "Cloth" },
+    { "key": "tartan",      "label": "Tartan",      "group": "Cloth" },
+    { "key": "houndstooth", "label": "Houndstooth", "group": "Cloth" },
+    { "key": "herringbone", "label": "Herringbone", "group": "Cloth" },
+    { "key": "check",       "label": "Check",       "group": "Cloth" },
+    { "key": "gingham",     "label": "Gingham",     "group": "Cloth" },
+
+    { "key": "dots",        "label": "Dots",        "group": "Shapes" },
+    { "key": "bigdots",     "label": "Polka",       "group": "Shapes" },
+    { "key": "rings",       "label": "Rings",       "group": "Shapes" },
+    { "key": "scales",      "label": "Scales",      "group": "Shapes" },
+    { "key": "chevron",     "label": "Chevron",     "group": "Shapes" },
+    { "key": "zigzag",      "label": "Zigzag",      "group": "Shapes" },
+    { "key": "bricks",      "label": "Bricks",      "group": "Shapes" },
+    { "key": "triangles",   "label": "Triangles",   "group": "Shapes" },
+    { "key": "confetti",    "label": "Confetti",    "group": "Shapes" }
+  ],
+
+  "_paletteNote": "Every colour is dark enough to carry white text, because the crest and the leaderboard row both put white on it. Grouped by family so the picker reads as a spectrum.",
+
+  "palette": [
+    { "hex": "#7F1D1D", "name": "Oxblood" },
+    { "hex": "#B91C1C", "name": "Red" },
+    { "hex": "#DC2626", "name": "Bright red" },
+
+    { "hex": "#7C2D12", "name": "Chestnut" },
+    { "hex": "#C2410C", "name": "Rust" },
+    { "hex": "#EA580C", "name": "Orange" },
+
+    { "hex": "#78350F", "name": "Bronze" },
+    { "hex": "#B45309", "name": "Amber" },
+    { "hex": "#D97706", "name": "Marmalade" },
+
+    { "hex": "#713F12", "name": "Umber" },
+    { "hex": "#A16207", "name": "Mustard" },
+    { "hex": "#CA8A04", "name": "Gold" },
+
+    { "hex": "#365314", "name": "Moss" },
+    { "hex": "#4D7C0F", "name": "Olive" },
+    { "hex": "#65A30D", "name": "Lime" },
+
+    { "hex": "#14532D", "name": "Pine" },
+    { "hex": "#15803D", "name": "Green" },
+    { "hex": "#16A34A", "name": "Grass" },
+
+    { "hex": "#134E4A", "name": "Deep teal" },
+    { "hex": "#0F766E", "name": "Teal" },
+    { "hex": "#0D9488", "name": "Turquoise" },
+
+    { "hex": "#164E63", "name": "Petrol" },
+    { "hex": "#0E7490", "name": "Cyan" },
+    { "hex": "#0891B2", "name": "Sky" },
+
+    { "hex": "#1E3A8A", "name": "Navy" },
+    { "hex": "#1D4ED8", "name": "Royal" },
+    { "hex": "#2563EB", "name": "Blue" },
+
+    { "hex": "#312E81", "name": "Midnight" },
+    { "hex": "#4338CA", "name": "Indigo" },
+    { "hex": "#4F46E5", "name": "Iris" },
+
+    { "hex": "#4C1D95", "name": "Grape" },
+    { "hex": "#6D28D9", "name": "Violet" },
+    { "hex": "#7C3AED", "name": "Amethyst" },
+
+    { "hex": "#581C87", "name": "Aubergine" },
+    { "hex": "#86198F", "name": "Purple" },
+    { "hex": "#A21CAF", "name": "Magenta" },
+
+    { "hex": "#831843", "name": "Wine" },
+    { "hex": "#BE185D", "name": "Cerise" },
+    { "hex": "#DB2777", "name": "Pink" },
+
+    { "hex": "#7A1F3D", "name": "Claret" },
+    { "hex": "#9F1239", "name": "Cranberry" },
+    { "hex": "#E11D48", "name": "Rose" },
+
+    { "hex": "#1C1917", "name": "Ink" },
+    { "hex": "#292524", "name": "Charcoal" },
+    { "hex": "#3F3F46", "name": "Graphite" },
+    { "hex": "#44403C", "name": "Iron" },
+    { "hex": "#57534E", "name": "Stone" },
+    { "hex": "#52525B", "name": "Slate" }
+  ],
+
+  "backgrounds": [
+    { "hex": "#DCE1DC", "name": "League default" },
+    { "hex": "#FFFFFF", "name": "White" },
+    { "hex": "#F7F5F0", "name": "Paper" },
+    { "hex": "#F4F1EA", "name": "Cream" },
+    { "hex": "#F5EFE0", "name": "Sand" },
+    { "hex": "#E8EDE6", "name": "Fairway" },
+    { "hex": "#E6EFEF", "name": "Mist" },
+    { "hex": "#E4EAF2", "name": "Sky" },
+    { "hex": "#EDE9F5", "name": "Lilac" },
+    { "hex": "#F2E8EC", "name": "Blush" },
+    { "hex": "#F0E9E2", "name": "Linen" },
+    { "hex": "#E9E4DC", "name": "Oat" },
+    { "hex": "#2A2F3A", "name": "Slate" },
+    { "hex": "#1B2621", "name": "Deep green" },
+    { "hex": "#241F2E", "name": "Aubergine" },
+    { "hex": "#3B2A2A", "name": "Oxblood" },
+    { "hex": "#1C1917", "name": "Ink" },
+    { "hex": "#14213D", "name": "Navy" }
+  ]
+}

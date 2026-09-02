@@ -273,3 +273,23 @@
 @media (max-width:760px){
   .player .face{aspect-ratio:2/1;font-size:26px}
 }
+
+/* ============================================================
+   PICKER GROUPS — the font and pattern lists got long enough
+   to need headings
+   ============================================================ */
+.grouplbl{
+  font-family:var(--data);font-size:8px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--dim);
+  margin:14px 0 7px;padding-bottom:4px;border-bottom:1px solid var(--rule);
+}
+.grouplbl:first-child{margin-top:0}
+.fontrow{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:7px}
+.bgrow{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:7px}
+.fonts,.bgs{display:block}
+.fnt .sample{font-size:21px}
+.bgo .sw{height:44px}
+.bgo .nm{font-size:8px;padding:5px 0}
+
+/* the palette got long too — tighter tiles, still tappable */
+.swatches{grid-template-columns:repeat(auto-fill,minmax(34px,1fr))!important;gap:5px}

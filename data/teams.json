@@ -1,159 +1,16 @@
 [
   {
-    "slug": "ar-bombers",
-    "name": "AR Bombers",
-    "crest": "AB",
-    "accent": "#C2410C",
-    "typeface": "archivo",
-    "backdrop": "argyle",
-    "handicap": 5,
-    "bay": 1,
-    "mood": "content",
-    "moodSentiment": "good",
-    "song": {
-      "title": "",
-      "artist": "",
-      "provider": "youtube",
-      "id": null
-    },
-    "bio": "",
-    "roster": [
-      {
-        "name": "Justin Krautz",
-        "hcp": 0,
-        "quote": ""
-      },
-      {
-        "name": "Blake Krejci",
-        "hcp": 0,
-        "quote": ""
-      },
-      {
-        "name": "Collin Snell",
-        "hcp": 0,
-        "quote": ""
-      }
-    ],
-    "points": 0,
-    "played": 0,
-    "won": 0,
-    "lost": 0,
-    "form": [],
-    "bestRound": null,
-    "lastSeason": {
-      "played": 12,
-      "total": 366,
-      "average": 30.5,
-      "best": 28,
-      "worst": 34
-    }
-  },
-  {
-    "slug": "dustin-my-johnson",
-    "name": "Dustin My Johnson",
-    "crest": "DJ",
-    "accent": "#2B3A67",
-    "typeface": "anton",
-    "backdrop": "plaid",
-    "handicap": 7,
-    "bay": 2,
-    "mood": "content",
-    "moodSentiment": "good",
-    "song": {
-      "title": "",
-      "artist": "",
-      "provider": "youtube",
-      "id": null
-    },
-    "bio": "",
-    "roster": [
-      {
-        "name": "Caleb Fields",
-        "hcp": 0,
-        "quote": ""
-      },
-      {
-        "name": "Eric Mohn",
-        "hcp": 0,
-        "quote": ""
-      },
-      {
-        "name": "Patrick Ruble",
-        "hcp": 0,
-        "quote": ""
-      }
-    ],
-    "points": 0,
-    "played": 0,
-    "won": 0,
-    "lost": 0,
-    "form": [],
-    "bestRound": null,
-    "lastSeason": {
-      "played": 12,
-      "total": 361,
-      "average": 30.1,
-      "best": 27,
-      "worst": 33
-    }
-  },
-  {
-    "slug": "hole-patrol",
-    "name": "Hole Patrol",
-    "crest": "HP",
-    "accent": "#4D7C0F",
-    "typeface": "dm-serif",
-    "backdrop": "pinstripe",
-    "handicap": 6,
-    "bay": 3,
-    "mood": "content",
-    "moodSentiment": "good",
-    "song": {
-      "title": "",
-      "artist": "",
-      "provider": "youtube",
-      "id": null
-    },
-    "bio": "",
-    "roster": [
-      {
-        "name": "Brendan Gray",
-        "hcp": 0,
-        "quote": ""
-      },
-      {
-        "name": "Mike Dujka",
-        "hcp": 0,
-        "quote": ""
-      },
-      {
-        "name": "Chris Pena",
-        "hcp": 0,
-        "quote": ""
-      }
-    ],
-    "points": 0,
-    "played": 0,
-    "won": 0,
-    "lost": 0,
-    "form": [],
-    "bestRound": null,
-    "lastSeason": {
-      "played": 12,
-      "total": 362,
-      "average": 30.2,
-      "best": 28,
-      "worst": 32
-    }
-  },
-  {
     "slug": "2-js-and-a-hard-r",
     "name": "2 J's and a Hard R",
     "crest": "2J",
+    "crestUrl": null,
     "accent": "#7A1F3D",
-    "typeface": "space-mono",
-    "backdrop": "dots",
-    "handicap": 7,
+    "typeface": "archivo",
+    "backdrop": "none",
+    "backdropColor": null,
+    "backdropImage": null,
+    "backdropMode": "tile",
+    "handicap": 0,
     "bay": 4,
     "mood": "content",
     "moodSentiment": "good",
@@ -168,24 +25,24 @@
       {
         "name": "Jimmy Calcagno",
         "hcp": 0,
-        "quote": ""
+        "quote": "",
+        "photo": null
       },
       {
         "name": "Ryan Roesler",
         "hcp": 0,
-        "quote": ""
+        "quote": "",
+        "photo": null
       },
       {
         "name": "Jose Muniz",
         "hcp": 0,
-        "quote": ""
+        "quote": "",
+        "photo": null
       }
     ],
     "points": 0,
     "played": 0,
-    "won": 0,
-    "lost": 0,
-    "form": [],
     "bestRound": null,
     "lastSeason": {
       "played": 12,
@@ -196,160 +53,17 @@
     }
   },
   {
-    "slug": "putt-pirates",
-    "name": "Putt Pirates",
-    "crest": "PP",
-    "accent": "#0E7490",
-    "typeface": "bungee",
-    "backdrop": "grid",
-    "handicap": 4,
-    "bay": 5,
-    "mood": "content",
-    "moodSentiment": "good",
-    "song": {
-      "title": "",
-      "artist": "",
-      "provider": "youtube",
-      "id": null
-    },
-    "bio": "",
-    "roster": [
-      {
-        "name": "Ryan Tuckey",
-        "hcp": 0,
-        "quote": ""
-      },
-      {
-        "name": "Joe Chaisson",
-        "hcp": 0,
-        "quote": ""
-      },
-      {
-        "name": "Alonzo Brown",
-        "hcp": 0,
-        "quote": ""
-      }
-    ],
-    "points": 0,
-    "played": 0,
-    "won": 0,
-    "lost": 0,
-    "form": [],
-    "bestRound": null,
-    "lastSeason": {
-      "played": 12,
-      "total": 388,
-      "average": 32.3,
-      "best": 28,
-      "worst": 36
-    }
-  },
-  {
-    "slug": "jager-bombers",
-    "name": "Jager Bombers",
-    "crest": "JB",
-    "accent": "#A16207",
+    "slug": "ar-bombers",
+    "name": "AR Bombers",
+    "crest": "AB",
+    "crestUrl": null,
+    "accent": "#C2410C",
     "typeface": "archivo",
-    "backdrop": "diagonal",
-    "handicap": 7,
-    "bay": 6,
-    "mood": "content",
-    "moodSentiment": "good",
-    "song": {
-      "title": "",
-      "artist": "",
-      "provider": "youtube",
-      "id": null
-    },
-    "bio": "",
-    "roster": [
-      {
-        "name": "Brian Ron",
-        "hcp": 0,
-        "quote": ""
-      },
-      {
-        "name": "Jeff Henderson",
-        "hcp": 0,
-        "quote": ""
-      },
-      {
-        "name": "Mo Wiley",
-        "hcp": 0,
-        "quote": ""
-      }
-    ],
-    "points": 0,
-    "played": 0,
-    "won": 0,
-    "lost": 0,
-    "form": [],
-    "bestRound": null,
-    "lastSeason": {
-      "played": 12,
-      "total": 347,
-      "average": 28.9,
-      "best": 26,
-      "worst": 31
-    }
-  },
-  {
-    "slug": "shannannagans",
-    "name": "Shannannagans",
-    "crest": "SH",
-    "accent": "#6D28D9",
-    "typeface": "anton",
-    "backdrop": "check",
-    "handicap": -3,
-    "bay": 7,
-    "mood": "content",
-    "moodSentiment": "good",
-    "song": {
-      "title": "",
-      "artist": "",
-      "provider": "youtube",
-      "id": null
-    },
-    "bio": "",
-    "roster": [
-      {
-        "name": "Shannon Chaisson",
-        "hcp": 0,
-        "quote": ""
-      },
-      {
-        "name": "Susanna Stewart",
-        "hcp": 0,
-        "quote": ""
-      },
-      {
-        "name": "Megan Pena",
-        "hcp": 0,
-        "quote": ""
-      }
-    ],
-    "points": 0,
-    "played": 0,
-    "won": 0,
-    "lost": 0,
-    "form": [],
-    "bestRound": null,
-    "lastSeason": {
-      "played": 12,
-      "total": 472,
-      "average": 39.3,
-      "best": 32,
-      "worst": 44
-    }
-  },
-  {
-    "slug": "good-bull-golf",
-    "name": "Good Bull Golf",
-    "crest": "GB",
-    "accent": "#B91C1C",
-    "typeface": "dm-serif",
-    "backdrop": "turf",
-    "handicap": 5,
+    "backdrop": "none",
+    "backdropColor": null,
+    "backdropImage": null,
+    "backdropMode": "tile",
+    "handicap": 0,
     "bay": 1,
     "mood": "content",
     "moodSentiment": "good",
@@ -362,141 +76,47 @@
     "bio": "",
     "roster": [
       {
-        "name": "Colin Williams",
+        "name": "Justin Krautz",
         "hcp": 0,
-        "quote": ""
+        "quote": "",
+        "photo": null
       },
       {
-        "name": "Buzz Vargas",
+        "name": "Blake Krejci",
         "hcp": 0,
-        "quote": ""
+        "quote": "",
+        "photo": null
       },
       {
-        "name": "Kaelyn Vargas",
+        "name": "Collin Snell",
         "hcp": 0,
-        "quote": ""
+        "quote": "",
+        "photo": null
       }
     ],
     "points": 0,
     "played": 0,
-    "won": 0,
-    "lost": 0,
-    "form": [],
     "bestRound": null,
     "lastSeason": {
       "played": 12,
-      "total": 380,
-      "average": 31.7,
-      "best": 30,
-      "worst": 35
-    }
-  },
-  {
-    "slug": "white-tee-privilege",
-    "name": "White Tee Privilege",
-    "crest": "WT",
-    "accent": "#0F766E",
-    "typeface": "space-mono",
-    "backdrop": "argyle",
-    "handicap": 6,
-    "bay": 2,
-    "mood": "content",
-    "moodSentiment": "good",
-    "song": {
-      "title": "",
-      "artist": "",
-      "provider": "youtube",
-      "id": null
-    },
-    "bio": "",
-    "roster": [
-      {
-        "name": "Ryan Certa",
-        "hcp": 0,
-        "quote": ""
-      },
-      {
-        "name": "Reagan Stewart",
-        "hcp": 0,
-        "quote": ""
-      },
-      {
-        "name": "Nick Acord",
-        "hcp": 0,
-        "quote": ""
-      }
-    ],
-    "points": 0,
-    "played": 0,
-    "won": 0,
-    "lost": 0,
-    "form": [],
-    "bestRound": null,
-    "lastSeason": {
-      "played": 12,
-      "total": 382,
-      "average": 31.8,
-      "best": 27,
-      "worst": 36
-    }
-  },
-  {
-    "slug": "bogey-express",
-    "name": "Bogey Express",
-    "crest": "BE",
-    "accent": "#DB2777",
-    "typeface": "bungee",
-    "backdrop": "plaid",
-    "handicap": 3,
-    "bay": 3,
-    "mood": "content",
-    "moodSentiment": "good",
-    "song": {
-      "title": "",
-      "artist": "",
-      "provider": "youtube",
-      "id": null
-    },
-    "bio": "",
-    "roster": [
-      {
-        "name": "Bill McDaniel",
-        "hcp": 0,
-        "quote": ""
-      },
-      {
-        "name": "Miguel Gonzalez",
-        "hcp": 0,
-        "quote": ""
-      },
-      {
-        "name": "Carlos Espinoza",
-        "hcp": 0,
-        "quote": ""
-      }
-    ],
-    "points": 0,
-    "played": 0,
-    "won": 0,
-    "lost": 0,
-    "form": [],
-    "bestRound": null,
-    "lastSeason": {
-      "played": 12,
-      "total": 378,
-      "average": 31.5,
-      "best": 27,
-      "worst": 36
+      "total": 366,
+      "average": 30.5,
+      "best": 28,
+      "worst": 34
     }
   },
   {
     "slug": "big-drive-energy",
     "name": "Big Drive Energy",
     "crest": "BD",
+    "crestUrl": null,
     "accent": "#3F3F46",
     "typeface": "archivo",
-    "backdrop": "pinstripe",
-    "handicap": 7,
+    "backdrop": "none",
+    "backdropColor": null,
+    "backdropImage": null,
+    "backdropMode": "tile",
+    "handicap": 0,
     "bay": 4,
     "mood": "content",
     "moodSentiment": "good",
@@ -511,24 +131,24 @@
       {
         "name": "Jett Morton",
         "hcp": 0,
-        "quote": ""
+        "quote": "",
+        "photo": null
       },
       {
         "name": "Dylan Anderson",
         "hcp": 0,
-        "quote": ""
+        "quote": "",
+        "photo": null
       },
       {
         "name": "Andrew Lucas",
         "hcp": 0,
-        "quote": ""
+        "quote": "",
+        "photo": null
       }
     ],
     "points": 0,
     "played": 0,
-    "won": 0,
-    "lost": 0,
-    "form": [],
     "bestRound": null,
     "lastSeason": {
       "played": 12,
@@ -539,13 +159,123 @@
     }
   },
   {
+    "slug": "bogey-express",
+    "name": "Bogey Express",
+    "crest": "BE",
+    "crestUrl": null,
+    "accent": "#DB2777",
+    "typeface": "archivo",
+    "backdrop": "none",
+    "backdropColor": null,
+    "backdropImage": null,
+    "backdropMode": "tile",
+    "handicap": 0,
+    "bay": 3,
+    "mood": "content",
+    "moodSentiment": "good",
+    "song": {
+      "title": "",
+      "artist": "",
+      "provider": "youtube",
+      "id": null
+    },
+    "bio": "",
+    "roster": [
+      {
+        "name": "Bill McDaniel",
+        "hcp": 0,
+        "quote": "",
+        "photo": null
+      },
+      {
+        "name": "Miguel Gonzalez",
+        "hcp": 0,
+        "quote": "",
+        "photo": null
+      },
+      {
+        "name": "Carlos Espinoza",
+        "hcp": 0,
+        "quote": "",
+        "photo": null
+      }
+    ],
+    "points": 0,
+    "played": 0,
+    "bestRound": null,
+    "lastSeason": {
+      "played": 12,
+      "total": 378,
+      "average": 31.5,
+      "best": 27,
+      "worst": 36
+    }
+  },
+  {
+    "slug": "dustin-my-johnson",
+    "name": "Dustin My Johnson",
+    "crest": "DJ",
+    "crestUrl": null,
+    "accent": "#2B3A67",
+    "typeface": "archivo",
+    "backdrop": "none",
+    "backdropColor": null,
+    "backdropImage": null,
+    "backdropMode": "tile",
+    "handicap": 0,
+    "bay": 2,
+    "mood": "content",
+    "moodSentiment": "good",
+    "song": {
+      "title": "",
+      "artist": "",
+      "provider": "youtube",
+      "id": null
+    },
+    "bio": "",
+    "roster": [
+      {
+        "name": "Caleb Fields",
+        "hcp": 0,
+        "quote": "",
+        "photo": null
+      },
+      {
+        "name": "Eric Mohn",
+        "hcp": 0,
+        "quote": "",
+        "photo": null
+      },
+      {
+        "name": "Patrick Ruble",
+        "hcp": 0,
+        "quote": "",
+        "photo": null
+      }
+    ],
+    "points": 0,
+    "played": 0,
+    "bestRound": null,
+    "lastSeason": {
+      "played": 12,
+      "total": 361,
+      "average": 30.1,
+      "best": 27,
+      "worst": 33
+    }
+  },
+  {
     "slug": "filthy-balls",
     "name": "Filthy Balls",
     "crest": "FB",
+    "crestUrl": null,
     "accent": "#7C2D12",
-    "typeface": "anton",
-    "backdrop": "dots",
-    "handicap": 6,
+    "typeface": "archivo",
+    "backdrop": "none",
+    "backdropColor": null,
+    "backdropImage": null,
+    "backdropMode": "tile",
+    "handicap": 0,
     "bay": 5,
     "mood": "content",
     "moodSentiment": "good",
@@ -560,24 +290,24 @@
       {
         "name": "Eric Wendt",
         "hcp": 0,
-        "quote": ""
+        "quote": "",
+        "photo": null
       },
       {
         "name": "Nigel Hansen",
         "hcp": 0,
-        "quote": ""
+        "quote": "",
+        "photo": null
       },
       {
         "name": "Matt Gallant",
         "hcp": 0,
-        "quote": ""
+        "quote": "",
+        "photo": null
       }
     ],
     "points": 0,
     "played": 0,
-    "won": 0,
-    "lost": 0,
-    "form": [],
     "bestRound": null,
     "lastSeason": {
       "played": 12,
@@ -588,13 +318,176 @@
     }
   },
   {
+    "slug": "good-bull-golf",
+    "name": "Good Bull Golf",
+    "crest": "GB",
+    "crestUrl": null,
+    "accent": "#B91C1C",
+    "typeface": "archivo",
+    "backdrop": "none",
+    "backdropColor": null,
+    "backdropImage": null,
+    "backdropMode": "tile",
+    "handicap": 0,
+    "bay": 1,
+    "mood": "content",
+    "moodSentiment": "good",
+    "song": {
+      "title": "",
+      "artist": "",
+      "provider": "youtube",
+      "id": null
+    },
+    "bio": "",
+    "roster": [
+      {
+        "name": "Colin Williams",
+        "hcp": 0,
+        "quote": "",
+        "photo": null
+      },
+      {
+        "name": "Buzz Vargas",
+        "hcp": 0,
+        "quote": "",
+        "photo": null
+      },
+      {
+        "name": "Kaelyn Vargas",
+        "hcp": 0,
+        "quote": "",
+        "photo": null
+      }
+    ],
+    "points": 0,
+    "played": 0,
+    "bestRound": null,
+    "lastSeason": {
+      "played": 12,
+      "total": 380,
+      "average": 31.7,
+      "best": 30,
+      "worst": 35
+    }
+  },
+  {
+    "slug": "hole-patrol",
+    "name": "Hole Patrol",
+    "crest": "HP",
+    "crestUrl": null,
+    "accent": "#4D7C0F",
+    "typeface": "archivo",
+    "backdrop": "none",
+    "backdropColor": null,
+    "backdropImage": null,
+    "backdropMode": "tile",
+    "handicap": 0,
+    "bay": 3,
+    "mood": "content",
+    "moodSentiment": "good",
+    "song": {
+      "title": "",
+      "artist": "",
+      "provider": "youtube",
+      "id": null
+    },
+    "bio": "",
+    "roster": [
+      {
+        "name": "Brendan Gray",
+        "hcp": 0,
+        "quote": "",
+        "photo": null
+      },
+      {
+        "name": "Mike Dujka",
+        "hcp": 0,
+        "quote": "",
+        "photo": null
+      },
+      {
+        "name": "Chris Pena",
+        "hcp": 0,
+        "quote": "",
+        "photo": null
+      }
+    ],
+    "points": 0,
+    "played": 0,
+    "bestRound": null,
+    "lastSeason": {
+      "played": 12,
+      "total": 362,
+      "average": 30.2,
+      "best": 28,
+      "worst": 32
+    }
+  },
+  {
+    "slug": "jager-bombers",
+    "name": "Jager Bombers",
+    "crest": "JB",
+    "crestUrl": null,
+    "accent": "#A16207",
+    "typeface": "archivo",
+    "backdrop": "none",
+    "backdropColor": null,
+    "backdropImage": null,
+    "backdropMode": "tile",
+    "handicap": 0,
+    "bay": 6,
+    "mood": "content",
+    "moodSentiment": "good",
+    "song": {
+      "title": "",
+      "artist": "",
+      "provider": "youtube",
+      "id": null
+    },
+    "bio": "",
+    "roster": [
+      {
+        "name": "Brian Ron",
+        "hcp": 0,
+        "quote": "",
+        "photo": null
+      },
+      {
+        "name": "Jeff Henderson",
+        "hcp": 0,
+        "quote": "",
+        "photo": null
+      },
+      {
+        "name": "Mo Wiley",
+        "hcp": 0,
+        "quote": "",
+        "photo": null
+      }
+    ],
+    "points": 0,
+    "played": 0,
+    "bestRound": null,
+    "lastSeason": {
+      "played": 12,
+      "total": 347,
+      "average": 28.9,
+      "best": 26,
+      "worst": 31
+    }
+  },
+  {
     "slug": "links-and-drinks",
     "name": "Links & Drinks",
     "crest": "LD",
+    "crestUrl": null,
     "accent": "#4338CA",
-    "typeface": "dm-serif",
-    "backdrop": "grid",
-    "handicap": 5,
+    "typeface": "archivo",
+    "backdrop": "none",
+    "backdropColor": null,
+    "backdropImage": null,
+    "backdropMode": "tile",
+    "handicap": 0,
     "bay": 6,
     "mood": "content",
     "moodSentiment": "good",
@@ -609,24 +502,24 @@
       {
         "name": "Garrett Bills",
         "hcp": 0,
-        "quote": ""
+        "quote": "",
+        "photo": null
       },
       {
         "name": "Tom Janusis",
         "hcp": 0,
-        "quote": ""
+        "quote": "",
+        "photo": null
       },
       {
         "name": "Gary Galloway",
         "hcp": 0,
-        "quote": ""
+        "quote": "",
+        "photo": null
       }
     ],
     "points": 0,
     "played": 0,
-    "won": 0,
-    "lost": 0,
-    "form": [],
     "bestRound": null,
     "lastSeason": {
       "played": 12,
@@ -634,6 +527,165 @@
       "average": 33.6,
       "best": 30,
       "worst": 42
+    }
+  },
+  {
+    "slug": "putt-pirates",
+    "name": "Putt Pirates",
+    "crest": "PP",
+    "crestUrl": null,
+    "accent": "#0E7490",
+    "typeface": "archivo",
+    "backdrop": "none",
+    "backdropColor": null,
+    "backdropImage": null,
+    "backdropMode": "tile",
+    "handicap": 0,
+    "bay": 5,
+    "mood": "content",
+    "moodSentiment": "good",
+    "song": {
+      "title": "",
+      "artist": "",
+      "provider": "youtube",
+      "id": null
+    },
+    "bio": "",
+    "roster": [
+      {
+        "name": "Ryan Tuckey",
+        "hcp": 0,
+        "quote": "",
+        "photo": null
+      },
+      {
+        "name": "Joe Chaisson",
+        "hcp": 0,
+        "quote": "",
+        "photo": null
+      },
+      {
+        "name": "Alonzo Brown",
+        "hcp": 0,
+        "quote": "",
+        "photo": null
+      }
+    ],
+    "points": 0,
+    "played": 0,
+    "bestRound": null,
+    "lastSeason": {
+      "played": 12,
+      "total": 388,
+      "average": 32.3,
+      "best": 28,
+      "worst": 36
+    }
+  },
+  {
+    "slug": "shannannagans",
+    "name": "Shannannagans",
+    "crest": "SH",
+    "crestUrl": null,
+    "accent": "#6D28D9",
+    "typeface": "archivo",
+    "backdrop": "none",
+    "backdropColor": null,
+    "backdropImage": null,
+    "backdropMode": "tile",
+    "handicap": 0,
+    "bay": 7,
+    "mood": "content",
+    "moodSentiment": "good",
+    "song": {
+      "title": "",
+      "artist": "",
+      "provider": "youtube",
+      "id": null
+    },
+    "bio": "",
+    "roster": [
+      {
+        "name": "Shannon Chaisson",
+        "hcp": 0,
+        "quote": "",
+        "photo": null
+      },
+      {
+        "name": "Susanna Stewart",
+        "hcp": 0,
+        "quote": "",
+        "photo": null
+      },
+      {
+        "name": "Megan Pena",
+        "hcp": 0,
+        "quote": "",
+        "photo": null
+      }
+    ],
+    "points": 0,
+    "played": 0,
+    "bestRound": null,
+    "lastSeason": {
+      "played": 12,
+      "total": 472,
+      "average": 39.3,
+      "best": 32,
+      "worst": 44
+    }
+  },
+  {
+    "slug": "white-tee-privilege",
+    "name": "White Tee Privilege",
+    "crest": "WT",
+    "crestUrl": null,
+    "accent": "#0F766E",
+    "typeface": "archivo",
+    "backdrop": "none",
+    "backdropColor": null,
+    "backdropImage": null,
+    "backdropMode": "tile",
+    "handicap": 0,
+    "bay": 2,
+    "mood": "content",
+    "moodSentiment": "good",
+    "song": {
+      "title": "",
+      "artist": "",
+      "provider": "youtube",
+      "id": null
+    },
+    "bio": "",
+    "roster": [
+      {
+        "name": "Ryan Certa",
+        "hcp": 0,
+        "quote": "",
+        "photo": null
+      },
+      {
+        "name": "Reagan Stewart",
+        "hcp": 0,
+        "quote": "",
+        "photo": null
+      },
+      {
+        "name": "Nick Acord",
+        "hcp": 0,
+        "quote": "",
+        "photo": null
+      }
+    ],
+    "points": 0,
+    "played": 0,
+    "bestRound": null,
+    "lastSeason": {
+      "played": 12,
+      "total": 382,
+      "average": 31.8,
+      "best": 27,
+      "worst": 36
     }
   }
 ]
