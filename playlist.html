@@ -59,11 +59,11 @@
   <div class="head" style="margin-top:34px"><h2>By team</h2><span class="note">In league order</span></div>
   <div class="tracklist">
     <div class="track" style="--c:#1D4ED8"
-         data-src="https://open.spotify.com/embed/track/4NvXTrOSsVlCw0bFe3lKY9?utm_source=generator&amp;theme=0"
-         data-h="152">
+         data-slug="dustin-my-johnson"
+         data-song='{&quot;title&quot;:&quot;Sweatpants&quot;,&quot;artist&quot;:&quot;Childish Gambino&quot;,&quot;provider&quot;:&quot;spotify&quot;,&quot;id&quot;:&quot;4NvXTrOSsVlCw0bFe3lKY9&quot;,&quot;art&quot;:&quot;https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e0221b2b485aef32bcc96c1875c&quot;}'>
       <div class="num">01</div>
       <div class="art" style="background:#1D4ED8">
-        <img src="https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e0221b2b485aef32bcc96c1875c" alt="" loading="lazy">
+        <img src="https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e0221b2b485aef32bcc96c1875c" alt="" loading="lazy">
         <button class="play" aria-label="Play Sweatpants">▶</button>
       </div>
       <div class="info"><b>Sweatpants</b><span>Childish Gambino</span></div>
@@ -82,21 +82,34 @@
 <div id="player" class="dock">
   <div class="dockinner">
     <button id="closedock" aria-label="Stop">✕</button>
+    <div class="spothost" hidden></div>
     <iframe id="frame" allow="autoplay; encrypted-media" title="Player"></iframe>
   </div>
 </div>
-<script>
-var frame=document.getElementById('frame'),dock=document.getElementById('player'),cur=null;
-function stop(){frame.src='';dock.classList.remove('up');
-  if(cur){cur.querySelector('.play').textContent='▶';cur.classList.remove('on');cur=null;}}
-document.getElementById('closedock').addEventListener('click',stop);
-document.querySelectorAll('.track').forEach(function(t){
-  t.querySelector('.play').addEventListener('click',function(){
-    if(cur===t){stop();return;}
-    if(cur){cur.querySelector('.play').textContent='▶';cur.classList.remove('on');}
-    t.classList.add('on');t.querySelector('.play').textContent='❚❚';
-    frame.style.height=t.dataset.h+'px';frame.src=t.dataset.src;
-    dock.classList.add('up');cur=t;
+<script type="module">
+import { mountDock, playSong } from './assets/player.js';
+
+let cur = null;
+const clear = () => {
+  if (!cur) return;
+  cur.querySelector('.play').textContent = '▶';
+  cur.classList.remove('on');
+  cur = null;
+};
+
+mountDock(document.getElementById('player'), { onStop: clear });
+
+document.querySelectorAll('.track').forEach(row => {
+  row.querySelector('.play').addEventListener('click', async () => {
+    const song = JSON.parse(row.dataset.song);
+    const was = cur;
+    clear();
+    if (was === row) { return; }
+    row.classList.add('on');
+    row.querySelector('.play').textContent = '❚❚';
+    cur = row;
+    const on = await playSong(song, row.dataset.slug);
+    if (!on) clear();
   });
 });
 </script>

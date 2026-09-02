@@ -84,6 +84,7 @@
 <div id="player" class="dock">
   <div class="dockinner">
     <button id="closedock" aria-label="Stop">✕</button>
+    <div class="spothost" hidden></div>
     <iframe id="frame" allow="autoplay; encrypted-media" title="Walk-up song"></iframe>
   </div>
 </div>
@@ -149,22 +150,20 @@
   </div>
 </div>
 
-<script>
-(function(){
-  var b=document.getElementById('play');
-  if(!b) return;
-  var dock=document.getElementById('player'),frame=document.getElementById('frame'),
-      src="",
-      h=80, on=false;
-  function stop(){frame.src='';dock.classList.remove('up');b.textContent='▶';on=false;}
-  document.getElementById('closedock').addEventListener('click',stop);
-  b.addEventListener('click',function(){
-    if(!src) return;
-    if(on){stop();return;}
-    frame.style.height=h+'px';frame.src=src;dock.classList.add('up');
-    b.textContent='❚❚';on=true;
+<script type="module">
+import { mountDock, playSong } from '../assets/player.js';
+
+const btn = document.getElementById('play');
+if (btn) {
+  const song = {"title":"","artist":"","provider":"youtube","id":null,"art":null};
+  mountDock(document.getElementById('player'), {
+    onStop: () => { btn.textContent = '▶'; }
   });
-})();
+  btn.addEventListener('click', async () => {
+    const on = await playSong(song, 'walkup');
+    btn.textContent = on ? '❚❚' : '▶';
+  });
+}
 </script>
 <script type="module">
 /* The mood is the one thing that should be current rather than

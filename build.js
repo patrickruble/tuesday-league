@@ -432,8 +432,8 @@ function buildPlaylist() {
 
   const tracks = withSongs.map((t,i) => `
     <div class="track" style="--c:${t.accent}"
-         data-src="${esc(embedUrl(t.song))}"
-         data-h="${t.song.provider === 'spotify' ? 152 : 80}">
+         data-slug="${esc(t.slug)}"
+         data-song='${esc(JSON.stringify(t.song))}'>
       <div class="num">${String(i+1).padStart(2,'0')}</div>
       <div class="art${coverFor(t.song) ? '' : ' empty'}" style="background:${t.accent}">
         ${coverFor(t.song) ? `<img src="${esc(coverFor(t.song))}" alt="" loading="lazy">` : ''}
@@ -484,21 +484,34 @@ function buildPlaylist() {
 <div id="player" class="dock">
   <div class="dockinner">
     <button id="closedock" aria-label="Stop">✕</button>
+    <div class="spothost" hidden></div>
     <iframe id="frame" allow="autoplay; encrypted-media" title="Player"></iframe>
   </div>
 </div>
-<script>
-var frame=document.getElementById('frame'),dock=document.getElementById('player'),cur=null;
-function stop(){frame.src='';dock.classList.remove('up');
-  if(cur){cur.querySelector('.play').textContent='▶';cur.classList.remove('on');cur=null;}}
-document.getElementById('closedock').addEventListener('click',stop);
-document.querySelectorAll('.track').forEach(function(t){
-  t.querySelector('.play').addEventListener('click',function(){
-    if(cur===t){stop();return;}
-    if(cur){cur.querySelector('.play').textContent='▶';cur.classList.remove('on');}
-    t.classList.add('on');t.querySelector('.play').textContent='❚❚';
-    frame.style.height=t.dataset.h+'px';frame.src=t.dataset.src;
-    dock.classList.add('up');cur=t;
+<script type="module">
+import { mountDock, playSong } from './assets/player.js';
+
+let cur = null;
+const clear = () => {
+  if (!cur) return;
+  cur.querySelector('.play').textContent = '▶';
+  cur.classList.remove('on');
+  cur = null;
+};
+
+mountDock(document.getElementById('player'), { onStop: clear });
+
+document.querySelectorAll('.track').forEach(row => {
+  row.querySelector('.play').addEventListener('click', async () => {
+    const song = JSON.parse(row.dataset.song);
+    const was = cur;
+    clear();
+    if (was === row) { return; }
+    row.classList.add('on');
+    row.querySelector('.play').textContent = '❚❚';
+    cur = row;
+    const on = await playSong(song, row.dataset.slug);
+    if (!on) clear();
   });
 });
 </script>`
@@ -734,6 +747,7 @@ ${t.backdropColor && isDark(t.backdropColor) ? `
 <div id="player" class="dock">
   <div class="dockinner">
     <button id="closedock" aria-label="Stop">✕</button>
+    <div class="spothost" hidden></div>
     <iframe id="frame" allow="autoplay; encrypted-media" title="Walk-up song"></iframe>
   </div>
 </div>
@@ -766,22 +780,20 @@ ${nextBlock}${moodStrip}${results}${last}
   </div>
 </div>
 
-<script>
-(function(){
-  var b=document.getElementById('play');
-  if(!b) return;
-  var dock=document.getElementById('player'),frame=document.getElementById('frame'),
-      src=${JSON.stringify(embedUrl(t.song) || '')},
-      h=${t.song && t.song.provider === 'spotify' ? 152 : 80}, on=false;
-  function stop(){frame.src='';dock.classList.remove('up');b.textContent='▶';on=false;}
-  document.getElementById('closedock').addEventListener('click',stop);
-  b.addEventListener('click',function(){
-    if(!src) return;
-    if(on){stop();return;}
-    frame.style.height=h+'px';frame.src=src;dock.classList.add('up');
-    b.textContent='❚❚';on=true;
+<script type="module">
+import { mountDock, playSong } from '../assets/player.js';
+
+const btn = document.getElementById('play');
+if (btn) {
+  const song = ${JSON.stringify(t.song || null)};
+  mountDock(document.getElementById('player'), {
+    onStop: () => { btn.textContent = '▶'; }
   });
-})();
+  btn.addEventListener('click', async () => {
+    const on = await playSong(song, 'walkup');
+    btn.textContent = on ? '❚❚' : '▶';
+  });
+}
 </script>
 <script type="module">
 /* The mood is the one thing that should be current rather than

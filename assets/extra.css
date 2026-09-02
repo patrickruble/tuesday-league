@@ -478,3 +478,9 @@
 
 /* on the green title bands it can sit a touch heavier */
 .masthead .mark .xm{stroke-linejoin:miter}
+
+/* the Spotify embed gets its own slot in the dock, since it
+   builds its own iframe rather than using ours */
+.spothost{width:100%;min-height:80px}
+.spothost iframe{width:100%;border:0;display:block}
+.dockinner iframe[hidden]{display:none}

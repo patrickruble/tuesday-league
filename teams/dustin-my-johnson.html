@@ -103,7 +103,7 @@
     <div class="song">
       <span class="lbl">Walk-up</span>
       <div class="art">
-        <img src="https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e0221b2b485aef32bcc96c1875c" alt="" loading="lazy">
+        <img src="https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e0221b2b485aef32bcc96c1875c" alt="" loading="lazy">
         <button class="play" id="play" aria-label="Play Sweatpants">▶</button>
       </div>
       <div class="song-meta"><b>Sweatpants</b><span>Childish Gambino</span></div>
@@ -114,6 +114,7 @@
 <div id="player" class="dock">
   <div class="dockinner">
     <button id="closedock" aria-label="Stop">✕</button>
+    <div class="spothost" hidden></div>
     <iframe id="frame" allow="autoplay; encrypted-media" title="Walk-up song"></iframe>
   </div>
 </div>
@@ -179,22 +180,20 @@
   </div>
 </div>
 
-<script>
-(function(){
-  var b=document.getElementById('play');
-  if(!b) return;
-  var dock=document.getElementById('player'),frame=document.getElementById('frame'),
-      src="https://open.spotify.com/embed/track/4NvXTrOSsVlCw0bFe3lKY9?utm_source=generator&theme=0",
-      h=152, on=false;
-  function stop(){frame.src='';dock.classList.remove('up');b.textContent='▶';on=false;}
-  document.getElementById('closedock').addEventListener('click',stop);
-  b.addEventListener('click',function(){
-    if(!src) return;
-    if(on){stop();return;}
-    frame.style.height=h+'px';frame.src=src;dock.classList.add('up');
-    b.textContent='❚❚';on=true;
+<script type="module">
+import { mountDock, playSong } from '../assets/player.js';
+
+const btn = document.getElementById('play');
+if (btn) {
+  const song = {"title":"Sweatpants","artist":"Childish Gambino","provider":"spotify","id":"4NvXTrOSsVlCw0bFe3lKY9","art":"https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e0221b2b485aef32bcc96c1875c"};
+  mountDock(document.getElementById('player'), {
+    onStop: () => { btn.textContent = '▶'; }
   });
-})();
+  btn.addEventListener('click', async () => {
+    const on = await playSong(song, 'walkup');
+    btn.textContent = on ? '❚❚' : '▶';
+  });
+}
 </script>
 <script type="module">
 /* The mood is the one thing that should be current rather than
