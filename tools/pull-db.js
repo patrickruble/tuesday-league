@@ -109,7 +109,8 @@ async function pull() {
         title: t.song_title || '',
         artist: t.song_artist || '',
         provider: t.song_provider || 'youtube',
-        id: t.song_id || null
+        id: t.song_id || null,
+        art: t.song_art || null
       },
       bio: t.bio || '',
       roster,

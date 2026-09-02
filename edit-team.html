@@ -178,7 +178,7 @@ input[disabled],textarea[disabled]{opacity:.55;cursor:not-allowed}
       <div class="pstatus">
         <div class="pmood"><span class="tag">Mood</span><i class="dot"></i><b id="pv-mood">—</b></div>
         <div class="psong">
-          <span class="btn2">▶</span>
+          <div class="pvart" id="pv-art"><span class="btn2">▶</span></div>
           <div><b id="pv-song">—</b><span id="pv-artist"></span></div>
         </div>
       </div>
@@ -281,11 +281,14 @@ input[disabled],textarea[disabled]{opacity:.55;cursor:not-allowed}
 
     <fieldset>
       <legend>Walk-up song</legend>
-      <div class="field">
+      <div class="field songrow">
+        <div class="songart" id="songart"><span>no cover</span></div>
+        <div style="flex:1;min-width:0">
         <label for="url">Paste a YouTube or Spotify link</label>
         <input type="text" id="url" placeholder="https://www.youtube.com/watch?v=…">
         <div class="hint" id="detect">YouTube plays in full for everyone. Spotify gives
           a 30 second preview unless the listener is signed in.</div>
+        </div>
       </div>
       <div class="field"><label for="song">Track</label><input type="text" id="song"></div>
       <div class="field"><label for="artist">Artist</label><input type="text" id="artist"></div>
@@ -394,7 +397,8 @@ const draft = {};
     mood: team.mood, typeface: team.typeface, backdrop: team.backdrop,
     accent: team.accent, crest: team.crest, bio: team.bio || '',
     song_title: team.song_title || '', song_artist: team.song_artist || '',
-    song_provider: team.song_provider, song_id: team.song_id, crest_url: team.crest_url,
+    song_provider: team.song_provider, song_id: team.song_id,
+    song_art: team.song_art || null, crest_url: team.crest_url,
     backdrop_color: team.backdrop_color || null,
     backdrop_image: team.backdrop_image || null,
     backdrop_mode: team.backdrop_mode || 'tile',
@@ -407,6 +411,7 @@ const draft = {};
   applyLook();
   paintMug();
   paintBgImage();
+  paintArt();
 
   draft.default_tee = profile.default_tee || 'blue';
   paintTee();
@@ -592,6 +597,10 @@ function applyLook() {
   $('pv-artist').textContent = draft.song_artist || '';
   $('pv-bio').textContent    = draft.bio || '—';
 
+  const pa = $('pv-art');
+  if (pa) pa.innerHTML = (draft.song_art
+    ? `<img src="${draft.song_art}" alt="">` : '') + '<span class="btn2">▶</span>';
+
   const mark = draft.crest_url
     ? `<img src="${publicCrest(draft.crest_url)}" alt="">`
     : (draft.crest || '—');
@@ -656,23 +665,60 @@ function countBio(){ $('c-bio').textContent = $('bio').value.length + '/400'; }
 $('fonts').querySelectorAll('.fnt').forEach(b =>
   b.addEventListener('click', () => { draft.typeface = b.dataset.k; touch(); applyLook(); }));
 
+let artTimer = null;
+
 $('url').addEventListener('input', e => {
   const v = e.target.value.trim();
   let m;
   if ((m = v.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})/))) {
-    draft.song_provider = 'youtube'; draft.song_id = m[1];
+    draft.song_provider = 'youtube';
+    draft.song_id = m[1];
+    /* YouTube's cover is derivable, no lookup needed */
+    draft.song_art = `https://img.youtube.com/vi/${m[1]}/mqdefault.jpg`;
     $('detect').textContent = 'YouTube · ' + m[1] + ' — plays in full for everyone.';
+    paintArt();
   } else if ((m = v.match(/spotify\.com\/track\/([A-Za-z0-9]+)/))) {
-    draft.song_provider = 'spotify'; draft.song_id = m[1];
+    draft.song_provider = 'spotify';
+    draft.song_id = m[1];
     $('detect').textContent = 'Spotify · ' + m[1] + ' — 30 second preview unless signed in.';
+    clearTimeout(artTimer);
+    artTimer = setTimeout(() => fetchSpotifyArt(v), 400);
   } else if (v === '') {
-    draft.song_provider = null; draft.song_id = null;
+    draft.song_provider = null; draft.song_id = null; draft.song_art = null;
     $('detect').textContent = 'Paste a link and we\u2019ll work out the rest.';
+    paintArt();
   } else {
     $('detect').textContent = 'That doesn\u2019t look like a YouTube or Spotify link.';
   }
   touch();
 });
+
+/* Spotify's oEmbed endpoint gives the cover and the title
+   without a key. Looked up once here, stored on the team, so
+   nothing has to fetch it when a page loads. */
+async function fetchSpotifyArt(url) {
+  try {
+    const r = await fetch('https://open.spotify.com/oembed?url=' + encodeURIComponent(url));
+    if (!r.ok) return;
+    const j = await r.json();
+    if (j.thumbnail_url) { draft.song_art = j.thumbnail_url; paintArt(); }
+    /* their title comes through as "Song" — fill it in if the
+       fields are still empty rather than overwriting a choice */
+    if (j.title && !$('song').value.trim()) {
+      $('song').value = j.title;
+      draft.song_title = j.title;
+      applyLook();
+    }
+  } catch { /* the song still works without a picture */ }
+}
+
+function paintArt() {
+  const slot = $('songart');
+  if (!slot) return;
+  slot.innerHTML = draft.song_art
+    ? `<img src="${draft.song_art}" alt="">`
+    : '<span>no cover</span>';
+}
 
 /* ---------- crest upload ---------- */
 $('crestfile').addEventListener('change', async e => {
@@ -877,7 +923,7 @@ $('save').addEventListener('click', async () => {
     accent: draft.accent, crest: draft.crest, bio: draft.bio,
     song_title: draft.song_title || null, song_artist: draft.song_artist || null,
     song_provider: draft.song_provider, song_id: draft.song_id,
-    crest_url: draft.crest_url,
+    song_art: draft.song_art, crest_url: draft.crest_url,
     backdrop_color: draft.backdrop_color,
     backdrop_image: draft.backdrop_image,
     backdrop_mode: draft.backdrop_mode
@@ -941,6 +987,19 @@ $('navtoggle').addEventListener('click', function(){
   color:var(--dim);font-family:var(--data)}
 .teeset button[aria-pressed="true"]{border-color:var(--ink);box-shadow:0 0 0 1px var(--ink)}
 .teeset button[aria-pressed="true"] span{color:var(--ink)}
+
+/* song cover */
+.songrow{display:flex;gap:14px;align-items:flex-start}
+.songart{width:64px;height:64px;flex:none;border:1px solid var(--rule);
+  background:#F2F4F2;display:grid;place-items:center;overflow:hidden}
+.songart img{width:100%;height:100%;object-fit:cover;display:block}
+.songart span{font-size:9px;color:var(--dim);font-family:var(--data);
+  letter-spacing:.06em;text-align:center;padding:4px}
+.pvart{width:34px;height:34px;flex:none;position:relative;overflow:hidden;
+  background:rgba(255,255,255,.12);display:grid;place-items:center}
+.pvart img{width:100%;height:100%;object-fit:cover;display:block;position:absolute;inset:0}
+.pvart .btn2{position:relative;z-index:1;background:rgba(10,30,20,.45);
+  width:100%;height:100%;border-radius:0}
 
 /* ============================================================
    Layout, last word.

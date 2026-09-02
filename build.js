@@ -116,6 +116,15 @@ function embedUrl(song) {
 }
 const providerName = p => p === 'spotify' ? 'Spotify' : 'YouTube';
 
+/* YouTube's cover can be worked out from the id. Spotify's is
+   fetched once when the song is saved and stored on the team. */
+function coverFor(song) {
+  if (!song || !song.id) return null;
+  if (song.art) return song.art;
+  if (song.provider === 'spotify') return null;
+  return `https://img.youtube.com/vi/${song.id}/mqdefault.jpg`;
+}
+
 /* ---------- derived ---------- */
 let played, standings, players, nextWeek, bayOf, partnerOf;
 
@@ -408,7 +417,10 @@ function buildPlaylist() {
          data-src="${esc(embedUrl(t.song))}"
          data-h="${t.song.provider === 'spotify' ? 152 : 80}">
       <div class="num">${String(i+1).padStart(2,'0')}</div>
-      <button class="play" style="background:${t.accent}" aria-label="Play ${esc(t.song.title)}">▶</button>
+      <div class="art${coverFor(t.song) ? '' : ' empty'}" style="background:${t.accent}">
+        ${coverFor(t.song) ? `<img src="${esc(coverFor(t.song))}" alt="" loading="lazy">` : ''}
+        <button class="play" aria-label="Play ${esc(t.song.title)}">▶</button>
+      </div>
       <div class="info"><b>${esc(t.song.title)}</b><span>${esc(t.song.artist)}</span></div>
       <div class="by">
         <a href="teams/${t.slug}.html" style="color:${t.accent}">${esc(t.name)}</a>
@@ -690,7 +702,10 @@ ${t.backdropColor && isDark(t.backdropColor) ? `
     ${t.song && t.song.id ? `
     <div class="song">
       <span class="lbl">Walk-up</span>
-      <button class="play" id="play" aria-label="Play walk-up song">▶</button>
+      <div class="art${coverFor(t.song) ? '' : ' empty'}">
+        ${coverFor(t.song) ? `<img src="${esc(coverFor(t.song))}" alt="" loading="lazy">` : ''}
+        <button class="play" id="play" aria-label="Play ${esc(t.song.title)}">▶</button>
+      </div>
       <div class="song-meta"><b>${esc(t.song.title)}</b><span>${esc(t.song.artist)}</span></div>
     </div>` : `
     <div class="song"><span class="lbl">Walk-up</span>

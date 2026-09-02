@@ -18,7 +18,8 @@
       "title": "",
       "artist": "",
       "provider": "youtube",
-      "id": null
+      "id": null,
+      "art": null
     },
     "bio": "",
     "roster": [
@@ -71,7 +72,8 @@
       "title": "",
       "artist": "",
       "provider": "youtube",
-      "id": null
+      "id": null,
+      "art": null
     },
     "bio": "",
     "roster": [
@@ -124,7 +126,8 @@
       "title": "",
       "artist": "",
       "provider": "youtube",
-      "id": null
+      "id": null,
+      "art": null
     },
     "bio": "",
     "roster": [
@@ -177,7 +180,8 @@
       "title": "",
       "artist": "",
       "provider": "youtube",
-      "id": null
+      "id": null,
+      "art": null
     },
     "bio": "",
     "roster": [
@@ -230,7 +234,8 @@
       "title": "Sweatpants",
       "artist": "Childish Gambino",
       "provider": "spotify",
-      "id": "4NvXTrOSsVlCw0bFe3lKY9"
+      "id": "4NvXTrOSsVlCw0bFe3lKY9",
+      "art": null
     },
     "bio": "",
     "roster": [
@@ -283,7 +288,8 @@
       "title": "",
       "artist": "",
       "provider": "youtube",
-      "id": null
+      "id": null,
+      "art": null
     },
     "bio": "",
     "roster": [
@@ -336,7 +342,8 @@
       "title": "",
       "artist": "",
       "provider": "youtube",
-      "id": null
+      "id": null,
+      "art": null
     },
     "bio": "",
     "roster": [
@@ -389,7 +396,8 @@
       "title": "",
       "artist": "",
       "provider": "youtube",
-      "id": null
+      "id": null,
+      "art": null
     },
     "bio": "",
     "roster": [
@@ -442,7 +450,8 @@
       "title": "",
       "artist": "",
       "provider": "youtube",
-      "id": null
+      "id": null,
+      "art": null
     },
     "bio": "",
     "roster": [
@@ -495,7 +504,8 @@
       "title": "",
       "artist": "",
       "provider": "youtube",
-      "id": null
+      "id": null,
+      "art": null
     },
     "bio": "",
     "roster": [
@@ -548,7 +558,8 @@
       "title": "",
       "artist": "",
       "provider": "youtube",
-      "id": null
+      "id": null,
+      "art": null
     },
     "bio": "",
     "roster": [
@@ -601,7 +612,8 @@
       "title": "",
       "artist": "",
       "provider": "youtube",
-      "id": null
+      "id": null,
+      "art": null
     },
     "bio": "",
     "roster": [
@@ -654,7 +666,8 @@
       "title": "",
       "artist": "",
       "provider": "youtube",
-      "id": null
+      "id": null,
+      "art": null
     },
     "bio": "",
     "roster": [
