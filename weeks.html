@@ -202,20 +202,21 @@ input.f:focus,select.f:focus{outline:none;border-color:var(--green);background:#
               </select>
             </div>
             <div>
-              <label class="f" for="signoff">Card sign-off</label>
-              <select class="f" id="signoff">
-                <option value="false">You confirm them</option>
-                <option value="true">The other team confirms</option>
-              </select>
-            </div>
-            <div>
               <label class="f" for="drawTime">Draw goes public at</label>
               <input class="f" id="drawTime" type="time" value="11:00">
             </div>
+            <div>
+              <label class="f" for="insta">Instagram handle</label>
+              <input class="f" id="insta" placeholder="katyxgolf">
+            </div>
+          </div>
+          <div style="margin-top:11px">
+            <label class="f" for="medianote">What the scrapbook page should say</label>
+            <input class="f" id="medianote"
+              placeholder="Send it here and it goes to whoever runs the account.">
           </div>
           <div class="note2">
-            Whatever's set here is what the entry screen tells people. Mulligans
-            are recorded either way — the number just gets flagged if it's over.
+            Whatever's set here is what the entry screen tells people.
           </div>
           <div class="msg2" id="ruleMsg"></div>
         </div>
@@ -344,8 +345,9 @@ async function refresh() {
   const { data: cfg } = await supabase.from('league_settings').select('*').maybeSingle();
   if (cfg) {
     $('mullAllow').value = cfg.mulligans_allowed ?? '';
-    $('signoff').value   = String(!!cfg.require_signoff);
     $('drawTime').value  = (cfg.draw_public_at || '11:00').slice(0,5);
+    $('insta').value     = cfg.instagram || '';
+    $('medianote').value = cfg.media_note || '';
   }
 
   const { data: cp } = await supabase.from('contest_pots').select('*');
@@ -733,8 +735,9 @@ $('ruleSave').addEventListener('click', async () => {
 
   const { error } = await supabase.from('league_settings').update({
     mulligans_allowed: $('mullAllow').value === '' ? null : Number($('mullAllow').value),
-    require_signoff:   $('signoff').value === 'true',
-    draw_public_at:    $('drawTime').value
+    draw_public_at:    $('drawTime').value,
+    instagram:         $('insta').value.trim().replace(/^@/, '') || null,
+    media_note:        $('medianote').value.trim() || null
   }).eq('id', 1);
 
   msg.textContent = error ? error.message : 'Saved.';

@@ -212,9 +212,18 @@ async function load(week) {
         action = `<button class="act" data-copy="${esc(t.name)}">Copy nudge</button>`;
       } else if (r.status === 'submitted') {
         const opp = teams[other ? other.team_id : null];
-        cls='s-wait'; label = 'WAITING ON ' + (opp ? opp.name.toUpperCase() : 'OPPONENT'); nWait++;
+        const hrs = r.submitted_at
+          ? (Date.now() - new Date(r.submitted_at)) / 3600000 : 0;
+        cls='s-wait';
+        label = 'WAITING ON ' + (opp ? opp.name.toUpperCase() : 'OPPONENT');
+        nWait++;
         chase.push(`${opp ? opp.name : 'Someone'} still to sign ${t.name}'s card`);
-        action = `<a class="act go" href="verify.html?round=${r.id}">Open</a>`;
+        /* after a couple of hours it's clearly not happening
+           tonight, so offer to do it rather than leaving it */
+        action = hrs >= 2
+          ? `<button class="act go" data-conf="${r.id}"
+               title="Waiting ${hrs.toFixed(0)}h">Confirm it</button>`
+          : `<a class="act go" href="verify.html?round=${r.id}">Open</a>`;
       } else if (r.status === 'disputed') {
         cls='s-bad'; label='DISPUTED'; nBad++;
         chase.push(`${t.name}'s card is disputed`);
@@ -278,6 +287,19 @@ async function load(week) {
       this.disabled = true;
     });
   }
+
+  document.querySelectorAll('[data-conf]').forEach(b =>
+    b.addEventListener('click', async function(){
+      if (!confirm('Confirm this card yourself? The other team never signed it.')) return;
+      this.disabled = true;
+      this.textContent = 'Confirming…';
+      const { error } = await supabase.rpc('confirm_as_commissioner', {
+        p_round: this.dataset.conf,
+        p_why: 'Confirmed by the commissioner — no sign-off from the other team'
+      });
+      if (error) { this.disabled = false; this.textContent = 'Confirm it'; alert(error.message); return; }
+      load(current);
+    }));
 
   document.querySelectorAll('[data-copy]').forEach(b =>
     b.addEventListener('click', async function(){
