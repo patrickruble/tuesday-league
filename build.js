@@ -75,6 +75,14 @@ const slugify = s => s.toLowerCase().normalize('NFD')
 
 const initials = s => s.split(/\s+/).map(w => w[0]).join('').slice(0,2).toUpperCase();
 
+/* teeTime is stored as 24 hour so the calendar file is
+   unambiguous; pages show it the way people say it. */
+function clock(t) {
+  const [h, m] = String(t || '19:30').split(':').map(Number);
+  const h12 = h % 12 || 12;
+  return `${h12}:${String(m).padStart(2,'0')}`;
+}
+
 /* A dark background needs the text panels turned up so nothing
    becomes hard to read. */
 /* Photos from the database are absolute Supabase URLs; ones
@@ -148,6 +156,7 @@ function weeksFor(slug) {
       if (!b) return null;
       const sc = (b.scores || {})[slug];
       return sc == null ? null : { week: w, bay: b.bay, points: sc,
+        roundId: (b.rounds || {})[slug] || null,
         partner: b.teams.find(s => s !== slug) };
     })
     .filter(Boolean);
@@ -263,7 +272,7 @@ function buildLeaderboard() {
     <div><div class="eyebrow">${esc(league.season)} · Stableford</div><h1>Leaderboard</h1></div>
     <div class="aside">
       ${played ? `THROUGH <b>WEEK ${league.currentWeek}</b> OF ${league.weeks}` : `<b>SEASON STARTS</b>`}<br>
-      ${nextWeek ? `${played ? 'NEXT ROUND' : 'FIRST ROUND'} <b>${esc(nextWeek.label)}</b> · ${esc(league.teeTime)}` : ''}
+      ${nextWeek ? `${played ? 'NEXT ROUND' : 'FIRST ROUND'} <b>${esc(nextWeek.label)}</b> · ${clock(league.teeTime)}` : ''}
     </div>
   </div>
 </div>
@@ -342,7 +351,7 @@ function buildSchedule() {
   <section class="week">
     <div class="whead">
       <h2>Week ${wk.week}</h2>
-      <span class="date">${esc(wk.label)}${wk.status==='next' ? ' · '+esc(league.teeTime) : ''}
+      <span class="date">${esc(wk.label)}${wk.status==='next' ? ' · '+clock(league.teeTime) : ''}
         · ${esc(wk.course)} ${esc(wk.nine)}</span>
       <span class="flag ${wk.status==='next' ? 'next">NEXT UP' : 'done">FINAL'}</span>
     </div>${rows}
@@ -356,6 +365,7 @@ function buildSchedule() {
   <div class="inner">
     <div><div class="eyebrow">${esc(league.season)} · ${league.weeks} weeks · ${league.bays} bays</div>
     <h1>Schedule</h1></div>
+    <a class="ics" href="league.ics">Add to your calendar</a>
   </div>
 </div>
 <div class="wrap">
@@ -505,11 +515,14 @@ function buildRecords() {
     ${card('Lowest team handicap', lowHcp.handicap, lowHcp.name, lowHcp.accent, 'teams/'+lowHcp.slug+'.html')}
     ${lowIdx ? card('Lowest index', lowIdx.hcp, lowIdx.name, lowIdx.team.accent, 'players/'+lowIdx.slug+'.html') : ''}
   </div>
+  <div id="awards"></div>
+
   <p style="color:var(--dim);font-size:13px;max-width:56ch;padding-bottom:50px">
-    Closest to the pin, long putt and chip-in records appear once side contests
-    are being recorded each week.
+    Most improved needs four rounds before it means anything. Closest to the pin,
+    long putt and chip-ins appear once side contests are being recorded.
   </p>
-</div>`
+</div>
+<script type="module" src="assets/awards.js"></script>`
   });
 }
 
@@ -612,13 +625,14 @@ ${t.backdropColor && isDark(t.backdropColor) ? `
     <section>
       <div class="head"><h2>Rounds</h2></div>
       ${rounds.map(r => `
-      <div class="match" style="grid-template-columns:74px 1fr auto">
+      <a class="match" href="${r.roundId ? '../card.html?round=' + r.roundId : '#'}"
+         style="grid-template-columns:74px 1fr auto;text-decoration:none;color:inherit">
         <div class="pld">${esc(r.week.label)}</div>
         <div class="vs"><b>${esc(r.week.course)} ${esc(r.week.nine)}</b>
           ${r.partner ? `<span style="color:var(--dim);font-size:12px">bay ${r.bay} with ${esc(bySlug[r.partner]?.name||'')}</span>` : ''}</div>
         <div class="mid"><span class="sc">${r.points}</span>
           <span style="font-size:9px;display:block">POINTS</span></div>
-      </div>`).join('')}
+      </a>`).join('')}
     </section>` : '';
 
   const last = t.lastSeason ? `
@@ -644,7 +658,7 @@ ${t.backdropColor && isDark(t.backdropColor) ? `
     <div>
       <div class="eyebrow">${played ? ordinal(t.rank) + ' of ' + teams.length : esc(league.season)}</div>
       <h1>${esc(t.name)}</h1>
-      <div class="meta">${bay ? 'Bay ' + bay + ' · ' : ''}${esc(league.night)} ${esc(league.teeTime)}${t.handicap ? ' · Team handicap ' + t.handicap : ''}</div>
+      <div class="meta">${bay ? 'Bay ' + bay + ' · ' : ''}${esc(league.night)} ${clock(league.teeTime)}${t.handicap ? ' · Team handicap ' + t.handicap : ''}</div>
     </div>
     <div class="tally"><b>${t.points || '—'}</b><span>SEASON POINTS</span></div>
   </div>
@@ -813,6 +827,60 @@ ${bagBlock}
   });
 }
 
+/* ============================================================
+   CALENDAR
+   One file, every Tuesday, with the bay in the location so it's
+   on the phone screen without opening anything.
+   ============================================================ */
+function buildICS() {
+  const stamp = d => d.toISOString().replace(/[-:]/g,'').split('.')[0] + 'Z';
+  const now = stamp(new Date());
+
+  /* Floating local times — no Z. The league always plays in one
+     place, so "7:30pm" should read as 7:30pm on every phone
+     regardless of where it thinks it is. */
+  const pad = n => String(n).padStart(2,'0');
+  const local = (y,m,d,hh,mm) => `${y}${pad(m)}${pad(d)}T${pad(hh)}${pad(mm)}00`;
+
+  const events = schedule.map(wk => {
+    const [y,m,d] = wk.date.split('-').map(Number);
+    const [hh,mm] = (league.teeTime || '19:30').replace(/[^0-9:]/g,'').split(':').map(Number);
+    const sh = hh || 19, sm = mm || 30;
+    const eh = (sh + 2) % 24;
+
+    const bays = (wk.bays || []).map(b =>
+      `Bay ${b.bay}: ${b.teams.map(s => bySlug[s]?.name || s).join(' and ')}`).join('\\n');
+
+    return [
+      'BEGIN:VEVENT',
+      `UID:week-${wk.week}@${league.domain || 'katygolfleague.com'}`,
+      `DTSTAMP:${now}`,
+      `DTSTART:${local(y,m,d,sh,sm)}`,
+      `DTEND:${local(y,m,d,eh,sm)}`,
+      `SUMMARY:${league.name} — week ${wk.week}`,
+      `LOCATION:${wk.course || ''} ${wk.nine || ''}`.trim(),
+      `DESCRIPTION:${wk.course} ${wk.nine}\\n\\n${bays}`,
+      'BEGIN:VALARM',
+      'TRIGGER:-PT2H',
+      'ACTION:DISPLAY',
+      'DESCRIPTION:Golf tonight',
+      'END:VALARM',
+      'END:VEVENT'
+    ].join('\r\n');
+  }).join('\r\n');
+
+  return [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    `PRODID:-//${league.name}//EN`,
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    `X-WR-CALNAME:${league.name}`,
+    events,
+    'END:VCALENDAR'
+  ].join('\r\n');
+}
+
 /* ============================================================ */
 main();
 
@@ -839,5 +907,6 @@ OUT('playlist.html', buildPlaylist());
 OUT('records.html',  buildRecords());
 teams.forEach(t   => OUT(`teams/${t.slug}.html`,   buildTeamPage(t)));
 players.forEach(p => OUT(`players/${p.slug}.html`, buildPlayerPage(p)));
+OUT('league.ics', buildICS());
 console.log(`Done. ${5 + teams.length + players.length} pages.`);
 }

@@ -1,0 +1,21 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Katy Golf League//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Katy Golf League
+BEGIN:VEVENT
+UID:week-1@katygolfleague.com
+DTSTAMP:20260902T203544Z
+DTSTART:20260908T193000
+DTEND:20260908T213000
+SUMMARY:Katy Golf League — week 1
+LOCATION:Pebble Beach Front 9
+DESCRIPTION:Pebble Beach Front 9\n\nBay 1: AR Bombers and Shannannagans\nBay 2: Dustin My Johnson and Good Bull Golf\nBay 3: Hole Patrol and White Tee Privilege\nBay 4: 2 J's and a Hard R and Bogey Express\nBay 5: Putt Pirates and Big Drive Energy\nBay 6: Jager Bombers and Filthy Balls\nBay 7: Links & Drinks
+BEGIN:VALARM
+TRIGGER:-PT2H
+ACTION:DISPLAY
+DESCRIPTION:Golf tonight
+END:VALARM
+END:VEVENT
+END:VCALENDAR
