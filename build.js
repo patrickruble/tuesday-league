@@ -53,6 +53,14 @@ const slugify = s => s.toLowerCase().normalize('NFD')
 
 const initials = s => s.split(/\s+/).map(w => w[0]).join('').slice(0,2).toUpperCase();
 
+/* A dark background needs the text panels turned up so nothing
+   becomes hard to read. */
+function isDark(hex) {
+  const n = parseInt(hex.slice(1), 16);
+  const lum = 0.299*(n>>16) + 0.587*((n>>8)&255) + 0.114*(n&255);
+  return lum < 128;
+}
+
 function embedUrl(song) {
   if (!song || !song.id) return null;
   if (song.provider === 'spotify')
@@ -480,6 +488,18 @@ function buildTeamPage(t) {
     --team-display:${face.stack};
     --team-wdth:${face.wdth};
   }
+${t.backdropColor ? `  .sheet{background-color:${t.backdropColor}}` : ''}
+${t.backdropImage ? `  .sheet{
+    background-image:${t.backdrop && t.backdrop !== 'none' ? 'var(--pattern),' : ''}url("../${t.backdropImage}");
+    background-repeat:${t.backdropMode === 'tile' ? 'repeat' : 'no-repeat'};
+    background-size:${t.backdropMode === 'tile' ? 'auto' : 'cover'};
+    background-position:center;
+    background-attachment:${t.backdropMode === 'fixed' ? 'fixed' : 'scroll'};
+  }` : ''}
+${t.backdropColor && isDark(t.backdropColor) ? `
+  .sheet .head h2{color:${t.accent}}
+  .sheet .panel,.sheet .h2h,.sheet .player,.sheet .match{background:rgba(255,255,255,.94)}
+  .sheet .run{background:rgba(255,255,255,.94)}` : ''}
 </style>`;
 
   const roster = t.roster.map((p,i) => `

@@ -235,6 +235,40 @@ input[disabled],textarea[disabled]{opacity:.55;cursor:not-allowed}
       <legend>Background</legend>
       <div class="bgs" id="bgs"></div>
       <div class="hint">Patterns take your team colour automatically.</div>
+
+      <div class="field" style="margin-top:20px">
+        <label>Background colour</label>
+        <div class="swatches" id="bgcolors"></div>
+        <div class="hint">Sits behind the pattern. Kept light so the words stay readable.</div>
+      </div>
+
+      <div class="field">
+        <label>Background image</label>
+        <div class="mugshot">
+          <div class="mug" id="bgprev" style="background-size:cover;background-position:center">—</div>
+          <div>
+            <label class="upl">Upload an image
+              <input type="file" id="bgfile" accept="image/png,image/jpeg,image/webp,image/gif">
+            </label>
+            <div class="hint" id="bghint">
+              A small tile repeats nicely. A photo works better on Cover.
+            </div>
+          </div>
+          <div style="flex:1;min-width:150px">
+            <label for="bgmode">How it sits</label>
+            <select id="bgmode">
+              <option value="tile">Tile — repeats</option>
+              <option value="cover">Cover — fills the page</option>
+              <option value="fixed">Fixed — stays put while scrolling</option>
+            </select>
+          </div>
+        </div>
+        <div class="hint" id="bgclearwrap" style="display:none">
+          <button type="button" id="bgclear" style="background:none;border:0;padding:0;
+            cursor:pointer;color:#B91C1C;font-family:inherit;font-size:12px;
+            text-decoration:underline;text-underline-offset:3px">Remove the image</button>
+        </div>
+      </div>
     </fieldset>
 
     <fieldset>
@@ -361,13 +395,18 @@ const draft = {};
     accent: team.accent, crest: team.crest, bio: team.bio || '',
     song_title: team.song_title || '', song_artist: team.song_artist || '',
     song_provider: team.song_provider, song_id: team.song_id, crest_url: team.crest_url,
+    backdrop_color: team.backdrop_color || null,
+    backdrop_image: team.backdrop_image || null,
+    backdrop_mode: team.backdrop_mode || 'tile',
     avatar_url: profile.avatar_url || null
   });
 
-  paintMoods(); paintBgs(); paintSwatches(); paintRoster(mates.data || []);
+  paintMoods(); paintBgs(); paintSwatches(); paintBgColors();
+  paintRoster(mates.data || []);
   fillForm();
   applyLook();
   paintMug();
+  paintBgImage();
 
   $('loading').hidden = true;
   $('page').hidden = false;
@@ -452,6 +491,27 @@ function applyLook() {
   BGS.forEach(c => $('pv-body').classList.remove('bg-' + c));
   $('pv-body').classList.add('bg-' + draft.backdrop);
 
+  /* background colour and image sit behind the pattern */
+  const body = $('pv-body');
+  body.style.backgroundColor = draft.backdrop_color || 'var(--card)';
+  if (draft.backdrop_image) {
+    const url = publicBackdrop(draft.backdrop_image);
+    const mode = draft.backdrop_mode || 'tile';
+    body.style.backgroundImage =
+      `${patternLayer(draft.backdrop)}url("${url}")`.replace(/^,/, '');
+    body.style.backgroundRepeat = mode === 'tile' ? 'repeat' : 'no-repeat';
+    body.style.backgroundSize   = mode === 'tile' ? 'auto' : 'cover';
+    body.style.backgroundPosition = 'center';
+  } else {
+    body.style.backgroundImage = '';
+    body.style.backgroundRepeat = '';
+    body.style.backgroundSize = '';
+  }
+
+  $('bgcolors').querySelectorAll('.sw2').forEach(b =>
+    b.setAttribute('aria-pressed', b.dataset.c === draft.backdrop_color));
+  $('bgmode').value = draft.backdrop_mode || 'tile';
+
   $('swatches').querySelectorAll('.sw2').forEach(b =>
     b.setAttribute('aria-pressed', b.dataset.c === draft.accent));
 
@@ -478,6 +538,26 @@ function applyLook() {
 }
 
 const publicCrest = p => supabase.storage.from('crests').getPublicUrl(p).data.publicUrl;
+
+/* When there's an uploaded image we have to build the pattern
+   as an inline gradient, because a CSS class would replace the
+   image rather than layer over it. */
+function patternLayer(kind) {
+  const pat = getComputedStyle(document.documentElement).getPropertyValue('--pat').trim();
+  switch (kind) {
+    case 'pinstripe': return `repeating-linear-gradient(90deg,${pat} 0 1px,transparent 1px 11px),`;
+    case 'argyle':    return `repeating-linear-gradient(45deg,${pat} 0 1px,transparent 1px 26px),` +
+                             `repeating-linear-gradient(-45deg,${pat} 0 1px,transparent 1px 26px),`;
+    case 'plaid':     return `repeating-linear-gradient(0deg,${pat} 0 4px,transparent 4px 20px),` +
+                             `repeating-linear-gradient(90deg,${pat} 0 4px,transparent 4px 20px),`;
+    case 'dots':      return `radial-gradient(${pat} 1.6px,transparent 1.7px),`;
+    case 'grid':      return `repeating-linear-gradient(0deg,${pat} 0 1px,transparent 1px 22px),` +
+                             `repeating-linear-gradient(90deg,${pat} 0 1px,transparent 1px 22px),`;
+    case 'diagonal':  return `repeating-linear-gradient(135deg,${pat} 0 3px,transparent 3px 14px),`;
+    case 'turf':      return `repeating-linear-gradient(90deg,${pat} 0 34px,transparent 34px 68px),`;
+    default:          return '';
+  }
+}
 
 function touch() {
   dirty = true;
@@ -535,6 +615,97 @@ $('crestfile').addEventListener('change', async e => {
 
   draft.crest_url = path;
   $('cresthint').textContent = 'Uploaded. Save to make it live.';
+  touch(); applyLook();
+});
+
+/* ---------- background colour and image ---------- */
+const BGCOLORS = [
+  ['#DCE1DC','League default'], ['#FFFFFF','White'],   ['#F4F1EA','Cream'],
+  ['#E8EDE6','Fairway'],        ['#E4EAF2','Sky'],     ['#F2E8EC','Blush'],
+  ['#EDE9F5','Lilac'],          ['#F5EFE0','Sand'],    ['#E6EFEF','Mist'],
+  ['#2A2F3A','Slate'],          ['#1B2621','Deep'],    ['#3B2A2A','Oxblood']
+];
+
+const publicBackdrop = p => supabase.storage.from('backdrops').getPublicUrl(p).data.publicUrl;
+
+function paintBgColors() {
+  $('bgcolors').innerHTML = BGCOLORS.map(([c,label]) =>
+    `<button class="sw2" style="background:${c}" data-c="${c}" title="${label}"
+      aria-label="${label}"></button>`).join('');
+  $('bgcolors').querySelectorAll('.sw2').forEach(b =>
+    b.addEventListener('click', () => {
+      draft.backdrop_color = b.dataset.c;
+      touch(); applyLook();
+    }));
+}
+
+function paintBgImage() {
+  const prev = $('bgprev');
+  if (draft.backdrop_image) {
+    prev.style.backgroundImage = `url("${publicBackdrop(draft.backdrop_image)}")`;
+    prev.textContent = '';
+    $('bgclearwrap').style.display = 'block';
+  } else {
+    prev.style.backgroundImage = 'none';
+    prev.textContent = '—';
+    $('bgclearwrap').style.display = 'none';
+  }
+}
+
+/* Shrink to something sensible. A tile wants to stay small; a
+   cover image doesn't need to be more than 1600px wide. */
+function shrinkWide(file, max = 1600) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      /* small images are almost certainly meant as tiles — leave them */
+      if (img.width <= 400 && img.height <= 400) return resolve(file);
+      const scale = Math.min(1, max / img.width);
+      const c = document.createElement('canvas');
+      c.width  = Math.round(img.width  * scale);
+      c.height = Math.round(img.height * scale);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      c.toBlob(b => b ? resolve(b) : reject(new Error('Could not process that image')),
+               'image/jpeg', 0.82);
+    };
+    img.onerror = () => reject(new Error('That file isn\u2019t an image we can read'));
+    img.src = URL.createObjectURL(file);
+  });
+}
+
+$('bgfile').addEventListener('change', async e => {
+  const f = e.target.files[0];
+  if (!f) return;
+  $('bghint').textContent = 'Processing…';
+
+  /* GIFs get uploaded as they are — resizing would kill the animation */
+  let blob = f, type = f.type;
+  if (f.type !== 'image/gif') {
+    try { blob = await shrinkWide(f); type = 'image/jpeg'; }
+    catch (err) { $('bghint').textContent = err.message; return; }
+  }
+
+  $('bghint').textContent = 'Uploading…';
+  const ext  = type === 'image/gif' ? 'gif' : 'jpg';
+  const path = `${team.id}/backdrop-${Date.now()}.${ext}`;
+  const { error } = await supabase.storage.from('backdrops')
+    .upload(path, blob, { upsert: true, contentType: type });
+
+  if (error) { $('bghint').textContent = 'Upload failed: ' + error.message; return; }
+
+  draft.backdrop_image = path;
+  $('bghint').textContent = `Uploaded, ${Math.round(blob.size/1024)} KB. Save to make it live.`;
+  paintBgImage(); touch(); applyLook();
+});
+
+$('bgclear').addEventListener('click', () => {
+  draft.backdrop_image = null;
+  $('bghint').textContent = 'Removed. Save to make it live.';
+  paintBgImage(); touch(); applyLook();
+});
+
+$('bgmode').addEventListener('change', e => {
+  draft.backdrop_mode = e.target.value;
   touch(); applyLook();
 });
 
@@ -601,7 +772,10 @@ $('save').addEventListener('click', async () => {
     accent: draft.accent, crest: draft.crest, bio: draft.bio,
     song_title: draft.song_title || null, song_artist: draft.song_artist || null,
     song_provider: draft.song_provider, song_id: draft.song_id,
-    crest_url: draft.crest_url
+    crest_url: draft.crest_url,
+    backdrop_color: draft.backdrop_color,
+    backdrop_image: draft.backdrop_image,
+    backdrop_mode: draft.backdrop_mode
   };
 
   const { error } = await supabase.from('teams').update(patch).eq('id', team.id);
