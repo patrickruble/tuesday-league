@@ -36,8 +36,16 @@
       "href": "teams.html"
     },
     {
+      "label": "The week",
+      "href": "week.html"
+    },
+    {
       "label": "Clubhouse",
       "href": "clubhouse.html"
+    },
+    {
+      "label": "Scrapbook",
+      "href": "scrapbook.html"
     }
   ],
   "typefaces": {
@@ -81,20 +89,12 @@
   },
   "navMore": [
     {
-      "label": "The week",
-      "href": "week.html"
-    },
-    {
       "label": "Records",
       "href": "records.html"
     },
     {
       "label": "Playlist",
       "href": "playlist.html"
-    },
-    {
-      "label": "Scrapbook",
-      "href": "scrapbook.html"
     }
   ]
 }
