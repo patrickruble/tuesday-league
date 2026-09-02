@@ -1,0 +1,80 @@
+{
+  "_comment": "Hole data for the simulator courses. Yardages are approximate — the X-Golf screen is the authority, so check the first time you play each course and correct these. Stroke index is the ranking within the nine, 1 hardest.",
+
+  "_shape": "Each hole carries a shape so it can be drawn: bend is -1 (hard left) to 1 (hard right), width is how generous the fairway is, and hazards are placed roughly rather than surveyed.",
+
+  "_tees": "Black and blue for the men, red for the women. White is kept for anyone who wants it but nobody in this league uses it.",
+
+  "courses": [
+    {
+      "slug": "pebble-beach-front",
+      "name": "Pebble Beach",
+      "nine": "front",
+      "par": 36,
+      "holes": [
+        { "hole": 1, "par": 4, "si": 5, "yards": { "black": 380, "blue": 361, "red": 292 },
+          "bend": 0.25, "width": 0.7, "hazards": ["bunker-right-fairway","bunker-green-left"],
+          "note": "Gentle right. Bunkers pinch the second half." },
+        { "hole": 2, "par": 5, "si": 7, "yards": { "black": 516, "blue": 484, "red": 411 },
+          "bend": -0.2, "width": 0.8, "hazards": ["bunker-left-fairway","bunker-green-right"],
+          "note": "Reachable. The bunker short right is the one that catches people." },
+        { "hole": 3, "par": 4, "si": 3, "yards": { "black": 404, "blue": 374, "red": 320 },
+          "bend": -0.45, "width": 0.6, "hazards": ["bunker-left-fairway"],
+          "note": "Dogleg left. Cutting the corner is worth about thirty yards." },
+        { "hole": 4, "par": 4, "si": 8, "yards": { "black": 331, "blue": 326, "red": 297 },
+          "bend": 0.1, "width": 0.55, "hazards": ["ocean-right","bunker-green-front"],
+          "note": "Short and mean. Right is the ocean." },
+        { "hole": 5, "par": 3, "si": 6, "yards": { "black": 195, "blue": 166, "red": 130 },
+          "bend": 0, "width": 0.5, "hazards": ["bunker-green-left","bunker-green-right"],
+          "note": "Uphill. Take one more club than you think." },
+        { "hole": 6, "par": 5, "si": 2, "yards": { "black": 523, "blue": 498, "red": 419 },
+          "bend": 0.3, "width": 0.75, "hazards": ["ocean-right","bunker-green-left"],
+          "note": "Climbs to a plateau. The whole right side falls into the sea." },
+        { "hole": 7, "par": 3, "si": 9, "yards": { "black": 106, "blue": 98, "red": 87 },
+          "bend": 0, "width": 0.4, "hazards": ["ocean-right","bunker-green-front","bunker-green-left"],
+          "note": "A hundred yards downhill into the wind. Famous for a reason." },
+        { "hole": 8, "par": 4, "si": 1, "yards": { "black": 428, "blue": 418, "red": 337 },
+          "bend": 0.5, "width": 0.6, "hazards": ["ocean-right","bunker-green-right"],
+          "note": "Blind tee shot, then across the cliff. Hardest on the nine." },
+        { "hole": 9, "par": 4, "si": 4, "yards": { "black": 505, "blue": 481, "red": 425 },
+          "bend": -0.15, "width": 0.7, "hazards": ["ocean-right","bunker-green-left"],
+          "note": "Long par four running downhill along the water." }
+      ]
+    },
+    {
+      "slug": "oakmont-front",
+      "name": "Oakmont",
+      "nine": "front",
+      "par": 35,
+      "holes": [
+        { "hole": 1, "par": 4, "si": 2, "yards": { "black": 482, "blue": 448, "red": 376 },
+          "bend": 0.2, "width": 0.65, "hazards": ["bunker-right-fairway","bunker-green-right"],
+          "note": "Downhill and long. A brutal opener." },
+        { "hole": 2, "par": 4, "si": 8, "yards": { "black": 341, "blue": 325, "red": 285 },
+          "bend": -0.25, "width": 0.6, "hazards": ["bunker-left-fairway","bunker-green-left"],
+          "note": "Short but the green does the work." },
+        { "hole": 3, "par": 4, "si": 4, "yards": { "black": 428, "blue": 400, "red": 341 },
+          "bend": 0, "width": 0.55, "hazards": ["church-pews-left","bunker-green-right"],
+          "note": "The church pews run all down the left." },
+        { "hole": 4, "par": 5, "si": 6, "yards": { "black": 609, "blue": 566, "red": 480 },
+          "bend": 0.15, "width": 0.75, "hazards": ["church-pews-left","bunker-green-front"],
+          "note": "Long. The pews are still there." },
+        { "hole": 5, "par": 4, "si": 7, "yards": { "black": 382, "blue": 360, "red": 310 },
+          "bend": -0.3, "width": 0.6, "hazards": ["bunker-left-fairway"],
+          "note": "Uphill dogleg left to a green that repels everything." },
+        { "hole": 6, "par": 3, "si": 5, "yards": { "black": 194, "blue": 180, "red": 145 },
+          "bend": 0, "width": 0.45, "hazards": ["bunker-green-left","bunker-green-right"],
+          "note": "Long one-shotter, bunkers both sides." },
+        { "hole": 7, "par": 4, "si": 3, "yards": { "black": 479, "blue": 447, "red": 372 },
+          "bend": 0.25, "width": 0.6, "hazards": ["bunker-right-fairway","bunker-green-left"],
+          "note": "Another long four. Oakmont has a lot of these." },
+        { "hole": 8, "par": 3, "si": 9, "yards": { "black": 288, "blue": 252, "red": 190 },
+          "bend": 0, "width": 0.5, "hazards": ["bunker-green-left","bunker-green-right"],
+          "note": "The longest par three in championship golf. Yes, really." },
+        { "hole": 9, "par": 4, "si": 1, "yards": { "black": 477, "blue": 452, "red": 385 },
+          "bend": -0.2, "width": 0.65, "hazards": ["bunker-green-front","bunker-green-right"],
+          "note": "Uphill all the way to a green shared with the putting course." }
+      ]
+    }
+  ]
+}

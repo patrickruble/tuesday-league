@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scorecard — Katy Golf League</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#007041">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=Instrument+Sans:wght@400;500;600&family=Martian+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/extra.css">
+<style>
+:root{--accent:#007041}
+.wrap2{max-width:900px;margin:0 auto;padding:0 24px}
+
+/* ---------- head ---------- */
+.cardhead{background:var(--green);color:#fff;padding-bottom:28px}
+.cardhead .inner{max-width:900px;margin:0 auto;padding:0 24px;
+  display:grid;grid-template-columns:auto 1fr auto;gap:22px;align-items:end}
+.cardhead .crest{width:64px;height:64px;background:var(--accent);display:grid;
+  place-items:center;font-family:var(--display);font-weight:800;font-size:21px;
+  color:#fff;box-shadow:0 0 0 1px rgba(255,255,255,.25)}
+.cardhead h1{font-size:clamp(28px,6vw,46px);letter-spacing:-.025em;
+  text-transform:uppercase;font-variation-settings:'wdth' 110}
+.cardhead .meta{margin-top:8px;font-size:13px;color:rgba(255,255,255,.72)}
+.cardhead .score{text-align:right;font-family:var(--data);white-space:nowrap}
+.cardhead .score b{display:block;font-size:38px;font-weight:600;letter-spacing:-.04em}
+.cardhead .score span{font-size:9px;letter-spacing:.12em;color:rgba(255,255,255,.6)}
+
+/* ---------- the run of holes ---------- */
+.run{margin:26px 0 40px;border:1px solid var(--rule);background:var(--card)}
+.hrow{display:grid;grid-template-columns:96px 1fr 132px;gap:0;
+  border-bottom:1px solid var(--rule)}
+.hrow:last-child{border-bottom:0}
+
+.plan{border-right:1px solid var(--rule);padding:10px;background:#FAFBFA}
+.plan svg{width:100%;height:auto;display:block}
+
+.about{padding:16px 18px;min-width:0}
+.about .top{display:flex;align-items:baseline;gap:11px;flex-wrap:wrap}
+.about .no{font-family:var(--display);font-weight:800;font-size:30px;line-height:1;
+  letter-spacing:-.03em}
+.about .par{font-family:var(--data);font-size:11px;color:var(--dim);letter-spacing:.07em}
+.about .yds{font-family:var(--data);font-size:11px;color:var(--dim)}
+.about .si{font-family:var(--data);font-size:9px;letter-spacing:.08em;color:var(--dim);
+  margin-left:auto}
+.about .stroke{background:color-mix(in srgb,var(--accent) 13%,transparent);
+  color:var(--accent);font-family:var(--data);font-size:9px;padding:3px 6px;
+  letter-spacing:.06em}
+.about p{margin:9px 0 0;font-size:13px;color:var(--dim);line-height:1.5;max-width:46ch}
+
+.marks{border-left:1px solid var(--rule);display:grid;
+  grid-template-rows:1fr auto;align-items:center;text-align:center;padding:14px 10px}
+.marks .g{font-family:var(--data);font-size:34px;font-weight:600;letter-spacing:-.05em;
+  line-height:1;position:relative;display:inline-block;padding:6px 10px}
+/* circle a birdie, square a bogey — the way you'd mark a card */
+.marks .g.bird::before{content:"";position:absolute;inset:0;border:2px solid var(--accent);
+  border-radius:50%}
+.marks .g.eag::before{content:"";position:absolute;inset:-4px;border:2px solid var(--accent);
+  border-radius:50%}
+.marks .g.eag::after{content:"";position:absolute;inset:2px;border:2px solid var(--accent);
+  border-radius:50%}
+.marks .g.bog::before{content:"";position:absolute;inset:0;border:2px solid var(--dim)}
+.marks .g.dbl::before{content:"";position:absolute;inset:-4px;border:2px solid var(--dim)}
+.marks .g.dbl::after{content:"";position:absolute;inset:2px;border:2px solid var(--dim)}
+.marks .pts{font-family:var(--data);font-size:10px;letter-spacing:.09em;color:var(--dim);
+  margin-top:9px}
+.marks .pts b{color:var(--ink);font-size:13px}
+
+/* ---------- totals ---------- */
+.totals{display:grid;grid-template-columns:repeat(4,1fr);background:var(--green-deep);
+  color:#fff}
+.totals div{padding:18px 16px;border-right:1px solid rgba(255,255,255,.14)}
+.totals div:last-child{border-right:0}
+.totals b{display:block;font-family:var(--data);font-size:28px;font-weight:600;
+  letter-spacing:-.04em;line-height:1}
+.totals span{display:block;margin-top:6px;font-size:9px;letter-spacing:.12em;
+  text-transform:uppercase;color:rgba(255,255,255,.55)}
+
+.legend2{display:flex;gap:20px;flex-wrap:wrap;font-size:12px;color:var(--dim);
+  padding:16px 0 50px;align-items:center}
+.legend2 i{display:inline-block;width:20px;height:20px;margin-right:6px;
+  vertical-align:middle;position:relative}
+.legend2 i.c{border:2px solid var(--accent);border-radius:50%}
+.legend2 i.s{border:2px solid var(--dim)}
+
+.teepick{display:flex;gap:6px;align-items:center;margin-left:auto}
+.teepick button{width:30px;height:30px;border:1px solid rgba(255,255,255,.3);
+  cursor:pointer;padding:0;border-radius:50%}
+.teepick button[aria-pressed="true"]{box-shadow:0 0 0 2px #fff}
+.t-black{background:#1A1A1A}.t-blue{background:#1B4F8A}.t-red{background:#C0392B}
+
+@media (max-width:720px){
+  .hrow{grid-template-columns:74px 1fr 92px}
+  .plan{padding:7px}
+  .about{padding:12px}
+  .about .no{font-size:24px}
+  .about p{display:none}
+  .marks .g{font-size:27px}
+  .totals{grid-template-columns:repeat(2,1fr)}
+  .cardhead .inner{grid-template-columns:auto 1fr}
+  .cardhead .score{grid-column:1/-1;text-align:left;padding-top:12px;
+    border-top:1px solid rgba(255,255,255,.2)}
+  .cardhead .score b{display:inline;font-size:26px}
+  .cardhead .score span{margin-left:10px}
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="inner">
+    <a class="mark" href="index.html">Katy <em>·</em> Golf League</a>
+    <button class="navtoggle" id="navtoggle" aria-expanded="false" aria-controls="nav">MENU</button>
+    <nav id="nav">
+      <a href="index.html">Leaderboard</a>
+      <a href="schedule.html">Schedule</a>
+      <a href="teams.html">Teams</a>
+      <a href="scrapbook.html">Scrapbook</a>
+      <span id="authslot" class="authslot"></span>
+    </nav>
+  </div>
+</header>
+
+<div id="loading" style="padding:60px 24px;text-align:center;color:var(--dim)">
+  Loading the card…
+</div>
+<div id="app" hidden></div>
+
+<footer>
+  <div class="inner">
+    <span>Katy Golf League</span>
+    <span>9-hole scramble · Stableford</span>
+  </div>
+</footer>
+
+<script type="module">
+import { supabase, paintAuthSlot } from './assets/db.js';
+import { holeSVG, yardsFor } from './assets/holes.js';
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c =>
+  ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+
+const params = new URLSearchParams(location.search);
+let tee = params.get('tee') || 'blue';
+let data = null, plans = null;
+
+paintAuthSlot(0);
+
+(async () => {
+  const id = params.get('round');
+  if (!id) return fail('No card specified.');
+
+  const { data: rs, error } = await supabase
+    .from('round_scores').select('*').eq('id', id).maybeSingle();
+  if (error || !rs) return fail('That card isn\u2019t available.');
+
+  const [{ data: match }, { data: team }] = await Promise.all([
+    supabase.from('matches').select('*,courses(*)').eq('id', rs.match_id).single(),
+    supabase.from('teams').select('name,crest,accent,slug').eq('id', rs.team_id).single()
+  ]);
+
+  /* the drawn plans live in a data file, matched by name and nine */
+  try {
+    const cj = await fetch('data/courses.json').then(r => r.json());
+    plans = cj.courses.find(c =>
+      c.name.toLowerCase() === match.courses.name.toLowerCase() &&
+      c.nine === match.courses.nine);
+  } catch { plans = null; }
+
+  data = { rs, match, course: match.courses, team };
+  render();
+})();
+
+function fail(msg) {
+  $('loading').innerHTML = `<b style="color:#B91C1C">${esc(msg)}</b>`;
+}
+
+function markClass(gross, par) {
+  const d = gross - par;
+  if (d <= -2) return 'eag';
+  if (d === -1) return 'bird';
+  if (d === 1)  return 'bog';
+  if (d >= 2)   return 'dbl';
+  return '';
+}
+
+function render() {
+  const { rs, match, course, team } = data;
+  document.documentElement.style.setProperty('--accent', team.accent);
+
+  const rows = course.pars.map((par, i) => {
+    const plan = plans?.holes?.[i] || { hole: i+1, par, bend: 0, width: .65, hazards: [] };
+    const yards = yardsFor(plan, tee);
+    const gross = rs.gross?.[i];
+    const pts   = rs.points?.[i];
+    const si    = course.stroke_index[i];
+    const strokes = strokesOn(si, rs.handicap);
+
+    return `
+    <div class="hrow">
+      <div class="plan">${holeSVG({ ...plan, par }, { tee, accent: team.accent })}</div>
+      <div class="about">
+        <div class="top">
+          <span class="no">${i+1}</span>
+          <span class="par">PAR ${par}</span>
+          ${yards ? `<span class="yds">${yards} YDS</span>` : ''}
+          ${strokes ? `<span class="stroke">${strokes > 0 ? '+' : ''}${strokes}</span>` : ''}
+          <span class="si">S.I. ${si}</span>
+        </div>
+        ${plan.note ? `<p>${esc(plan.note)}</p>` : ''}
+      </div>
+      <div class="marks">
+        <div><span class="g ${gross != null ? markClass(gross, par) : ''}">${gross ?? '–'}</span></div>
+        <div class="pts">${pts != null ? `<b>${pts}</b> PT${pts === 1 ? '' : 'S'}` : ''}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  const grossTotal = (rs.gross || []).reduce((a,b) => a + (b||0), 0);
+  const parTotal   = course.pars.reduce((a,b) => a+b, 0);
+  const diff       = grossTotal - parTotal;
+
+  $('loading').hidden = true;
+  $('app').hidden = false;
+  $('app').innerHTML = `
+  <div class="cardhead">
+    <div class="inner">
+      <div class="crest">${esc(team.crest)}</div>
+      <div>
+        <div class="eyebrow">Week ${match.week} · ${new Date(match.played_on)
+          .toLocaleDateString([], {weekday:'long',day:'numeric',month:'long'})}</div>
+        <h1>${esc(course.name)}</h1>
+        <div class="meta">${esc(course.nine)} nine · par ${parTotal} ·
+          ${esc(team.name)}${match.bay ? ' · bay ' + match.bay : ''}</div>
+      </div>
+      <div class="score">
+        <b>${rs.total_points ?? '—'}</b>
+        <span>STABLEFORD POINTS</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap2">
+    <div style="display:flex;align-items:center;gap:14px;margin-top:22px;flex-wrap:wrap">
+      <span style="font-family:var(--data);font-size:10px;letter-spacing:.12em;
+        text-transform:uppercase;color:var(--dim)">Yardages from</span>
+      <div class="teepick" style="margin-left:0">
+        <button class="t-black" data-t="black" aria-pressed="${tee==='black'}" aria-label="Black tees"></button>
+        <button class="t-blue"  data-t="blue"  aria-pressed="${tee==='blue'}"  aria-label="Blue tees"></button>
+        <button class="t-red"   data-t="red"   aria-pressed="${tee==='red'}"   aria-label="Red tees"></button>
+      </div>
+    </div>
+
+    <div class="run">${rows}</div>
+
+    <div class="totals">
+      <div><b>${grossTotal || '—'}</b><span>Gross</span></div>
+      <div><b>${grossTotal ? (diff > 0 ? '+' : '') + diff : '—'}</b><span>To par</span></div>
+      <div><b>${rs.handicap > 0 ? '+' : ''}${rs.handicap ?? 0}</b><span>Team handicap</span></div>
+      <div><b>${rs.total_points ?? '—'}</b><span>Points</span></div>
+    </div>
+
+    <div class="legend2">
+      <span><i class="c"></i>Birdie</span>
+      <span><i class="s"></i>Bogey</span>
+      <span>Double ring is an eagle, double square is a double bogey</span>
+      <span style="margin-left:auto">
+        <a href="teams/${esc(team.slug)}.html" style="color:var(--green)">${esc(team.name)}</a>
+      </span>
+    </div>
+  </div>`;
+
+  document.querySelectorAll('.teepick button').forEach(b =>
+    b.addEventListener('click', () => { tee = b.dataset.t; render(); }));
+}
+
+function strokesOn(si, hcp) {
+  if (!hcp) return 0;
+  const n = Math.floor(Math.abs(hcp)/9) + (si <= Math.abs(hcp) % 9 ? 1 : 0);
+  return Math.sign(hcp) * n;
+}
+
+$('navtoggle').addEventListener('click', function(){
+  const n = $('nav'), open = n.classList.toggle('open');
+  this.setAttribute('aria-expanded', open);
+  this.textContent = open ? 'CLOSE' : 'MENU';
+});
+</script>
+</body>
+</html>
