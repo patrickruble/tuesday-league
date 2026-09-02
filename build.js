@@ -546,7 +546,7 @@ ${t.backdropColor && isDark(t.backdropColor) ? `
     --dim:rgba(255,255,255,.56);
     --rule:rgba(255,255,255,.15);
     --card:rgba(255,255,255,.055);
-    --pat:${rgba(lighten(t.accent,.35), .18)};
+    --pat:${rgba(lighten(t.accent,.4), .22)};
     color:#F3F5F3;
   }
   .sheet .panel,.sheet .h2h,.sheet .player,.sheet .match,

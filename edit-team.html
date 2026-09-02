@@ -505,6 +505,7 @@ function applyLook() {
   /* background colour and image sit behind the pattern */
   const body = $('pv-body');
   body.style.backgroundColor = draft.backdrop_color || 'var(--card)';
+
   if (draft.backdrop_image) {
     const url = publicBackdrop(draft.backdrop_image);
     const mode = draft.backdrop_mode || 'tile';
@@ -524,13 +525,19 @@ function applyLook() {
   const dark = isDark(draft.backdrop_color);
   body.classList.toggle('darkbg', dark);
   if (dark) {
+    /* a dark accent on a dark background is invisible — lift the
+       pattern colour toward white and give it more presence */
+    const lift = lighten(draft.accent, .4);
+    const ln = parseInt(lift.slice(1),16);
+    body.style.setProperty('--pat',
+      `rgba(${ln>>16},${(ln>>8)&255},${ln&255},.22)`);
     body.style.setProperty('--pv-ink', '#F3F5F3');
     body.style.setProperty('--pv-dim', 'rgba(255,255,255,.56)');
     body.style.setProperty('--pv-head', lighten(draft.accent, .45));
     body.style.setProperty('--pv-panel', 'rgba(255,255,255,.07)');
     body.style.setProperty('--pv-rule', 'rgba(255,255,255,.16)');
   } else {
-    ['--pv-ink','--pv-dim','--pv-head','--pv-panel','--pv-rule']
+    ['--pat','--pv-ink','--pv-dim','--pv-head','--pv-panel','--pv-rule']
       .forEach(v => body.style.removeProperty(v));
   }
 
@@ -582,7 +589,8 @@ function lighten(hex, amount = 0.5) {
 }
 
 function patternLayer(kind) {
-  const pat = getComputedStyle(document.documentElement).getPropertyValue('--pat').trim();
+  const host = document.getElementById('pv-body');
+  const pat = getComputedStyle(host).getPropertyValue('--pat').trim();
   switch (kind) {
     case 'pinstripe': return `repeating-linear-gradient(90deg,${pat} 0 1px,transparent 1px 11px),`;
     case 'argyle':    return `repeating-linear-gradient(45deg,${pat} 0 1px,transparent 1px 26px),` +
