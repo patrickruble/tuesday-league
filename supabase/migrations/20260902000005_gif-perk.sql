@@ -44,7 +44,8 @@ language plpgsql
 security definer
 as $$
 begin
-  if not is_commissioner()
+  if auth.uid() is not null
+     and not is_commissioner()
      and new.can_animate is distinct from old.can_animate then
     raise exception 'You cannot grant yourself that';
   end if;
@@ -78,3 +79,4 @@ where p.id = auth.uid();
 --    update profiles set can_animate = true where full_name = 'Their Name';
 -- ------------------------------------------------------------
 update profiles set can_animate = true where full_name = 'Patrick Ruble';
+
