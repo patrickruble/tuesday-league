@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jager Bombers — Katy Golf League</title>
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<meta name="theme-color" content="#007041">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=Instrument+Sans:wght@400;500;600&family=Martian+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+<link rel="stylesheet" href="../assets/extra.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --accent:#A16207;
+    --pat:rgba(161,98,7,0.15);
+    --mood:#7EBED7;
+    --team-display:'Archivo','Helvetica Neue',Arial,sans-serif;
+    --team-wdth:112;
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="inner">
+    <a class="mark" href="../index.html">Katy <em>·</em> Golf League</a>
+    <button class="navtoggle" id="navtoggle" aria-expanded="false" aria-controls="nav">MENU</button>
+    <nav id="nav">
+      <a href="../index.html">Leaderboard</a>
+      <a href="../schedule.html">Schedule</a>
+      <a href="../teams.html" aria-current="page">Teams</a>
+      <a href="../clubhouse.html">Clubhouse</a>
+      <a href="../playlist.html">Playlist</a>
+      <a href="../records.html">Records</a>
+      <span id="authslot" class="authslot"></span>
+    </nav>
+  </div>
+</header>
+
+
+<div class="hero">
+  <div class="inner">
+    <div class="crest-lg">JB</div>
+    <div>
+      <div class="eyebrow">Season Season 3</div>
+      <h1>Jager Bombers</h1>
+      <div class="meta">Bay 6 · Tuesdays 7:30</div>
+    </div>
+    <div class="tally"><b>—</b><span>SEASON POINTS</span></div>
+  </div>
+</div>
+
+<div class="status">
+  <div class="inner">
+    <div class="moodline"><span class="lbl">Mood</span><i class="dot2"></i><b>content</b></div>
+    
+    <div class="song"><span class="lbl">Walk-up</span>
+      <span style="font-size:12px;color:rgba(255,255,255,.45)">not picked yet</span></div>
+  </div>
+</div>
+
+<div id="player" class="dock">
+  <div class="dockinner">
+    <button id="closedock" aria-label="Stop">✕</button>
+    <iframe id="frame" allow="autoplay; encrypted-media" title="Walk-up song"></iframe>
+  </div>
+</div>
+
+<div class="numbers">
+  <div class="inner">
+    <div><b>—</b><span>Points per round</span></div>
+    <div><b>—</b><span>Best round</span></div>
+    <div><b>—</b><span>Team handicap</span></div>
+    <div><b>—</b><span>Rounds played</span></div>
+    <div><b>—</b><span>Standing</span></div>
+  </div>
+</div>
+
+<div class="sheet bg-diagonal">
+  <div class="wrap">
+    
+    <section>
+      <div class="head"><h2>Roster</h2></div>
+      <div class="roster">
+      <article class="player">
+        <div class="face">BR</div>
+        <div class="idx">01 · CAPTAIN</div>
+        <h3><a href="../players/brian-ron.html" style="color:inherit;text-decoration:none">Brian Ron</a></h3>
+        <div class="hcp">INDEX TBC</div>
+        
+      </article>
+      <article class="player">
+        <div class="face">JH</div>
+        <div class="idx">02</div>
+        <h3><a href="../players/jeff-henderson.html" style="color:inherit;text-decoration:none">Jeff Henderson</a></h3>
+        <div class="hcp">INDEX TBC</div>
+        
+      </article>
+      <article class="player">
+        <div class="face">MW</div>
+        <div class="idx">03</div>
+        <h3><a href="../players/mo-wiley.html" style="color:inherit;text-decoration:none">Mo Wiley</a></h3>
+        <div class="hcp">INDEX TBC</div>
+        
+      </article>
+      </div>
+    </section>
+
+    <section>
+      <div class="head"><h2>Next round</h2>
+        <span class="note">TUE 08 SEP · Pebble Beach Front 9</span>
+      </div>
+      <div class="h2h">
+        <div class="baytag"><b>6</b><span>BAY</span></div>
+        <div class="txt">
+          <b>Sharing with Filthy Balls</b>
+            They'll sign off your card, and you'll sign off theirs.
+        </div>
+      </div>
+    </section>
+    <section>
+      <div class="head"><h2>Last season</h2>
+        <span class="note">Different format — kept for reference</span></div>
+      <div class="statgrid">
+        <div><b>28.9</b><span>Average</span><small>over 12 rounds</small></div>
+        <div><b>26</b><span>Best</span></div>
+        <div><b>31</b><span>Worst</span></div>
+      </div>
+    </section>
+    <div style="height:30px"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var b=document.getElementById('play');
+  if(!b) return;
+  var dock=document.getElementById('player'),frame=document.getElementById('frame'),
+      src="",
+      h=80, on=false;
+  function stop(){frame.src='';dock.classList.remove('up');b.textContent='▶';on=false;}
+  document.getElementById('closedock').addEventListener('click',stop);
+  b.addEventListener('click',function(){
+    if(!src) return;
+    if(on){stop();return;}
+    frame.style.height=h+'px';frame.src=src;dock.classList.add('up');
+    b.textContent='❚❚';on=true;
+  });
+})();
+</script>
+
+
+<div class="sponsors">
+  <div class="inner">
+    <span class="lede">Supported by</span>
+    
+    <div class="slot"><b>Example Pro Shop</b> <span>Club fitting and repairs</span></div><div class="slot"><b>Example Taproom</b> <span>Post-round headquarters</span></div>
+  </div>
+</div>
+
+<footer>
+  <div class="inner">
+    <span>Katy Golf League</span>
+    <span>13 teams · 9-hole scramble · Stableford</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var b=document.getElementById('navtoggle'),n=document.getElementById('nav');
+  if(!b) return;
+  b.addEventListener('click',function(){
+    var open=n.classList.toggle('open');
+    b.setAttribute('aria-expanded',open);
+    b.textContent=open?'CLOSE':'MENU';
+  });
+})();
+</script>
+<script type="module">
+  import { paintAuthSlot } from '../assets/db.js';
+  paintAuthSlot(1);
+</script>
+</body>
+</html>

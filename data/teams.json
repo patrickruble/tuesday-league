@@ -1,198 +1,639 @@
 [
   {
-    "slug": "bogey-nights", "name": "Bogey Nights", "crest": "BN",
-    "accent": "#A16207", "typeface": "bungee", "backdrop": "diagonal",
-    "handicap": 3, "bay": 1,
-    "mood": "smug", "moodSentiment": "good",
-    "song": { "title": "Bad Reputation", "artist": "Joan Jett", "provider": "youtube", "id": "dQw4w9WgXcQ" },
-    "bio": "Named before anyone on the team had actually made a bogey. Now it is a promise rather than a joke.",
+    "slug": "ar-bombers",
+    "name": "AR Bombers",
+    "crest": "AB",
+    "accent": "#C2410C",
+    "typeface": "archivo",
+    "backdrop": "argyle",
+    "handicap": 0,
+    "bay": 1,
+    "mood": "content",
+    "moodSentiment": "good",
+    "song": {
+      "title": "",
+      "artist": "",
+      "provider": "youtube",
+      "id": null
+    },
+    "bio": "",
     "roster": [
-      { "name": "Kate Halloran", "hcp": 4.2, "quote": "We peak in November." },
-      { "name": "Sam Pyke", "hcp": 9.6, "quote": "I only hit driver." },
-      { "name": "Tomas Ferreira", "hcp": 12.4, "quote": "Third chip-in this season, thanks for asking." }
+      {
+        "name": "Justin Krautz",
+        "hcp": 0,
+        "quote": ""
+      },
+      {
+        "name": "Blake Krejci",
+        "hcp": 0,
+        "quote": ""
+      },
+      {
+        "name": "Collin Snell",
+        "hcp": 0,
+        "quote": ""
+      }
     ],
-    "points": 152, "played": 10, "won": 9, "lost": 1, "form": [1,1,1,0,1], "bestRound": 18
+    "points": 0,
+    "played": 0,
+    "won": 0,
+    "lost": 0,
+    "form": [],
+    "bestRound": null,
+    "lastSeason": {
+      "played": 12,
+      "total": 366,
+      "average": 30.5,
+      "best": 28,
+      "worst": 34
+    }
   },
   {
-    "slug": "the-sandbaggers", "name": "The Sandbaggers", "crest": "SB",
-    "accent": "#3F3F46", "typeface": "space-mono", "backdrop": "grid",
-    "handicap": 6, "bay": 2,
-    "mood": "sandbagging", "moodSentiment": "odd",
-    "song": { "title": "Smooth Operator", "artist": "Sade", "provider": "youtube", "id": "dQw4w9WgXcQ" },
-    "bio": "We have never once misrepresented a handicap and we resent the implication contained in our own team name.",
+    "slug": "dustin-my-johnson",
+    "name": "Dustin My Johnson",
+    "crest": "DJ",
+    "accent": "#2B3A67",
+    "typeface": "anton",
+    "backdrop": "plaid",
+    "handicap": 0,
+    "bay": 2,
+    "mood": "content",
+    "moodSentiment": "good",
+    "song": {
+      "title": "",
+      "artist": "",
+      "provider": "youtube",
+      "id": null
+    },
+    "bio": "",
     "roster": [
-      { "name": "Wei Ng", "hcp": 7.1, "quote": "No idea what you mean." },
-      { "name": "Yves Delacroix", "hcp": 10.3, "quote": "Handicaps are a social construct." },
-      { "name": "Ruth Whitfield", "hcp": 13.8, "quote": "Improving naturally." }
+      {
+        "name": "Caleb Fields",
+        "hcp": 0,
+        "quote": ""
+      },
+      {
+        "name": "Eric Mohn",
+        "hcp": 0,
+        "quote": ""
+      },
+      {
+        "name": "Patrick Ruble",
+        "hcp": 0,
+        "quote": ""
+      }
     ],
-    "points": 147, "played": 10, "won": 8, "lost": 2, "form": [1,0,1,1,1], "bestRound": 17
+    "points": 0,
+    "played": 0,
+    "won": 0,
+    "lost": 0,
+    "form": [],
+    "bestRound": null,
+    "lastSeason": {
+      "played": 12,
+      "total": 361,
+      "average": 30.1,
+      "best": 27,
+      "worst": 33
+    }
   },
   {
-    "slug": "static-cling", "name": "Static Cling", "crest": "SC",
-    "accent": "#C2410C", "typeface": "archivo", "backdrop": "argyle",
-    "handicap": 4, "bay": 3,
-    "mood": "tilted", "moodSentiment": "bad",
-    "song": { "title": "Cannonball", "artist": "The Breeders", "provider": "youtube", "id": "dQw4w9WgXcQ" },
-    "bio": "Formed when three people who had all been dropped from other rosters discovered they were, collectively, slightly better than any of those rosters. Not taking questions about week 6.",
+    "slug": "hole-patrol",
+    "name": "Hole Patrol",
+    "crest": "HP",
+    "accent": "#4D7C0F",
+    "typeface": "dm-serif",
+    "backdrop": "pinstripe",
+    "handicap": 0,
+    "bay": 3,
+    "mood": "content",
+    "moodSentiment": "good",
+    "song": {
+      "title": "",
+      "artist": "",
+      "provider": "youtube",
+      "id": null
+    },
+    "bio": "",
     "roster": [
-      { "name": "Rita Okonkwo", "hcp": 6.4, "quote": "I called it in preseason." },
-      { "name": "Dev Varma", "hcp": 11.8, "quote": "No comment." },
-      { "name": "Marta Bell", "hcp": 14.1, "quote": "Peaking at the right time." }
+      {
+        "name": "Brendan Gray",
+        "hcp": 0,
+        "quote": ""
+      },
+      {
+        "name": "Mike Dujka",
+        "hcp": 0,
+        "quote": ""
+      },
+      {
+        "name": "Chris Pena",
+        "hcp": 0,
+        "quote": ""
+      }
     ],
-    "points": 138, "played": 10, "won": 7, "lost": 3, "form": [1,1,0,1,1], "bestRound": 16
+    "points": 0,
+    "played": 0,
+    "won": 0,
+    "lost": 0,
+    "form": [],
+    "bestRound": null,
+    "lastSeason": {
+      "played": 12,
+      "total": 362,
+      "average": 30.2,
+      "best": 28,
+      "worst": 32
+    }
   },
   {
-    "slug": "night-shift", "name": "Night Shift", "crest": "NS",
-    "accent": "#2B3A67", "typeface": "anton", "backdrop": "pinstripe",
-    "handicap": 5, "bay": 4,
-    "mood": "grinding", "moodSentiment": "hot",
-    "song": { "title": "Night Moves", "artist": "Bob Seger", "provider": "youtube", "id": "dQw4w9WgXcQ" },
-    "bio": "All three of us work nights. Tuesday at 7:30 is our Saturday morning and we treat it accordingly.",
+    "slug": "2-js-and-a-hard-r",
+    "name": "2 J's and a Hard R",
+    "crest": "2J",
+    "accent": "#7A1F3D",
+    "typeface": "space-mono",
+    "backdrop": "dots",
+    "handicap": 0,
+    "bay": 4,
+    "mood": "content",
+    "moodSentiment": "good",
+    "song": {
+      "title": "",
+      "artist": "",
+      "provider": "youtube",
+      "id": null
+    },
+    "bio": "",
     "roster": [
-      { "name": "Jide Abara", "hcp": 5.9, "quote": "Framed the card." },
-      { "name": "Ana Lindqvist", "hcp": 12.0, "quote": "Still 1-0 vs Static Cling." },
-      { "name": "Pierre Roy", "hcp": 15.2, "quote": "Selling wedges, see the clubhouse." }
+      {
+        "name": "Jimmy Calcagno",
+        "hcp": 0,
+        "quote": ""
+      },
+      {
+        "name": "Ryan Roesler",
+        "hcp": 0,
+        "quote": ""
+      },
+      {
+        "name": "Jose Muniz",
+        "hcp": 0,
+        "quote": ""
+      }
     ],
-    "points": 136, "played": 10, "won": 7, "lost": 3, "form": [1,1,1,1,0], "bestRound": 17
+    "points": 0,
+    "played": 0,
+    "won": 0,
+    "lost": 0,
+    "form": [],
+    "bestRound": null,
+    "lastSeason": {
+      "played": 12,
+      "total": 362,
+      "average": 30.2,
+      "best": 27,
+      "worst": 35
+    }
   },
   {
-    "slug": "shank-redemption", "name": "Shank Redemption", "crest": "SR",
-    "accent": "#6D28D9", "typeface": "dm-serif", "backdrop": "check",
-    "handicap": 7, "bay": 5,
-    "mood": "hopeful", "moodSentiment": "good",
-    "song": { "title": "Free Bird", "artist": "Lynyrd Skynyrd", "provider": "youtube", "id": "dQw4w9WgXcQ" },
-    "bio": "Get busy chipping or get busy dying. Mostly the second one, but we are working on it.",
+    "slug": "putt-pirates",
+    "name": "Putt Pirates",
+    "crest": "PP",
+    "accent": "#0E7490",
+    "typeface": "bungee",
+    "backdrop": "grid",
+    "handicap": 0,
+    "bay": 5,
+    "mood": "content",
+    "moodSentiment": "good",
+    "song": {
+      "title": "",
+      "artist": "",
+      "provider": "youtube",
+      "id": null
+    },
+    "bio": "",
     "roster": [
-      { "name": "Luca Marchetti", "hcp": 8.4, "quote": "It is a work in progress." },
-      { "name": "Kofi Osei", "hcp": 11.1, "quote": "Every week is a fresh start." },
-      { "name": "Petra Kowal", "hcp": 16.7, "quote": "Looking for a 3-wood." }
+      {
+        "name": "Ryan Tuckey",
+        "hcp": 0,
+        "quote": ""
+      },
+      {
+        "name": "Joe Chaisson",
+        "hcp": 0,
+        "quote": ""
+      },
+      {
+        "name": "Alonzo Brown",
+        "hcp": 0,
+        "quote": ""
+      }
     ],
-    "points": 131, "played": 10, "won": 6, "lost": 4, "form": [0,1,1,0,1], "bestRound": 16
+    "points": 0,
+    "played": 0,
+    "won": 0,
+    "lost": 0,
+    "form": [],
+    "bestRound": null,
+    "lastSeason": {
+      "played": 12,
+      "total": 388,
+      "average": 32.3,
+      "best": 28,
+      "worst": 36
+    }
   },
   {
-    "slug": "cart-path-only", "name": "Cart Path Only", "crest": "CP",
-    "accent": "#0E7490", "typeface": "archivo", "backdrop": "turf",
-    "handicap": 5, "bay": 6,
-    "mood": "content", "moodSentiment": "good",
-    "song": { "title": "Take It Easy", "artist": "Eagles", "provider": "youtube", "id": "dQw4w9WgXcQ" },
-    "bio": "A simulator league means never having to hear those three words again. We named ourselves after the thing we escaped.",
+    "slug": "jager-bombers",
+    "name": "Jager Bombers",
+    "crest": "JB",
+    "accent": "#A16207",
+    "typeface": "archivo",
+    "backdrop": "diagonal",
+    "handicap": 0,
+    "bay": 6,
+    "mood": "content",
+    "moodSentiment": "good",
+    "song": {
+      "title": "",
+      "artist": "",
+      "provider": "youtube",
+      "id": null
+    },
+    "bio": "",
     "roster": [
-      { "name": "Nora Brennan", "hcp": 7.8, "quote": "No cart, no path, no problem." },
-      { "name": "Beto Sotelo", "hcp": 10.9, "quote": "Indoor golf is real golf." },
-      { "name": "Anil Iyer", "hcp": 14.5, "quote": "Climate controlled and proud." }
+      {
+        "name": "Brian Ron",
+        "hcp": 0,
+        "quote": ""
+      },
+      {
+        "name": "Jeff Henderson",
+        "hcp": 0,
+        "quote": ""
+      },
+      {
+        "name": "Mo Wiley",
+        "hcp": 0,
+        "quote": ""
+      }
     ],
-    "points": 128, "played": 10, "won": 6, "lost": 4, "form": [1,0,1,1,0], "bestRound": 15
+    "points": 0,
+    "played": 0,
+    "won": 0,
+    "lost": 0,
+    "form": [],
+    "bestRound": null,
+    "lastSeason": {
+      "played": 12,
+      "total": 347,
+      "average": 28.9,
+      "best": 26,
+      "worst": 31
+    }
   },
   {
-    "slug": "grip-it-and-sip-it", "name": "Grip It & Sip It", "crest": "GS",
-    "accent": "#4D7C0F", "typeface": "bungee", "backdrop": "plaid",
-    "handicap": 8, "bay": 7,
-    "mood": "bouncy", "moodSentiment": "good",
-    "song": { "title": "Red Red Wine", "artist": "UB40", "provider": "youtube", "id": "dQw4w9WgXcQ" },
-    "bio": "Our scoring correlates with the second half of our name in a way the commissioner has described as statistically interesting.",
+    "slug": "shannannagans",
+    "name": "Shannannagans",
+    "crest": "SH",
+    "accent": "#6D28D9",
+    "typeface": "anton",
+    "backdrop": "check",
+    "handicap": 0,
+    "bay": 7,
+    "mood": "content",
+    "moodSentiment": "good",
+    "song": {
+      "title": "",
+      "artist": "",
+      "provider": "youtube",
+      "id": null
+    },
+    "bio": "",
     "roster": [
-      { "name": "Yuki Tanaka", "hcp": 9.2, "quote": "Two is optimal. Three is a mistake." },
-      { "name": "Thabo Mbeki", "hcp": 13.4, "quote": "Hydration is key." },
-      { "name": "Grace Vance", "hcp": 17.0, "quote": "I am here for the atmosphere." }
+      {
+        "name": "Shannon Chaisson",
+        "hcp": 0,
+        "quote": ""
+      },
+      {
+        "name": "Susanna Stewart",
+        "hcp": 0,
+        "quote": ""
+      },
+      {
+        "name": "Megan Pena",
+        "hcp": 0,
+        "quote": ""
+      }
     ],
-    "points": 125, "played": 10, "won": 6, "lost": 4, "form": [1,1,1,0,0], "bestRound": 16
+    "points": 0,
+    "played": 0,
+    "won": 0,
+    "lost": 0,
+    "form": [],
+    "bestRound": null,
+    "lastSeason": {
+      "played": 12,
+      "total": 472,
+      "average": 39.3,
+      "best": 32,
+      "worst": 44
+    }
   },
   {
-    "slug": "hot-bench", "name": "Hot Bench", "crest": "HB",
-    "accent": "#7A1F3D", "typeface": "dm-serif", "backdrop": "argyle",
-    "handicap": 6, "bay": 1,
-    "mood": "salty", "moodSentiment": "bad",
-    "song": { "title": "Hot Stuff", "artist": "Donna Summer", "provider": "youtube", "id": "dQw4w9WgXcQ" },
-    "bio": "Bay 4 is our bay. We do not care what the schedule says.",
+    "slug": "good-bull-golf",
+    "name": "Good Bull Golf",
+    "crest": "GB",
+    "accent": "#B91C1C",
+    "typeface": "dm-serif",
+    "backdrop": "turf",
+    "handicap": 0,
+    "bay": 1,
+    "mood": "content",
+    "moodSentiment": "good",
+    "song": {
+      "title": "",
+      "artist": "",
+      "provider": "youtube",
+      "id": null
+    },
+    "bio": "",
     "roster": [
-      { "name": "Fiona Quill", "hcp": 8.9, "quote": "See you Tuesday." },
-      { "name": "Marco Amaro", "hcp": 12.6, "quote": "We are due." },
-      { "name": "Erik Stenson", "hcp": 15.9, "quote": "Bring the whole bench." }
+      {
+        "name": "Colin Williams",
+        "hcp": 0,
+        "quote": ""
+      },
+      {
+        "name": "Buzz Vargas",
+        "hcp": 0,
+        "quote": ""
+      },
+      {
+        "name": "Kaelyn Vargas",
+        "hcp": 0,
+        "quote": ""
+      }
     ],
-    "points": 122, "played": 10, "won": 5, "lost": 5, "form": [0,1,0,1,1], "bestRound": 15
+    "points": 0,
+    "played": 0,
+    "won": 0,
+    "lost": 0,
+    "form": [],
+    "bestRound": null,
+    "lastSeason": {
+      "played": 12,
+      "total": 380,
+      "average": 31.7,
+      "best": 30,
+      "worst": 35
+    }
   },
   {
-    "slug": "green-room", "name": "Green Room", "crest": "GR",
-    "accent": "#0F766E", "typeface": "archivo", "backdrop": "dots",
-    "handicap": 6, "bay": 2,
-    "mood": "annoyed", "moodSentiment": "bad",
-    "song": { "title": "Green Onions", "artist": "Booker T. & the M.G.'s", "provider": "youtube", "id": "dQw4w9WgXcQ" },
-    "bio": "Three putts is not a personality. We are working on making it not a personality.",
+    "slug": "white-tee-privilege",
+    "name": "White Tee Privilege",
+    "crest": "WT",
+    "accent": "#0F766E",
+    "typeface": "space-mono",
+    "backdrop": "argyle",
+    "handicap": 0,
+    "bay": 2,
+    "mood": "content",
+    "moodSentiment": "good",
+    "song": {
+      "title": "",
+      "artist": "",
+      "provider": "youtube",
+      "id": null
+    },
+    "bio": "",
     "roster": [
-      { "name": "Marc Haddad", "hcp": 7.5, "quote": "The mood status is a bit much." },
-      { "name": "Ellie Prosser", "hcp": 11.4, "quote": "We lost on a handicap." },
-      { "name": "Jun Lin", "hcp": 14.8, "quote": "Good match though." }
+      {
+        "name": "Ryan Certa",
+        "hcp": 0,
+        "quote": ""
+      },
+      {
+        "name": "Reagan Stewart",
+        "hcp": 0,
+        "quote": ""
+      },
+      {
+        "name": "Nick Acord",
+        "hcp": 0,
+        "quote": ""
+      }
     ],
-    "points": 119, "played": 10, "won": 5, "lost": 5, "form": [1,0,0,1,0], "bestRound": 15
+    "points": 0,
+    "played": 0,
+    "won": 0,
+    "lost": 0,
+    "form": [],
+    "bestRound": null,
+    "lastSeason": {
+      "played": 12,
+      "total": 382,
+      "average": 31.8,
+      "best": 27,
+      "worst": 36
+    }
   },
   {
-    "slug": "fore-play", "name": "Fore Play", "crest": "FP",
-    "accent": "#DB2777", "typeface": "bungee", "backdrop": "check",
-    "handicap": 9, "bay": 3,
-    "mood": "giddy", "moodSentiment": "good",
-    "song": { "title": "Let's Get It On", "artist": "Marvin Gaye", "provider": "youtube", "id": "dQw4w9WgXcQ" },
-    "bio": "The name was funnier before we had to say it out loud to the commissioner. We are keeping it.",
+    "slug": "bogey-express",
+    "name": "Bogey Express",
+    "crest": "BE",
+    "accent": "#DB2777",
+    "typeface": "bungee",
+    "backdrop": "plaid",
+    "handicap": 0,
+    "bay": 3,
+    "mood": "content",
+    "moodSentiment": "good",
+    "song": {
+      "title": "",
+      "artist": "",
+      "provider": "youtube",
+      "id": null
+    },
+    "bio": "",
     "roster": [
-      { "name": "Rosa Castellan", "hcp": 10.7, "quote": "Committed to the bit." },
-      { "name": "Dani Ruiz", "hcp": 14.2, "quote": "It is a good name." },
-      { "name": "Ben Aldridge", "hcp": 18.1, "quote": "My mother asked about the name." }
+      {
+        "name": "Bill McDaniel",
+        "hcp": 0,
+        "quote": ""
+      },
+      {
+        "name": "Miguel Gonzalez",
+        "hcp": 0,
+        "quote": ""
+      },
+      {
+        "name": "Carlos Espinoza",
+        "hcp": 0,
+        "quote": ""
+      }
     ],
-    "points": 112, "played": 10, "won": 4, "lost": 6, "form": [0,0,1,1,0], "bestRound": 14
+    "points": 0,
+    "played": 0,
+    "won": 0,
+    "lost": 0,
+    "form": [],
+    "bestRound": null,
+    "lastSeason": {
+      "played": 12,
+      "total": 378,
+      "average": 31.5,
+      "best": 27,
+      "worst": 36
+    }
   },
   {
-    "slug": "lavender-menace", "name": "Lavender Menace", "crest": "LM",
-    "accent": "#86198F", "typeface": "blackletter", "backdrop": "diagonal",
-    "handicap": 8, "bay": 4,
-    "mood": "feral", "moodSentiment": "odd",
-    "song": { "title": "Rebel Girl", "artist": "Bikini Kill", "provider": "youtube", "id": "dQw4w9WgXcQ" },
-    "bio": "We picked the blackletter font on purpose and we will not be changing it.",
+    "slug": "big-drive-energy",
+    "name": "Big Drive Energy",
+    "crest": "BD",
+    "accent": "#3F3F46",
+    "typeface": "archivo",
+    "backdrop": "pinstripe",
+    "handicap": 0,
+    "bay": 4,
+    "mood": "content",
+    "moodSentiment": "good",
+    "song": {
+      "title": "",
+      "artist": "",
+      "provider": "youtube",
+      "id": null
+    },
+    "bio": "",
     "roster": [
-      { "name": "Ada Oyelaran", "hcp": 9.8, "quote": "Menacing, specifically." },
-      { "name": "Tess Beck", "hcp": 13.0, "quote": "The font is the point." },
-      { "name": "Sol Trujillo", "hcp": 16.3, "quote": "Lavender is a strong colour." }
+      {
+        "name": "Jett Morton",
+        "hcp": 0,
+        "quote": ""
+      },
+      {
+        "name": "Dylan Anderson",
+        "hcp": 0,
+        "quote": ""
+      },
+      {
+        "name": "Andrew Lucas",
+        "hcp": 0,
+        "quote": ""
+      }
     ],
-    "points": 108, "played": 10, "won": 4, "lost": 6, "form": [1,0,0,0,1], "bestRound": 15
+    "points": 0,
+    "played": 0,
+    "won": 0,
+    "lost": 0,
+    "form": [],
+    "bestRound": null,
+    "lastSeason": {
+      "played": 12,
+      "total": 348,
+      "average": 29,
+      "best": 27,
+      "worst": 32
+    }
   },
   {
-    "slug": "mulligan-stew", "name": "Mulligan Stew", "crest": "MS",
-    "accent": "#7C2D12", "typeface": "dm-serif", "backdrop": "plaid",
-    "handicap": 10, "bay": 5,
-    "mood": "deflated", "moodSentiment": "bad",
-    "song": { "title": "Second Chance", "artist": "Peter Bjorn and John", "provider": "youtube", "id": "dQw4w9WgXcQ" },
-    "bio": "League rules permit zero mulligans. We named ourselves after our grievance.",
+    "slug": "filthy-balls",
+    "name": "Filthy Balls",
+    "crest": "FB",
+    "accent": "#7C2D12",
+    "typeface": "anton",
+    "backdrop": "dots",
+    "handicap": 0,
+    "bay": 5,
+    "mood": "content",
+    "moodSentiment": "good",
+    "song": {
+      "title": "",
+      "artist": "",
+      "provider": "youtube",
+      "id": null
+    },
+    "bio": "",
     "roster": [
-      { "name": "Ida Faraday", "hcp": 11.6, "quote": "One per nine would be reasonable." },
-      { "name": "Raj Choudhury", "hcp": 15.5, "quote": "I am petitioning." },
-      { "name": "Alma Reyes", "hcp": 19.2, "quote": "The first tee should not count." }
+      {
+        "name": "Eric Wendt",
+        "hcp": 0,
+        "quote": ""
+      },
+      {
+        "name": "Nigel Hansen",
+        "hcp": 0,
+        "quote": ""
+      },
+      {
+        "name": "Matt Gallant",
+        "hcp": 0,
+        "quote": ""
+      }
     ],
-    "points": 104, "played": 10, "won": 3, "lost": 7, "form": [0,1,0,0,0], "bestRound": 14
+    "points": 0,
+    "played": 0,
+    "won": 0,
+    "lost": 0,
+    "form": [],
+    "bestRound": null,
+    "lastSeason": {
+      "played": 12,
+      "total": 370,
+      "average": 30.8,
+      "best": 28,
+      "worst": 34
+    }
   },
   {
-    "slug": "orange-julius", "name": "Orange Julius", "crest": "OJ",
-    "accent": "#B45309", "typeface": "space-mono", "backdrop": "dots",
-    "handicap": 9, "bay": 6,
-    "mood": "blah", "moodSentiment": "bad",
-    "song": { "title": "Orange Crush", "artist": "R.E.M.", "provider": "youtube", "id": "dQw4w9WgXcQ" },
-    "bio": "There is a Julius on the team. The orange part is unexplained and will remain so.",
+    "slug": "links-and-drinks",
+    "name": "Links & Drinks",
+    "crest": "LD",
+    "accent": "#4338CA",
+    "typeface": "dm-serif",
+    "backdrop": "grid",
+    "handicap": 0,
+    "bay": 6,
+    "mood": "content",
+    "moodSentiment": "good",
+    "song": {
+      "title": "",
+      "artist": "",
+      "provider": "youtube",
+      "id": null
+    },
+    "bio": "",
     "roster": [
-      { "name": "Dani Salgado", "hcp": 12.3, "quote": "Need a sub for week 11." },
-      { "name": "Julius Whitmore", "hcp": 14.9, "quote": "It is my name, that is the whole joke." },
-      { "name": "Min Pak", "hcp": 18.6, "quote": "We are not chasing the title." }
+      {
+        "name": "Garrett Bills",
+        "hcp": 0,
+        "quote": ""
+      },
+      {
+        "name": "Tom Janusis",
+        "hcp": 0,
+        "quote": ""
+      },
+      {
+        "name": "Gary Galloway",
+        "hcp": 0,
+        "quote": ""
+      }
     ],
-    "points": 99, "played": 10, "won": 2, "lost": 8, "form": [0,0,0,1,0], "bestRound": 13
-  },
-  {
-    "slug": "the-chunkers", "name": "The Chunkers", "crest": "TC",
-    "accent": "#57534E", "typeface": "anton", "backdrop": "turf",
-    "handicap": 11, "bay": 7,
-    "mood": "unhinged", "moodSentiment": "odd",
-    "song": { "title": "Loser", "artist": "Beck", "provider": "youtube", "id": "dQw4w9WgXcQ" },
-    "bio": "Last place and still the best team name in the league. We would rather lose as The Chunkers than win as anyone else.",
-    "roster": [
-      { "name": "Rae Vogel", "hcp": 13.7, "quote": "Best name in the league." },
-      { "name": "Nikhil Anand", "hcp": 17.4, "quote": "We take a lot of divots." },
-      { "name": "Cleo Broussard", "hcp": 21.0, "quote": "Fat shots are still shots." }
-    ],
-    "points": 91, "played": 10, "won": 1, "lost": 9, "form": [0,0,0,0,0], "bestRound": 12
+    "points": 0,
+    "played": 0,
+    "won": 0,
+    "lost": 0,
+    "form": [],
+    "bestRound": null,
+    "lastSeason": {
+      "played": 12,
+      "total": 403,
+      "average": 33.6,
+      "best": 30,
+      "worst": 42
+    }
   }
 ]
