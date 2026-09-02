@@ -51,12 +51,23 @@ const load = p => { try { return JSON.parse(fs.readFileSync(p,'utf8')); } catch 
 async function pull() {
   console.log('Pulling from', URL_);
 
-  const [teams, profiles, spots, settings] = await Promise.all([
+  const [teams, profiles, spots, settings, matches, weekCfg, contests] = await Promise.all([
     q('teams', '*', 'name.asc'),
     q('profiles', 'id,full_name,hcp_index,quote,avatar_url,team_id'),
     q('roster_spots', 'team_id,spot,full_name,hcp_index,claimed_by', 'spot.asc'),
-    q('league_settings', '*').catch(() => [])
+    q('league_settings', '*').catch(() => []),
+    q('matches', 'id,week,played_on,tee_time,bay,course_id,home_team,away_team', 'week.asc')
+      .catch(() => []),
+    q('week_settings', '*').catch(() => []),
+    q('contest_tallies', '*').catch(() => [])
   ]);
+
+  /* side contest wins, per player, so a player page can show
+     something real rather than a row of dashes */
+  const wins = {};
+  for (const c of contests) {
+    (wins[c.profile_id] ??= {})[c.kind] = c.wins;
+  }
 
   console.log(`  ${teams.length} teams, ${profiles.length} profiles, ${spots.length} roster spots`);
 
@@ -79,14 +90,16 @@ async function pull() {
             name:  p ? p.full_name : s.full_name,
             hcp:   (p && p.hcp_index != null ? p.hcp_index : s.hcp_index) ?? 0,
             quote: p ? (p.quote || '') : '',
-            photo: p ? publicUrl('avatars', p.avatar_url) : null
+            photo: p ? publicUrl('avatars', p.avatar_url) : null,
+            wins:  p ? (wins[p.id] || null) : null
           };
         })
       : signed.map(p => ({
           name: p.full_name,
           hcp: p.hcp_index ?? 0,
           quote: p.quote || '',
-          photo: publicUrl('avatars', p.avatar_url)
+          photo: publicUrl('avatars', p.avatar_url),
+          wins: wins[p.id] || null
         }));
 
     return {
@@ -174,6 +187,52 @@ async function pull() {
     fs.writeFileSync(path.join(ROOT,'data','settings.json'),
       JSON.stringify(settings[0], null, 2) + '\n');
     console.log('  wrote data/settings.json');
+  }
+
+  /* The schedule comes through the same anon key the public
+     site uses, so a week whose draw hasn't gone public yet
+     simply isn't in the result — nothing here has to know the
+     rule, it just can't see them. */
+  if (matches.length) {
+    const courses = await q('courses', 'id,name,nine').catch(() => []);
+    const byId = Object.fromEntries(courses.map(c => [c.id, c]));
+    const cfg  = Object.fromEntries(weekCfg.map(w => [w.week, w]));
+    const slugOf = Object.fromEntries(teams.map(t => [t.id, t.slug]));
+
+    const weeks = {};
+    for (const m of matches) {
+      const c = byId[m.course_id] || {};
+      const w = (weeks[m.week] ??= {
+        week: m.week,
+        date: m.played_on,
+        label: new Date(m.played_on + 'T12:00:00')
+          .toLocaleDateString('en-GB', { weekday:'short', day:'2-digit', month:'short' })
+          .toUpperCase(),
+        course: c.name || '',
+        nine: c.nine ? c.nine.charAt(0).toUpperCase() + c.nine.slice(1) + ' 9' : '',
+        status: 'final',
+        ctpHole: cfg[m.week]?.ctp_hole ?? null,
+        longPuttHole: cfg[m.week]?.long_putt_hole ?? null,
+        bays: []
+      });
+      w.bays.push({
+        bay: m.bay,
+        teams: [m.home_team, m.away_team].filter(Boolean).map(id => slugOf[id]).filter(Boolean)
+      });
+    }
+
+    const today = new Date().toISOString().slice(0,10);
+    const list = Object.values(weeks).sort((a,b) => b.week - a.week);
+    const upcoming = list.filter(w => w.date >= today).sort((a,b) => a.week - b.week)[0];
+    if (upcoming) upcoming.status = 'next';
+    list.forEach(w => { if (w.date > today && w !== upcoming) w.status = 'later'; });
+    list.forEach(w => w.bays.sort((a,b) => (a.bay||0) - (b.bay||0)));
+
+    fs.writeFileSync(path.join(ROOT,'data','schedule.json'),
+      JSON.stringify(list, null, 2) + '\n');
+    console.log(`  wrote data/schedule.json — ${list.length} week${list.length===1?'':'s'} visible`);
+  } else {
+    console.log('  no visible weeks — the draw may not be public yet');
   }
 
   return out;

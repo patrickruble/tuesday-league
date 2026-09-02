@@ -1,20 +1,21 @@
 [
   {
-    "_comment": "No matchups — every team plays its own scramble off its own handicap. Bays are shared for logistics, and your bay partner signs off your card. 13 teams over 7 bays means one bay has a single team each week.",
     "week": 1,
     "date": "2026-09-08",
-    "label": "TUE 08 SEP",
+    "label": "TUE 08 SEPT",
     "course": "Pebble Beach",
     "nine": "Front 9",
     "status": "next",
+    "ctpHole": null,
+    "longPuttHole": null,
     "bays": [
-      { "bay": 1, "teams": ["ar-bombers", "shannannagans"] },
-      { "bay": 2, "teams": ["dustin-my-johnson", "good-bull-golf"] },
-      { "bay": 3, "teams": ["hole-patrol", "white-tee-privilege"] },
-      { "bay": 4, "teams": ["2-js-and-a-hard-r", "bogey-express"] },
-      { "bay": 5, "teams": ["putt-pirates", "big-drive-energy"] },
-      { "bay": 6, "teams": ["jager-bombers", "filthy-balls"] },
-      { "bay": 7, "teams": ["links-and-drinks"] }
+      {
+        "bay": "2",
+        "teams": [
+          "dustin-my-johnson",
+          "good-bull-golf"
+        ]
+      }
     ]
   }
 ]

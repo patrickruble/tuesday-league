@@ -824,6 +824,39 @@ try {
 /* ============================================================
    PLAYER PAGE
    ============================================================ */
+/* Side contest wins, and nothing else — a scramble doesn't
+   produce individual numbers, so inventing rows to fill a grid
+   would just be four dashes. */
+function seasonBlock(p) {
+  const w = p.wins || {};
+  const items = [
+    ['ctp',       'Closest to the pin'],
+    ['long_putt', 'Long putts'],
+    ['chip_in',   'Chip-ins']
+  ].filter(([k]) => w[k]);
+
+  if (!items.length) {
+    return `
+  <section>
+    <div class="head"><h2>This season</h2></div>
+    <p style="color:var(--dim);font-size:15px;max-width:52ch;margin:0">
+      Nothing on the board yet. A scramble is scored as a team, so what shows up
+      here is the side contests — closest to the pin, long putts, chip-ins.
+    </p>
+  </section>`;
+  }
+
+  return `
+  <section>
+    <div class="head"><h2>This season</h2>
+      <span class="note">Side contests</span></div>
+    <div class="statgrid">
+      ${items.map(([k,label]) =>
+        `<div><b>${w[k]}</b><span>${label}</span></div>`).join('')}
+    </div>
+  </section>`;
+}
+
 function buildPlayerPage(p) {
   const t = p.team;
   const mates = t.roster.filter(m => m.slug !== p.slug).map(m => `
@@ -873,16 +906,7 @@ function buildPlayerPage(p) {
 ${p.quote ? `<div class="quotebar"><div class="inner"><span class="lbl">Says</span><q>${esc(p.quote)}</q></div></div>` : ''}
 
 <div class="wrap">
-  <section>
-    <div class="head"><h2>This season</h2>
-      <span class="note">Scramble — most stats belong to the team</span></div>
-    <div class="statgrid">
-      <div><b>—</b><span>Drives used</span><small>Recorded from week 1</small></div>
-      <div><b>—</b><span>Closest to pin</span><small>Side contest wins</small></div>
-      <div><b>—</b><span>Long putts</span><small>Side contest wins</small></div>
-      <div><b>—</b><span>Chip-ins</span><small>From off the green</small></div>
-    </div>
-  </section>
+  ${seasonBlock(p)}
 ${bagBlock}
   <section>
     <div class="head"><h2>Teammates</h2></div>

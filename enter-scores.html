@@ -264,11 +264,10 @@ const esc = s => String(s ?? '').replace(/[&<>"]/g, c =>
 const params = new URLSearchParams(location.search);
 let profile, match, course, team, partner, round, roster = [];
 let gross = Array(9).fill(null);
-let drives = {};
 let photoPath = null;
 let scoring = { '-2':3, '-1':2, '0':1, '1':0 };
 let strokeFrom = 'hardest';
-let minDrives = 2;
+let needSignoff = false;
 let saveTimer = null;
 
 /* ------------------------------------------------------------
@@ -287,7 +286,7 @@ let saveTimer = null;
   if (cfg) {
     scoring = cfg.scoring || scoring;
     strokeFrom = cfg.stroke_from || 'hardest';
-    minDrives = cfg.min_drives_per_player ?? 2;
+    needSignoff = !!cfg.require_signoff;
   }
 
   const matchId = params.get('match');
@@ -368,16 +367,15 @@ async function loadMatch(id) {
   /* pick up wherever we left off: the draft in the database,
      or whatever's cached locally if the phone lost signal */
   if (round?.gross) gross = round.gross.slice();
-  if (round?.drives_used) drives = round.drives_used;
+
   const cached = localStorage.getItem(cacheKey());
   if (cached && !round?.gross) {
     try {
       const c = JSON.parse(cached);
       if (c.gross) gross = c.gross;
-      if (c.drives) drives = c.drives;
+
     } catch {}
   }
-  roster.forEach(p => { drives[p.id] ??= 0; });
 
   render();
 }
@@ -459,25 +457,12 @@ function render() {
 
   <div class="holes" id="holes">${holes}</div>
 
-  <div class="panel" id="drivepanel">
-    <h2>Whose drive did you use?</h2>
-    ${roster.length ? roster.map(p => `
-      <div class="drive" data-p="${p.id}">
-        <span class="who">${esc(p.full_name)}</span>
-        <button type="button" data-d="-1" aria-label="One fewer">−</button>
-        <span class="cnt">${drives[p.id] || 0}</span>
-        <button type="button" data-d="1" aria-label="One more">+</button>
-      </div>`).join('')
-      : '<p style="font-size:13px;color:var(--dim);margin:0">Nobody on your team has signed up yet.</p>'}
-    <div class="short" id="short"></div>
-  </div>
-
   <div class="panel" id="photo">
     <h2>Photo of the screen</h2>
     <label class="drop">
       <span class="big">▣</span>
       <b>Take a photo</b>
-      <span>Required. ${partner ? esc(partner.name) + ' checks it against your numbers.' : ''}</span>
+      <span>Required. It's what Chris checks against if a card is queried.</span>
       <input type="file" id="shot" accept="image/*" capture="environment">
     </label>
     <div class="shot">
@@ -513,16 +498,6 @@ function wire() {
           if (gross[i] < course.pars[i]) cheer(row, b);
           if (wasEmpty) nudgeNext(i);
         }
-      }));
-  });
-
-  document.querySelectorAll('.drive').forEach(d => {
-    const id = d.dataset.p;
-    d.querySelectorAll('button').forEach(b =>
-      b.addEventListener('click', () => {
-        drives[id] = Math.max(0, Math.min(9, (drives[id] || 0) + (+b.dataset.d)));
-        d.querySelector('.cnt').textContent = drives[id];
-        tally(); queueSave();
       }));
   });
 
@@ -587,22 +562,15 @@ function tally() {
   $('pts').textContent = done ? roundPoints() : '—';
 
   const hasPhoto = $('photo').classList.contains('has');
-  const totalDrives = Object.values(drives).reduce((a,b) => a+b, 0);
-  const shortOf = roster.filter(p => (drives[p.id]||0) < minDrives);
-
-  $('short').textContent = roster.length && shortOf.length && totalDrives
-    ? `${shortOf.map(p => p.full_name.split(' ')[0]).join(' and ')} ` +
-      `${shortOf.length === 1 ? 'is' : 'are'} under the ${minDrives}-drive minimum.`
-    : '';
-
   const ready = done === 9 && hasPhoto;
   $('send').disabled = !ready;
   $('gap').className = 'gap';
   $('gap').textContent =
-    done < 9    ? `${9-done} hole${done===8?'':'s'} to go` :
-    !hasPhoto   ? 'Photo needed before you can submit' :
-    partner     ? `Goes to ${partner.name} to sign off` :
-                  'Goes to Chris to sign off';
+    done < 9      ? `${9-done} hole${done===8?'':'s'} to go` :
+    !hasPhoto     ? 'Photo needed before you can submit' :
+    !needSignoff  ? 'Straight onto the leaderboard' :
+    partner       ? `Goes to ${partner.name} to sign off` :
+                    'Goes to Chris to sign off';
 }
 
 /* ------------------------------------------------------------
@@ -610,7 +578,7 @@ function tally() {
 ------------------------------------------------------------ */
 function queueSave() {
   try {
-    localStorage.setItem(cacheKey(), JSON.stringify({ gross, drives }));
+    localStorage.setItem(cacheKey(), JSON.stringify({ gross }));
   } catch {}
   clearTimeout(saveTimer);
   saveTimer = setTimeout(saveDraft, 1500);
@@ -621,7 +589,6 @@ async function saveDraft() {
     match_id: match.id,
     team_id: profile.team_id,
     gross: gross.some(g => g == null) ? null : gross,
-    drives_used: drives,
     status: 'draft'
   };
   if (round?.id) {
@@ -703,7 +670,7 @@ async function submit() {
   await saveDraft();
 
   const { error } = await supabase.from('rounds')
-    .update({ gross, drives_used: drives, status: 'submitted' })
+    .update({ gross, status: 'submitted' })
     .eq('id', round.id);
 
   if (error) {
@@ -715,7 +682,27 @@ async function submit() {
 
   try { localStorage.removeItem(cacheKey()); } catch {}
 
+  /* When the league doesn't require the other team to sign,
+     the database confirms it on submit and there's nothing
+     left to chase. */
+  if (!needSignoff) return finished();
+
   await handOver();
+}
+
+function finished() {
+  document.body.classList.add('sent');
+  window.scrollTo(0,0);
+  $('app').innerHTML = `
+    <div class="state">
+      <div class="tick">✓</div>
+      <h2>That's your card in</h2>
+      <p>${roundPoints()} points, on the leaderboard now. Chris sees everything
+         and will pick up anything that looks off.</p>
+      <a href="contests.html?match=${match.id}">Record the contests</a>
+      <p style="margin-top:16px;font-size:13px">
+        <a href="index.html" style="color:var(--green)">Back to the league</a></p>
+    </div>`;
 }
 
 /* ------------------------------------------------------------
@@ -790,6 +777,15 @@ async function handOver() {
         </div>`
         : `<p class="lede">Nobody's listed to sign yet.</p>`}
       </div>
+    </div>
+
+    <div class="later" style="margin-top:16px;padding-top:16px">
+      <a href="contests.html?match=${match.id}"
+         style="display:inline-block;background:var(--green);color:#fff;
+                text-decoration:none;padding:12px 18px;font-size:14px;font-weight:600">
+        Record the contests
+      </a>
+      <div style="margin-top:9px">Closest to the pin, long putt, chip-ins.</div>
     </div>
 
     <div class="later">

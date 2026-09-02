@@ -27,19 +27,22 @@
         "name": "Jimmy Calcagno",
         "hcp": 0,
         "quote": "",
-        "photo": null
+        "photo": null,
+        "wins": null
       },
       {
         "name": "Ryan Roesler",
         "hcp": 0,
         "quote": "",
-        "photo": null
+        "photo": null,
+        "wins": null
       },
       {
         "name": "Jose Muniz",
         "hcp": 0,
         "quote": "",
-        "photo": null
+        "photo": null,
+        "wins": null
       }
     ],
     "points": 0,
@@ -81,19 +84,22 @@
         "name": "Justin Krautz",
         "hcp": 0,
         "quote": "",
-        "photo": null
+        "photo": null,
+        "wins": null
       },
       {
         "name": "Blake Krejci",
         "hcp": 0,
         "quote": "",
-        "photo": null
+        "photo": null,
+        "wins": null
       },
       {
         "name": "Collin Snell",
         "hcp": 0,
         "quote": "",
-        "photo": null
+        "photo": null,
+        "wins": null
       }
     ],
     "points": 0,
@@ -135,19 +141,22 @@
         "name": "Jett Morton",
         "hcp": 0,
         "quote": "",
-        "photo": null
+        "photo": null,
+        "wins": null
       },
       {
         "name": "Dylan Anderson",
         "hcp": 0,
         "quote": "",
-        "photo": null
+        "photo": null,
+        "wins": null
       },
       {
         "name": "Andrew Lucas",
         "hcp": 0,
         "quote": "",
-        "photo": null
+        "photo": null,
+        "wins": null
       }
     ],
     "points": 0,
@@ -189,19 +198,22 @@
         "name": "Bill McDaniel",
         "hcp": 0,
         "quote": "",
-        "photo": null
+        "photo": null,
+        "wins": null
       },
       {
         "name": "Miguel Gonzalez",
         "hcp": 0,
         "quote": "",
-        "photo": null
+        "photo": null,
+        "wins": null
       },
       {
         "name": "Carlos Espinoza",
         "hcp": 0,
         "quote": "",
-        "photo": null
+        "photo": null,
+        "wins": null
       }
     ],
     "points": 0,
@@ -235,7 +247,7 @@
       "artist": "Childish Gambino",
       "provider": "spotify",
       "id": "4NvXTrOSsVlCw0bFe3lKY9",
-      "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e0221b2b485aef32bcc96c1875c"
+      "art": "https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e0221b2b485aef32bcc96c1875c"
     },
     "bio": "",
     "roster": [
@@ -243,19 +255,22 @@
         "name": "Caleb Fields",
         "hcp": 0,
         "quote": "",
-        "photo": null
+        "photo": null,
+        "wins": null
       },
       {
         "name": "Eric Mohn",
         "hcp": 0,
         "quote": "",
-        "photo": null
+        "photo": null,
+        "wins": null
       },
       {
         "name": "Patrick Ruble",
         "hcp": 0,
         "quote": "You gotta risk it to get the biscuit",
-        "photo": "https://iubvgagijqlwiauzcisj.supabase.co/storage/v1/object/public/avatars/ce4ee1a8-a206-4029-b7bc-5c575dc86142/avatar-1788375876803.gif"
+        "photo": "https://iubvgagijqlwiauzcisj.supabase.co/storage/v1/object/public/avatars/ce4ee1a8-a206-4029-b7bc-5c575dc86142/avatar-1788375876803.gif",
+        "wins": null
       }
     ],
     "points": 0,
@@ -297,19 +312,22 @@
         "name": "Eric Wendt",
         "hcp": 0,
         "quote": "",
-        "photo": null
+        "photo": null,
+        "wins": null
       },
       {
         "name": "Nigel Hansen",
         "hcp": 0,
         "quote": "",
-        "photo": null
+        "photo": null,
+        "wins": null
       },
       {
         "name": "Matt Gallant",
         "hcp": 0,
         "quote": "",
-        "photo": null
+        "photo": null,
+        "wins": null
       }
     ],
     "points": 0,
@@ -351,19 +369,22 @@
         "name": "Colin Williams",
         "hcp": 0,
         "quote": "",
-        "photo": null
+        "photo": null,
+        "wins": null
       },
       {
         "name": "Buzz Vargas",
         "hcp": 0,
         "quote": "",
-        "photo": null
+        "photo": null,
+        "wins": null
       },
       {
         "name": "Kaelyn Vargas",
         "hcp": 0,
         "quote": "",
-        "photo": null
+        "photo": null,
+        "wins": null
       }
     ],
     "points": 0,
@@ -405,19 +426,22 @@
         "name": "Brendan Gray",
         "hcp": 0,
         "quote": "",
-        "photo": null
+        "photo": null,
+        "wins": null
       },
       {
         "name": "Mike Dujka",
         "hcp": 0,
         "quote": "",
-        "photo": null
+        "photo": null,
+        "wins": null
       },
       {
         "name": "Chris Pena",
         "hcp": 0,
         "quote": "",
-        "photo": null
+        "photo": null,
+        "wins": null
       }
     ],
     "points": 0,
@@ -459,19 +483,22 @@
         "name": "Brian Ron",
         "hcp": 0,
         "quote": "",
-        "photo": null
+        "photo": null,
+        "wins": null
       },
       {
         "name": "Jeff Henderson",
         "hcp": 0,
         "quote": "",
-        "photo": null
+        "photo": null,
+        "wins": null
       },
       {
         "name": "Mo Wiley",
         "hcp": 0,
         "quote": "",
-        "photo": null
+        "photo": null,
+        "wins": null
       }
     ],
     "points": 0,
@@ -513,19 +540,22 @@
         "name": "Garrett Bills",
         "hcp": 0,
         "quote": "",
-        "photo": null
+        "photo": null,
+        "wins": null
       },
       {
         "name": "Tom Janusis",
         "hcp": 0,
         "quote": "",
-        "photo": null
+        "photo": null,
+        "wins": null
       },
       {
         "name": "Gary Galloway",
         "hcp": 0,
         "quote": "",
-        "photo": null
+        "photo": null,
+        "wins": null
       }
     ],
     "points": 0,
@@ -567,19 +597,22 @@
         "name": "Ryan Tuckey",
         "hcp": 0,
         "quote": "",
-        "photo": null
+        "photo": null,
+        "wins": null
       },
       {
         "name": "Joe Chaisson",
         "hcp": 0,
         "quote": "",
-        "photo": null
+        "photo": null,
+        "wins": null
       },
       {
         "name": "Alonzo Brown",
         "hcp": 0,
         "quote": "",
-        "photo": null
+        "photo": null,
+        "wins": null
       }
     ],
     "points": 0,
@@ -621,19 +654,22 @@
         "name": "Shannon Chaisson",
         "hcp": 0,
         "quote": "",
-        "photo": null
+        "photo": null,
+        "wins": null
       },
       {
         "name": "Susanna Stewart",
         "hcp": 0,
         "quote": "",
-        "photo": null
+        "photo": null,
+        "wins": null
       },
       {
         "name": "Megan Pena",
         "hcp": 0,
         "quote": "",
-        "photo": null
+        "photo": null,
+        "wins": null
       }
     ],
     "points": 0,
@@ -675,19 +711,22 @@
         "name": "Ryan Certa",
         "hcp": 0,
         "quote": "",
-        "photo": null
+        "photo": null,
+        "wins": null
       },
       {
         "name": "Reagan Stewart",
         "hcp": 0,
         "quote": "",
-        "photo": null
+        "photo": null,
+        "wins": null
       },
       {
         "name": "Nick Acord",
         "hcp": 0,
         "quote": "",
-        "photo": null
+        "photo": null,
+        "wins": null
       }
     ],
     "points": 0,
