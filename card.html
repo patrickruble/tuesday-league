@@ -80,7 +80,7 @@
 .marks .pts b{color:var(--ink);font-size:13px}
 
 /* ---------- totals ---------- */
-.totals{display:grid;grid-template-columns:repeat(4,1fr);background:var(--green-deep);
+.totals{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));background:var(--green-deep);
   color:#fff}
 .totals div{padding:18px 16px;border-right:1px solid rgba(255,255,255,.14)}
 .totals div:last-child{border-right:0}
@@ -282,6 +282,7 @@ function render() {
       <div><b>${grossTotal ? (diff > 0 ? '+' : '') + diff : '—'}</b><span>To par</span></div>
       <div><b>${rs.handicap > 0 ? '+' : ''}${rs.handicap ?? 0}</b><span>Team handicap</span></div>
       <div><b>${rs.total_points ?? '—'}</b><span>Points</span></div>
+      ${rs.mulligans ? `<div><b>${rs.mulligans}</b><span>Mulligan${rs.mulligans === 1 ? '' : 's'}</span></div>` : ''}
     </div>
 
     <div class="legend2">

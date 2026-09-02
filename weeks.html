@@ -178,6 +178,44 @@ input.f:focus,select.f:focus{outline:none;border-color:var(--green);background:#
       </div>
 
       <div class="block2">
+        <header>
+          <h2>League rules</h2>
+          <span class="sub">applies to every week</span>
+          <div class="acts"><button class="b go" id="ruleSave">Save</button></div>
+        </header>
+        <div class="body2">
+          <div class="grid2" style="grid-template-columns:repeat(auto-fit,minmax(190px,1fr))">
+            <div>
+              <label class="f" for="mullAllow">Mulligans allowed</label>
+              <select class="f" id="mullAllow">
+                <option value="">Not stated</option>
+                <option value="0">None</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+              </select>
+            </div>
+            <div>
+              <label class="f" for="signoff">Card sign-off</label>
+              <select class="f" id="signoff">
+                <option value="false">You confirm them</option>
+                <option value="true">The other team confirms</option>
+              </select>
+            </div>
+            <div>
+              <label class="f" for="drawTime">Draw goes public at</label>
+              <input class="f" id="drawTime" type="time" value="11:00">
+            </div>
+          </div>
+          <div class="note2">
+            Whatever's set here is what the entry screen tells people. Mulligans
+            are recorded either way — the number just gets flagged if it's over.
+          </div>
+          <div class="msg2" id="ruleMsg"></div>
+        </div>
+      </div>
+
+      <div class="block2">
         <header><h2>Weeks so far</h2></header>
         <div class="body2" id="weekList">
           <p style="color:var(--dim);font-size:13px;margin:0">Loading…</p>
@@ -296,6 +334,13 @@ async function refresh() {
      whether he's moved anyone */
   const { data: lb } = await supabase.from('last_bays').select('*');
   usualBay = Object.fromEntries((lb||[]).map(r => [r.team_id, r.bay]));
+
+  const { data: cfg } = await supabase.from('league_settings').select('*').maybeSingle();
+  if (cfg) {
+    $('mullAllow').value = cfg.mulligans_allowed ?? '';
+    $('signoff').value   = String(!!cfg.require_signoff);
+    $('drawTime').value  = (cfg.draw_public_at || '11:00').slice(0,5);
+  }
 
   const { data: cp } = await supabase.from('contest_pots').select('*');
   pots = {};
@@ -675,6 +720,20 @@ function paintWeeks() {
       refresh();
     }));
 }
+
+$('ruleSave').addEventListener('click', async () => {
+  const msg = $('ruleMsg');
+  msg.textContent = 'Saving…'; msg.className = 'msg2 on good';
+
+  const { error } = await supabase.from('league_settings').update({
+    mulligans_allowed: $('mullAllow').value === '' ? null : Number($('mullAllow').value),
+    require_signoff:   $('signoff').value === 'true',
+    draw_public_at:    $('drawTime').value
+  }).eq('id', 1);
+
+  msg.textContent = error ? error.message : 'Saved.';
+  msg.className = 'msg2 on ' + (error ? 'bad' : 'good');
+});
 
 /* ---------- tabs ---------- */
 document.querySelectorAll('.tabs button').forEach(b =>

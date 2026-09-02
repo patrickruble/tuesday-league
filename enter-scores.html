@@ -130,6 +130,21 @@ button{font-family:inherit}
 .short{font-size:12px;color:var(--warn);margin-top:9px}
 
 /* ============================================================
+   MULLIGANS — one line, because it shouldn't slow the card down
+   ============================================================ */
+.mull{display:flex;align-items:center;gap:11px}
+.mtext{flex:1;min-width:0}
+.mtext b{display:block;font-size:15px;line-height:1.2}
+.mtext span{font-size:12px;color:var(--dim)}
+#mullpanel button{width:42px;height:42px;border:1px solid var(--rule);
+  background:#FBFCFB;font-size:20px;cursor:pointer;color:var(--ink);
+  line-height:1;padding:0;flex:none}
+#mullpanel button:active{background:var(--field)}
+.mcount{font-family:var(--data);font-size:20px;font-weight:600;min-width:26px;
+  text-align:center;flex:none}
+.mover{font-size:12px;color:var(--warn);margin-top:9px}
+
+/* ============================================================
    PHOTO
    ============================================================ */
 .drop{border:1px dashed var(--rule);padding:20px;text-align:center;cursor:pointer;
@@ -268,6 +283,8 @@ let photoPath = null;
 let scoring = { '-2':3, '-1':2, '0':1, '1':0 };
 let strokeFrom = 'hardest';
 let needSignoff = false;
+let mulliganLimit = null;
+let mulligans = 0;
 let saveTimer = null;
 
 /* ------------------------------------------------------------
@@ -287,6 +304,7 @@ let saveTimer = null;
     scoring = cfg.scoring || scoring;
     strokeFrom = cfg.stroke_from || 'hardest';
     needSignoff = !!cfg.require_signoff;
+    mulliganLimit = cfg.mulligans_allowed ?? null;
   }
 
   const matchId = params.get('match');
@@ -367,12 +385,14 @@ async function loadMatch(id) {
   /* pick up wherever we left off: the draft in the database,
      or whatever's cached locally if the phone lost signal */
   if (round?.gross) gross = round.gross.slice();
+  if (round?.mulligans) mulligans = round.mulligans;
 
   const cached = localStorage.getItem(cacheKey());
   if (cached && !round?.gross) {
     try {
       const c = JSON.parse(cached);
       if (c.gross) gross = c.gross;
+      if (c.mulligans != null) mulligans = c.mulligans;
 
     } catch {}
   }
@@ -457,6 +477,23 @@ function render() {
 
   <div class="holes" id="holes">${holes}</div>
 
+  <div class="panel" id="mullpanel">
+    <div class="mull">
+      <div class="mtext">
+        <b>Mulligans used</b>
+        <span>${
+          mulliganLimit === 0 ? 'None are meant to be used, but say so if you did.'
+          : mulliganLimit ? `${mulliganLimit} allowed.`
+          : 'If you took any.'
+        }</span>
+      </div>
+      <button type="button" id="mdown" aria-label="One fewer">−</button>
+      <span class="mcount" id="mcount">${mulligans}</span>
+      <button type="button" id="mup" aria-label="One more">+</button>
+    </div>
+    <div class="mover" id="mover"></div>
+  </div>
+
   <div class="panel" id="photo">
     <h2>Photo of the screen</h2>
     <label class="drop">
@@ -501,6 +538,9 @@ function wire() {
       }));
   });
 
+  $('mdown').addEventListener('click', () => bumpMulligans(-1));
+  $('mup').addEventListener('click',   () => bumpMulligans(1));
+
   $('shot').addEventListener('change', onPhoto);
   $('redo').addEventListener('click', () => {
     $('photo').classList.remove('has');
@@ -535,6 +575,18 @@ function cheer(row, btn) {
                     : 'TWO IN A ROW';
     row.querySelector('.hrow').insertBefore(tag, row.querySelector('.pill'));
   }
+}
+
+function bumpMulligans(d) {
+  mulligans = Math.max(0, Math.min(20, mulligans + d));
+  $('mcount').textContent = mulligans;
+  $('mover').textContent =
+    (mulliganLimit != null && mulligans > mulliganLimit)
+      ? (mulliganLimit === 0
+          ? `${mulligans} more than the league gives out. Chris will see it.`
+          : `${mulligans - mulliganLimit} over the ${mulliganLimit} allowed.`)
+      : '';
+  queueSave();
 }
 
 /* scroll the next unfilled hole into view — keeps a thumb moving
@@ -578,7 +630,7 @@ function tally() {
 ------------------------------------------------------------ */
 function queueSave() {
   try {
-    localStorage.setItem(cacheKey(), JSON.stringify({ gross }));
+    localStorage.setItem(cacheKey(), JSON.stringify({ gross, mulligans }));
   } catch {}
   clearTimeout(saveTimer);
   saveTimer = setTimeout(saveDraft, 1500);
@@ -589,6 +641,7 @@ async function saveDraft() {
     match_id: match.id,
     team_id: profile.team_id,
     gross: gross.some(g => g == null) ? null : gross,
+    mulligans,
     status: 'draft'
   };
   if (round?.id) {
@@ -670,7 +723,7 @@ async function submit() {
   await saveDraft();
 
   const { error } = await supabase.from('rounds')
-    .update({ gross, status: 'submitted' })
+    .update({ gross, mulligans, status: 'submitted' })
     .eq('id', round.id);
 
   if (error) {
