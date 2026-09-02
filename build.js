@@ -77,6 +77,16 @@ const initials = s => s.split(/\s+/).map(w => w[0]).join('').slice(0,2).toUpperC
 
 /* teeTime is stored as 24 hour so the calendar file is
    unambiguous; pages show it the way people say it. */
+/* The ballot-box X, drawn instead of typed. The character
+   itself renders as a hollow box in some fonts and as emoji in
+   others, which is no use in a wordmark. */
+const XMARK = `<svg class="xm" viewBox="0 0 20 20" aria-hidden="true">
+  <rect x="1.4" y="1.4" width="17.2" height="17.2" rx="1"
+        fill="none" stroke="currentColor" stroke-width="2.6"/>
+  <path d="M6.2 6.2 L13.8 13.8 M13.8 6.2 L6.2 13.8" stroke="currentColor"
+        stroke-width="2.8" stroke-linecap="square"/>
+</svg>`;
+
 function clock(t) {
   const [h, m] = String(t || '19:30').split(':').map(Number);
   const h12 = h % 12 || 12;
@@ -224,7 +234,7 @@ ${head}
 
 <header class="masthead">
   <div class="inner">
-    <a class="mark" href="${up}index.html">${esc(league.wordmark[0])} <em>·</em> ${esc(league.wordmark[1])}</a>
+    <a class="mark" href="${up}index.html">${esc(league.wordmark[0])} ${XMARK} ${esc(league.wordmark[1])}</a>
     <button class="navtoggle" id="navtoggle" aria-expanded="false" aria-controls="nav">MENU</button>
     <nav id="nav">
       ${nav}${more}

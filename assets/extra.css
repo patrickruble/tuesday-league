@@ -443,8 +443,8 @@
   transition:background .14s ease;
 }
 .art .play:hover{background:rgba(10,30,20,.16)}
-.art.empty{background:rgba(255,255,255,.08)}
-.art.empty .play{background:transparent;color:var(--lime)}
+.art.empty{background:var(--accent);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+.art.empty .play{background:rgba(0,0,0,.24);color:#fff}
 .song-meta{font-size:13px;line-height:1.35;min-width:0}
 .song-meta b{display:block;font-weight:600;font-size:15px;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:210px}
@@ -459,3 +459,22 @@
 .track{grid-template-columns:42px 52px 1fr auto}
 .track .art{width:52px;height:52px}
 .track .art .play{position:absolute;inset:0;width:100%;height:100%}
+
+
+/* ============================================================
+   THE MARK
+   A box with an X in it, sitting where the separator was, so
+   the wordmark reads as Katy X Golf League without spelling it
+   out. Drawn rather than typed — the ballot-box character is
+   unreliable across fonts.
+   ============================================================ */
+.mark{display:inline-flex;align-items:center;gap:9px}
+.xm{
+  width:1.02em;height:1.02em;flex:none;
+  color:var(--lime);
+  transform:translateY(-.03em);
+}
+.mark:hover .xm{color:#fff}
+
+/* on the green title bands it can sit a touch heavier */
+.masthead .mark .xm{stroke-linejoin:miter}

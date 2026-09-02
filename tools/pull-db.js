@@ -124,6 +124,37 @@ async function pull() {
     };
   });
 
+  /* Spotify covers need a lookup. The editor does it when a
+     link is pasted, but songs saved before that have none — so
+     fill in anything missing here, once, at build time. */
+  const needArt = out.filter(t =>
+    t.song.id && t.song.provider === 'spotify' && !t.song.art);
+
+  if (needArt.length) {
+    console.log(`  looking up ${needArt.length} Spotify cover${needArt.length === 1 ? '' : 's'}`);
+    await Promise.all(needArt.map(async t => {
+      try {
+        const url = `https://open.spotify.com/track/${t.song.id}`;
+        const r = await fetch('https://open.spotify.com/oembed?url=' + encodeURIComponent(url), {
+          headers: {
+            /* a bare Node request sometimes gets refused */
+            'User-Agent': 'Mozilla/5.0 (compatible; KatyGolfLeague/1.0)',
+            'Accept': 'application/json'
+          }
+        });
+        if (!r.ok) { console.log(`    ${t.name}: Spotify said ${r.status}`); return; }
+        const j = await r.json();
+        if (j.thumbnail_url) t.song.art = j.thumbnail_url;
+      } catch { /* the song works without a picture */ }
+    }));
+
+    const still = needArt.filter(t => !t.song.art).length;
+    if (still) {
+      console.log(`    ${still} still without a cover — re-pasting the link in the`);
+      console.log('    editor fetches it from the browser, which is more reliable.');
+    }
+  }
+
   /* moods table gives us the sentiment for each word */
   try {
     const moods = await q('moods', 'word,sentiment');
