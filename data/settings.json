@@ -20,5 +20,9 @@
   "show_pending": true,
   "updated_at": "2026-08-31T18:58:05.118859+00:00",
   "stroke_from": "hardest",
-  "mulligans_allowed": null
+  "mulligans_allowed": null,
+  "require_signoff": true,
+  "draw_public_at": "11:00:00",
+  "instagram": null,
+  "media_note": null
 }

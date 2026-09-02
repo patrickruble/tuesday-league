@@ -8,7 +8,7 @@
   "season": "Season 3",
   "format": "9-hole scramble \u00b7 Stableford",
   "night": "Tuesdays",
-  "teeTime": "19:30",
+  "teeTime": "19:00",
   "bays": 7,
   "weeks": 12,
   "currentWeek": 10,
@@ -96,5 +96,9 @@
       "label": "Playlist",
       "href": "playlist.html"
     }
-  ]
+  ],
+  "seasonName": "Fall 2026",
+  "seasonStart": "2026-09-08",
+  "seasonEnd": "2026-11-24",
+  "playoffDate": "2026-12-01"
 }

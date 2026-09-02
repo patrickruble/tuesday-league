@@ -177,6 +177,7 @@ input.f:focus,select.f:focus{outline:none;border-color:var(--green);background:#
           <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
             <button class="b" id="sameAgain">Same as last week</button>
             <button class="b" id="clearBays">Empty them</button>
+            <button class="b" id="restOfSeason">Fill in the rest of the season</button>
           </div>
           <div class="note2" id="usual"></div>
           <div class="msg2" id="wkMsg"></div>
@@ -298,6 +299,9 @@ const esc = s => String(s ?? '').replace(/[&<>"]/g, c =>
 
 const BAYS = 7;
 let teams = [], courses = [], weeks = [], editingCourse = null, editingWeek = null;
+let league = { weeks: 12 };
+
+try { league = await fetch('data/league.json').then(r => r.json()); } catch {}
 
 /* ---------- boot ---------- */
 (async () => {
@@ -621,6 +625,71 @@ function editWeek(n) {
   checkLeftover();
   window.scrollTo({ top:0, behavior:'smooth' });
 }
+
+/* Twelve Tuesdays is a lot of forms. Once one week is right,
+   this repeats it forward every seven days to the end of the
+   season — same bays, same course, dates a week apart. Each
+   one can be edited afterwards. */
+$('restOfSeason').addEventListener('click', async () => {
+  const msg = $('wkMsg');
+  const say = (t, ok) => { msg.textContent = t; msg.className = 'msg2 on ' + (ok?'good':'bad'); };
+
+  const startWeek = Number($('wkNo').value);
+  const startDate = $('wkDate').value;
+  const courseId  = $('wkCourse').value;
+  if (!startWeek || !startDate || !courseId)
+    return say('Set this week up first, then fill in the rest.');
+
+  const picked = bayPicks();
+  if (!picked.length) return say('Put the teams in their bays first.');
+  if (picked.length !== new Set(picked).size) return say('A team is in two bays at once.');
+
+  const total = Number(league.weeks || 12);
+  const last  = Number(league.seasonEnd ? 0 : 0);
+  const howMany = total - startWeek;
+  if (howMany < 1) return say('That\u2019s already the last week.');
+
+  if (!confirm(
+    `Create weeks ${startWeek + 1} to ${total}, a week apart, with these same bays?\n\n` +
+    `You can change the course and the bays on any of them afterwards.`)) return;
+
+  $('restOfSeason').disabled = true;
+  say('Building the season…', true);
+
+  const rows = [];
+  for (let n = startWeek + 1; n <= total; n++) {
+    const d = new Date(startDate + 'T12:00:00');
+    d.setDate(d.getDate() + 7 * (n - startWeek));
+    const on = d.toISOString().slice(0,10);
+
+    if (weeks.some(w => w.week === n)) continue;   // don't tread on one that exists
+
+    for (let bay = 1; bay <= BAYS; bay++) {
+      const a = $('baygrid').querySelector(`[data-bay="${bay}"][data-slot="a"]`).value;
+      const b = $('baygrid').querySelector(`[data-bay="${bay}"][data-slot="b"]`).value;
+      if (!a && !b) continue;
+      rows.push({
+        week: n, played_on: on, tee_time: $('wkTime').value, bay,
+        course_id: courseId,
+        home_team: a || b,
+        away_team: (a && b) ? b : null
+      });
+    }
+  }
+
+  if (!rows.length) {
+    $('restOfSeason').disabled = false;
+    return say('Those weeks already exist.');
+  }
+
+  const { error } = await supabase.from('matches').insert(rows);
+  $('restOfSeason').disabled = false;
+  if (error) return say(error.message);
+
+  const made = new Set(rows.map(r => r.week)).size;
+  say(`${made} more week${made === 1 ? '' : 's'} added. Set the course on each as you go.`, true);
+  refresh();
+});
 
 $('wkSave').addEventListener('click', async () => {
   const msg = $('wkMsg');

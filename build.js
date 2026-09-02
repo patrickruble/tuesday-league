@@ -95,6 +95,9 @@ const XMARK = `<svg class="xm" viewBox="0 0 20 20" aria-hidden="true">
         stroke-width="2.8" stroke-linecap="square"/>
 </svg>`;
 
+const fmtDate = d => new Date(d + 'T12:00:00')
+  .toLocaleDateString('en-GB', { day: 'numeric', month: 'long' });
+
 function clock(t) {
   const [h, m] = String(t || '19:30').split(':').map(Number);
   const h12 = h % 12 || 12;
@@ -416,8 +419,12 @@ function buildSchedule() {
   </div>
 </div>
 <div class="wrap">
-  <p class="lede2">Everyone plays their own scramble. Bays are shared two teams to a
-    bay, and the team next to you signs off your card at the end of the night.</p>
+  <p class="lede2">Everyone plays their own scramble off their own handicap —
+    sharing a bay is just where you stand. Bay assignments go up at 11 on the
+    morning of play.${league.seasonStart ? `
+    <br><br>${league.weeks} weeks, ${fmtDate(league.seasonStart)} to
+    ${fmtDate(league.seasonEnd)}${league.playoffDate
+      ? `, then playoffs on ${fmtDate(league.playoffDate)}` : ''}.` : ''}</p>
   ${weeks}
   <div style="height:50px"></div>
 </div>`
