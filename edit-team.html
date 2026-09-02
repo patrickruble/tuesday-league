@@ -305,12 +305,11 @@ input[disabled],textarea[disabled]{opacity:.55;cursor:not-allowed}
         <div class="mug" id="mug">—</div>
         <div>
           <label class="upl">Upload a photo
-            <input type="file" id="avatarfile" accept="image/png,image/jpeg,image/webp,image/gif">
+            <input type="file" id="avatarfile" accept="image/png,image/jpeg,image/webp">
           </label>
           <div class="hint" id="avatarhint">
             Shows on your team's roster and your player page. Square works best.
-            A GIF stays animated. Leave it blank and you get your initials on the
-            team colour.
+            Leave it blank and you get your initials on the team colour.
           </div>
         </div>
       </div>
@@ -389,6 +388,13 @@ const draft = {};
   applyLook();
   paintMug();
   paintBgImage();
+
+  if (profile.can_animate) {
+    $('avatarfile').accept = 'image/png,image/jpeg,image/webp,image/gif';
+    $('avatarhint').textContent =
+      'Shows on your team\u2019s roster and your player page. Square works best. ' +
+      'You can use a GIF and it\u2019ll stay animated.';
+  }
 
   $('loading').hidden = true;
   $('page').hidden = false;
@@ -784,6 +790,13 @@ $('avatarfile').addEventListener('change', async e => {
 
   const animated = f.type === 'image/gif';
 
+  if (animated && !profile.can_animate) {
+    $('avatarhint').textContent =
+      'Animated avatars are handed out by the commissioner. Ask Chris.';
+    e.target.value = '';
+    return;
+  }
+
   /* A GIF has to go up whole — running it through canvas would
      flatten it to a single frame. Everything else gets squared
      and shrunk, because a phone photo is 4 MB and a roster tile
@@ -876,20 +889,36 @@ $('navtoggle').addEventListener('click', function(){
 }
 </style>
 <style>
-.page{display:grid!important;grid-template-columns:1fr 384px!important;gap:26px!important;
-      align-items:start!important;max-width:1080px;margin:0 auto;padding:26px 24px}
+/* ============================================================
+   Layout, last word.
+   This page loads site.css and extra.css for the shared look,
+   and several of their rules reach elements here that they were
+   never meant to. Rather than fight that selector by selector,
+   the layout is stated once, here, after everything else.
+   ============================================================ */
+.page{display:grid!important;grid-template-columns:1fr 384px!important;
+      gap:26px!important;align-items:start!important;
+      max-width:1080px;margin:0 auto;padding:26px 24px}
 .form{display:block!important;min-width:0!important;width:auto!important;order:1}
 .form>*{display:block!important;float:none!important;width:auto!important}
 .form fieldset{display:block!important;width:auto!important;margin:0 0 14px!important}
 .preview{order:2;position:sticky;top:24px}
+
 .fonts,.bgs{display:block!important}
-.fontrow{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(126px,1fr))!important;gap:7px!important}
-.bgrow{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(82px,1fr))!important;gap:7px!important}
+.fontrow{display:grid!important;
+  grid-template-columns:repeat(auto-fill,minmax(126px,1fr))!important;gap:7px!important}
+.bgrow{display:grid!important;
+  grid-template-columns:repeat(auto-fill,minmax(82px,1fr))!important;gap:7px!important}
 .grouplbl{display:block!important;margin:16px 0 7px}
-.swatches{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(34px,1fr))!important;gap:5px!important}
+.swatches{display:grid!important;
+  grid-template-columns:repeat(auto-fill,minmax(34px,1fr))!important;gap:5px!important}
+
 [hidden]{display:none!important}
-@media (max-width:940px){.page{grid-template-columns:1fr!important}.preview{position:static;order:0}}
+
+@media (max-width:940px){
+  .page{grid-template-columns:1fr!important}
+  .preview{position:static;order:0}
+}
 </style>
 </body>
 </html>
-
