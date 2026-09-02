@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Katy Golf League</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#00522F">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=Instrument+Sans:wght@400;500;600&family=Martian+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#007041;--deep:#00341E;--lime:#B8EB7A;
+  --ink:#F3F7F3;--dim:rgba(255,255,255,.5);--rule:rgba(255,255,255,.13);
+  --display:'Archivo','Helvetica Neue',Arial,sans-serif;
+  --body:'Instrument Sans',system-ui,sans-serif;
+  --data:'Martian Mono','Courier New',monospace;
+
+  /* everything scales off this, so one number fits any screen */
+  --u: clamp(10px, 1.05vw, 22px);
+}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%;overflow:hidden}
+body{
+  background:var(--deep);color:var(--ink);
+  font-family:var(--body);
+  cursor:none;
+}
+h1,h2,h3{font-family:var(--display);font-weight:800;line-height:.95;margin:0}
+
+/* ---------- frame ---------- */
+.screen{height:100vh;display:grid;grid-template-rows:auto 1fr auto}
+
+.bar{
+  display:flex;align-items:center;gap:calc(var(--u) * 1.6);
+  padding:calc(var(--u) * 1.1) calc(var(--u) * 2);
+  background:var(--green);
+}
+.wordmark{
+  font-family:var(--display);font-weight:800;font-variation-settings:'wdth' 118;
+  font-size:calc(var(--u) * 1.5);letter-spacing:.09em;text-transform:uppercase;
+  display:inline-flex;align-items:center;gap:calc(var(--u) * .55);
+}
+.xm{width:1em;height:1em;color:var(--lime)}
+.when{margin-left:auto;font-family:var(--data);font-size:calc(var(--u) * 1.05);
+  color:rgba(255,255,255,.72);letter-spacing:.08em}
+.clock{font-size:calc(var(--u) * 1.5);color:#fff;margin-left:calc(var(--u) * 1.2)}
+
+.stage{position:relative;overflow:hidden}
+.panel{
+  position:absolute;inset:0;padding:calc(var(--u) * 1.8) calc(var(--u) * 2);
+  opacity:0;transition:opacity .5s ease;pointer-events:none;
+  display:flex;flex-direction:column;
+}
+.panel.on{opacity:1}
+.panel h2{
+  font-size:calc(var(--u) * 1.5);letter-spacing:.16em;text-transform:uppercase;
+  color:var(--lime);margin-bottom:calc(var(--u) * 1.2);flex:none;
+}
+.panel h2 small{color:var(--dim);letter-spacing:.06em;font-family:var(--body);
+  font-weight:400;font-size:calc(var(--u) * .95);margin-left:calc(var(--u) * .9);
+  text-transform:none}
+
+/* ---------- bays ---------- */
+.bays{display:grid;grid-template-columns:repeat(4,1fr);gap:calc(var(--u) * .8);
+  flex:1;align-content:start}
+.baycard{background:rgba(255,255,255,.05);border-left:calc(var(--u) * .35) solid var(--c);
+  padding:calc(var(--u) * 1) calc(var(--u) * 1.1);display:flex;flex-direction:column;
+  gap:calc(var(--u) * .5)}
+.baycard .no{font-family:var(--data);font-size:calc(var(--u) * 1);color:var(--dim);
+  letter-spacing:.14em}
+.baycard .team{display:flex;align-items:center;gap:calc(var(--u) * .6)}
+.baycard .chip{width:calc(var(--u) * 1.9);height:calc(var(--u) * 1.9);flex:none;
+  display:grid;place-items:center;font-family:var(--display);font-weight:800;
+  font-size:calc(var(--u) * .78);color:#fff}
+.baycard .nm{font-family:var(--display);font-weight:800;font-size:calc(var(--u) * 1.25);
+  line-height:1.05;letter-spacing:-.01em}
+.baycard .state{margin-left:auto;font-family:var(--data);font-size:calc(var(--u) * .68);
+  letter-spacing:.08em;padding:calc(var(--u) * .18) calc(var(--u) * .45)}
+.st-in{background:var(--lime);color:var(--deep)}
+.st-wait{background:rgba(255,255,255,.14);color:#fff}
+.st-none{color:var(--dim);box-shadow:inset 0 0 0 1px var(--rule)}
+
+/* ---------- standings ---------- */
+.board{display:grid;grid-auto-rows:1fr;gap:calc(var(--u) * .28);flex:1}
+.row{display:grid;grid-template-columns:calc(var(--u)*2.6) calc(var(--u)*2.4) 1fr auto auto;
+  align-items:center;gap:calc(var(--u) * .9);
+  background:rgba(255,255,255,.045);padding:0 calc(var(--u) * 1);
+  border-left:calc(var(--u) * .3) solid var(--c)}
+.row .pos{font-family:var(--data);font-size:calc(var(--u) * 1.45);color:var(--dim)}
+.row .crest{width:calc(var(--u)*2.1);height:calc(var(--u)*2.1);display:grid;
+  place-items:center;font-family:var(--display);font-weight:800;
+  font-size:calc(var(--u) * .82);color:#fff;background:var(--c)}
+.row .nm{font-family:var(--display);font-weight:800;font-size:calc(var(--u) * 1.5);
+  letter-spacing:-.015em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .ppr{font-family:var(--data);font-size:calc(var(--u) * .95);color:var(--dim)}
+.row .pts{font-family:var(--data);font-size:calc(var(--u) * 1.9);font-weight:600;
+  letter-spacing:-.04em;min-width:calc(var(--u) * 4);text-align:right}
+.row.lead{background:rgba(184,235,122,.13)}
+
+/* ---------- graph ---------- */
+.chart{flex:1;position:relative}
+.chart svg{width:100%;height:100%;display:block}
+.gl{stroke:var(--rule);stroke-width:1}
+.gt{fill:var(--dim);font-family:var(--data);font-size:11px}
+.series{fill:none;stroke-width:3.5;stroke-linejoin:round;stroke-linecap:round}
+.series.muted{opacity:.24;stroke-width:2}
+.dot{stroke:var(--deep);stroke-width:2}
+.slab{font-family:var(--display);font-weight:800;font-size:15px}
+
+/* ---------- notice ---------- */
+.notice{flex:1;display:grid;place-content:center;text-align:center;gap:calc(var(--u)*.9)}
+.notice b{font-family:var(--display);font-weight:800;font-size:calc(var(--u) * 4.4);
+  line-height:.95;letter-spacing:-.02em;display:block}
+.notice span{font-size:calc(var(--u) * 1.5);color:var(--dim)}
+
+/* ---------- footer ---------- */
+.ticker{
+  display:flex;align-items:center;gap:calc(var(--u) * 1.4);
+  padding:calc(var(--u) * .8) calc(var(--u) * 2);
+  background:var(--green);font-size:calc(var(--u) * .95);
+  color:rgba(255,255,255,.8);white-space:nowrap;overflow:hidden;
+}
+.ticker b{color:#fff}
+.dots{margin-left:auto;display:flex;gap:calc(var(--u) * .4)}
+.dots i{width:calc(var(--u) * .45);height:calc(var(--u) * .45);border-radius:50%;
+  background:rgba(255,255,255,.28)}
+.dots i.on{background:var(--lime)}
+</style>
+</head>
+<body>
+
+<div class="screen">
+  <div class="bar">
+    <span class="wordmark">Katy
+      <svg class="xm" viewBox="0 0 20 20" aria-hidden="true">
+        <rect x="1.4" y="1.4" width="17.2" height="17.2" rx="1" fill="none"
+              stroke="currentColor" stroke-width="2.6"/>
+        <path d="M6.2 6.2 L13.8 13.8 M13.8 6.2 L6.2 13.8" stroke="currentColor"
+              stroke-width="2.8" stroke-linecap="square"/>
+      </svg>
+      Golf League</span>
+    <span class="when" id="when">—</span>
+    <span class="clock" id="clock">—</span>
+  </div>
+
+  <div class="stage" id="stage">
+    <div class="panel on" id="p-bays"></div>
+    <div class="panel"    id="p-board"></div>
+    <div class="panel"    id="p-chart"></div>
+  </div>
+
+  <div class="ticker">
+    <span id="tick">Loading…</span>
+    <span class="dots" id="dots"></span>
+  </div>
+</div>
+
+<script type="module">
+import { supabase } from './assets/db.js';
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c =>
+  ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+
+const HOLD = 15000;   // how long each panel stays up
+const POLL = 30000;   // how often the data refreshes
+
+let teams = {}, standings = [], tonight = null, rounds = [], history = [];
+let panels = [], idx = 0;
+
+/* ------------------------------------------------------------
+   Clock
+------------------------------------------------------------ */
+function tick() {
+  const d = new Date();
+  $('clock').textContent = d.toLocaleTimeString([], { hour:'numeric', minute:'2-digit' });
+  $('when').textContent = d.toLocaleDateString([], { weekday:'long', day:'numeric', month:'long' })
+    .toUpperCase();
+}
+tick(); setInterval(tick, 20000);
+
+/* ------------------------------------------------------------
+   Data
+------------------------------------------------------------ */
+async function load() {
+  const [{ data: ts }, { data: st }, { data: ms }] = await Promise.all([
+    supabase.from('teams').select('id,slug,name,crest,accent'),
+    supabase.from('standings').select('*'),
+    supabase.from('matches').select('id,week,played_on,bay,home_team,away_team')
+      .order('played_on', { ascending: false })
+  ]);
+
+  teams = Object.fromEntries((ts||[]).map(t => [t.id, t]));
+  standings = st || [];
+
+  /* the most recent match day is "tonight" */
+  if (ms && ms.length) {
+    const day = ms[0].played_on;
+    tonight = { date: day, week: ms[0].week, matches: ms.filter(m => m.played_on === day) };
+    const ids = tonight.matches.map(m => m.id);
+    const { data: rs } = await supabase.from('rounds')
+      .select('id,match_id,team_id,status').in('match_id', ids);
+    rounds = rs || [];
+  }
+
+  const { data: hist } = await supabase.from('round_scores')
+    .select('team_id,week,total_points').eq('status','confirmed').order('week');
+  history = hist || [];
+
+  paint();
+}
+
+/* ------------------------------------------------------------
+   Panels
+------------------------------------------------------------ */
+function paint() {
+  paintBays();
+  paintBoard();
+  paintChart();
+
+  /* only show panels that have something on them */
+  panels = ['p-bays','p-board','p-chart'].filter(id => $(id).dataset.ready === '1');
+  $('dots').innerHTML = panels.map(() => '<i></i>').join('');
+  show(0);
+  paintTicker();
+}
+
+function paintBays() {
+  const el = $('p-bays');
+  if (!tonight) {
+    el.dataset.ready = '0';
+    el.innerHTML = '';
+    return;
+  }
+  el.dataset.ready = '1';
+
+  const statusOf = (matchId, teamId) => {
+    const r = rounds.find(x => x.match_id === matchId && x.team_id === teamId);
+    if (!r || r.status === 'draft') return ['st-none','NOT IN'];
+    if (r.status === 'submitted')   return ['st-wait','WAITING'];
+    if (r.status === 'disputed')    return ['st-wait','DISPUTED'];
+    return ['st-in','IN'];
+  };
+
+  el.innerHTML = `
+    <h2>Tonight <small>Week ${tonight.week} · ${new Date(tonight.date)
+      .toLocaleDateString([], { day:'numeric', month:'long' })}</small></h2>
+    <div class="bays">
+      ${tonight.matches.sort((a,b) => (a.bay||0) - (b.bay||0)).map(m => {
+        const list = [m.home_team, m.away_team].filter(Boolean);
+        const lead = teams[list[0]] || {};
+        return `
+        <div class="baycard" style="--c:${lead.accent || '#5F6F66'}">
+          <div class="no">BAY ${m.bay ?? '—'}</div>
+          ${list.map(id => {
+            const t = teams[id] || {};
+            const [cls, label] = statusOf(m.id, id);
+            return `
+            <div class="team">
+              <div class="chip" style="background:${t.accent}">${esc(t.crest||'')}</div>
+              <div class="nm">${esc(t.name||'')}</div>
+              <span class="state ${cls}">${label}</span>
+            </div>`;
+          }).join('')}
+        </div>`;
+      }).join('')}
+    </div>`;
+}
+
+function paintBoard() {
+  const el = $('p-board');
+  const played = standings.filter(s => s.played > 0);
+
+  if (!played.length) {
+    el.dataset.ready = '1';
+    el.innerHTML = `
+      <h2>Standings</h2>
+      <div class="notice">
+        <b>Season starts Tuesday</b>
+        <span>${standings.length} teams · 9-hole scramble · Stableford</span>
+      </div>`;
+    return;
+  }
+
+  el.dataset.ready = '1';
+  const top = played.slice(0, 10);
+  el.innerHTML = `
+    <h2>Standings <small>after ${Math.max(...played.map(p => p.played))} rounds</small></h2>
+    <div class="board">
+      ${top.map((t,i) => `
+        <div class="row${i === 0 ? ' lead' : ''}" style="--c:${t.accent}">
+          <span class="pos">${i+1}</span>
+          <span class="crest">${esc(t.crest)}</span>
+          <span class="nm">${esc(t.name)}</span>
+          <span class="ppr">${t.ppr ?? '—'} a round</span>
+          <span class="pts">${t.points}</span>
+        </div>`).join('')}
+    </div>`;
+}
+
+/* ------------------------------------------------------------
+   The graph: points as they've accumulated, week by week
+------------------------------------------------------------ */
+function paintChart() {
+  const el = $('p-chart');
+  const weeks = [...new Set(history.map(h => h.week))].sort((a,b) => a-b);
+
+  if (weeks.length < 2) { el.dataset.ready = '0'; el.innerHTML = ''; return; }
+  el.dataset.ready = '1';
+
+  /* running totals per team */
+  const lines = {};
+  for (const t of Object.values(teams)) lines[t.id] = { team: t, pts: [], total: 0 };
+  for (const w of weeks) {
+    for (const id of Object.keys(lines)) {
+      const row = history.find(h => h.team_id === id && h.week === w);
+      if (row) lines[id].total += row.total_points;
+      lines[id].pts.push(lines[id].total);
+    }
+  }
+
+  const series = Object.values(lines).filter(l => l.total > 0)
+    .sort((a,b) => b.total - a.total);
+  const max = Math.max(...series.map(s => s.total), 1);
+
+  const W = 1000, H = 460, L = 54, R = 190, T = 22, B = 42;
+  const x = i => L + (W - L - R) * (weeks.length === 1 ? 0 : i / (weeks.length - 1));
+  const y = v => T + (H - T - B) * (1 - v / max);
+
+  const grid = [0, .25, .5, .75, 1].map(f => {
+    const v = Math.round(max * f);
+    return `<line class="gl" x1="${L}" y1="${y(v)}" x2="${W-R}" y2="${y(v)}"/>
+            <text class="gt" x="${L-10}" y="${y(v)+4}" text-anchor="end">${v}</text>`;
+  }).join('');
+
+  const ticks = weeks.map((w,i) =>
+    `<text class="gt" x="${x(i)}" y="${H-16}" text-anchor="middle">WK ${w}</text>`).join('');
+
+  const paths = series.map((s,rank) => {
+    const d = s.pts.map((v,i) => `${i ? 'L' : 'M'} ${x(i).toFixed(1)} ${y(v).toFixed(1)}`).join(' ');
+    const lead = rank < 4;
+    return `<path class="series${lead ? '' : ' muted'}" d="${d}" stroke="${s.team.accent}"/>`;
+  }).join('');
+
+  const ends = series.slice(0, 4).map(s => {
+    const cy = y(s.total), cx = x(weeks.length - 1);
+    return `
+      <circle class="dot" cx="${cx}" cy="${cy}" r="5.5" fill="${s.team.accent}"/>
+      <text class="slab" x="${cx + 12}" y="${cy + 5}" fill="${s.team.accent}">
+        ${esc(s.team.name)}</text>`;
+  }).join('');
+
+  el.innerHTML = `
+    <h2>The season so far <small>points as they've stacked up</small></h2>
+    <div class="chart">
+      <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">
+        ${grid}${ticks}${paths}${ends}
+      </svg>
+    </div>`;
+}
+
+function paintTicker() {
+  const bits = [];
+
+  if (tonight) {
+    const inCount = rounds.filter(r => r.status === 'confirmed').length;
+    const expect  = tonight.matches.reduce((a,m) =>
+      a + [m.home_team, m.away_team].filter(Boolean).length, 0);
+    bits.push(`<b>${inCount}</b> of ${expect} cards signed off`);
+  }
+
+  const played = standings.filter(s => s.played > 0);
+  if (played.length) {
+    const best = played.reduce((a,b) => (b.best_round||0) > (a.best_round||0) ? b : a);
+    bits.push(`Best round <b>${best.best_round}</b> — ${best.name}`);
+    bits.push(`Leader <b>${played[0].name}</b> on ${played[0].points}`);
+  } else {
+    bits.push('First round Tuesday, 7:30');
+    bits.push('Scan the code in your bay to enter your card');
+  }
+
+  $('tick').innerHTML = bits.join(' &nbsp;·&nbsp; ');
+}
+
+/* ------------------------------------------------------------
+   Rotation
+------------------------------------------------------------ */
+function show(i) {
+  if (!panels.length) return;
+  idx = (i + panels.length) % panels.length;
+  ['p-bays','p-board','p-chart'].forEach(id =>
+    $(id).classList.toggle('on', id === panels[idx]));
+  [...$('dots').children].forEach((d,n) => d.classList.toggle('on', n === idx));
+}
+
+setInterval(() => show(idx + 1), HOLD);
+setInterval(load, POLL);
+load();
+
+/* arrow keys to step through by hand, for when someone does
+   want to look at a particular panel */
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight') show(idx + 1);
+  if (e.key === 'ArrowLeft')  show(idx - 1);
+  if (e.key === 'f') document.documentElement.requestFullscreen?.();
+});
+</script>
+</body>
+</html>
