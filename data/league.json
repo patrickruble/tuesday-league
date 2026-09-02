@@ -38,14 +38,6 @@
     {
       "label": "The week",
       "href": "week.html"
-    },
-    {
-      "label": "Clubhouse",
-      "href": "clubhouse.html"
-    },
-    {
-      "label": "Scrapbook",
-      "href": "scrapbook.html"
     }
   ],
   "typefaces": {
@@ -88,6 +80,14 @@
     "odd": "#C9A0DC"
   },
   "navMore": [
+    {
+      "label": "Clubhouse",
+      "href": "clubhouse.html"
+    },
+    {
+      "label": "Scrapbook",
+      "href": "scrapbook.html"
+    },
     {
       "label": "Records",
       "href": "records.html"
