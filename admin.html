@@ -178,7 +178,7 @@ async function load(week) {
 
   const ids = (matches||[]).map(m => m.id);
   const { data: rounds } = await supabase.from('rounds')
-    .select('id,match_id,team_id,status,submitted_at,dispute_note')
+    .select('id,match_id,team_id,status,submitted_at,dispute_note,attested_method,attested_name')
     .in('match_id', ids.length ? ids : ['00000000-0000-0000-0000-000000000000']);
 
   const { data: scores } = await supabase.from('round_scores')
@@ -214,8 +214,15 @@ async function load(week) {
         chase.push(`${t.name}'s card is disputed`);
         action = `<a class="act go" href="verify.html?round=${r.id}">Review</a>`;
       } else {
-        cls='s-in'; label='CONFIRMED'; nIn++;
-        action = `<button class="act" disabled>Done</button>`;
+        /* flag the weaker signature so it's visible rather than
+           buried in the data */
+        const inPerson = r.attested_method === 'in_person';
+        cls   = 's-in';
+        label = inPerson ? 'SIGNED IN PERSON' : 'CONFIRMED';
+        nIn++;
+        action = inPerson
+          ? `<a class="act" href="verify.html?round=${r.id}">Look</a>`
+          : `<button class="act" disabled>Done</button>`;
       }
 
       const when = r?.submitted_at

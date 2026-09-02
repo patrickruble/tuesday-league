@@ -127,6 +127,70 @@ button{font-family:inherit}
 .has .shot{display:flex}
 
 /* ============================================================
+   THE QR — the opponent scans it on their own phone, so the
+   confirmation is theirs rather than something typed on ours
+   ============================================================ */
+.qrwrap{background:var(--card);border:1px solid var(--rule);padding:22px 18px;
+  text-align:center;margin-bottom:18px}
+.qrwrap canvas,.qrwrap img{width:100%;max-width:250px;height:auto;display:block;
+  margin:0 auto 14px;image-rendering:pixelated}
+.qrwrap .cap{font-size:14px;line-height:1.5;color:var(--dim)}
+.qrwrap .cap b{color:var(--ink)}
+.qrfail{font-size:13px;color:var(--dim);line-height:1.5}
+.qrfail code{display:block;background:#F2F4F2;padding:10px;margin-top:9px;
+  font-family:var(--data);font-size:11px;word-break:break-all}
+
+.fallback{margin-top:20px;padding-top:18px;border-top:1px solid var(--rule)}
+.fallback > button{background:none;border:0;padding:0;cursor:pointer;
+  font-family:inherit;font-size:13px;color:var(--green);font-weight:600;
+  text-decoration:underline;text-underline-offset:3px}
+.fallback .body{display:none;margin-top:16px}
+.fallback.on .body{display:block}
+.warnbox{background:#FDF3E7;border-left:4px solid #B45309;padding:12px 14px;
+  font-size:13px;line-height:1.5;color:#7A4A10;margin-bottom:16px}
+
+/* ============================================================
+   HANDING OVER — the other team signs on your phone
+   ============================================================ */
+.hand{padding:20px 16px 40px}
+.hand .lede{font-size:15px;color:var(--dim);line-height:1.5;margin:0 0 18px}
+.hand .lede b{color:var(--ink)}
+.who-list{display:grid;gap:8px;margin-bottom:20px}
+.who-list button{
+  background:var(--card);border:1px solid var(--rule);padding:15px 16px;
+  text-align:left;cursor:pointer;font-size:16px;font-weight:500;color:var(--ink);
+}
+.who-list button[aria-pressed="true"]{
+  border-color:var(--green);background:#F3F9F1;
+  box-shadow:inset 0 0 0 1px var(--green);
+}
+.who-list button span{display:block;font-size:11px;color:var(--dim);
+  font-family:var(--data);letter-spacing:.06em;margin-top:2px}
+
+.sigwrap{display:none}
+.sigwrap.on{display:block}
+.sigbox{background:var(--card);border:1px solid var(--rule);position:relative;
+  touch-action:none}
+.sigbox canvas{display:block;width:100%;height:180px;cursor:crosshair}
+.sigline{position:absolute;left:20px;right:20px;bottom:38px;
+  border-bottom:1px solid var(--rule);pointer-events:none}
+.sighint{position:absolute;left:20px;bottom:16px;font-size:12px;color:var(--dim);
+  pointer-events:none}
+.sigbox.drawn .sighint{display:none}
+.sigacts{display:flex;gap:9px;margin-top:11px;align-items:center}
+.sigacts .clear{background:none;border:1px solid var(--rule);padding:9px 14px;
+  font-size:13px;cursor:pointer;color:var(--dim)}
+.sigacts .note{flex:1;font-size:12px;color:var(--dim);line-height:1.4}
+.sigacts .note.err{color:var(--warn)}
+.sigacts .sign{background:var(--green);color:#fff;border:0;padding:13px 20px;
+  font-size:15px;font-weight:600;cursor:pointer}
+.sigacts .sign:disabled{opacity:.4;cursor:default}
+
+.later{margin-top:22px;padding-top:18px;border-top:1px solid var(--rule);
+  font-size:13px;color:var(--dim);line-height:1.5}
+.later a{color:var(--green);font-weight:600}
+
+/* ============================================================
    STICKY BAR
    ============================================================ */
 .bar{position:fixed;left:0;right:0;bottom:0;background:var(--green-deep);color:#fff;
@@ -168,6 +232,7 @@ body.sent .holes,body.sent .panel,body.sent .bar{display:none}
 
 <script type="module">
 import { supabase, requireAuth, me } from './assets/db.js';
+import QRCode from 'https://cdn.jsdelivr.net/npm/qrcode@1.5.4/+esm';
 
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c =>
@@ -548,7 +613,10 @@ async function onPhoto(e) {
 
   if (!round?.id) await saveDraft();
 
-  const path = `${match.week}/${match.id}/${profile.team_id}/${Date.now()}.jpg`;
+  /* team id first, matching the storage policy and the other
+     buckets. Week and match stay in the path so a season can be
+     pulled out of the archive later. */
+  const path = `${profile.team_id}/w${match.week}/${match.id}/${Date.now()}.jpg`;
   const { error } = await supabase.storage.from('scorecards')
     .upload(path, blob, { upsert: true, contentType: 'image/jpeg' });
 
@@ -592,10 +660,224 @@ async function submit() {
 
   try { localStorage.removeItem(cacheKey()); } catch {}
 
-  done('Card submitted',
-    partner
-      ? `${roundPoints()} points. Hand your phone to ${partner.name} — they can sign it off right now, or do it later from their own.`
-      : `${roundPoints()} points. Chris will sign it off.`);
+  await handOver();
+}
+
+/* ------------------------------------------------------------
+   Hand the phone over
+   The other team picks their name and signs with a finger. It
+   isn't an authenticated confirmation — it's a named person
+   putting their mark next to the photo, which is what the paper
+   card was.
+------------------------------------------------------------ */
+let signer = null, sigDirty = false;
+
+async function handOver() {
+  const { data: signers } = await supabase.rpc('signers_for', { p_round: round.id });
+  const list = signers || [];
+
+  document.body.classList.add('sent');
+  window.scrollTo(0,0);
+
+  const url = new URL(`verify.html?round=${round.id}`, location.href).href;
+
+  $('app').innerHTML = `
+  <div class="top">
+    <div class="crumb">${roundPoints()} points · submitted</div>
+    <h1 style="font-size:26px;margin-top:10px">Get it signed</h1>
+    <p style="margin:11px 0 0;font-size:14px;color:rgba(255,255,255,.8);line-height:1.5">
+      ${partner
+        ? `Someone from <b style="color:#fff">${esc(partner.name)}</b> confirms the
+           numbers match the screen.`
+        : `Nobody else in your bay, so Chris confirms this one.`}
+    </p>
+  </div>
+
+  <div class="hand">
+    <div class="qrwrap">
+      <div id="qrslot"></div>
+      <p class="cap">
+        <b>Have them scan this with their phone.</b><br>
+        It opens the card on their own device, signed in as them.
+        One tap and it's done.
+      </p>
+    </div>
+
+    <div class="fallback" id="fallback">
+      <button type="button" id="showfb">They don't have their phone</button>
+      <div class="body">
+        <div class="warnbox">
+          A signature on your phone can't prove who made it, so it counts for less
+          than them confirming on their own. Chris can see which cards were signed
+          this way. Use the code above if there's any chance of it.
+        </div>
+        ${list.length ? `
+        <p class="lede">Who's signing?</p>
+        <div class="who-list" id="wholist">
+          ${list.map(p => `
+            <button type="button" data-n="${esc(p.name)}" aria-pressed="false">
+              ${esc(p.name)}<span>${p.role === 'commissioner' ? 'COMMISSIONER' : 'OPPONENT'}</span>
+            </button>`).join('')}
+        </div>
+
+        <div class="sigwrap" id="sigwrap">
+          <p class="lede" id="sigfor"></p>
+          <div class="sigbox" id="sigbox">
+            <canvas id="sig"></canvas>
+            <div class="sigline"></div>
+            <div class="sighint">Sign here</div>
+          </div>
+          <div class="sigacts">
+            <button type="button" class="clear" id="sigclear">Clear</button>
+            <span class="note" id="signote">Signing says the card matches the screen.</span>
+            <button type="button" class="sign" id="dosign" disabled>Sign</button>
+          </div>
+        </div>`
+        : `<p class="lede">Nobody's listed to sign yet.</p>`}
+      </div>
+    </div>
+
+    <div class="later">
+      No rush — the card stays submitted either way, and
+      ${partner ? esc(partner.name) + ' can confirm it' : 'Chris can confirm it'}
+      later from their own phone.
+      <a href="index.html">Back to the league</a>
+    </div>
+  </div>`;
+
+  paintQR(url);
+
+  $('showfb').addEventListener('click', () => {
+    $('fallback').classList.add('on');
+    $('showfb').style.display = 'none';
+    wireSignature();
+  });
+}
+
+async function paintQR(url) {
+  const slot = $('qrslot');
+  try {
+    const cv = document.createElement('canvas');
+    await QRCode.toCanvas(cv, url, {
+      width: 500, margin: 1,
+      color: { dark: '#10221A', light: '#FFFFFF' }
+    });
+    slot.appendChild(cv);
+  } catch {
+    /* offline or the CDN is unreachable — the link still works */
+    slot.innerHTML =
+      `<p class="qrfail">Couldn't draw the code. They can open this instead:
+       <code>${esc(url)}</code></p>`;
+  }
+}
+
+function wireSignature() {
+  const list = $('wholist');
+  if (!list) return;
+
+  list.querySelectorAll('button').forEach(b =>
+    b.addEventListener('click', () => {
+      signer = b.dataset.n;
+      list.querySelectorAll('button').forEach(x =>
+        x.setAttribute('aria-pressed', x === b));
+      $('sigfor').innerHTML = `<b>${esc(signer)}</b>, sign below.`;
+      $('sigwrap').classList.add('on');
+      $('sigwrap').scrollIntoView({ behavior:'smooth', block:'nearest' });
+      sizeCanvas();
+    }));
+
+  const cv = $('sig');
+  const ctx = cv.getContext('2d');
+  let drawing = false;
+
+  function sizeCanvas() {
+    const dpr = window.devicePixelRatio || 1;
+    const r = cv.getBoundingClientRect();
+    cv.width = r.width * dpr;
+    cv.height = r.height * dpr;
+    ctx.scale(dpr, dpr);
+    ctx.lineWidth = 2.4;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.strokeStyle = '#10221A';
+  }
+
+  const pos = e => {
+    const r = cv.getBoundingClientRect();
+    const p = e.touches ? e.touches[0] : e;
+    return { x: p.clientX - r.left, y: p.clientY - r.top };
+  };
+
+  const start = e => {
+    e.preventDefault();
+    drawing = true;
+    const { x, y } = pos(e);
+    ctx.beginPath(); ctx.moveTo(x, y);
+  };
+  const move = e => {
+    if (!drawing) return;
+    e.preventDefault();
+    const { x, y } = pos(e);
+    ctx.lineTo(x, y); ctx.stroke();
+    if (!sigDirty) {
+      sigDirty = true;
+      $('sigbox').classList.add('drawn');
+      $('dosign').disabled = false;
+    }
+  };
+  const end = () => { drawing = false; };
+
+  cv.addEventListener('pointerdown', start);
+  cv.addEventListener('pointermove', move);
+  window.addEventListener('pointerup', end);
+
+  $('sigclear').addEventListener('click', () => {
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    sigDirty = false;
+    $('sigbox').classList.remove('drawn');
+    $('dosign').disabled = true;
+  });
+
+  $('dosign').addEventListener('click', () => sign(cv));
+  window.addEventListener('resize', () => { if (signer) sizeCanvas(); });
+}
+
+async function sign(cv) {
+  const note = $('signote'), btn = $('dosign');
+  btn.disabled = true;
+  note.textContent = 'Saving…'; note.className = 'note';
+
+  const blob = await new Promise(r => cv.toBlob(r, 'image/png'));
+  const path = `${round.id}/${Date.now()}.png`;
+
+  const up = await supabase.storage.from('signatures')
+    .upload(path, blob, { contentType: 'image/png', upsert: true });
+
+  if (up.error) {
+    btn.disabled = false;
+    note.textContent = up.error.message; note.className = 'note err';
+    return;
+  }
+
+  const { error } = await supabase.rpc('attest_in_person', {
+    p_round: round.id, p_name: signer, p_signature: path
+  });
+
+  if (error) {
+    btn.disabled = false;
+    note.textContent = error.message; note.className = 'note err';
+    return;
+  }
+
+  $('app').innerHTML = `
+    <div class="state">
+      <div class="tick">✓</div>
+      <h2>Signed and done</h2>
+      <p>${esc(signer)} signed it. Your ${roundPoints()} points are on the
+         leaderboard. Nothing else to do tonight.</p>
+      <a href="index.html">Back to the league</a>
+    </div>`;
+  window.scrollTo(0,0);
 }
 
 function done(title, body) {
