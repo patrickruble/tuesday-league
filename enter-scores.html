@@ -3,23 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Enter Scores — X-Golf Tuesday League</title>
+<title>Enter your card — Katy Golf League</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#007041">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,100..125,400..800&family=Instrument+Sans:wght@400;500;600&family=Martian+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=Instrument+Sans:wght@400;500;600&family=Martian+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --green:#007041;
-  --green-deep:#00522F;
-  --lime:#B8EB7A;
-  --field:#DCE1DC;
-  --card:#FFFFFF;
-  --ink:#10221A;
-  --dim:#5F6F66;
-  --rule:#D2D8D2;
-  --accent:#C2410C;      /* your team */
-  --opp:#7A1F3D;         /* opponent */
-
+  --green:#007041;--green-deep:#00522F;--lime:#B8EB7A;
+  --field:#DCE1DC;--card:#FFFFFF;--ink:#10221A;--dim:#5F6F66;--rule:#D2D8D2;
+  --accent:#007041;--warn:#B91C1C;
   --display:'Archivo','Helvetica Neue',Arial,sans-serif;
   --body:'Instrument Sans',system-ui,sans-serif;
   --data:'Martian Mono','Courier New',monospace;
@@ -28,374 +23,595 @@
 html{-webkit-text-size-adjust:100%}
 body{
   margin:0;background:var(--field);color:var(--ink);
-  font-family:var(--body);font-size:15px;line-height:1.5;
+  font-family:var(--body);font-size:15px;line-height:1.45;
   -webkit-font-smoothing:antialiased;
-  padding-bottom:112px;      /* room for the sticky bar */
+  padding-bottom:130px;
+  -webkit-tap-highlight-color:transparent;
 }
 h1,h2{margin:0;font-family:var(--display);font-weight:800;line-height:1}
 button{font-family:inherit}
-:focus-visible{outline:2px solid var(--green);outline-offset:2px}
-.shell{max-width:520px;margin:0 auto}
+:focus-visible{outline:3px solid var(--lime);outline-offset:2px}
+.shell{max-width:560px;margin:0 auto}
 
 /* ============================================================
-   MATCH HEADER — bay, opponent, course. The three things you
-   check to confirm you're on the right card.
+   HEADER — bay first, because that's what you check
    ============================================================ */
-.top{background:var(--green);color:#fff;padding:16px 18px 18px}
-.crumb{
-  font-size:10px;letter-spacing:.15em;text-transform:uppercase;
-  color:var(--lime);font-weight:600;
-}
-.bayline{display:flex;align-items:center;gap:14px;margin-top:12px}
-.bay{
-  background:var(--lime);color:var(--green-deep);
-  font-family:var(--data);font-weight:600;
-  padding:7px 11px;line-height:1;text-align:center;flex:none;
-}
-.bay b{display:block;font-size:22px;letter-spacing:-.04em}
-.bay span{display:block;font-size:8px;letter-spacing:.16em;margin-top:3px}
-.course{font-size:13px;color:rgba(255,255,255,.8);line-height:1.4}
-.course b{display:block;color:#fff;font-size:15px;font-weight:600}
-
-.matchup{
-  display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;
-  margin-top:16px;padding-top:15px;border-top:1px solid rgba(255,255,255,.2);
-}
-.side{display:flex;align-items:center;gap:9px;min-width:0}
-.side.them{justify-content:flex-end;text-align:right}
-.tile{
-  width:34px;height:34px;flex:none;display:grid;place-items:center;
-  font-family:var(--display);font-weight:800;font-size:12px;color:#fff;
-}
-.side b{font-size:14px;line-height:1.2;font-weight:600}
-.side span{display:block;font-size:10px;color:rgba(255,255,255,.55)}
-.vs{font-family:var(--data);font-size:10px;color:rgba(255,255,255,.5)}
+.top{background:var(--green);color:#fff;padding:14px 16px 16px}
+.crumb{font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--lime);font-weight:600}
+.bayline{display:flex;align-items:center;gap:13px;margin-top:11px}
+.bay{background:var(--lime);color:var(--green-deep);font-family:var(--data);
+  font-weight:600;padding:7px 11px;line-height:1;text-align:center;flex:none}
+.bay b{display:block;font-size:23px;letter-spacing:-.04em}
+.bay span{display:block;font-size:7px;letter-spacing:.16em;margin-top:3px}
+.course{font-size:12px;color:rgba(255,255,255,.78);line-height:1.35;flex:1;min-width:0}
+.course b{display:block;color:#fff;font-size:16px;font-weight:600}
+.side{margin-top:13px;padding-top:12px;border-top:1px solid rgba(255,255,255,.2);
+  display:flex;align-items:center;gap:10px;font-size:12px;color:rgba(255,255,255,.72)}
+.side .tile{width:28px;height:28px;flex:none;display:grid;place-items:center;
+  font-family:var(--display);font-weight:800;font-size:10px;color:#fff}
+.side b{color:#fff}
 
 /* ============================================================
-   TEES
-   ============================================================ */
-.panel{background:var(--card);margin-top:1px;padding:16px 18px}
-.panel h2{
-  font-size:11px;letter-spacing:.15em;text-transform:uppercase;
-  color:var(--dim);margin-bottom:14px;
-}
-.teerow{display:flex;align-items:center;gap:10px;padding:7px 0}
-.teerow + .teerow{border-top:1px solid var(--rule)}
-.teerow .who{flex:1;font-size:14px;font-weight:500;min-width:0}
-.tees{display:flex;gap:5px;flex:none}
-.tee{
-  width:30px;height:30px;border:1px solid var(--rule);cursor:pointer;
-  padding:0;position:relative;border-radius:50%;
-}
-.tee[aria-pressed="true"]{box-shadow:0 0 0 2px var(--ink);border-color:var(--ink)}
-.tee.red{background:#C0392B}
-.tee.white{background:#F5F5F0}
-.tee.blue{background:#1B4F8A}
-.tee.black{background:#1A1A1A}
-
-/* ============================================================
-   HOLES
+   HOLES — one tap each
    ============================================================ */
 .holes{margin-top:1px}
-.hole{
-  background:var(--card);display:grid;
-  grid-template-columns:44px 1fr auto 46px;
-  gap:12px;align-items:center;padding:12px 18px;
-  border-bottom:1px solid var(--rule);
-}
-.hno{font-family:var(--data);font-size:11px;color:var(--dim);line-height:1.35}
-.hno b{display:block;font-size:19px;color:var(--ink);font-weight:600;letter-spacing:-.05em}
-.hmeta{font-size:11px;color:var(--dim);line-height:1.4}
-.hmeta .dot{
-  display:inline-block;width:6px;height:6px;border-radius:50%;
-  background:var(--accent);margin-left:5px;vertical-align:middle;
-}
-.step{display:flex;align-items:center;gap:0;flex:none}
-.step button{
-  width:40px;height:40px;border:1px solid var(--rule);background:var(--card);
-  font-size:19px;cursor:pointer;color:var(--ink);line-height:1;
-}
-.step button:active{background:var(--field)}
-.step button:disabled{opacity:.3;cursor:default}
-.step .val{
-  width:46px;height:40px;border-top:1px solid var(--rule);
-  border-bottom:1px solid var(--rule);
-  display:grid;place-items:center;
-  font-family:var(--data);font-size:17px;font-weight:600;
-}
-.step .val.empty{color:#C3CBC5}
-.pill{
-  font-family:var(--data);font-size:13px;font-weight:600;
-  height:30px;display:grid;place-items:center;color:var(--dim);
-  background:#F2F4F2;
-}
+.hole{background:var(--card);border-bottom:1px solid var(--rule);padding:11px 14px}
+.hrow{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.hno{font-family:var(--data);font-size:19px;font-weight:600;letter-spacing:-.05em;
+  min-width:26px}
+.hpar{font-family:var(--data);font-size:10px;color:var(--dim);letter-spacing:.06em}
+.stroke{display:inline-flex;align-items:center;gap:4px;font-family:var(--data);
+  font-size:9px;letter-spacing:.06em;color:var(--accent);
+  background:color-mix(in srgb,var(--accent) 12%,transparent);
+  padding:3px 6px;margin-left:2px}
+.stroke i{width:5px;height:5px;border-radius:50%;background:var(--accent);display:block}
+.pill{margin-left:auto;font-family:var(--data);font-size:13px;font-weight:600;
+  min-width:34px;height:26px;display:grid;place-items:center;background:#F2F4F2;color:var(--dim)}
 .pill.p1{background:#EDF3EA;color:var(--ink)}
 .pill.p2{background:#E4F2D6;color:var(--green)}
 .pill.p3{background:var(--accent);color:#fff}
-.pill.p0{background:#F2F4F2;color:#AAB4AD}
+.pill.p0{background:#F2F4F2;color:#B4BDB7}
+
+/* the number row — the whole point of the page */
+.nums{display:grid;grid-template-columns:repeat(6,1fr);gap:5px}
+.nums button{
+  height:52px;border:1px solid var(--rule);background:#FBFCFB;cursor:pointer;
+  font-family:var(--data);font-size:18px;font-weight:600;color:var(--ink);
+  padding:0;position:relative;
+}
+.nums button.par::after{
+  content:"";position:absolute;left:50%;bottom:6px;transform:translateX(-50%);
+  width:14px;height:2px;background:var(--rule);
+}
+.nums button[aria-pressed="true"]{
+  background:var(--green);border-color:var(--green);color:#fff;
+}
+.nums button[aria-pressed="true"].eag{background:var(--accent);border-color:var(--accent)}
+.nums button:active{transform:scale(.96)}
+
+/* ============================================================
+   DRIVES — who hit the one you used
+   ============================================================ */
+.panel{background:var(--card);margin-top:1px;padding:14px 16px}
+.panel h2{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);
+  margin-bottom:11px}
+.drive{display:flex;align-items:center;gap:11px;padding:8px 0}
+.drive + .drive{border-top:1px solid var(--rule)}
+.drive .who{flex:1;font-size:15px;font-weight:500;min-width:0}
+.drive .cnt{font-family:var(--data);font-size:17px;font-weight:600;min-width:22px;
+  text-align:center}
+.drive button{width:40px;height:40px;border:1px solid var(--rule);background:#FBFCFB;
+  font-size:19px;cursor:pointer;color:var(--ink);line-height:1;padding:0}
+.drive button:disabled{opacity:.3;cursor:default}
+.short{font-size:12px;color:var(--warn);margin-top:9px}
 
 /* ============================================================
    PHOTO
    ============================================================ */
-.photo{background:var(--card);margin-top:1px;padding:16px 18px}
-.drop{
-  border:1px dashed var(--rule);padding:22px;text-align:center;
-  cursor:pointer;display:block;
-}
-.drop:hover{border-color:var(--green);background:#F7FAF7}
-.drop .big{font-size:22px;color:var(--dim)}
-.drop b{display:block;font-size:14px;margin-top:6px}
+.drop{border:1px dashed var(--rule);padding:20px;text-align:center;cursor:pointer;
+  display:block;background:#FBFCFB}
+.drop:hover{border-color:var(--green)}
+.drop .big{font-size:21px;color:var(--dim)}
+.drop b{display:block;font-size:15px;margin-top:5px}
 .drop span{display:block;font-size:12px;color:var(--dim);margin-top:3px}
 .drop input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
-.shot{display:none;align-items:center;gap:13px}
-.shot img{width:64px;height:64px;object-fit:cover;flex:none;border:1px solid var(--rule)}
+.shot{display:none;align-items:center;gap:12px}
+.shot img{width:62px;height:62px;object-fit:cover;flex:none;border:1px solid var(--rule)}
 .shot .info{flex:1;min-width:0;font-size:13px}
 .shot .info b{display:block}
 .shot .info span{color:var(--dim);font-size:11px}
-.shot button{
-  background:none;border:1px solid var(--rule);padding:6px 11px;
-  font-size:12px;cursor:pointer;color:var(--dim);
-}
+.shot button{background:none;border:1px solid var(--rule);padding:7px 11px;
+  font-size:12px;cursor:pointer;color:var(--dim)}
 .has .drop{display:none}
 .has .shot{display:flex}
 
 /* ============================================================
-   STICKY SUBMIT
+   STICKY BAR
    ============================================================ */
-.bar{
-  position:fixed;left:0;right:0;bottom:0;background:var(--green-deep);
-  color:#fff;padding:12px 18px calc(12px + env(safe-area-inset-bottom));
-  box-shadow:0 -6px 20px rgba(0,0,0,.14);
-}
-.bar .shell{display:flex;align-items:center;gap:16px}
-.total{flex:none;font-family:var(--data);line-height:1.15}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--green-deep);color:#fff;
+  padding:11px 16px calc(11px + env(safe-area-inset-bottom));
+  box-shadow:0 -6px 20px rgba(0,0,0,.16);z-index:20}
+.bar .shell{display:flex;align-items:center;gap:14px}
+.total{flex:none;font-family:var(--data);line-height:1.1}
 .total b{display:block;font-size:26px;font-weight:600;letter-spacing:-.04em}
-.total span{font-size:9px;letter-spacing:.13em;color:rgba(255,255,255,.55)}
-.gap{flex:1;font-size:11px;color:rgba(255,255,255,.6);line-height:1.35}
-.send{
-  flex:none;background:var(--lime);color:var(--green-deep);border:0;
-  padding:13px 20px;font-size:14px;font-weight:600;cursor:pointer;
-}
-.send:disabled{background:rgba(255,255,255,.15);color:rgba(255,255,255,.4);cursor:default}
+.total span{font-size:8px;letter-spacing:.13em;color:rgba(255,255,255,.55)}
+.gap{flex:1;font-size:11px;color:rgba(255,255,255,.62);line-height:1.35}
+.gap.err{color:#FFB4B4}
+.send{flex:none;background:var(--lime);color:var(--green-deep);border:0;
+  padding:14px 20px;font-size:15px;font-weight:600;cursor:pointer}
+.send:disabled{background:rgba(255,255,255,.14);color:rgba(255,255,255,.4);cursor:default}
 
-/* sent state */
-.done{display:none;padding:40px 18px;text-align:center;background:var(--card);margin-top:1px}
-.done .tick{
-  width:52px;height:52px;border-radius:50%;background:var(--green);color:#fff;
-  display:grid;place-items:center;margin:0 auto 16px;font-size:24px;
-}
-.done h2{font-size:22px;margin-bottom:8px}
-.done p{margin:0;color:var(--dim);font-size:14px}
-.sent .holes,.sent .photo,.sent .panel,.sent .bar{display:none}
-.sent .done{display:block}
+.state{padding:44px 18px;text-align:center;background:var(--card);margin-top:1px}
+.state .tick{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;
+  margin:0 auto 15px;font-size:24px;color:#fff;background:var(--green)}
+.state h2{font-size:21px;margin-bottom:9px}
+.state p{margin:0 auto;color:var(--dim);font-size:14px;max-width:38ch;line-height:1.5}
+.state a{display:inline-block;margin-top:17px;background:var(--green);color:#fff;
+  text-decoration:none;padding:11px 18px;font-size:14px;font-weight:600}
+body.sent .holes,body.sent .panel,body.sent .bar{display:none}
+
+.pick{padding:20px 16px}
+.pick a{display:block;background:var(--card);border:1px solid var(--rule);
+  padding:14px 16px;margin-bottom:9px;text-decoration:none;color:inherit}
+.pick a:hover{border-color:var(--green)}
+.pick b{display:block;font-size:16px}
+.pick span{font-size:12px;color:var(--dim)}
 </style>
 </head>
 <body>
 
 <div class="shell">
+  <div id="loading" class="state"><p>Loading your card…</p></div>
+  <div id="app" hidden></div>
+</div>
 
+<script type="module">
+import { supabase, requireAuth, me } from './assets/db.js';
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c =>
+  ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+
+const params = new URLSearchParams(location.search);
+let profile, match, course, team, partner, round, roster = [];
+let gross = Array(9).fill(null);
+let drives = {};
+let photoPath = null;
+let scoring = { '-2':3, '-1':2, '0':1, '1':0 };
+let strokeFrom = 'hardest';
+let minDrives = 2;
+let saveTimer = null;
+
+/* ------------------------------------------------------------
+   Boot
+------------------------------------------------------------ */
+(async () => {
+  const session = await requireAuth();
+  if (!session) return;
+
+  profile = await me();
+  if (!profile)          return fail('Could not load your profile.');
+  if (!profile.team_id)  return fail('You\u2019re not on a team yet.',
+                                     '<a href="login.html">Claim your spot</a>');
+
+  const { data: cfg } = await supabase.from('league_settings').select('*').maybeSingle();
+  if (cfg) {
+    scoring = cfg.scoring || scoring;
+    strokeFrom = cfg.stroke_from || 'hardest';
+    minDrives = cfg.min_drives_per_player ?? 2;
+  }
+
+  const matchId = params.get('match');
+  if (!matchId) return pickMatch();
+
+  await loadMatch(matchId);
+})();
+
+function fail(msg, extra = '') {
+  $('loading').innerHTML =
+    `<div class="tick" style="background:#B91C1C">!</div>
+     <h2>Can't do that</h2><p>${esc(msg)}</p>${extra}`;
+}
+
+/* If the QR didn't carry a match, offer the ones this team can enter. */
+async function pickMatch() {
+  const { data } = await supabase
+    .from('matches')
+    .select('id,week,played_on,bay,home_team,away_team,courses(name,nine)')
+    .or(`home_team.eq.${profile.team_id},away_team.eq.${profile.team_id}`)
+    .order('played_on', { ascending: false })
+    .limit(6);
+
+  if (!data || !data.length) {
+    return fail('No rounds scheduled for your team yet.',
+                '<a href="index.html">Back to the league</a>');
+  }
+
+  $('loading').hidden = true;
+  $('app').hidden = false;
+  $('app').innerHTML = `
+    <div class="top"><div class="crumb">${esc(profile.team_name)}</div>
+      <h1 style="font-size:24px;margin-top:10px">Which round?</h1></div>
+    <div class="pick">${data.map(m => `
+      <a href="?match=${m.id}">
+        <b>Week ${m.week}${m.bay ? ' · Bay ' + m.bay : ''}</b>
+        <span>${new Date(m.played_on).toLocaleDateString([], {weekday:'long',day:'numeric',month:'long'})}
+          · ${esc(m.courses?.name || '')} ${esc(m.courses?.nine || '')}</span>
+      </a>`).join('')}
+    </div>`;
+}
+
+async function loadMatch(id) {
+  const [{ data: m, error }, { data: mates }] = await Promise.all([
+    supabase.from('matches')
+      .select('*,courses(*)')
+      .eq('id', id).maybeSingle(),
+    supabase.from('profiles')
+      .select('id,full_name').eq('team_id', profile.team_id)
+  ]);
+
+  if (error || !m) return fail('That round doesn\u2019t exist.');
+  if (![m.home_team, m.away_team].includes(profile.team_id))
+    return fail('Your team isn\u2019t in that bay.');
+
+  match  = m;
+  course = m.courses;
+  roster = mates || [];
+
+  const otherId = m.home_team === profile.team_id ? m.away_team : m.home_team;
+
+  const [{ data: t }, { data: p }, { data: r }] = await Promise.all([
+    supabase.from('teams').select('*').eq('id', profile.team_id).single(),
+    otherId ? supabase.from('teams').select('name,crest,accent').eq('id', otherId).maybeSingle()
+            : Promise.resolve({ data:null }),
+    supabase.from('rounds').select('*').eq('match_id', id).eq('team_id', profile.team_id).maybeSingle()
+  ]);
+
+  team = t; partner = p; round = r;
+
+  if (round?.status === 'confirmed')
+    return done('Already signed off',
+      `Your ${roundPoints()} points are on the leaderboard. Nothing else to do.`);
+  if (round?.status === 'submitted')
+    return done('Already in',
+      partner ? `Waiting on ${partner.name} to sign it off.` : 'Waiting on sign-off.');
+
+  /* pick up wherever we left off: the draft in the database,
+     or whatever's cached locally if the phone lost signal */
+  if (round?.gross) gross = round.gross.slice();
+  if (round?.drives_used) drives = round.drives_used;
+  const cached = localStorage.getItem(cacheKey());
+  if (cached && !round?.gross) {
+    try {
+      const c = JSON.parse(cached);
+      if (c.gross) gross = c.gross;
+      if (c.drives) drives = c.drives;
+    } catch {}
+  }
+  roster.forEach(p => { drives[p.id] ??= 0; });
+
+  render();
+}
+
+const cacheKey = () => `kgl-card-${match.id}-${profile.team_id}`;
+
+/* ------------------------------------------------------------
+   Scoring, mirroring the database function
+------------------------------------------------------------ */
+function strokesOn(i) {
+  const h = team.handicap || 0;
+  if (!h) return 0;
+  const si = course.stroke_index[i];
+  const idx = strokeFrom === 'easiest' ? 10 - si : si;
+  const n = Math.floor(Math.abs(h)/9) + (idx <= Math.abs(h) % 9 ? 1 : 0);
+  return Math.sign(h) * n;
+}
+
+function pointsFor(i) {
+  if (gross[i] == null) return null;
+  let diff = (gross[i] + strokesOn(i)) - course.pars[i];
+  const keys = Object.keys(scoring).map(Number).sort((a,b) => a-b);
+  diff = Math.max(keys[0], Math.min(keys[keys.length-1], diff));
+  return scoring[String(diff)];
+}
+
+const roundPoints = () =>
+  gross.reduce((a,g,i) => a + (g == null ? 0 : pointsFor(i)), 0);
+
+/* ------------------------------------------------------------
+   Render
+------------------------------------------------------------ */
+function render() {
+  document.documentElement.style.setProperty('--accent', team.accent);
+
+  const holes = course.pars.map((par,i) => {
+    const st = strokesOn(i);
+    /* six numbers, centred on par: eagle through triple */
+    const opts = [];
+    for (let d = -2; d <= 3; d++) opts.push(par + d);
+    return `
+    <div class="hole" data-h="${i}">
+      <div class="hrow">
+        <span class="hno">${i+1}</span>
+        <span class="hpar">PAR ${par}</span>
+        ${st ? `<span class="stroke"><i></i>${st > 0 ? '+' : ''}${st}</span>` : ''}
+        <span class="pill" id="p${i}">–</span>
+      </div>
+      <div class="nums" role="group" aria-label="Score for hole ${i+1}">
+        ${opts.map(v => `
+          <button type="button" data-v="${v}"
+            class="${v === par ? 'par' : ''}${v <= par-2 ? ' eag' : ''}"
+            aria-pressed="false" aria-label="${v}">${v > 0 ? v : ''}</button>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+
+  $('loading').hidden = true;
+  $('app').hidden = false;
+  $('app').innerHTML = `
   <div class="top">
-    <div class="crumb">Week 11 · Tue 01 Sep</div>
+    <div class="crumb">Week ${match.week} · ${new Date(match.played_on)
+      .toLocaleDateString([], {weekday:'short',day:'numeric',month:'short'})}</div>
     <div class="bayline">
-      <div class="bay"><b>4</b><span>BAY</span></div>
+      ${match.bay ? `<div class="bay"><b>${match.bay}</b><span>BAY</span></div>` : ''}
       <div class="course">
-        <b>Pebble Beach</b>
-        Front 9 · Par 36 · 7:30 PM
+        <b>${esc(course.name)}</b>
+        ${esc(course.nine)} 9 · par ${course.pars.reduce((a,b)=>a+b,0)}${
+          team.handicap ? ` · your handicap ${team.handicap > 0 ? '+' : ''}${team.handicap}` : ''}
       </div>
     </div>
-    <div class="matchup">
-      <div class="side">
-        <div class="tile" style="background:var(--accent)">SC</div>
-        <div><b>Static Cling</b><span>Your team · HCP 4</span></div>
-      </div>
-      <div class="vs">VS</div>
-      <div class="side them">
-        <div><b>Hot Bench</b><span>HCP 6</span></div>
-        <div class="tile" style="background:var(--opp)">HB</div>
-      </div>
+    <div class="side">
+      <div class="tile" style="background:${team.accent}">${esc(team.crest)}</div>
+      <span><b>${esc(team.name)}</b> — your card</span>
+      ${partner ? `<span style="margin-left:auto;text-align:right">
+        signed off by <b>${esc(partner.name)}</b></span>` : ''}
     </div>
   </div>
 
-  <div class="panel">
-    <h2>Tees played</h2>
-    <div class="teerow">
-      <span class="who">Rita Okonkwo</span>
-      <div class="tees" role="group" aria-label="Tee for Rita Okonkwo">
-        <button class="tee red"   aria-pressed="false" aria-label="Red"></button>
-        <button class="tee white" aria-pressed="false" aria-label="White"></button>
-        <button class="tee blue"  aria-pressed="true"  aria-label="Blue"></button>
-        <button class="tee black" aria-pressed="false" aria-label="Black"></button>
-      </div>
-    </div>
-    <div class="teerow">
-      <span class="who">Dev Varma</span>
-      <div class="tees" role="group" aria-label="Tee for Dev Varma">
-        <button class="tee red"   aria-pressed="false" aria-label="Red"></button>
-        <button class="tee white" aria-pressed="false" aria-label="White"></button>
-        <button class="tee blue"  aria-pressed="false" aria-label="Blue"></button>
-        <button class="tee black" aria-pressed="true"  aria-label="Black"></button>
-      </div>
-    </div>
-    <div class="teerow">
-      <span class="who">Marta Bell</span>
-      <div class="tees" role="group" aria-label="Tee for Marta Bell">
-        <button class="tee red"   aria-pressed="false" aria-label="Red"></button>
-        <button class="tee white" aria-pressed="true"  aria-label="White"></button>
-        <button class="tee blue"  aria-pressed="false" aria-label="Blue"></button>
-        <button class="tee black" aria-pressed="false" aria-label="Black"></button>
-      </div>
-    </div>
+  <div class="holes" id="holes">${holes}</div>
+
+  <div class="panel" id="drivepanel">
+    <h2>Whose drive did you use?</h2>
+    ${roster.length ? roster.map(p => `
+      <div class="drive" data-p="${p.id}">
+        <span class="who">${esc(p.full_name)}</span>
+        <button type="button" data-d="-1" aria-label="One fewer">−</button>
+        <span class="cnt">${drives[p.id] || 0}</span>
+        <button type="button" data-d="1" aria-label="One more">+</button>
+      </div>`).join('')
+      : '<p style="font-size:13px;color:var(--dim);margin:0">Nobody on your team has signed up yet.</p>'}
+    <div class="short" id="short"></div>
   </div>
 
-  <div class="holes" id="holes"><!-- built by script --></div>
-
-  <div class="photo" id="photo">
-    <h2 style="font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);margin-bottom:14px">
-      Scorecard photo
-    </h2>
+  <div class="panel" id="photo">
+    <h2>Photo of the screen</h2>
     <label class="drop">
       <span class="big">▣</span>
-      <b>Take a photo of the screen</b>
-      <span>Required — Hot Bench check this against your numbers</span>
+      <b>Take a photo</b>
+      <span>Required. ${partner ? esc(partner.name) + ' checks it against your numbers.' : ''}</span>
       <input type="file" id="shot" accept="image/*" capture="environment">
     </label>
     <div class="shot">
-      <img id="thumb" alt="Scorecard photo preview">
-      <div class="info"><b>Scorecard attached</b><span id="fname"></span></div>
+      <img id="thumb" alt="Scorecard photo">
+      <div class="info"><b>Attached</b><span id="fname"></span></div>
       <button type="button" id="redo">Retake</button>
     </div>
   </div>
 
-  <div class="done">
-    <div class="tick">✓</div>
-    <h2>Card submitted</h2>
-    <p>Hot Bench have been asked to sign off. You'll get a notification once
-       they do, and the result posts to the leaderboard then.</p>
-  </div>
+  <div class="bar">
+    <div class="shell">
+      <div class="total"><b id="pts">—</b><span>POINTS</span></div>
+      <div class="gap" id="gap">Tap a number on each hole</div>
+      <button class="send" id="send" disabled>Submit</button>
+    </div>
+  </div>`;
 
-</div>
-
-<div class="bar" id="bar">
-  <div class="shell">
-    <div class="total"><b id="pts">—</b><span>POINTS</span></div>
-    <div class="gap" id="gap">Enter all 9 holes</div>
-    <button class="send" id="send" disabled>Submit</button>
-  </div>
-</div>
-
-<script>
-/* ------------------------------------------------------------
-   Course + handicap would come from the match record.
-   Points math mirrors stableford_points() in the database —
-   the server recomputes on save, this is just live feedback.
------------------------------------------------------------- */
-var PARS   = [4,4,3,5,4,4,3,4,5];
-var SI     = [4,2,8,1,6,3,9,5,7];
-var HCP    = 4;
-var SCORING= {"-2":3,"-1":2,"0":1,"1":0};   // from league_settings
-
-var gross = [null,null,null,null,null,null,null,null,null];
-
-function strokesOn(i){
-  return Math.floor(HCP/9) + (SI[i] <= (HCP%9) ? 1 : 0);
-}
-function pointsFor(i){
-  if(gross[i]==null) return null;
-  var diff = (gross[i]-strokesOn(i)) - PARS[i];
-  var keys = Object.keys(SCORING).map(Number).sort(function(a,b){return a-b});
-  diff = Math.max(keys[0], Math.min(keys[keys.length-1], diff));
-  return SCORING[String(diff)];
+  wire();
+  gross.forEach((_,i) => paint(i));
+  tally();
 }
 
-var holes = document.getElementById('holes');
-PARS.forEach(function(par,i){
-  var st = strokesOn(i);
-  var row = document.createElement('div');
-  row.className = 'hole';
-  row.innerHTML =
-    '<div class="hno"><b>'+(i+1)+'</b>PAR '+par+'</div>'+
-    '<div class="hmeta">S.I. '+SI[i]+
-      (st ? '<span class="dot" title="Handicap stroke"></span>' : '')+
-      (st ? '<br>'+st+' stroke' : '')+'</div>'+
-    '<div class="step">'+
-      '<button type="button" data-d="-1" aria-label="Lower score hole '+(i+1)+'">−</button>'+
-      '<div class="val empty" id="v'+i+'">–</div>'+
-      '<button type="button" data-d="1" aria-label="Raise score hole '+(i+1)+'">+</button>'+
-    '</div>'+
-    '<div class="pill" id="p'+i+'">–</div>';
-  row.querySelectorAll('.step button').forEach(function(b){
-    b.addEventListener('click', function(){
-      var d = parseInt(b.dataset.d,10);
-      if(gross[i]==null){ gross[i] = par; }        // first tap starts at par
-      else { gross[i] = Math.max(1, Math.min(12, gross[i]+d)); }
-      paint(i); tally();
-    });
+function wire() {
+  $('holes').querySelectorAll('.hole').forEach(row => {
+    const i = +row.dataset.h;
+    row.querySelectorAll('.nums button').forEach(b =>
+      b.addEventListener('click', () => {
+        const v = +b.dataset.v;
+        gross[i] = gross[i] === v ? null : v;   // tap again to clear
+        paint(i); tally(); queueSave();
+        if (gross[i] != null) nudgeNext(i);
+      }));
   });
-  holes.appendChild(row);
-});
 
-function paint(i){
-  var v = document.getElementById('v'+i);
-  var p = document.getElementById('p'+i);
-  if(gross[i]==null){
-    v.textContent='–'; v.className='val empty';
-    p.textContent='–'; p.className='pill';
+  document.querySelectorAll('.drive').forEach(d => {
+    const id = d.dataset.p;
+    d.querySelectorAll('button').forEach(b =>
+      b.addEventListener('click', () => {
+        drives[id] = Math.max(0, Math.min(9, (drives[id] || 0) + (+b.dataset.d)));
+        d.querySelector('.cnt').textContent = drives[id];
+        tally(); queueSave();
+      }));
+  });
+
+  $('shot').addEventListener('change', onPhoto);
+  $('redo').addEventListener('click', () => {
+    $('photo').classList.remove('has');
+    $('shot').value = ''; photoPath = null; tally();
+  });
+  $('send').addEventListener('click', submit);
+}
+
+/* scroll the next unfilled hole into view — keeps a thumb moving
+   down the card without hunting */
+function nudgeNext(i) {
+  const next = gross.findIndex((g,j) => j > i && g == null);
+  if (next < 0) return;
+  const el = $('holes').querySelector(`[data-h="${next}"]`);
+  if (el) el.scrollIntoView({ behavior:'smooth', block:'center' });
+}
+
+function paint(i) {
+  const row = $('holes').querySelector(`[data-h="${i}"]`);
+  if (!row) return;
+  row.querySelectorAll('.nums button').forEach(b =>
+    b.setAttribute('aria-pressed', +b.dataset.v === gross[i]));
+  const pill = $('p'+i);
+  const pt = pointsFor(i);
+  pill.textContent = pt == null ? '–' : pt;
+  pill.className = 'pill' + (pt == null ? '' : ' p'+pt);
+}
+
+function tally() {
+  const done = gross.filter(g => g != null).length;
+  $('pts').textContent = done ? roundPoints() : '—';
+
+  const hasPhoto = $('photo').classList.contains('has');
+  const totalDrives = Object.values(drives).reduce((a,b) => a+b, 0);
+  const shortOf = roster.filter(p => (drives[p.id]||0) < minDrives);
+
+  $('short').textContent = roster.length && shortOf.length && totalDrives
+    ? `${shortOf.map(p => p.full_name.split(' ')[0]).join(' and ')} ` +
+      `${shortOf.length === 1 ? 'is' : 'are'} under the ${minDrives}-drive minimum.`
+    : '';
+
+  const ready = done === 9 && hasPhoto;
+  $('send').disabled = !ready;
+  $('gap').className = 'gap';
+  $('gap').textContent =
+    done < 9    ? `${9-done} hole${done===8?'':'s'} to go` :
+    !hasPhoto   ? 'Photo needed before you can submit' :
+    partner     ? `Goes to ${partner.name} to sign off` :
+                  'Goes to Chris to sign off';
+}
+
+/* ------------------------------------------------------------
+   Saving — locally on every tap, to the database a moment later
+------------------------------------------------------------ */
+function queueSave() {
+  try {
+    localStorage.setItem(cacheKey(), JSON.stringify({ gross, drives }));
+  } catch {}
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveDraft, 1500);
+}
+
+async function saveDraft() {
+  const row = {
+    match_id: match.id,
+    team_id: profile.team_id,
+    gross: gross.some(g => g == null) ? null : gross,
+    drives_used: drives,
+    status: 'draft'
+  };
+  if (round?.id) {
+    await supabase.from('rounds').update(row).eq('id', round.id);
+  } else {
+    const { data } = await supabase.from('rounds').insert(row).select().maybeSingle();
+    if (data) round = data;
+  }
+}
+
+/* ------------------------------------------------------------
+   Photo
+------------------------------------------------------------ */
+function shrink(file, max = 1400) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      const scale = Math.min(1, max / Math.max(img.width, img.height));
+      const c = document.createElement('canvas');
+      c.width  = Math.round(img.width  * scale);
+      c.height = Math.round(img.height * scale);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      c.toBlob(b => b ? resolve(b) : reject(new Error('Could not read that photo')),
+               'image/jpeg', 0.82);
+    };
+    img.onerror = () => reject(new Error('Could not read that photo'));
+    img.src = URL.createObjectURL(file);
+  });
+}
+
+async function onPhoto(e) {
+  const f = e.target.files[0];
+  if (!f) return;
+  $('gap').textContent = 'Shrinking the photo…';
+
+  let blob;
+  try { blob = await shrink(f); }
+  catch (err) { $('gap').textContent = err.message; $('gap').className = 'gap err'; return; }
+
+  $('thumb').src = URL.createObjectURL(blob);
+  $('fname').textContent = Math.round(blob.size/1024) + ' KB';
+  $('photo').classList.add('has');
+  $('gap').textContent = 'Uploading…';
+
+  if (!round?.id) await saveDraft();
+
+  const path = `${match.week}/${match.id}/${profile.team_id}/${Date.now()}.jpg`;
+  const { error } = await supabase.storage.from('scorecards')
+    .upload(path, blob, { upsert: true, contentType: 'image/jpeg' });
+
+  if (error) {
+    $('gap').textContent = 'Upload failed: ' + error.message;
+    $('gap').className = 'gap err';
+    $('photo').classList.remove('has');
     return;
   }
-  v.textContent = gross[i]; v.className='val';
-  var pt = pointsFor(i);
-  p.textContent = pt;
-  p.className = 'pill p'+pt;
-}
 
-function tally(){
-  var done = gross.filter(function(g){return g!=null}).length;
-  var sum  = gross.reduce(function(a,g,i){ return a + (g==null?0:pointsFor(i)); },0);
-  document.getElementById('pts').textContent = done ? sum : '—';
-
-  var hasPhoto = document.getElementById('photo').classList.contains('has');
-  var ready = done===9 && hasPhoto;
-  document.getElementById('send').disabled = !ready;
-  document.getElementById('gap').textContent =
-    done<9   ? (9-done)+' hole'+(done===8?'':'s')+' left' :
-    !hasPhoto? 'Photo required' :
-               'Goes to Hot Bench to sign off';
-}
-
-/* photo */
-var photo = document.getElementById('photo');
-document.getElementById('shot').addEventListener('change', function(e){
-  var f = e.target.files[0];
-  if(!f) return;
-  document.getElementById('thumb').src = URL.createObjectURL(f);
-  document.getElementById('fname').textContent =
-    Math.round(f.size/1024) + ' KB';
-  photo.classList.add('has');
-  tally();
-});
-document.getElementById('redo').addEventListener('click', function(){
-  photo.classList.remove('has');
-  document.getElementById('shot').value='';
-  tally();
-});
-
-/* tees */
-document.querySelectorAll('.tees').forEach(function(g){
-  g.querySelectorAll('.tee').forEach(function(b){
-    b.addEventListener('click', function(){
-      g.querySelectorAll('.tee').forEach(function(x){ x.setAttribute('aria-pressed','false') });
-      b.setAttribute('aria-pressed','true');
-    });
+  await supabase.from('round_photos').insert({
+    round_id: round.id, storage_path: path,
+    uploaded_by: profile.id, bytes: blob.size
   });
-});
 
-/* submit */
-document.getElementById('send').addEventListener('click', function(){
+  photoPath = path;
+  tally();
+}
+
+/* ------------------------------------------------------------
+   Submit
+------------------------------------------------------------ */
+async function submit() {
+  $('send').disabled = true;
+  $('gap').textContent = 'Sending…';
+  $('gap').className = 'gap';
+
+  clearTimeout(saveTimer);
+  await saveDraft();
+
+  const { error } = await supabase.from('rounds')
+    .update({ gross, drives_used: drives, status: 'submitted' })
+    .eq('id', round.id);
+
+  if (error) {
+    $('send').disabled = false;
+    $('gap').textContent = error.message;
+    $('gap').className = 'gap err';
+    return;
+  }
+
+  try { localStorage.removeItem(cacheKey()); } catch {}
+
+  done('Card submitted',
+    partner
+      ? `${roundPoints()} points. Hand your phone to ${partner.name} — they can sign it off right now, or do it later from their own.`
+      : `${roundPoints()} points. Chris will sign it off.`);
+}
+
+function done(title, body) {
   document.body.classList.add('sent');
+  $('loading').hidden = true;
+  $('app').hidden = false;
+  $('app').innerHTML = `
+    <div class="state">
+      <div class="tick">✓</div>
+      <h2>${esc(title)}</h2><p>${esc(body)}</p>
+      ${round?.id && partner
+        ? `<a href="verify.html?round=${round.id}">Sign it off now</a>`
+        : `<a href="index.html">Back to the league</a>`}
+    </div>`;
   window.scrollTo(0,0);
-});
-
-tally();
+}
 </script>
 </body>
 </html>
