@@ -834,6 +834,34 @@ try {
 /* The three side contests are what a scramble produces for an
    individual, so they stay on the page whether or not anyone
    has won one yet. */
+const SLOT_LABEL = {
+  driver:'Driver', wood:'Fairway wood', hybrid:'Hybrid', irons:'Irons',
+  wedge:'Wedge', putter:'Putter', ball:'Ball', glove:'Glove',
+  shoes:'Shoes', bag:'Bag', other:'Also'
+};
+
+/* What someone says is in their bag. Nobody checks. */
+function inTheBag(p) {
+  const items = p.bag || [];
+  if (!items.length) return '';
+
+  return `
+  <section>
+    <div class="head"><h2>In the bag</h2>
+      <span class="note">${items.length} thing${items.length === 1 ? '' : 's'}</span></div>
+    <div class="baglist">
+      ${items.map(i => `
+        <div class="bagitem">
+          <span class="slot">${esc(SLOT_LABEL[i.slot] || i.slot)}</span>
+          <span class="what">
+            <b>${esc([i.brand, i.model].filter(Boolean).join(' '))}</b>
+            ${i.detail ? `<span>${esc(i.detail)}</span>` : ''}
+          </span>
+        </div>`).join('')}
+    </div>
+  </section>`;
+}
+
 function seasonBlock(p) {
   const w = p.wins || {};
   const items = [
@@ -864,24 +892,6 @@ function buildPlayerPage(p) {
         <div><b>${esc(m.name)}</b><span>${m.hcp ? 'HCP ' + m.hcp : 'index TBC'}</span></div>
       </a>`).join('');
 
-  const kit = bags[p.slug] || [];
-  const bagBlock = kit.length ? `
-  <section>
-    <div class="head"><h2>What's in the bag</h2>
-      <span class="note">${kit.filter(i => i.forSale).length ? 'Something here is for sale' : ''}</span></div>
-    <div class="bag">${kit.map(i => `
-      <div class="item${i.forSale ? ' selling' : ''}">
-        <div class="cat">${esc(i.category)}</div>
-        <div class="what">
-          <b>${esc([i.brand, i.model].filter(Boolean).join(' '))}</b>
-          ${i.spec ? `<span>${esc(i.spec)}</span>` : ''}
-          ${i.note ? `<p>${esc(i.note)}</p>` : ''}
-        </div>
-        ${i.forSale ? `<div class="tag">FOR SALE${i.asking ? ` · $${i.asking}` : ''}</div>` : ''}
-      </div>`).join('')}
-    </div>
-  </section>` : '';
-
   return layout({
     title:p.name, current:'teams.html', depth:1,
     head:`<style>:root{--accent:${t.accent}}</style>`,
@@ -904,7 +914,7 @@ ${p.quote ? `<div class="quotebar"><div class="inner"><span class="lbl">Says</sp
 
 <div class="wrap">
   ${seasonBlock(p)}
-${bagBlock}
+  ${inTheBag(p)}
   <section>
     <div class="head"><h2>Teammates</h2></div>
     <div class="teammates">${mates}

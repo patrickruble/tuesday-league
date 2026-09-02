@@ -353,6 +353,16 @@ input[disabled],textarea[disabled]{opacity:.55;cursor:not-allowed}
     </fieldset>
 
     <fieldset>
+      <legend>What's in the bag</legend>
+      <div class="hint" style="margin-bottom:12px">
+        Shows on your player page. Nobody checks, so feel free to claim the driver
+        you keep meaning to buy.
+      </div>
+      <div id="bagrows"></div>
+      <button type="button" class="addbag" id="addbag">Add something</button>
+    </fieldset>
+
+    <fieldset>
       <legend>Roster quotes</legend>
       <div id="roster"></div>
       <div class="hint">You can only change your own.</div>
@@ -430,6 +440,11 @@ const draft = {};
 
   draft.default_tee = profile.default_tee || 'blue';
   paintTee();
+
+  const { data: bagData } = await supabase.from('bag_items')
+    .select('*').eq('profile_id', profile.id).order('position');
+  bag = bagData || [];
+  paintBag();
 
   if (profile.can_animate) {
     $('avatarfile').accept = 'image/png,image/jpeg,image/webp,image/gif';
@@ -839,6 +854,104 @@ $('bgmode').addEventListener('change', e => {
   touch(); applyLook();
 });
 
+/* ---------- what's in the bag ---------- */
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c =>
+  ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+
+const SLOTS = [
+  ['driver','Driver'], ['wood','Fairway wood'], ['hybrid','Hybrid'],
+  ['irons','Irons'],   ['wedge','Wedge'],       ['putter','Putter'],
+  ['ball','Ball'],     ['glove','Glove'],       ['shoes','Shoes'],
+  ['bag','Bag'],       ['other','Something else']
+];
+
+let bag = [];
+
+function bagRow(item = {}) {
+  const div = document.createElement('div');
+  div.className = 'bagrow';
+  div.dataset.id = item.id || '';
+  div.innerHTML = `
+    <select aria-label="What it is">
+      ${SLOTS.map(([v,l]) =>
+        `<option value="${v}"${item.slot === v ? ' selected' : ''}>${l}</option>`).join('')}
+    </select>
+    <input placeholder="Make" value="${esc(item.brand || '')}" aria-label="Make">
+    <input placeholder="Model" value="${esc(item.model || '')}" aria-label="Model">
+    <input placeholder="Loft, shaft" value="${esc(item.detail || '')}" aria-label="Detail">
+    <button type="button" class="drop3" aria-label="Remove">×</button>`;
+
+  div.querySelectorAll('select,input').forEach(el =>
+    el.addEventListener('input', touch));
+  div.querySelector('.drop3').addEventListener('click', () => {
+    div.remove(); touch(); bagEmptyNote();
+  });
+  return div;
+}
+
+function paintBag() {
+  const host = $('bagrows');
+  host.innerHTML = '';
+  bag.forEach(item => host.appendChild(bagRow(item)));
+  bagEmptyNote();
+}
+
+function bagEmptyNote() {
+  const host = $('bagrows');
+  const has = host.querySelector('.bagrow');
+  let note = host.querySelector('.bagempty');
+  if (!has && !note) {
+    note = document.createElement('div');
+    note.className = 'bagempty';
+    note.textContent = 'Nothing in it yet.';
+    host.appendChild(note);
+  } else if (has && note) note.remove();
+}
+
+$('addbag').addEventListener('click', () => {
+  $('bagrows').appendChild(bagRow());
+  bagEmptyNote();
+  touch();
+});
+
+function readBag() {
+  return [...$('bagrows').querySelectorAll('.bagrow')].map((row, i) => {
+    const [brand, model, detail] = [...row.querySelectorAll('input')].map(x => x.value.trim());
+    return {
+      id: row.dataset.id || null,
+      slot: row.querySelector('select').value,
+      brand: brand || null,
+      model: model || null,
+      detail: detail || null,
+      position: i
+    };
+  }).filter(r => r.brand || r.model || r.detail);
+}
+
+async function saveBag() {
+  const rows = readBag();
+  const keep = rows.filter(r => r.id).map(r => r.id);
+
+  /* anything the person deleted */
+  const gone = bag.filter(b => !keep.includes(b.id)).map(b => b.id);
+  if (gone.length) await supabase.from('bag_items').delete().in('id', gone);
+
+  for (const r of rows) {
+    const payload = {
+      profile_id: profile.id,
+      slot: r.slot, brand: r.brand, model: r.model,
+      detail: r.detail, position: r.position
+    };
+    if (r.id) await supabase.from('bag_items').update(payload).eq('id', r.id);
+    else      await supabase.from('bag_items').insert(payload);
+  }
+
+  const { data } = await supabase.from('bag_items')
+    .select('*').eq('profile_id', profile.id).order('position');
+  bag = data || [];
+  paintBag();
+}
+
 /* ---------- your tees ---------- */
 function paintTee() {
   $('teeset').querySelectorAll('button').forEach(b =>
@@ -944,6 +1057,8 @@ $('save').addEventListener('click', async () => {
     backdrop_mode: draft.backdrop_mode
   };
 
+  await saveBag();
+
   const { error } = await supabase.from('teams').update(patch).eq('id', team.id);
 
   if (!error) {
@@ -980,6 +1095,28 @@ window.addEventListener('beforeunload', e => {
 }
 </style>
 <style>
+/* the bag */
+.bagrow{display:grid;grid-template-columns:104px 1fr 1fr 96px 34px;gap:7px;
+  align-items:center;padding:7px 0}
+.bagrow + .bagrow{border-top:1px dotted var(--rule)}
+.bagrow select,.bagrow input{font-family:inherit;font-size:14px;padding:8px 9px;
+  border:1px solid var(--rule);background:#FBFCFB;width:100%;min-width:0}
+.bagrow select:focus,.bagrow input:focus{outline:none;border-color:var(--green);
+  background:#fff}
+.bagrow .drop3{background:none;border:0;cursor:pointer;color:var(--dim);font-size:17px;
+  padding:0;line-height:1}
+.bagrow .drop3:hover{color:#B91C1C}
+.addbag{margin-top:11px;background:#FBFCFB;border:1px solid var(--rule);
+  padding:10px 15px;font-size:13px;cursor:pointer;font-family:inherit;width:100%}
+.addbag:hover{border-color:var(--green);color:var(--green)}
+.bagempty{font-size:13px;color:var(--dim);padding:6px 0}
+
+@media (max-width:620px){
+  .bagrow{grid-template-columns:1fr 1fr 34px;row-gap:6px}
+  .bagrow select{grid-column:1/3}
+  .bagrow input:nth-of-type(3){grid-column:1/3}
+}
+
 /* tee picker */
 .teeset{display:flex;gap:10px}
 .teeset button{

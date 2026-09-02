@@ -51,7 +51,8 @@ const load = p => { try { return JSON.parse(fs.readFileSync(p,'utf8')); } catch 
 async function pull() {
   console.log('Pulling from', URL_);
 
-  const [teams, profiles, spots, settings, matches, weekCfg, contests] = await Promise.all([
+  const [teams, profiles, spots, settings, matches, weekCfg, contests, bagRows] =
+    await Promise.all([
     q('teams', '*', 'name.asc'),
     q('profiles', 'id,full_name,hcp_index,quote,avatar_url,team_id'),
     q('roster_spots', 'team_id,spot,full_name,hcp_index,claimed_by', 'spot.asc'),
@@ -59,7 +60,8 @@ async function pull() {
     q('matches', 'id,week,played_on,tee_time,bay,course_id,home_team,away_team', 'week.asc')
       .catch(() => []),
     q('week_settings', '*').catch(() => []),
-    q('contest_tallies', '*').catch(() => [])
+    q('contest_tallies', '*').catch(() => []),
+    q('bags', '*').catch(() => [])
   ]);
 
   /* side contest wins, per player, so a player page can show
@@ -67,6 +69,14 @@ async function pull() {
   const wins = {};
   for (const c of contests) {
     (wins[c.profile_id] ??= {})[c.kind] = c.wins;
+  }
+
+  /* what's in each bag, already in club order from the view */
+  const bags = {};
+  for (const b of bagRows) {
+    (bags[b.profile_id] ??= []).push({
+      slot: b.slot, brand: b.brand, model: b.model, detail: b.detail
+    });
   }
 
   console.log(`  ${teams.length} teams, ${profiles.length} profiles, ${spots.length} roster spots`);
@@ -91,7 +101,8 @@ async function pull() {
             hcp:   (p && p.hcp_index != null ? p.hcp_index : s.hcp_index) ?? 0,
             quote: p ? (p.quote || '') : '',
             photo: p ? publicUrl('avatars', p.avatar_url) : null,
-            wins:  p ? (wins[p.id] || null) : null
+            wins:  p ? (wins[p.id] || null) : null,
+            bag:   p ? (bags[p.id] || null) : null
           };
         })
       : signed.map(p => ({
@@ -99,7 +110,8 @@ async function pull() {
           hcp: p.hcp_index ?? 0,
           quote: p.quote || '',
           photo: publicUrl('avatars', p.avatar_url),
-          wins: wins[p.id] || null
+          wins: wins[p.id] || null,
+          bag: bags[p.id] || null
         }));
 
     return {

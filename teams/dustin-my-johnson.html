@@ -103,7 +103,7 @@
     <div class="song">
       <span class="lbl">Walk-up</span>
       <div class="art">
-        <img src="https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e0221b2b485aef32bcc96c1875c" alt="" loading="lazy">
+        <img src="https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e0221b2b485aef32bcc96c1875c" alt="" loading="lazy">
         <button class="play" id="play" aria-label="Play Sweatpants">▶</button>
       </div>
       <div class="song-meta"><b>Sweatpants</b><span>Childish Gambino</span></div>
@@ -185,7 +185,7 @@ import { mountDock, playSong } from '../assets/player.js';
 
 const btn = document.getElementById('play');
 if (btn) {
-  const song = {"title":"Sweatpants","artist":"Childish Gambino","provider":"spotify","id":"4NvXTrOSsVlCw0bFe3lKY9","art":"https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e0221b2b485aef32bcc96c1875c"};
+  const song = {"title":"Sweatpants","artist":"Childish Gambino","provider":"spotify","id":"4NvXTrOSsVlCw0bFe3lKY9","art":"https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e0221b2b485aef32bcc96c1875c"};
   mountDock(document.getElementById('player'), {
     onStop: () => { btn.textContent = '▶'; }
   });
