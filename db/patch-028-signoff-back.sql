@@ -8,10 +8,50 @@
 --  fallback, not the routine.
 -- ============================================================
 
+-- Patch 023 introduced these. If that migration didn't land,
+-- add them here rather than failing.
+alter table league_settings
+  add column if not exists require_signoff boolean not null default true,
+  add column if not exists draw_public_at  time    not null default '11:00',
+  add column if not exists instagram       text,
+  add column if not exists media_note      text,
+  add column if not exists mulligans_allowed smallint;
+
 alter table league_settings
   alter column require_signoff set default true;
 
 update league_settings set require_signoff = true where id = 1;
+
+-- ------------------------------------------------------------
+--  The draw gate, also from patch 023, restated so it exists
+--  either way.
+-- ------------------------------------------------------------
+create or replace function draw_is_public(p_played_on date)
+returns boolean
+language sql
+stable
+as $$
+  select (p_played_on + coalesce(
+            (select draw_public_at from league_settings where id = 1),
+            time '11:00'))
+         <= timezone('America/Chicago', now())::timestamp;
+$$;
+
+drop policy if exists read_matches on matches;
+create policy read_matches on matches for select using (
+  is_commissioner()
+  or draw_is_public(played_on)
+  or my_team() in (home_team, away_team)
+);
+
+drop policy if exists read_week_settings on week_settings;
+create policy read_week_settings on week_settings for select using (
+  is_commissioner()
+  or exists (
+    select 1 from matches m
+     where m.week = week_settings.week and draw_is_public(m.played_on)
+  )
+);
 
 comment on column league_settings.require_signoff is
   'A card waits for the other team in the bay. The commissioner
