@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=Instrument+Sans:wght@400;500;600&family=Martian+Mono:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/site.css">
 <link rel="stylesheet" href="assets/extra.css">
+<link rel="stylesheet" href="assets/patterns.css">
 <style>
 body{display:flex;flex-direction:column;min-height:100vh}
 main{flex:1;display:grid;place-items:start center;padding:36px 24px 60px}
@@ -30,10 +31,10 @@ input:focus{outline:none;border-color:var(--green);background:#fff}
 .field + .field{margin-top:16px}
 .hint{font-size:12px;color:var(--dim);margin-top:6px}
 
-.btn{width:100%;margin-top:20px;background:var(--green);color:#fff;border:0;
+.go{width:100%;margin-top:20px;background:var(--green);color:#fff;border:0;
   padding:14px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit}
-.btn:hover{background:var(--green-deep)}
-.btn[disabled]{opacity:.55;cursor:default}
+.go:hover{background:var(--green-deep)}
+.go[disabled]{opacity:.55;cursor:default}
 
 .alt{margin-top:16px;font-size:13px;color:var(--dim);text-align:center;line-height:1.9}
 .alt button{background:none;border:0;padding:0;cursor:pointer;font-family:inherit;
@@ -62,11 +63,29 @@ input:focus{outline:none;border-color:var(--green);background:#fff}
 
 <header class="masthead">
   <div class="inner">
-    <a class="mark" href="index.html">Katy <em>·</em> Golf League</a>
-    <nav>
+    <a class="mark" href="index.html">Katy <svg class="xm" viewBox="0 0 20 20" aria-hidden="true">
+        <rect x="1.4" y="1.4" width="17.2" height="17.2" rx="1" fill="none"
+              stroke="currentColor" stroke-width="2.6"/>
+        <path d="M6.2 6.2 L13.8 13.8 M13.8 6.2 L6.2 13.8" stroke="currentColor"
+              stroke-width="2.8" stroke-linecap="square"/>
+      </svg>
+      Golf League</a>
+    <button class="navtoggle" id="navtoggle" aria-expanded="false" aria-controls="nav">MENU</button>
+    <nav id="nav">
       <a href="index.html">Leaderboard</a>
       <a href="schedule.html">Schedule</a>
       <a href="teams.html">Teams</a>
+      <a href="clubhouse.html">Clubhouse</a>
+      <div class="more">
+        <button type="button" id="morebtn" aria-expanded="false" aria-controls="morelist">More</button>
+        <div class="morelist" id="morelist">
+          <a href="week.html">The week</a>
+          <a href="records.html">Records</a>
+          <a href="playlist.html">Playlist</a>
+          <a href="scrapbook.html">Scrapbook</a>
+        </div>
+      </div>
+      <span id="authslot" class="authslot"></span>
     </nav>
   </div>
 </header>
@@ -88,7 +107,7 @@ input:focus{outline:none;border-color:var(--green);background:#fff}
           <label for="in-pw">Password</label>
           <input type="password" id="in-pw" autocomplete="current-password">
         </div>
-        <button class="btn" id="do-in">Sign in</button>
+        <button class="go" id="do-in">Sign in</button>
       </fieldset>
       <p class="alt">
         <button data-go="p-up">Need an account?</button><br>
@@ -115,7 +134,7 @@ input:focus{outline:none;border-color:var(--green);background:#fff}
           <input type="password" id="up-pw" autocomplete="new-password">
           <div class="hint">At least 6 characters.</div>
         </div>
-        <button class="btn" id="do-up">Create account</button>
+        <button class="go" id="do-up">Create account</button>
       </fieldset>
       <p class="alt"><button data-go="p-in">Already have one? Sign in</button></p>
     </div>
@@ -130,7 +149,7 @@ input:focus{outline:none;border-color:var(--green);background:#fff}
           <label for="fg-email">Email</label>
           <input type="email" id="fg-email" autocomplete="email" inputmode="email">
         </div>
-        <button class="btn" id="do-forgot">Email me a link</button>
+        <button class="go" id="do-forgot">Email me a link</button>
       </fieldset>
       <p class="alt"><button data-go="p-in">Back to sign in</button></p>
     </div>
@@ -146,7 +165,7 @@ input:focus{outline:none;border-color:var(--green);background:#fff}
           <input type="password" id="rs-pw" autocomplete="new-password">
           <div class="hint">At least 6 characters.</div>
         </div>
-        <button class="btn" id="do-reset">Save password</button>
+        <button class="go" id="do-reset">Save password</button>
       </fieldset>
     </div>
 
@@ -285,22 +304,31 @@ async function paintSpots() {
 }
 
 /* keep the page honest if the session changes in another tab */
-/* Enter submits whichever pane is showing */
-document.querySelectorAll('input').forEach(function(i){
-  i.addEventListener('keydown', function(e){
-    if(e.key !== 'Enter') return;
-    e.preventDefault();
-    var pane = i.closest('.pane');
-    var b = pane && pane.querySelector('.btn');
-    if(b && !b.disabled) b.click();
-  });
-});
-
 supabase.auth.onAuthStateChange((event) => {
   if (event === 'SIGNED_OUT') show('p-in');
 });
 </script>
+<script>
+(function(){
+  var b=document.getElementById('navtoggle'),n=document.getElementById('nav');
+  if(b) b.addEventListener('click',function(){
+    var open=n.classList.toggle('open');
+    b.setAttribute('aria-expanded',open);
+    b.textContent=open?'CLOSE':'MENU';
+  });
+  var mb=document.getElementById('morebtn');
+  if(mb){
+    mb.addEventListener('click',function(e){
+      e.stopPropagation();
+      var open=mb.parentNode.classList.toggle('open');
+      mb.setAttribute('aria-expanded',open);
+    });
+    document.addEventListener('click',function(){
+      mb.parentNode.classList.remove('open');
+      mb.setAttribute('aria-expanded','false');
+    });
+  }
+})();
+</script>
 </body>
 </html>
-
-

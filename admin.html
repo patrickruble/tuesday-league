@@ -13,6 +13,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=Instrument+Sans:wght@400;500;600&family=Martian+Mono:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/site.css">
 <link rel="stylesheet" href="assets/extra.css">
+<link rel="stylesheet" href="assets/patterns.css">
 <style>
 :root{--wait:#B45309;--bad:#B91C1C}
 .tagged{margin-left:auto;font-family:var(--data);font-size:9px;letter-spacing:.12em;
@@ -73,15 +74,20 @@
 
 <header class="masthead">
   <div class="inner">
-    <a class="mark" href="index.html">Katy <em>·</em> Golf League</a>
-    <button class="navtoggle" id="navtoggle" aria-expanded="false" aria-controls="nav">MENU</button>
-    <nav id="nav">
-      <a href="index.html">Leaderboard</a>
-      <a href="schedule.html">Schedule</a>
-      <a href="teams.html">Teams</a>
-      <a href="scrapbook.html">Scrapbook</a>
-      <span id="authslot" class="authslot"></span>
+    <a class="mark" href="index.html">Katy <svg class="xm" viewBox="0 0 20 20" aria-hidden="true">
+        <rect x="1.4" y="1.4" width="17.2" height="17.2" rx="1" fill="none"
+              stroke="currentColor" stroke-width="2.6"/>
+        <path d="M6.2 6.2 L13.8 13.8 M13.8 6.2 L6.2 13.8" stroke="currentColor"
+              stroke-width="2.8" stroke-linecap="square"/>
+      </svg>
+      Golf League</a>
+    <nav id="nav" class="adminnav">
+      <a href="admin.html" aria-current="page">Tonight</a>
+      <a href="rosters.html">Rosters</a>
+      <a href="weeks.html">Weeks</a>
+      <a href="index.html" class="out">The site</a>
     </nav>
+    <span class="tagged">COMMISSIONER</span>
   </div>
 </header>
 

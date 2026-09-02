@@ -824,35 +824,25 @@ try {
 /* ============================================================
    PLAYER PAGE
    ============================================================ */
-/* Side contest wins, and nothing else — a scramble doesn't
-   produce individual numbers, so inventing rows to fill a grid
-   would just be four dashes. */
+/* The three side contests are what a scramble produces for an
+   individual, so they stay on the page whether or not anyone
+   has won one yet. */
 function seasonBlock(p) {
   const w = p.wins || {};
   const items = [
-    ['ctp',       'Closest to the pin'],
-    ['long_putt', 'Long putts'],
-    ['chip_in',   'Chip-ins']
-  ].filter(([k]) => w[k]);
-
-  if (!items.length) {
-    return `
-  <section>
-    <div class="head"><h2>This season</h2></div>
-    <p style="color:var(--dim);font-size:15px;max-width:52ch;margin:0">
-      Nothing on the board yet. A scramble is scored as a team, so what shows up
-      here is the side contests — closest to the pin, long putts, chip-ins.
-    </p>
-  </section>`;
-  }
+    ['ctp',       'Closest to the pin', 'Nearest wins the pot'],
+    ['long_putt', 'Long putts',         'Longest wins the pot'],
+    ['chip_in',   'Chip-ins',           'From off the green']
+  ];
+  const any = items.some(([k]) => w[k]);
 
   return `
   <section>
     <div class="head"><h2>This season</h2>
-      <span class="note">Side contests</span></div>
+      <span class="note">${any ? 'Side contests' : 'Nothing on the board yet'}</span></div>
     <div class="statgrid">
-      ${items.map(([k,label]) =>
-        `<div><b>${w[k]}</b><span>${label}</span></div>`).join('')}
+      ${items.map(([k,label,note]) =>
+        `<div><b>${w[k] || 0}</b><span>${label}</span><small>${note}</small></div>`).join('')}
     </div>
   </section>`;
 }

@@ -19,5 +19,6 @@
   "attest_who": "any_player",
   "show_pending": true,
   "updated_at": "2026-08-31T18:58:05.118859+00:00",
-  "stroke_from": "hardest"
+  "stroke_from": "hardest",
+  "mulligans_allowed": null
 }
