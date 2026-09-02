@@ -75,6 +75,14 @@ const slugify = s => s.toLowerCase().normalize('NFD')
 
 const initials = s => s.split(/\s+/).map(w => w[0]).join('').slice(0,2).toUpperCase();
 
+/* "Jimmy Calcagno" becomes "J. Calcagno" — enough to tell two
+   Ryans apart without eating the row. */
+function shortName(full) {
+  const parts = String(full || '').trim().split(/\s+/);
+  if (parts.length < 2) return parts[0] || '';
+  return `${parts[0][0]}. ${parts[parts.length - 1]}`;
+}
+
 /* teeTime is stored as 24 hour so the calendar file is
    unambiguous; pages show it the way people say it. */
 /* The ballot-box X, drawn instead of typed. The character
@@ -295,7 +303,7 @@ function buildLeaderboard() {
       <div class="pos">${t.rank}</div>
       <div><div class="crest">${esc(t.crest)}</div></div>
       <div class="name"><b>${esc(t.name)}</b>
-        <div class="players">${t.roster.map(p => esc(p.name.split(' ').pop())).join(' · ')}</div></div>
+        <div class="players">${t.roster.map(p => esc(shortName(p.name))).join(' · ')}</div></div>
       <div class="pld">${t.played || '—'}</div>
       <div class="pts">${t.points || '—'}</div>
       <div class="avg">${t.played ? (t.points/t.played).toFixed(1) : '—'}</div>
