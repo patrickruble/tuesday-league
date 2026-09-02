@@ -211,6 +211,13 @@ const rosters = readRosters();
 const hcps    = readHandicaps();
 const history = readHistory();
 
+/* Team handicaps live in data/handicaps.json, keyed by slug.
+   Golf League Guru shows these on screen but won't export them,
+   so they get typed in once and kept. */
+const teamHcp = load(path.join(DATA,'handicaps.json')) || {};
+const nHcp = Object.keys(teamHcp).filter(k => !k.startsWith('_')).length;
+if (nHcp) console.log(`  team handicaps: ${nHcp} teams`);
+
 if (!Object.keys(rosters).length) {
   console.log('\nNo rosters found. Export the Teams report into import/ and try again.');
   process.exit(1);
@@ -235,7 +242,7 @@ const teams = names.map((name, i) => {
     accent:   old.accent   || PALETTE[i % PALETTE.length],
     typeface: old.typeface || FACES[i % FACES.length],
     backdrop: old.backdrop || BACKS[i % BACKS.length],
-    handicap: old.handicap ?? 0,
+    handicap: teamHcp[slug] ?? old.handicap ?? 0,
     bay:      old.bay      ?? ((i % 7) + 1),
 
     mood:          old.mood          || 'content',

@@ -1,0 +1,19 @@
+{
+  "_comment": "Team handicaps from Golf League Guru, 2026 Spring. The formula is (average of the last 4 rounds) minus (average par of those rounds), rounded. A team scoring under par gets a positive handicap added to their gross; a team over par gets a negative one. These are last season's numbers — they recalculate as the new season runs.",
+
+  "_formula": "handicap = round(avg_par - avg_score_last_4)",
+
+  "2-js-and-a-hard-r":   7,
+  "ar-bombers":          5,
+  "big-drive-energy":    7,
+  "bogey-express":       3,
+  "dustin-my-johnson":   7,
+  "filthy-balls":        6,
+  "good-bull-golf":      5,
+  "hole-patrol":         6,
+  "jager-bombers":       7,
+  "links-and-drinks":    5,
+  "putt-pirates":        4,
+  "shannannagans":      -3,
+  "white-tee-privilege": 6
+}
