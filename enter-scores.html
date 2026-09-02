@@ -46,6 +46,8 @@ button{font-family:inherit}
 .bay span{display:block;font-size:7px;letter-spacing:.16em;margin-top:3px}
 .course{font-size:12px;color:rgba(255,255,255,.78);line-height:1.35;flex:1;min-width:0}
 .course b{display:block;color:#fff;font-size:16px;font-weight:600}
+.conds{margin-top:12px;font-family:var(--data);font-size:10px;letter-spacing:.07em;
+  color:var(--lime);text-transform:uppercase;line-height:1.5}
 .side{margin-top:13px;padding-top:12px;border-top:1px solid rgba(255,255,255,.2);
   display:flex;align-items:center;gap:10px;font-size:12px;color:rgba(255,255,255,.72)}
 .side .tile{width:28px;height:28px;flex:none;display:grid;place-items:center;
@@ -277,7 +279,7 @@ const esc = s => String(s ?? '').replace(/[&<>"]/g, c =>
   ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
 
 const params = new URLSearchParams(location.search);
-let profile, match, course, team, partner, round, roster = [];
+let profile, match, course, team, partner, round, roster = [], conditions = {};
 let gross = Array(9).fill(null);
 let photoPath = null;
 let scoring = { '-2':3, '-1':2, '0':1, '1':0 };
@@ -366,6 +368,10 @@ async function loadMatch(id) {
 
   const otherId = m.home_team === profile.team_id ? m.away_team : m.home_team;
 
+  const { data: cond } = await supabase.from('week_settings')
+    .select('*').eq('week', m.week).maybeSingle();
+  conditions = cond || {};
+
   const [{ data: t }, { data: p }, { data: r }] = await Promise.all([
     supabase.from('teams').select('*').eq('id', profile.team_id).single(),
     otherId ? supabase.from('teams').select('name,crest,accent').eq('id', otherId).maybeSingle()
@@ -405,6 +411,25 @@ const cacheKey = () => `kgl-card-${match.id}-${profile.team_id}`;
 /* ------------------------------------------------------------
    Scoring, mirroring the database function
 ------------------------------------------------------------ */
+/* Play the back nine and the screen in front of you says hole
+   10. The card should agree with it. */
+const holeNo = i => (course?.nine === 'back' ? 10 : 1) + i;
+
+/* What the sim is set to tonight, in a line. */
+function conditionsLine() {
+  const c = conditions;
+  if (!c) return '';
+  const bits = [];
+  if (c.wind === 'none')       bits.push('no wind');
+  else if (c.wind)             bits.push(c.wind + ' wind');
+  else if (c.wind_speed)       bits.push(c.wind_speed + ' mph wind');
+  if (c.green_speed)           bits.push(c.green_speed + ' greens');
+  if (c.gimme_ft === 0)        bits.push('putt everything out');
+  else if (c.gimme_ft != null) bits.push(c.gimme_ft + 'ft concedes');
+  if (c.conditions)            bits.push(c.conditions);
+  return bits.join(' \u00b7 ');
+}
+
 function strokesOn(i) {
   const h = team.handicap || 0;
   if (!h) return 0;
@@ -439,12 +464,12 @@ function render() {
     return `
     <div class="hole" data-h="${i}">
       <div class="hrow">
-        <span class="hno">${i+1}</span>
+        <span class="hno">${holeNo(i)}</span>
         <span class="hpar">PAR ${par}</span>
         ${st ? `<span class="stroke"><i></i>${st > 0 ? '+' : ''}${st}</span>` : ''}
         <span class="pill" id="p${i}">–</span>
       </div>
-      <div class="nums" role="group" aria-label="Score for hole ${i+1}">
+      <div class="nums" role="group" aria-label="Score for hole ${holeNo(i)}">
         ${opts.map(v => `
           <button type="button" data-v="${v}"
             class="${v === par ? 'par' : ''}${v <= par-2 ? ' eag' : ''}"
@@ -467,6 +492,8 @@ function render() {
           team.handicap ? ` · your handicap ${team.handicap > 0 ? '+' : ''}${team.handicap}` : ''}
       </div>
     </div>
+    ${conditionsLine() ? `<div class="conds">${conditionsLine()}</div>` : ''}
+
     <div class="side">
       <div class="tile" style="background:${team.accent}">${esc(team.crest)}</div>
       <span><b>${esc(team.name)}</b> — your card</span>

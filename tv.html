@@ -167,7 +167,7 @@ const esc = s => String(s ?? '').replace(/[&<>"]/g, c =>
 const HOLD = 15000;   // how long each panel stays up
 const POLL = 30000;   // how often the data refreshes
 
-let teams = {}, standings = [], tonight = null, rounds = [], history = [];
+let teams = {}, standings = [], tonight = null, rounds = [], history = [], conds = '';
 let panels = [], idx = 0;
 
 /* ------------------------------------------------------------
@@ -203,6 +203,13 @@ async function load() {
     const { data: rs } = await supabase.from('rounds')
       .select('id,match_id,team_id,status').in('match_id', ids);
     rounds = rs || [];
+  }
+
+  if (tonight) {
+    const { data: wc } = await supabase.from('week_conditions')
+      .select('line,course_name,nine').eq('week', tonight.week).maybeSingle();
+    conds = wc?.line || '';
+    if (wc?.course_name) conds = `${wc.course_name} ${wc.nine}${conds ? ' · ' + conds : ''}`;
   }
 
   const { data: hist } = await supabase.from('round_scores')
@@ -246,7 +253,8 @@ function paintBays() {
 
   el.innerHTML = `
     <h2>Tonight <small>Week ${tonight.week} · ${new Date(tonight.date)
-      .toLocaleDateString([], { day:'numeric', month:'long' })}</small></h2>
+      .toLocaleDateString([], { day:'numeric', month:'long' })}${
+      conds ? ' · ' + esc(conds) : ''}</small></h2>
     <div class="bays">
       ${tonight.matches.sort((a,b) => (a.bay||0) - (b.bay||0)).map(m => {
         const list = [m.home_team, m.away_team].filter(Boolean);

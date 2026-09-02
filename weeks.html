@@ -163,6 +163,39 @@ input.f:focus,select.f:focus{outline:none;border-color:var(--green);background:#
               <select class="f" id="lpHole"></select></div>
           </div>
 
+          <label class="f" style="margin-top:16px">How the sim is set</label>
+          <div class="grid2" style="grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+               margin-bottom:8px">
+            <div><label class="f" for="wind">Wind</label>
+              <select class="f" id="wind">
+                <option value="">Not set</option>
+                <option value="none">None</option>
+                <option value="calm">Calm</option>
+                <option value="moderate">Moderate</option>
+                <option value="strong">Strong</option>
+              </select></div>
+            <div><label class="f" for="windMph">Speed (mph)</label>
+              <input class="f" id="windMph" type="number" min="0" max="40" inputmode="numeric"></div>
+            <div><label class="f" for="greens">Greens</label>
+              <select class="f" id="greens">
+                <option value="">Not set</option>
+                <option value="slow">Slow</option>
+                <option value="medium">Medium</option>
+                <option value="fast">Fast</option>
+                <option value="tournament">Tournament</option>
+              </select></div>
+            <div><label class="f" for="gimme">Concedes</label>
+              <select class="f" id="gimme">
+                <option value="">Not set</option>
+                <option value="7">7 feet</option>
+                <option value="4">4 feet</option>
+                <option value="2">2 feet</option>
+                <option value="0">Putt everything</option>
+              </select></div>
+          </div>
+          <input class="f" id="conds" placeholder="Anything else worth saying"
+            style="margin-bottom:18px">
+
           <label class="f" style="margin-top:14px">The pot — fill in after you've
             taken the money</label>
           <div id="potRows" style="margin-bottom:18px"></div>
@@ -584,6 +617,7 @@ $('wkNew').addEventListener('click', () => {
   $('wkDate').value = nextTuesday();
   $('wkTime').value = '19:30';
   $('ctpHole').value = ''; $('lpHole').value = '';
+  ['wind','windMph','greens','gimme','conds'].forEach(id => $(id).value = '');
   $('baygrid').querySelectorAll('select').forEach(s => s.value = '');
   checkLeftover();
 });
@@ -606,6 +640,11 @@ function editWeek(n) {
   if (w.course_id) $('wkCourse').value = w.course_id;
   $('ctpHole').value = w.settings?.ctp_hole || '';
   $('lpHole').value  = w.settings?.long_putt_hole || '';
+  $('wind').value    = w.settings?.wind || '';
+  $('windMph').value = w.settings?.wind_speed ?? '';
+  $('greens').value  = w.settings?.green_speed || '';
+  $('gimme').value   = w.settings?.gimme_ft ?? '';
+  $('conds').value   = w.settings?.conditions || '';
 
   POT_KINDS.forEach(([k]) => {
     const p = (pots[n] || {})[k] || {};
@@ -745,7 +784,12 @@ $('wkSave').addEventListener('click', async () => {
   await supabase.from('week_settings').upsert({
     week,
     ctp_hole: $('ctpHole').value ? Number($('ctpHole').value) : null,
-    long_putt_hole: $('lpHole').value ? Number($('lpHole').value) : null
+    long_putt_hole: $('lpHole').value ? Number($('lpHole').value) : null,
+    wind:        $('wind').value || null,
+    wind_speed:  $('windMph').value === '' ? null : Number($('windMph').value),
+    green_speed: $('greens').value || null,
+    gimme_ft:    $('gimme').value === '' ? null : Number($('gimme').value),
+    conditions:  $('conds').value.trim() || null
   });
 
   for (const [k] of POT_KINDS) {
@@ -779,7 +823,8 @@ function paintWeeks() {
       <div class="det">
         <b>${new Date(w.played_on).toLocaleDateString([], {weekday:'long',day:'numeric',month:'long'})}</b>
         <span>${esc(w.course?.name || 'no course')} ${esc(w.course?.nine || '')} ·
-          ${w.matches.length} bays${w.settings?.ctp_hole ? ' · CTP hole ' + w.settings.ctp_hole : ''}</span>
+          ${w.matches.length} bays${w.settings?.ctp_hole ? ' · CTP hole ' + w.settings.ctp_hole : ''}${
+          w.settings?.wind ? ' · ' + w.settings.wind + ' wind' : ''}</span>
       </div>
       <button class="b" data-editw="${w.week}">Edit</button>
       <button class="b del" data-delw="${w.week}">Delete</button>

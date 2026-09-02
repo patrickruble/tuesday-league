@@ -27,6 +27,8 @@
 .cardhead h1{font-size:clamp(28px,6vw,46px);letter-spacing:-.025em;
   text-transform:uppercase;font-variation-settings:'wdth' 110}
 .cardhead .meta{margin-top:8px;font-size:13px;color:rgba(255,255,255,.72)}
+.cardhead .conds2{margin-top:7px;font-family:var(--data);font-size:10px;
+  letter-spacing:.07em;text-transform:uppercase;color:var(--lime)}
 .cardhead .score{text-align:right;font-family:var(--data);white-space:nowrap}
 .cardhead .score b{display:block;font-size:38px;font-weight:600;letter-spacing:-.04em}
 .cardhead .score span{font-size:9px;letter-spacing:.12em;color:rgba(255,255,255,.6)}
@@ -176,7 +178,22 @@ const params = new URLSearchParams(location.search);
    touched their own settings. */
 let tee = params.get('tee') || 'blue';
 let teeFromProfile = false;
-let data = null, plans = null;
+let data = null, plans = null, conds = '';
+
+/* What the sim was set to that night — a 34 into a strong wind
+   is not the same round as a 34 with none. */
+function condLine(c) {
+  if (!c) return '';
+  const bits = [];
+  if (c.wind === 'none')       bits.push('no wind');
+  else if (c.wind)             bits.push(c.wind + ' wind');
+  else if (c.wind_speed)       bits.push(c.wind_speed + ' mph wind');
+  if (c.green_speed)           bits.push(c.green_speed + ' greens');
+  if (c.gimme_ft === 0)        bits.push('putt everything out');
+  else if (c.gimme_ft != null) bits.push(c.gimme_ft + 'ft concedes');
+  if (c.conditions)            bits.push(c.conditions);
+  return bits.join(' \u00b7 ');
+}
 
 paintAuthSlot(0);
 
@@ -206,6 +223,10 @@ paintAuthSlot(0);
       c.nine === match.courses.nine);
   } catch { plans = null; }
 
+  const { data: ws } = await supabase.from('week_settings')
+    .select('*').eq('week', rs.week).maybeSingle();
+  conds = condLine(ws || {});
+
   data = { rs, match, course: match.courses, team };
   render();
 })();
@@ -227,6 +248,9 @@ function render() {
   const { rs, match, course, team } = data;
   document.documentElement.style.setProperty('--accent', team.accent);
 
+  const back = course.nine === 'back';
+  const holeNo = i => (back ? 10 : 1) + i;
+
   const rows = course.pars.map((par, i) => {
     const plan = plans?.holes?.[i] || { hole: i+1, par, bend: 0, width: .65, hazards: [] };
     const yards = yardsFor(plan, tee);
@@ -240,7 +264,7 @@ function render() {
       <div class="plan">${holeSVG({ ...plan, par }, { tee, accent: team.accent })}</div>
       <div class="about">
         <div class="top">
-          <span class="no">${i+1}</span>
+          <span class="no">${holeNo(i)}</span>
           <span class="par">PAR ${par}</span>
           ${yards ? `<span class="yds">${yards} YDS</span>` : ''}
           ${strokes ? `<span class="stroke">${strokes > 0 ? '+' : ''}${strokes}</span>` : ''}
@@ -271,6 +295,7 @@ function render() {
         <h1>${esc(course.name)}</h1>
         <div class="meta">${esc(course.nine)} nine · par ${parTotal} ·
           ${esc(team.name)}${match.bay ? ' · bay ' + match.bay : ''}</div>
+        ${conds ? `<div class="conds2">${esc(conds)}</div>` : ''}
       </div>
       <div class="score">
         <b>${rs.total_points ?? '—'}</b>

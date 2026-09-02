@@ -213,6 +213,18 @@ async function pull() {
         status: 'final',
         ctpHole: cfg[m.week]?.ctp_hole ?? null,
         longPuttHole: cfg[m.week]?.long_putt_hole ?? null,
+        conditions: (() => {
+          const c = cfg[m.week] || {};
+          const bits = [];
+          if (c.wind === 'none')       bits.push('no wind');
+          else if (c.wind)             bits.push(c.wind + ' wind');
+          else if (c.wind_speed)       bits.push(c.wind_speed + ' mph wind');
+          if (c.green_speed)           bits.push(c.green_speed + ' greens');
+          if (c.gimme_ft === 0)        bits.push('putt everything out');
+          else if (c.gimme_ft != null) bits.push(c.gimme_ft + 'ft concedes');
+          if (c.conditions)            bits.push(c.conditions);
+          return bits.join(' \u00b7 ') || null;
+        })(),
         bays: []
       });
       w.bays.push({

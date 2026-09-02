@@ -184,9 +184,13 @@ let weeks = [];
 
 async function load(week) {
   const w = weeks.find(x => x.week === week);
+  const { data: wc } = await supabase.from('week_conditions')
+    .select('line').eq('week', week).maybeSingle();
+
   $('sub').textContent =
     `${w.course_name} ${w.nine} nine · ` +
-    new Date(w.played_on).toLocaleDateString([], {weekday:'long',day:'numeric',month:'long'});
+    new Date(w.played_on).toLocaleDateString([], {weekday:'long',day:'numeric',month:'long'}) +
+    (wc?.line ? ' · ' + wc.line : '');
 
   const [{ data: holes }, { data: cards }, { data: prog }] = await Promise.all([
     supabase.from('hole_stats').select('*').eq('week', week).order('hole'),

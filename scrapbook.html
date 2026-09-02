@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Scrapbook — Katy Golf League</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="icon" href="favicon-32.png" sizes="32x32">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="theme-color" content="#007041">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,13 +14,89 @@
 <link rel="stylesheet" href="assets/extra.css">
 <link rel="stylesheet" href="assets/patterns.css">
 <style>
-.zoom{position:fixed;inset:0;background:rgba(8,18,13,.94);display:none;
-  place-items:center;padding:24px;z-index:30;cursor:zoom-out}
-.zoom.on{display:grid}
-.zoom figure{margin:0;max-width:100%;max-height:100%;display:grid;gap:12px}
-.zoom img{max-width:100%;max-height:78vh;object-fit:contain;display:block}
-.zoom figcaption{color:rgba(255,255,255,.7);font-size:13px;text-align:center;
-  font-family:var(--data)}
+.wrap4{max-width:900px;margin:0 auto;padding:0 24px}
+
+/* ---------- the account ---------- */
+.gram{background:var(--card);border:1px solid var(--rule);margin:26px 0 18px;
+  display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center;
+  padding:22px 24px}
+.gram .glyph{width:56px;height:56px;flex:none;display:grid;place-items:center;
+  background:linear-gradient(135deg,#F58529,#DD2A7B 45%,#8134AF 75%,#515BD4);
+  border-radius:14px}
+.gram .glyph svg{width:30px;height:30px;fill:none;stroke:#fff;stroke-width:2}
+.gram .txt3 b{display:block;font-family:var(--display);font-weight:800;font-size:21px;
+  letter-spacing:-.01em}
+.gram .txt3 span{font-size:14px;color:var(--dim)}
+.gram a.follow{background:var(--ink);color:#fff;text-decoration:none;padding:12px 20px;
+  font-size:14px;font-weight:600;white-space:nowrap}
+.gram a.follow:hover{background:var(--green)}
+
+/* ---------- sending something ---------- */
+.send{background:var(--card);border:1px solid var(--rule);padding:22px 24px;
+  margin-bottom:18px}
+.send h2{font-size:17px;margin:0 0 7px;font-family:var(--display);font-weight:800}
+.send p.lede3{font-size:14px;color:var(--dim);line-height:1.55;margin:0 0 16px;
+  max-width:56ch}
+.drop2{border:1px dashed var(--rule);padding:28px 20px;text-align:center;
+  cursor:pointer;display:block;background:#FBFCFB}
+.drop2:hover{border-color:var(--green);background:#F7FAF7}
+.drop2 .big2{font-size:26px;color:var(--dim)}
+.drop2 b{display:block;font-size:16px;margin-top:7px}
+.drop2 span{display:block;font-size:12px;color:var(--dim);margin-top:4px}
+.drop2 input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+
+.preview2{display:none;gap:16px;align-items:flex-start}
+.preview2.on{display:flex}
+.preview2 .thumb2{width:120px;height:120px;flex:none;border:1px solid var(--rule);
+  background:#EEF1EE;object-fit:cover;display:block}
+.preview2 .side2{flex:1;min-width:0}
+.preview2 textarea{width:100%;font-family:inherit;font-size:15px;padding:11px 12px;
+  border:1px solid var(--rule);background:#FBFCFB;min-height:78px;resize:vertical;
+  line-height:1.5}
+.preview2 textarea:focus{outline:none;border-color:var(--green);background:#fff}
+.preview2 .acts2{display:flex;gap:9px;align-items:center;margin-top:11px}
+.preview2 .acts2 .note{flex:1;font-size:12px;color:var(--dim)}
+.preview2 .acts2 .note.err{color:#B91C1C}
+.preview2 .acts2 button{background:var(--green);color:#fff;border:0;padding:11px 18px;
+  font-size:14px;font-weight:600;cursor:pointer}
+.preview2 .acts2 button.ghost2{background:none;color:var(--dim);
+  box-shadow:inset 0 0 0 1px var(--rule)}
+.preview2 .acts2 button[disabled]{opacity:.45;cursor:default}
+
+/* ---------- what's been sent ---------- */
+.mine2{margin-bottom:26px}
+.mine2 h2{font-size:13px;letter-spacing:.14em;text-transform:uppercase;
+  margin:0 0 12px;font-family:var(--display);font-weight:800}
+.queue{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.qitem{background:var(--card);border:1px solid var(--rule);border-bottom-width:4px;
+  border-bottom-color:var(--c,var(--rule))}
+.qitem img,.qitem video{width:100%;aspect-ratio:1;object-fit:cover;display:block;
+  background:#EEF1EE}
+.qitem .meta2{padding:9px 10px;font-size:12px;line-height:1.4}
+.qitem .meta2 b{display:block;font-size:12px}
+.qitem .meta2 span{color:var(--dim);font-size:11px;font-family:var(--data)}
+.qitem .st2{display:inline-block;margin-top:5px;font-family:var(--data);font-size:8px;
+  letter-spacing:.09em;padding:3px 6px}
+.s-new{background:#FDF3E7;color:#8A5A16}
+.s-posted{background:var(--green);color:#fff}
+.s-passed{background:transparent;color:var(--dim);box-shadow:inset 0 0 0 1px var(--rule)}
+.qitem button{background:none;border:0;padding:0;margin-top:6px;cursor:pointer;
+  color:#B91C1C;font-size:11px;font-family:inherit;text-decoration:underline;
+  text-underline-offset:3px}
+
+/* commissioner strip */
+.qitem .admin2{display:flex;gap:7px;padding:0 10px 10px}
+.qitem .admin2 button{flex:1;margin:0;border:1px solid var(--rule);padding:6px 0;
+  font-size:11px;color:var(--dim);text-decoration:none}
+.qitem .admin2 button:hover{border-color:var(--ink);color:var(--ink)}
+
+.empty5{background:var(--card);border:1px dashed var(--rule);padding:38px 24px;
+  text-align:center;color:var(--dim);font-size:14px;line-height:1.6}
+.empty5 b{display:block;color:var(--ink);font-size:17px;margin-bottom:7px;
+  font-family:var(--display);font-weight:800}
+
+.cards3{font-size:13px;color:var(--dim);padding:8px 0 50px;line-height:1.6}
+.cards3 a{color:var(--green);font-weight:600}
 </style>
 </head>
 <body>
@@ -57,119 +132,268 @@
 
 <div class="title">
   <div class="inner">
-    <div>
-      <div class="eyebrow">Every card, every week</div>
-      <h1>Scrapbook</h1>
-    </div>
+    <div><div class="eyebrow">The league, on film</div><h1>Scrapbook</h1></div>
   </div>
 </div>
 
-<div class="wrap">
-  <div id="shelves">
-    <div class="empty" style="margin:28px 0 50px">
-      <b>Loading</b>
-      Pulling the season's cards together.
-    </div>
-  </div>
-</div>
-
-<div class="zoom" id="zoom">
-  <figure><img alt=""><figcaption></figcaption></figure>
+<div class="wrap4">
+  <div id="gramslot"></div>
+  <div id="sendslot"></div>
+  <div id="mineslot"></div>
+  <p class="cards3">
+    Looking for a scorecard? Every one is kept —
+    <a href="week.html">the week pages</a> link through to them.
+  </p>
 </div>
 
 <footer>
   <div class="inner">
     <span>Katy Golf League</span>
-    <span>Every scorecard photo is kept. Nothing gets deleted.</span>
+    <span>Send it in and it might make the account</span>
   </div>
 </footer>
 
 <script type="module">
-import { supabase } from './assets/db.js';
+import { supabase, getSession, me, paintAuthSlot } from './assets/db.js';
 
-const shelves = document.getElementById('shelves');
-const zoom    = document.getElementById('zoom');
+const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c =>
   ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
 
-const fmt = d => new Date(d).toLocaleDateString(undefined,
-  { weekday:'short', day:'numeric', month:'short' });
+const MAX_PHOTO = 8  * 1024 * 1024;
+const MAX_VIDEO = 40 * 1024 * 1024;
 
-async function load() {
-  const { data, error } = await supabase
-    .from('scrapbook').select('*').limit(400);
+let profile = null, settings = {}, feed = [], file = null, kind = null;
 
-  if (error) {
-    shelves.innerHTML = `<div class="empty" style="margin:28px 0 50px">
-      <b>Couldn't load the archive</b>${esc(error.message)}</div>`;
+paintAuthSlot(0);
+
+(async () => {
+  const { data: cfg } = await supabase.from('league_settings').select('*').maybeSingle();
+  settings = cfg || {};
+
+  if (await getSession()) profile = await me();
+
+  paintGram();
+  paintSend();
+  await paintFeed();
+})();
+
+/* ---------- the account ---------- */
+function paintGram() {
+  if (!settings.instagram) {
+    $('gramslot').innerHTML = '';
     return;
   }
-
-  if (!data || !data.length) {
-    shelves.innerHTML = `<div class="empty" style="margin:28px 0 50px">
-      <b>Nothing here yet</b>
-      Every scorecard photo submitted this season shows up here, newest first.
-      The first one lands after week&nbsp;1.
+  const handle = settings.instagram.replace(/^@/, '');
+  $('gramslot').innerHTML = `
+    <div class="gram">
+      <div class="glyph">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.2" cy="6.8" r="1.1" fill="#fff" stroke="none"/>
+        </svg>
+      </div>
+      <div class="txt3">
+        <b>@${esc(handle)}</b>
+        <span>Everything from league night ends up here.</span>
+      </div>
+      <a class="follow" href="https://instagram.com/${encodeURIComponent(handle)}"
+         target="_blank" rel="noopener">Follow</a>
     </div>`;
-    return;
-  }
-
-  /* group by week, newest first */
-  const weeks = new Map();
-  for (const p of data) {
-    if (!weeks.has(p.week)) weeks.set(p.week, []);
-    weeks.get(p.week).push(p);
-  }
-
-  shelves.innerHTML = [...weeks.entries()]
-    .sort((a,b) => b[0] - a[0])
-    .map(([week, snaps]) => {
-      const first = snaps[0];
-      return `
-      <section class="shelf">
-        <h2>Week ${week}
-          <span>${esc(first.course_name)} ${esc(first.nine)} · ${fmt(first.played_on)} · ${snaps.length} card${snaps.length===1?'':'s'}</span>
-        </h2>
-        <div class="snaps">${snaps.map(s => {
-          const url = supabase.storage.from('scorecards')
-                        .getPublicUrl(s.storage_path).data.publicUrl;
-          return `
-          <button class="snap" style="border-bottom-color:${s.accent}"
-                  data-full="${esc(url)}"
-                  data-cap="${esc(s.team_name)} — week ${week}${s.caption ? ' — ' + esc(s.caption) : ''}">
-            <img src="${esc(url)}" alt="${esc(s.team_name)} scorecard, week ${week}" loading="lazy">
-            <div class="cap">
-              <b>${esc(s.team_name)}</b>
-              <span>${s.uploaded_by ? esc(s.uploaded_by) : ''}</span>
-              ${s.caption ? `<div style="margin-top:5px">${esc(s.caption)}</div>` : ''}
-            </div>
-          </button>`;
-        }).join('')}
-        </div>
-      </section>`;
-    }).join('');
-
-  shelves.querySelectorAll('.snap').forEach(b =>
-    b.addEventListener('click', () => {
-      zoom.querySelector('img').src = b.dataset.full;
-      zoom.querySelector('figcaption').textContent = b.dataset.cap;
-      zoom.classList.add('on');
-    }));
 }
 
-zoom.addEventListener('click', () => zoom.classList.remove('on'));
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') zoom.classList.remove('on');
-});
+/* ---------- sending ---------- */
+function paintSend() {
+  if (!profile) {
+    $('sendslot').innerHTML = `
+      <div class="send">
+        <h2>Got something worth posting?</h2>
+        <p class="lede3"><a href="login.html" style="color:var(--green);font-weight:600">Sign in</a>
+          and you can send a photo or a clip straight to whoever runs the account.</p>
+      </div>`;
+    return;
+  }
 
-document.getElementById('navtoggle').addEventListener('click', function(){
-  const n = document.getElementById('nav');
-  const open = n.classList.toggle('open');
-  this.setAttribute('aria-expanded', open);
-  this.textContent = open ? 'CLOSE' : 'MENU';
-});
+  $('sendslot').innerHTML = `
+    <div class="send">
+      <h2>Got something worth posting?</h2>
+      <p class="lede3">
+        ${settings.media_note
+          ? esc(settings.media_note)
+          : 'Send it here and it goes to whoever runs the account. Photos up to 8 MB, ' +
+            'clips up to 40 MB — anything longer is better sent to the account directly.'}
+      </p>
 
-load();
+      <label class="drop2" id="drop">
+        <span class="big2">▣</span>
+        <b>Pick a photo or a clip</b>
+        <span>JPG, PNG, MP4 or MOV</span>
+        <input type="file" id="pick" accept="image/*,video/*">
+      </label>
+
+      <div class="preview2" id="prev">
+        <div id="thumbslot"></div>
+        <div class="side2">
+          <textarea id="cap" maxlength="400"
+            placeholder="Anything to say about it? Optional."></textarea>
+          <div class="acts2">
+            <span class="note" id="snote"></span>
+            <button type="button" class="ghost2" id="scancel">Pick another</button>
+            <button type="button" id="ssend">Send it</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+
+  $('pick').addEventListener('change', onPick);
+  $('scancel').addEventListener('click', reset);
+  $('ssend').addEventListener('click', send);
+}
+
+function reset() {
+  file = null; kind = null;
+  $('prev').classList.remove('on');
+  $('drop').style.display = 'block';
+  $('pick').value = '';
+  $('cap').value = '';
+  $('snote').textContent = '';
+}
+
+function onPick(e) {
+  const f = e.target.files[0];
+  if (!f) return;
+
+  kind = f.type.startsWith('video') ? 'video' : 'photo';
+  const cap = kind === 'video' ? MAX_VIDEO : MAX_PHOTO;
+
+  if (f.size > cap) {
+    $('drop').style.display = 'block';
+    $('prev').classList.add('on');
+    $('thumbslot').innerHTML = '';
+    $('snote').textContent =
+      `That's ${(f.size/1048576).toFixed(0)} MB — the limit for a ${kind} is ` +
+      `${(cap/1048576).toFixed(0)} MB.` +
+      (kind === 'video' ? ' A shorter clip, or send it to the account directly.' : '');
+    $('snote').className = 'note err';
+    $('ssend').disabled = true;
+    return;
+  }
+
+  file = f;
+  $('ssend').disabled = false;
+  $('snote').textContent = `${kind === 'video' ? 'Clip' : 'Photo'}, ${(f.size/1048576).toFixed(1)} MB.`;
+  $('snote').className = 'note';
+
+  const url = URL.createObjectURL(f);
+  $('thumbslot').innerHTML = kind === 'video'
+    ? `<video class="thumb2" src="${url}" muted playsinline></video>`
+    : `<img class="thumb2" src="${url}" alt="">`;
+
+  $('drop').style.display = 'none';
+  $('prev').classList.add('on');
+  $('cap').focus();
+}
+
+async function send() {
+  if (!file) return;
+  $('ssend').disabled = true;
+  $('snote').textContent = 'Sending…';
+  $('snote').className = 'note';
+
+  const ext = (file.name.split('.').pop() || (kind === 'video' ? 'mp4' : 'jpg')).toLowerCase();
+  const path = `${profile.id}/${Date.now()}.${ext}`;
+
+  const up = await supabase.storage.from('media')
+    .upload(path, file, { contentType: file.type, upsert: false });
+
+  if (up.error) {
+    $('ssend').disabled = false;
+    $('snote').textContent = up.error.message;
+    $('snote').className = 'note err';
+    return;
+  }
+
+  const { error } = await supabase.from('media_submissions').insert({
+    sent_by: profile.id,
+    team_id: profile.team_id,
+    storage_path: path,
+    kind,
+    bytes: file.size,
+    caption: $('cap').value.trim() || null
+  });
+
+  if (error) {
+    $('ssend').disabled = false;
+    $('snote').textContent = error.message;
+    $('snote').className = 'note err';
+    return;
+  }
+
+  reset();
+  await paintFeed();
+}
+
+/* ---------- what's been sent ---------- */
+const urlOf = p => supabase.storage.from('media').getPublicUrl(p).data.publicUrl;
+
+async function paintFeed() {
+  const { data } = await supabase.from('media_feed').select('*').limit(60);
+  feed = data || [];
+
+  if (!feed.length) {
+    $('mineslot').innerHTML = profile ? `
+      <div class="empty5">
+        <b>Nothing sent in yet</b>
+        Whatever goes up here is whatever people send. Be the first.
+      </div>` : '';
+    return;
+  }
+
+  const admin = profile?.is_admin;
+
+  $('mineslot').innerHTML = `
+    <div class="mine2">
+      <h2>${admin ? 'The queue' : 'Sent in'}</h2>
+      <div class="queue">
+        ${feed.map(m => `
+          <div class="qitem" style="--c:${m.accent || 'var(--rule)'}">
+            ${m.kind === 'video'
+              ? `<video src="${esc(urlOf(m.storage_path))}" muted playsinline controls preload="metadata"></video>`
+              : `<img src="${esc(urlOf(m.storage_path))}" alt="" loading="lazy">`}
+            <div class="meta2">
+              <b>${esc(m.sent_by_name)}</b>
+              <span>${esc(m.team_name || '')}</span>
+              ${m.caption ? `<div style="margin-top:5px">${esc(m.caption)}</div>` : ''}
+              <span class="st2 s-${m.status}">${
+                m.status === 'posted' ? 'POSTED' :
+                m.status === 'passed' ? 'NOT USED' : 'WAITING'}</span>
+              ${m.status === 'new' && !admin ? `<button data-pull="${m.id}">Take it back</button>` : ''}
+            </div>
+            ${admin && m.status === 'new' ? `
+              <div class="admin2">
+                <button data-mark="posted" data-id="${m.id}">Posted</button>
+                <button data-mark="passed" data-id="${m.id}">Pass</button>
+              </div>` : ''}
+          </div>`).join('')}
+      </div>
+    </div>`;
+
+  $('mineslot').querySelectorAll('[data-pull]').forEach(b =>
+    b.addEventListener('click', async () => {
+      const m = feed.find(x => x.id === b.dataset.pull);
+      await supabase.storage.from('media').remove([m.storage_path]);
+      await supabase.from('media_submissions').delete().eq('id', b.dataset.pull);
+      paintFeed();
+    }));
+
+  $('mineslot').querySelectorAll('[data-mark]').forEach(b =>
+    b.addEventListener('click', async () => {
+      await supabase.from('media_submissions')
+        .update({ status: b.dataset.mark }).eq('id', b.dataset.id);
+      paintFeed();
+    }));
+}
 </script>
 <script>
 (function(){
