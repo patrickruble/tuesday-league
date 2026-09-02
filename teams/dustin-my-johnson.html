@@ -15,18 +15,42 @@
 <link rel="stylesheet" href="../assets/extra.css">
 <link rel="stylesheet" href="../assets/patterns.css">
 
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700..900&display=swap" rel="stylesheet">
 <style>
   :root{
-    --accent:#2B3A67;
-    --pat:rgba(43,58,103,0.15);
-    --mood:#7EBED7;
-    --team-display:'Archivo','Helvetica Neue',Arial,sans-serif;
-    --team-wdth:112;
+    --accent:#1D4ED8;
+    --pat:rgba(29,78,216,0.15);
+    --mood:#B8EB7A;
+    --team-display:'Playfair Display',Georgia,serif;
+    --team-wdth:100;
   }
+  .sheet{background-color:#3B2A2A}
 
 
-
+  /* dark background — invert the type rather than floating
+     white boxes on it */
+  .sheet{
+    --ink:#F3F5F3;
+    --dim:rgba(255,255,255,.56);
+    --rule:rgba(255,255,255,.15);
+    --card:rgba(255,255,255,.055);
+    --pat:rgba(119,149,232,0.22);
+    color:#F3F5F3;
+  }
+  .sheet .panel,.sheet .h2h,.sheet .player,.sheet .match,
+  .sheet .run,.sheet .statgrid > div,.sheet .bag,.sheet .item{
+    background:rgba(255,255,255,.055);
+    border-color:rgba(255,255,255,.15);
+    color:#F3F5F3;
+  }
+  .sheet .roster{background:rgba(255,255,255,.15)}
+  .sheet .head h2{color:#839eea}
+  .sheet .hcp{color:#839eea}
+  .sheet .said,.sheet .idx,.sheet .pld,.sheet .note,
+  .sheet .course,.sheet small{color:rgba(255,255,255,.56)}
+  .sheet .mid .sc{color:#F3F5F3}
+  .sheet a{color:#8ea7ec}
+  .sheet section + section{border-top-color:rgba(255,255,255,.14)}
 </style>
 </head>
 <body>
@@ -52,7 +76,7 @@
   <div class="inner">
     <div class="crest-lg">DJ</div>
     <div>
-      <div class="eyebrow">Season Season 3</div>
+      <div class="eyebrow">Season 3</div>
       <h1>Dustin My Johnson</h1>
       <div class="meta">Bay 2 · Tuesdays 7:30</div>
     </div>
@@ -62,10 +86,13 @@
 
 <div class="status">
   <div class="inner">
-    <div class="moodline"><span class="lbl">Mood</span><i class="dot2"></i><b>content</b></div>
+    <div class="moodline"><span class="lbl">Mood</span><i class="dot2"></i><b>dialed</b></div>
     
-    <div class="song"><span class="lbl">Walk-up</span>
-      <span style="font-size:12px;color:rgba(255,255,255,.45)">not picked yet</span></div>
+    <div class="song">
+      <span class="lbl">Walk-up</span>
+      <button class="play" id="play" aria-label="Play walk-up song">▶</button>
+      <div class="song-meta"><b>Sweatpants</b><span>Childish Gambino</span></div>
+    </div>
   </div>
 </div>
 
@@ -146,8 +173,8 @@
   var b=document.getElementById('play');
   if(!b) return;
   var dock=document.getElementById('player'),frame=document.getElementById('frame'),
-      src="",
-      h=80, on=false;
+      src="https://open.spotify.com/embed/track/4NvXTrOSsVlCw0bFe3lKY9?utm_source=generator&theme=0",
+      h=152, on=false;
   function stop(){frame.src='';dock.classList.remove('up');b.textContent='▶';on=false;}
   document.getElementById('closedock').addEventListener('click',stop);
   b.addEventListener('click',function(){

@@ -642,7 +642,7 @@ ${t.backdropColor && isDark(t.backdropColor) ? `
   <div class="inner">
     <div class="crest-lg${t.crestUrl ? ' has-img' : ''}">${crest}</div>
     <div>
-      <div class="eyebrow">${played ? ordinal(t.rank) + ' of ' + teams.length : 'Season ' + esc(league.season)}</div>
+      <div class="eyebrow">${played ? ordinal(t.rank) + ' of ' + teams.length : esc(league.season)}</div>
       <h1>${esc(t.name)}</h1>
       <div class="meta">${bay ? 'Bay ' + bay + ' · ' : ''}${esc(league.night)} ${esc(league.teeTime)}${t.handicap ? ' · Team handicap ' + t.handicap : ''}</div>
     </div>

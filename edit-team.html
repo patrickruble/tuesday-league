@@ -305,11 +305,12 @@ input[disabled],textarea[disabled]{opacity:.55;cursor:not-allowed}
         <div class="mug" id="mug">—</div>
         <div>
           <label class="upl">Upload a photo
-            <input type="file" id="avatarfile" accept="image/png,image/jpeg,image/webp">
+            <input type="file" id="avatarfile" accept="image/png,image/jpeg,image/webp,image/gif">
           </label>
           <div class="hint" id="avatarhint">
             Shows on your team's roster and your player page. Square works best.
-            Leave it and you get your initials on the team colour.
+            A GIF stays animated. Leave it blank and you get your initials on the
+            team colour.
           </div>
         </div>
       </div>
@@ -780,22 +781,39 @@ function shrink(file, size = 512) {
 $('avatarfile').addEventListener('change', async e => {
   const f = e.target.files[0];
   if (!f) return;
-  $('avatarhint').textContent = 'Processing…';
 
-  let blob;
-  try { blob = await shrink(f); }
-  catch (err) { $('avatarhint').textContent = err.message; return; }
+  const animated = f.type === 'image/gif';
+
+  /* A GIF has to go up whole — running it through canvas would
+     flatten it to a single frame. Everything else gets squared
+     and shrunk, because a phone photo is 4 MB and a roster tile
+     is 200 pixels. */
+  let blob = f, type = f.type, ext = 'jpg';
+
+  if (animated) {
+    if (f.size > 3 * 1024 * 1024) {
+      $('avatarhint').textContent =
+        'That GIF is over 3 MB. Try a shorter loop or a smaller one.';
+      return;
+    }
+    ext = 'gif';
+  } else {
+    $('avatarhint').textContent = 'Processing…';
+    try { blob = await shrink(f); type = 'image/jpeg'; }
+    catch (err) { $('avatarhint').textContent = err.message; return; }
+  }
 
   $('avatarhint').textContent = 'Uploading…';
-  const path = `${profile.id}/avatar-${Date.now()}.jpg`;
+  const path = `${profile.id}/avatar-${Date.now()}.${ext}`;
   const { error } = await supabase.storage.from('avatars')
-    .upload(path, blob, { upsert: true, contentType: 'image/jpeg' });
+    .upload(path, blob, { upsert: true, contentType: type });
 
   if (error) { $('avatarhint').textContent = 'Upload failed: ' + error.message; return; }
 
   draft.avatar_url = path;
-  $('avatarhint').textContent =
-    `Uploaded, ${Math.round(blob.size / 1024)} KB. Save to make it live.`;
+  $('avatarhint').textContent = animated
+    ? `Uploaded, ${Math.round(blob.size/1024)} KB and still moving. Save to make it live.`
+    : `Uploaded, ${Math.round(blob.size/1024)} KB. Save to make it live.`;
   paintMug();
   touch();
 });
