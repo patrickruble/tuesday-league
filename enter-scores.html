@@ -90,6 +90,29 @@ button{font-family:inherit}
 .nums button[aria-pressed="true"].eag{background:var(--accent);border-color:var(--accent)}
 .nums button:active{transform:scale(.96)}
 
+/* a short flourish for something under par — enough to notice,
+   not enough to sit through nine times */
+@keyframes pop{
+  0%  {transform:scale(1)}
+  40% {transform:scale(1.14)}
+  100%{transform:scale(1)}
+}
+.nums button.cheer{animation:pop .34s ease}
+@keyframes glow{
+  0%  {box-shadow:0 0 0 0 color-mix(in srgb,var(--accent) 60%,transparent)}
+  100%{box-shadow:0 0 0 14px transparent}
+}
+.hole.cheer .pill{animation:glow .55s ease}
+@media (prefers-reduced-motion:reduce){
+  .nums button.cheer,.hole.cheer .pill{animation:none}
+}
+
+/* a run of two or more under par gets marked as you build it */
+.streak{display:inline-flex;align-items:center;gap:5px;font-family:var(--data);
+  font-size:9px;letter-spacing:.08em;color:var(--accent);
+  background:color-mix(in srgb,var(--accent) 12%,transparent);
+  padding:3px 7px;margin-left:8px}
+
 /* ============================================================
    DRIVES — who hit the one you used
    ============================================================ */
@@ -483,9 +506,13 @@ function wire() {
     row.querySelectorAll('.nums button').forEach(b =>
       b.addEventListener('click', () => {
         const v = +b.dataset.v;
+        const wasEmpty = gross[i] == null;
         gross[i] = gross[i] === v ? null : v;   // tap again to clear
         paint(i); tally(); queueSave();
-        if (gross[i] != null) nudgeNext(i);
+        if (gross[i] != null) {
+          if (gross[i] < course.pars[i]) cheer(row, b);
+          if (wasEmpty) nudgeNext(i);
+        }
       }));
   });
 
@@ -505,6 +532,34 @@ function wire() {
     $('shot').value = ''; photoPath = null; tally();
   });
   $('send').addEventListener('click', submit);
+}
+
+/* Under par gets a quick pop, and a run of them says so. The
+   run only counts holes you've actually entered, so it appears
+   as you build it rather than after the fact. */
+function cheer(row, btn) {
+  btn.classList.remove('cheer');
+  void btn.offsetWidth;                 // restart the animation
+  btn.classList.add('cheer');
+  row.classList.remove('cheer');
+  void row.offsetWidth;
+  row.classList.add('cheer');
+
+  const i = +row.dataset.h;
+  let run = 0;
+  for (let j = i; j >= 0; j--) {
+    if (gross[j] != null && gross[j] < course.pars[j]) run++; else break;
+  }
+
+  document.querySelectorAll('.streak').forEach(el => el.remove());
+  if (run >= 2) {
+    const tag = document.createElement('span');
+    tag.className = 'streak';
+    tag.textContent = run >= 4 ? `${run} IN A ROW — STOP IT`
+                    : run === 3 ? 'THREE IN A ROW'
+                    : 'TWO IN A ROW';
+    row.querySelector('.hrow').insertBefore(tag, row.querySelector('.pill'));
+  }
 }
 
 /* scroll the next unfilled hole into view — keeps a thumb moving

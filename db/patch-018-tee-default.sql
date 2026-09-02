@@ -101,7 +101,8 @@ $$;
 --  The picker on the login page shows the tee too, so people
 --  can recognise themselves by more than a name.
 -- ------------------------------------------------------------
-create or replace view open_spots as
+drop view if exists open_spots;
+create view open_spots as
 select
   rs.id, rs.full_name, rs.spot, rs.hcp_index, rs.default_tee,
   t.id as team_id, t.name as team_name, t.slug, t.accent, t.crest
@@ -109,3 +110,4 @@ from roster_spots rs
 join teams t on t.id = rs.team_id
 where rs.claimed_by is null
 order by t.name, rs.spot;
+

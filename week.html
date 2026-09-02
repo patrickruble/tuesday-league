@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The week — Katy Golf League</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#007041">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=Instrument+Sans:wght@400;500;600&family=Martian+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/extra.css">
+<style>
+.wrap3{max-width:960px;margin:0 auto;padding:0 24px}
+
+.pending{background:#FDF3E7;border-left:4px solid #B45309;padding:13px 16px;
+  font-size:13px;color:#7A4A10;margin:20px 0;line-height:1.5}
+
+/* ---------- headline numbers ---------- */
+.big{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:1px;background:var(--rule);border:1px solid var(--rule);margin:22px 0}
+.big > div{background:var(--card);padding:18px}
+.big b{display:block;font-family:var(--data);font-size:27px;font-weight:600;
+  letter-spacing:-.045em;line-height:1}
+.big span{display:block;margin-top:6px;font-size:10px;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--dim)}
+.big small{display:block;margin-top:5px;font-size:12px;color:var(--dim);
+  font-family:var(--body);letter-spacing:0;text-transform:none}
+
+/* ---------- hardest / easiest ---------- */
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:26px}
+.pick2{background:var(--card);border:1px solid var(--rule);padding:18px;
+  border-left:5px solid var(--c)}
+.pick2 .lab{font-family:var(--data);font-size:9px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--dim)}
+.pick2 .no{font-family:var(--display);font-weight:800;font-size:38px;line-height:1;
+  margin:7px 0 2px;letter-spacing:-.03em}
+.pick2 .det{font-family:var(--data);font-size:12px;color:var(--dim)}
+.pick2 p{margin:9px 0 0;font-size:13px;color:var(--dim);line-height:1.45}
+
+/* ---------- the run of holes ---------- */
+.hs{border:1px solid var(--rule);background:var(--card);margin-bottom:30px}
+.hs .hd{display:grid;grid-template-columns:44px 46px 1fr 76px 72px;gap:0;
+  background:var(--green);color:#fff;font-family:var(--data);font-size:9px;
+  letter-spacing:.11em}
+.hs .hd span{padding:9px 8px}
+.hs .r{display:grid;grid-template-columns:44px 46px 1fr 76px 72px;
+  align-items:center;border-bottom:1px solid var(--rule)}
+.hs .r:last-child{border-bottom:0}
+.hs .r > *{padding:10px 8px}
+.hs .n{font-family:var(--data);font-size:16px;font-weight:600;letter-spacing:-.04em}
+.hs .pr{font-family:var(--data);font-size:11px;color:var(--dim)}
+.hs .avg{font-family:var(--data);font-size:13px;font-weight:600;text-align:right}
+.hs .avg.over{color:#B45309}
+.hs .avg.under{color:var(--green)}
+.hs .n2{font-family:var(--data);font-size:11px;color:var(--dim);text-align:right}
+
+/* the spread of scores as a bar */
+.spread{display:flex;height:22px;overflow:hidden;background:#F2F4F2}
+.spread i{display:block;height:100%}
+.s-eag{background:#7A1F3D}
+.s-bird{background:var(--green)}
+.s-par{background:#B8D9A3}
+.s-bog{background:#E0C9A6}
+.s-worse{background:#D8D8D4}
+.key{display:flex;gap:16px;flex-wrap:wrap;font-size:11px;color:var(--dim);
+  padding:12px 0 40px;align-items:center}
+.key i{display:inline-block;width:11px;height:11px;margin-right:5px;vertical-align:-1px}
+
+.weekpick2{margin-left:auto;background:transparent;color:#fff;
+  border:1px solid rgba(255,255,255,.3);font-family:var(--data);font-size:11px;
+  padding:7px 10px}
+.weekpick2 option{color:var(--ink)}
+
+.empty3{background:var(--card);border:1px dashed var(--rule);padding:44px 24px;
+  text-align:center;color:var(--dim);font-size:14px;line-height:1.6;margin:26px 0}
+.empty3 b{display:block;color:var(--ink);font-size:17px;margin-bottom:7px;
+  font-family:var(--display);font-weight:800}
+
+@media (max-width:700px){
+  .pair{grid-template-columns:1fr}
+  .hs .hd,.hs .r{grid-template-columns:34px 38px 1fr 62px}
+  .hs .n2{display:none}
+  .hs .hd span:last-child{display:none}
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="inner">
+    <a class="mark" href="index.html">Katy <em>·</em> Golf League</a>
+    <button class="navtoggle" id="navtoggle" aria-expanded="false" aria-controls="nav">MENU</button>
+    <nav id="nav">
+      <a href="index.html">Leaderboard</a>
+      <a href="schedule.html">Schedule</a>
+      <a href="teams.html">Teams</a>
+      <a href="scrapbook.html">Scrapbook</a>
+      <span id="authslot" class="authslot"></span>
+    </nav>
+  </div>
+</header>
+
+<div class="title">
+  <div class="inner">
+    <div><div class="eyebrow" id="sub">—</div><h1>The week</h1></div>
+    <select class="weekpick2" id="weekpick"></select>
+  </div>
+</div>
+
+<div class="wrap3">
+  <div id="body"><div class="empty3"><b>Loading</b>Working out how the week went.</div></div>
+</div>
+
+<footer>
+  <div class="inner">
+    <span>Katy Golf League</span>
+    <span>Confirmed cards only</span>
+  </div>
+</footer>
+
+<script type="module">
+import { supabase, paintAuthSlot } from './assets/db.js';
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c =>
+  ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+
+paintAuthSlot(0);
+
+let weeks = [];
+
+(async () => {
+  const { data } = await supabase.from('week_summary').select('*');
+  weeks = data || [];
+
+  if (!weeks.length) {
+    $('body').innerHTML = `<div class="empty3">
+      <b>No finished rounds yet</b>
+      Once a week's cards are all signed off, this page works out which holes
+      played hardest, who scored best and how the field did on every hole.</div>`;
+    $('sub').textContent = 'Nothing to report yet';
+    $('weekpick').style.display = 'none';
+    return;
+  }
+
+  $('weekpick').innerHTML = weeks.map(w =>
+    `<option value="${w.week}">Week ${w.week} · ${new Date(w.played_on)
+      .toLocaleDateString([], {day:'numeric',month:'short'})}</option>`).join('');
+  $('weekpick').addEventListener('change', e => load(+e.target.value));
+
+  load(weeks[0].week);
+})();
+
+async function load(week) {
+  const w = weeks.find(x => x.week === week);
+  $('sub').textContent =
+    `${w.course_name} ${w.nine} nine · ` +
+    new Date(w.played_on).toLocaleDateString([], {weekday:'long',day:'numeric',month:'long'});
+
+  const [{ data: holes }, { data: cards }, { data: prog }] = await Promise.all([
+    supabase.from('hole_stats').select('*').eq('week', week).order('hole'),
+    supabase.from('round_scores').select('*').eq('week', week).eq('status','confirmed'),
+    supabase.from('week_progress').select('*').eq('week', week).maybeSingle()
+  ]);
+
+  const teams = {};
+  const { data: ts } = await supabase.from('teams').select('id,name,slug,accent,crest');
+  (ts||[]).forEach(t => teams[t.id] = t);
+
+  const best = [...(cards||[])].sort((a,b) => b.total_points - a.total_points)[0];
+  const hardest = [...(holes||[])].sort((a,b) => b.avg_to_par - a.avg_to_par)[0];
+  const easiest = [...(holes||[])].sort((a,b) => a.avg_to_par - b.avg_to_par)[0];
+
+  const totalBird = (holes||[]).reduce((a,h) => a + h.birdies, 0);
+  const totalEag  = (holes||[]).reduce((a,h) => a + h.eagles, 0);
+
+  const waiting = prog ? (prog.waiting || 0) + (prog.disputed || 0) : 0;
+
+  $('body').innerHTML = `
+  ${waiting ? `<div class="pending">
+    ${waiting} card${waiting === 1 ? '' : 's'} still to be signed off, so these
+    numbers will move. Only confirmed cards are counted.</div>` : ''}
+
+  <div class="big">
+    <div><b>${w.cards_in}</b><span>Cards in</span></div>
+    <div><b>${w.avg_points}</b><span>Average points</span></div>
+    <div><b>${w.best_points}</b><span>Best round</span>
+      ${best ? `<small>${esc(teams[best.team_id]?.name || '')}</small>` : ''}</div>
+    <div><b>${w.avg_gross}</b><span>Average gross</span></div>
+    <div><b>${totalBird}</b><span>Birdies</span></div>
+    <div><b>${totalEag}</b><span>Eagles</span></div>
+  </div>
+
+  ${hardest && easiest ? `
+  <div class="pair">
+    <div class="pick2" style="--c:#B45309">
+      <div class="lab">Hardest hole</div>
+      <div class="no">${hardest.hole}</div>
+      <div class="det">PAR ${hardest.par} · ${hardest.avg_gross} AVERAGE ·
+        ${hardest.avg_to_par > 0 ? '+' : ''}${hardest.avg_to_par} TO PAR</div>
+      <p>${hardest.pars + hardest.birdies + hardest.eagles} of ${hardest.cards} made
+         par or better. ${hardest.worse} took more than a bogey.</p>
+    </div>
+    <div class="pick2" style="--c:#007041">
+      <div class="lab">Easiest hole</div>
+      <div class="no">${easiest.hole}</div>
+      <div class="det">PAR ${easiest.par} · ${easiest.avg_gross} AVERAGE ·
+        ${easiest.avg_to_par > 0 ? '+' : ''}${easiest.avg_to_par} TO PAR</div>
+      <p>${easiest.birdies + easiest.eagles} went under par on it.</p>
+    </div>
+  </div>` : ''}
+
+  <div class="hs">
+    <div class="hd">
+      <span>HOLE</span><span>PAR</span><span>HOW THE FIELD PLAYED IT</span>
+      <span style="text-align:right">AVG</span><span style="text-align:right">BEST</span>
+    </div>
+    ${(holes||[]).map(h => {
+      const n = h.cards || 1;
+      const pct = v => (v / n * 100).toFixed(1) + '%';
+      return `
+      <div class="r">
+        <div class="n">${h.hole}</div>
+        <div class="pr">${h.par}</div>
+        <div>
+          <div class="spread" title="${h.eagles} eagles, ${h.birdies} birdies, ${h.pars} pars, ${h.bogeys} bogeys">
+            ${h.eagles  ? `<i class="s-eag"   style="width:${pct(h.eagles)}"></i>`  : ''}
+            ${h.birdies ? `<i class="s-bird"  style="width:${pct(h.birdies)}"></i>` : ''}
+            ${h.pars    ? `<i class="s-par"   style="width:${pct(h.pars)}"></i>`    : ''}
+            ${h.bogeys  ? `<i class="s-bog"   style="width:${pct(h.bogeys)}"></i>`  : ''}
+            ${h.worse   ? `<i class="s-worse" style="width:${pct(h.worse)}"></i>`   : ''}
+          </div>
+        </div>
+        <div class="avg ${h.avg_to_par > 0 ? 'over' : h.avg_to_par < 0 ? 'under' : ''}">
+          ${h.avg_to_par > 0 ? '+' : ''}${h.avg_to_par}</div>
+        <div class="n2">${h.best}</div>
+      </div>`;
+    }).join('')}
+  </div>
+
+  <div class="key">
+    <span><i class="s-eag"></i>Eagle</span>
+    <span><i class="s-bird"></i>Birdie</span>
+    <span><i class="s-par"></i>Par</span>
+    <span><i class="s-bog"></i>Bogey</span>
+    <span><i class="s-worse"></i>Worse</span>
+    <span style="margin-left:auto">Average is against par</span>
+  </div>`;
+}
+
+$('navtoggle').addEventListener('click', function(){
+  const n = $('nav'), open = n.classList.toggle('open');
+  this.setAttribute('aria-expanded', open);
+  this.textContent = open ? 'CLOSE' : 'MENU';
+});
+</script>
+</body>
+</html>

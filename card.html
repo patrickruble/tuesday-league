@@ -68,6 +68,15 @@
 .marks .g.dbl::after{content:"";position:absolute;inset:2px;border:2px solid var(--dim)}
 .marks .pts{font-family:var(--data);font-size:10px;letter-spacing:.09em;color:var(--dim);
   margin-top:9px}
+
+/* a run of holes under par, drawn as a rail down the edge */
+.hrow{position:relative}
+.hrow.run::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;
+  background:var(--accent)}
+.hrow.run-start::before{top:8px;border-radius:2px 2px 0 0}
+.hrow.run-end::before{bottom:8px;border-radius:0 0 2px 2px}
+.runtag{position:absolute;left:12px;top:8px;font-family:var(--data);font-size:8px;
+  letter-spacing:.1em;background:var(--accent);color:#fff;padding:3px 6px;z-index:2}
 .marks .pts b{color:var(--ink);font-size:13px}
 
 /* ---------- totals ---------- */
@@ -285,8 +294,35 @@ function render() {
     </div>
   </div>`;
 
+  markRuns(rs, course);
+
   document.querySelectorAll('.teepick button').forEach(b =>
     b.addEventListener('click', () => { tee = b.dataset.t; render(); }));
+}
+
+/* Two or more consecutive holes under par get a rail down the
+   left of the card, labelled at the top of the run. */
+function markRuns(rs, course) {
+  const rows = [...document.querySelectorAll('.hrow')];
+  const under = (rs.gross || []).map((g,i) => g != null && g < course.pars[i]);
+
+  let i = 0;
+  while (i < under.length) {
+    if (!under[i]) { i++; continue; }
+    let j = i;
+    while (j + 1 < under.length && under[j+1]) j++;
+    const len = j - i + 1;
+    if (len >= 2) {
+      for (let k = i; k <= j; k++) rows[k]?.classList.add('run');
+      rows[i]?.classList.add('run-start');
+      rows[j]?.classList.add('run-end');
+      const tag = document.createElement('span');
+      tag.className = 'runtag';
+      tag.textContent = len >= 4 ? len + ' IN A ROW' : len === 3 ? 'THREE IN A ROW' : 'TWO IN A ROW';
+      rows[i]?.appendChild(tag);
+    }
+    i = j + 1;
+  }
 }
 
 function strokesOn(si, hcp) {
