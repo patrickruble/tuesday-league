@@ -33,16 +33,22 @@
 
 <header class="masthead">
   <div class="inner">
-    <a class="mark" href="../index.html">Katy <em>·</em> Golf League</a>
+    <a class="mark" href="../index.html">Katy <em>·</em> X-Golf League</a>
     <button class="navtoggle" id="navtoggle" aria-expanded="false" aria-controls="nav">MENU</button>
     <nav id="nav">
       <a href="../index.html">Leaderboard</a>
       <a href="../schedule.html">Schedule</a>
       <a href="../teams.html" aria-current="page">Teams</a>
-      <a href="../week.html">The week</a>
       <a href="../clubhouse.html">Clubhouse</a>
-      <a href="../playlist.html">Playlist</a>
-      <a href="../records.html">Records</a>
+      <div class="more">
+        <button type="button" id="morebtn" aria-expanded="false" aria-controls="morelist">More</button>
+        <div class="morelist" id="morelist">
+          <a href="../week.html">The week</a>
+          <a href="../records.html">Records</a>
+          <a href="../playlist.html">Playlist</a>
+          <a href="../scrapbook.html">Scrapbook</a>
+        </div>
+      </div>
       <span id="authslot" class="authslot"></span>
     </nav>
   </div>
@@ -51,13 +57,13 @@
 
 <div class="hero">
   <div class="inner">
-    <div class="crest-lg">PP</div>
-    <div>
-      <div class="eyebrow">Season 3</div>
-      <h1>Putt Pirates</h1>
-      <div class="meta">Bay 5 · Tuesdays 7:30</div>
+    <div class="eyebrow">Season 3</div>
+    <h1>Putt Pirates</h1>
+    <div class="underline">
+      <div class="crest-sm">PP</div>
+      <span class="meta">Bay 5 · Tuesdays 7:30</span>
+      <span class="tally"><b>—</b> season points</span>
     </div>
-    <div class="tally"><b>—</b><span>SEASON POINTS</span></div>
   </div>
 </div>
 
@@ -79,11 +85,7 @@
 
 <div class="numbers">
   <div class="inner">
-    <div><b>—</b><span>Points per round</span></div>
-    <div><b>—</b><span>Best round</span></div>
-    <div><b>—</b><span>Team handicap</span></div>
-    <div><b>—</b><span>Rounds played</span></div>
-    <div><b>—</b><span>Standing</span></div>
+    <span class="waiting">No rounds played yet — first one TUE 08 SEP</span>
   </div>
 </div>
 
@@ -202,12 +204,24 @@ try {
 <script>
 (function(){
   var b=document.getElementById('navtoggle'),n=document.getElementById('nav');
-  if(!b) return;
-  b.addEventListener('click',function(){
+  if(b) b.addEventListener('click',function(){
     var open=n.classList.toggle('open');
     b.setAttribute('aria-expanded',open);
     b.textContent=open?'CLOSE':'MENU';
   });
+
+  var mb=document.getElementById('morebtn');
+  if(mb){
+    mb.addEventListener('click',function(e){
+      e.stopPropagation();
+      var open=mb.parentNode.classList.toggle('open');
+      mb.setAttribute('aria-expanded',open);
+    });
+    document.addEventListener('click',function(){
+      mb.parentNode.classList.remove('open');
+      mb.setAttribute('aria-expanded','false');
+    });
+  }
 })();
 </script>
 <script type="module">

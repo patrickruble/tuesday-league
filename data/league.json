@@ -2,7 +2,7 @@
   "name": "Katy Golf League",
   "wordmark": [
     "Katy",
-    "Golf League"
+    "X-Golf League"
   ],
   "domain": "katygolfleague.com",
   "season": "Season 3",
@@ -36,20 +36,8 @@
       "href": "teams.html"
     },
     {
-      "label": "The week",
-      "href": "week.html"
-    },
-    {
       "label": "Clubhouse",
       "href": "clubhouse.html"
-    },
-    {
-      "label": "Playlist",
-      "href": "playlist.html"
-    },
-    {
-      "label": "Records",
-      "href": "records.html"
     }
   ],
   "typefaces": {
@@ -90,5 +78,23 @@
     "cold": "#E8A87C",
     "bad": "#9AA5A0",
     "odd": "#C9A0DC"
-  }
+  },
+  "navMore": [
+    {
+      "label": "The week",
+      "href": "week.html"
+    },
+    {
+      "label": "Records",
+      "href": "records.html"
+    },
+    {
+      "label": "Playlist",
+      "href": "playlist.html"
+    },
+    {
+      "label": "Scrapbook",
+      "href": "scrapbook.html"
+    }
+  ]
 }

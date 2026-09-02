@@ -9,8 +9,8 @@
 -- ------------------------------------------------------------
 drop view  if exists hole_photo_current;
 drop table if exists hole_photos;
-delete from storage.objects where bucket_id = 'holes';
-delete from storage.buckets where id = 'holes';
+-- The holes bucket is left in place; storage tables can't be
+-- written to directly, and an empty bucket costs nothing.
 drop policy if exists "read hole photos"   on storage.objects;
 drop policy if exists "upload hole photo"  on storage.objects;
 
@@ -121,3 +121,4 @@ join profiles p on p.id = sc.winner_id
 left join teams t on t.id = coalesce(sc.team_id, p.team_id)
 group by sc.kind, p.id, p.full_name, t.name, t.slug, t.accent
 order by sc.kind, wins desc;
+

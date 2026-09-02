@@ -181,9 +181,17 @@ function sponsorFooter() {
 
 function layout({ title, current, depth = 0, head = '', body }) {
   const up = depth ? '../' : '';
-  const nav = league.nav.map(n =>
-    `<a href="${up}${n.href}"${n.href === current ? ' aria-current="page"' : ''}>${esc(n.label)}</a>`
-  ).join('\n      ');
+  const link = n =>
+    `<a href="${up}${n.href}"${n.href === current ? ' aria-current="page"' : ''}>${esc(n.label)}</a>`;
+
+  const nav = league.nav.map(link).join('\n      ');
+  const more = (league.navMore || []).length ? `
+      <div class="more">
+        <button type="button" id="morebtn" aria-expanded="false" aria-controls="morelist">More</button>
+        <div class="morelist" id="morelist">
+          ${league.navMore.map(link).join('\n          ')}
+        </div>
+      </div>` : '';
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -210,7 +218,7 @@ ${head}
     <a class="mark" href="${up}index.html">${esc(league.wordmark[0])} <em>·</em> ${esc(league.wordmark[1])}</a>
     <button class="navtoggle" id="navtoggle" aria-expanded="false" aria-controls="nav">MENU</button>
     <nav id="nav">
-      ${nav}
+      ${nav}${more}
       <span id="authslot" class="authslot"></span>
     </nav>
   </div>
@@ -230,12 +238,24 @@ ${sponsorFooter()}
 <script>
 (function(){
   var b=document.getElementById('navtoggle'),n=document.getElementById('nav');
-  if(!b) return;
-  b.addEventListener('click',function(){
+  if(b) b.addEventListener('click',function(){
     var open=n.classList.toggle('open');
     b.setAttribute('aria-expanded',open);
     b.textContent=open?'CLOSE':'MENU';
   });
+
+  var mb=document.getElementById('morebtn');
+  if(mb){
+    mb.addEventListener('click',function(e){
+      e.stopPropagation();
+      var open=mb.parentNode.classList.toggle('open');
+      mb.setAttribute('aria-expanded',open);
+    });
+    document.addEventListener('click',function(){
+      mb.parentNode.classList.remove('open');
+      mb.setAttribute('aria-expanded','false');
+    });
+  }
 })();
 </script>
 <script type="module">
@@ -654,13 +674,13 @@ ${t.backdropColor && isDark(t.backdropColor) ? `
     body:`
 <div class="hero">
   <div class="inner">
-    <div class="crest-lg${t.crestUrl ? ' has-img' : ''}">${crest}</div>
-    <div>
-      <div class="eyebrow">${played ? ordinal(t.rank) + ' of ' + teams.length : esc(league.season)}</div>
-      <h1>${esc(t.name)}</h1>
-      <div class="meta">${bay ? 'Bay ' + bay + ' · ' : ''}${esc(league.night)} ${clock(league.teeTime)}${t.handicap ? ' · Team handicap ' + t.handicap : ''}</div>
+    <div class="eyebrow">${played ? ordinal(t.rank) + ' of ' + teams.length : esc(league.season)}</div>
+    <h1>${esc(t.name)}</h1>
+    <div class="underline">
+      <div class="crest-sm${t.crestUrl ? ' has-img' : ''}">${crest}</div>
+      <span class="meta">${bay ? 'Bay ' + bay + ' · ' : ''}${esc(league.night)} ${clock(league.teeTime)}${t.handicap ? ' · handicap ' + (t.handicap > 0 ? '+' : '') + t.handicap : ''}</span>
+      <span class="tally"><b>${t.points || '—'}</b> season points</span>
     </div>
-    <div class="tally"><b>${t.points || '—'}</b><span>SEASON POINTS</span></div>
   </div>
 </div>
 
@@ -687,11 +707,13 @@ ${t.backdropColor && isDark(t.backdropColor) ? `
 
 <div class="numbers">
   <div class="inner">
-    <div><b>${t.played ? (t.points/t.played).toFixed(1) : '—'}</b><span>Points per round</span></div>
-    <div><b>${t.bestRound || '—'}</b><span>Best round</span></div>
-    <div><b>${t.handicap || '—'}</b><span>Team handicap</span></div>
-    <div><b>${t.played || '—'}</b><span>Rounds played</span></div>
-    <div><b>${played ? ordinal(t.rank) : '—'}</b><span>Standing</span></div>
+    ${t.played ? `
+      <span><b>${(t.points/t.played).toFixed(1)}</b> a round</span>
+      <span><b>${t.bestRound || '—'}</b> best</span>
+      <span><b>${t.played}</b> round${t.played === 1 ? '' : 's'}</span>
+      <span><b>${ordinal(t.rank)}</b> of ${teams.length}</span>
+      ${t.handicap ? `<span><b>${t.handicap > 0 ? '+' : ''}${t.handicap}</b> handicap</span>` : ''}`
+    : `<span class="waiting">No rounds played yet — first one ${nextWeek ? esc(nextWeek.label) : 'soon'}</span>`}
   </div>
 </div>
 

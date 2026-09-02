@@ -310,3 +310,92 @@
 .award .who a{color:inherit;text-decoration:none}
 .award .who a:hover{color:var(--c);text-decoration:underline;text-underline-offset:3px}
 .award p{margin:8px 0 0;font-size:12px;color:var(--dim);line-height:1.45}
+
+/* ============================================================
+   NAV — four items and a More, so the bar doesn't sprawl
+   ============================================================ */
+.masthead .inner{gap:20px}
+.masthead nav{margin-left:34px;gap:18px}
+
+.more{position:relative}
+.more > button{
+  background:none;border:0;padding:0;cursor:pointer;font-family:inherit;
+  color:rgba(255,255,255,.76);font-size:12px;letter-spacing:.08em;
+  text-transform:uppercase;font-weight:500;
+}
+.more > button::after{content:"";display:inline-block;margin-left:6px;
+  border:3.5px solid transparent;border-top-color:currentColor;
+  transform:translateY(2px)}
+.more > button:hover{color:var(--lime)}
+.morelist{
+  display:none;position:absolute;top:calc(100% + 12px);left:-14px;z-index:30;
+  background:var(--green-deep);min-width:168px;padding:6px 0;
+  box-shadow:0 8px 24px rgba(0,0,0,.3);
+}
+.more.open .morelist{display:block}
+.more.open > button{color:var(--lime)}
+.morelist a{display:block;padding:10px 16px;font-size:12px}
+.morelist a:hover{background:rgba(255,255,255,.08)}
+
+@media (max-width:760px){
+  .masthead nav{margin-left:0}
+  .more{width:100%}
+  .more > button{padding:11px 2px;width:100%;text-align:left;font-size:13px;
+    border-bottom:1px solid rgba(255,255,255,.09)}
+  .morelist{position:static;display:block;background:transparent;box-shadow:none;
+    padding:0 0 0 14px}
+  .morelist a{padding:10px 2px;border-bottom:1px solid rgba(255,255,255,.07)}
+}
+
+/* ============================================================
+   TEAM HERO — the name starts at the margin, everything else
+   sits under it on one line
+   ============================================================ */
+.hero .inner{display:block}
+.hero h1{margin-bottom:0}
+.hero .underline{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  margin-top:16px;padding-top:14px;
+  border-top:1px solid rgba(255,255,255,.22);
+}
+.crest-sm{
+  width:34px;height:34px;flex:none;background:var(--accent);color:#fff;
+  display:grid;place-items:center;overflow:hidden;
+  font-family:var(--team-display);font-weight:800;font-size:12px;
+  box-shadow:0 0 0 1px rgba(255,255,255,.25);
+}
+.crest-sm img{width:100%;height:100%;object-fit:cover;display:block}
+.hero .underline .meta{margin-top:0;font-size:13px;color:rgba(255,255,255,.7)}
+.hero .underline .tally{
+  margin-left:auto;text-align:right;font-family:var(--body);font-size:13px;
+  color:rgba(255,255,255,.6);white-space:nowrap;
+}
+.hero .underline .tally b{
+  font-family:var(--data);font-size:26px;font-weight:600;letter-spacing:-.04em;
+  color:#fff;display:inline;margin-right:5px;
+}
+
+/* ============================================================
+   NUMBERS — a line of figures rather than five equal cards
+   ============================================================ */
+.numbers .inner{
+  display:flex;flex-wrap:wrap;gap:0;padding:0 24px;
+  grid-template-columns:none;
+}
+.numbers .inner > span{
+  padding:15px 22px 15px 0;margin-right:22px;font-size:13px;color:var(--dim);
+  border-right:1px solid var(--rule);
+}
+.numbers .inner > span:last-child{border-right:0;margin-right:0}
+.numbers .inner > span b{
+  font-family:var(--data);font-size:20px;font-weight:600;letter-spacing:-.04em;
+  color:var(--ink);margin-right:6px;
+}
+.numbers .waiting{color:var(--dim);font-size:13px;border-right:0;padding:16px 0}
+
+@media (max-width:620px){
+  .numbers .inner > span{padding-right:16px;margin-right:16px;font-size:12px}
+  .numbers .inner > span b{font-size:17px}
+  .hero .underline .tally{margin-left:0;width:100%;text-align:left;
+    padding-top:10px;border-top:1px solid rgba(255,255,255,.16)}
+}
