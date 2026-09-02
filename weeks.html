@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Weeks — Katy Golf League</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#007041">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=Instrument+Sans:wght@400;500;600&family=Martian+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/extra.css">
+<style>
+.tagged{margin-left:auto;font-family:var(--data);font-size:9px;letter-spacing:.12em;
+  background:var(--lime);color:var(--green-deep);padding:4px 8px}
+.tabs{background:var(--green-deep)}
+.tabs .inner{max-width:1040px;margin:0 auto;padding:0 24px;display:flex;gap:2px}
+.tabs button{background:none;border:0;padding:13px 18px;cursor:pointer;
+  font-family:var(--data);font-size:10px;letter-spacing:.11em;
+  color:rgba(255,255,255,.6);text-transform:uppercase}
+.tabs button[aria-selected="true"]{background:var(--field);color:var(--ink)}
+.pane2{display:none;padding-top:22px}
+.pane2.on{display:block}
+
+/* ---------- shared ---------- */
+.block2{background:var(--card);border:1px solid var(--rule);margin-bottom:14px}
+.block2 > header{display:flex;align-items:center;gap:12px;padding:13px 16px;
+  border-bottom:1px solid var(--rule);flex-wrap:wrap}
+.block2 > header h2{font-size:16px;margin:0;font-family:var(--display);font-weight:800}
+.block2 > header .sub{font-size:12px;color:var(--dim);font-family:var(--data)}
+.block2 > header .acts{margin-left:auto;display:flex;gap:8px}
+.block2 .body2{padding:16px}
+button.b{border:1px solid var(--rule);background:#FBFCFB;padding:8px 13px;
+  font-size:13px;cursor:pointer;font-family:inherit;white-space:nowrap}
+button.b:hover{border-color:var(--ink)}
+button.b.go{background:var(--green);border-color:var(--green);color:#fff}
+button.b.go:hover{background:var(--green-deep)}
+button.b.del{color:#B91C1C}
+button.b[disabled]{opacity:.4;cursor:default}
+
+label.f{display:block;font-family:var(--data);font-size:8px;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--dim);margin-bottom:4px}
+input.f,select.f{width:100%;font-family:inherit;font-size:15px;padding:9px 11px;
+  border:1px solid var(--rule);background:#FBFCFB;color:var(--ink)}
+input.f:focus,select.f:focus{outline:none;border-color:var(--green);background:#fff}
+.grid2{display:grid;gap:11px}
+
+/* ---------- courses ---------- */
+.holes9{display:grid;grid-template-columns:repeat(9,1fr);gap:5px}
+.holes9 input{text-align:center;font-family:var(--data);padding:9px 2px;font-size:15px}
+.holes9 .hn{font-family:var(--data);font-size:9px;color:var(--dim);text-align:center;
+  padding-bottom:3px}
+.courserow{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;
+  padding:11px 0;border-bottom:1px dotted var(--rule)}
+.courserow:last-child{border-bottom:0}
+.courserow b{font-size:15px}
+.courserow span{font-family:var(--data);font-size:11px;color:var(--dim)}
+
+/* ---------- bays ---------- */
+.baygrid{display:grid;gap:9px}
+.bayline2{display:grid;grid-template-columns:52px 1fr 1fr;gap:10px;align-items:center}
+.bayno{background:var(--green);color:#fff;font-family:var(--data);text-align:center;
+  padding:11px 0;line-height:1}
+.bayno b{display:block;font-size:17px;font-weight:600}
+.bayno span{display:block;font-size:7px;letter-spacing:.14em;margin-top:3px;opacity:.7}
+.unused{font-size:12px;color:var(--dim);padding:10px 0}
+
+.weekrow{display:grid;grid-template-columns:64px 1fr auto auto;gap:12px;
+  align-items:center;padding:12px 0;border-bottom:1px solid var(--rule)}
+.weekrow:last-child{border-bottom:0}
+.weekrow .wk{font-family:var(--data);font-size:15px;font-weight:600}
+.weekrow .det b{display:block;font-size:15px}
+.weekrow .det span{font-size:12px;color:var(--dim)}
+
+.note2{font-size:12px;color:var(--dim);line-height:1.5;margin-top:10px}
+.msg2{padding:11px 14px;font-size:13px;margin-top:12px;display:none}
+.msg2.on{display:block}
+.msg2.bad{background:#FBE4E4;color:#8C1A1A;border-left:4px solid #B91C1C}
+.msg2.good{background:#E4F2D6;color:#2F5314;border-left:4px solid var(--green)}
+
+.gate2{max-width:520px;margin:60px auto;background:var(--card);border:1px solid var(--rule);
+  padding:30px;text-align:center}
+
+@media (max-width:700px){
+  .bayline2{grid-template-columns:44px 1fr;row-gap:7px}
+  .bayline2 select:last-child{grid-column:2}
+  .holes9{grid-template-columns:repeat(5,1fr)}
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="inner">
+    <a class="mark" href="index.html">Katy
+      <svg class="xm" viewBox="0 0 20 20" aria-hidden="true">
+        <rect x="1.4" y="1.4" width="17.2" height="17.2" rx="1" fill="none"
+              stroke="currentColor" stroke-width="2.6"/>
+        <path d="M6.2 6.2 L13.8 13.8 M13.8 6.2 L6.2 13.8" stroke="currentColor"
+              stroke-width="2.8" stroke-linecap="square"/>
+      </svg>
+      Golf League</a>
+    <span class="tagged">COMMISSIONER</span>
+  </div>
+</header>
+
+<div id="gate" class="gate2" hidden>
+  <h2>Commissioner only</h2>
+  <p style="color:var(--dim);margin:9px 0 0">This page sets up courses and weeks.</p>
+</div>
+
+<div id="app" hidden>
+  <div class="title">
+    <div class="inner"><div><div class="eyebrow">Setting up the season</div>
+      <h1>Weeks</h1></div></div>
+  </div>
+
+  <div class="tabs">
+    <div class="inner">
+      <button data-p="p-weeks"   aria-selected="true">Weeks</button>
+      <button data-p="p-courses" aria-selected="false">Courses</button>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <!-- ============ WEEKS ============ -->
+    <div class="pane2 on" id="p-weeks">
+      <div class="block2">
+        <header>
+          <h2 id="wkTitle">A new week</h2>
+          <span class="sub" id="wkSub"></span>
+          <div class="acts">
+            <button class="b" id="wkNew">Start fresh</button>
+            <button class="b go" id="wkSave">Save the week</button>
+          </div>
+        </header>
+        <div class="body2">
+          <div class="grid2" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+               margin-bottom:18px">
+            <div><label class="f" for="wkNo">Week</label>
+              <input class="f" id="wkNo" type="number" min="1" max="30"></div>
+            <div><label class="f" for="wkDate">Date</label>
+              <input class="f" id="wkDate" type="date"></div>
+            <div><label class="f" for="wkTime">Tee time</label>
+              <input class="f" id="wkTime" type="time" value="19:30"></div>
+            <div><label class="f" for="wkCourse">Course</label>
+              <select class="f" id="wkCourse"></select></div>
+          </div>
+
+          <div class="grid2" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+               margin-bottom:8px">
+            <div><label class="f" for="ctpHole">Closest to the pin</label>
+              <select class="f" id="ctpHole"></select></div>
+            <div><label class="f" for="lpHole">Long putt</label>
+              <select class="f" id="lpHole"></select></div>
+          </div>
+
+          <label class="f" style="margin-top:14px">The pot — fill in after you've
+            taken the money</label>
+          <div id="potRows" style="margin-bottom:18px"></div>
+
+          <div class="note2" style="margin:0 0 12px">
+            Bay assignments stay hidden from everyone but the teams involved until
+            11am on the morning of play.
+          </div>
+          <label class="f">Bays — two teams to a bay</label>
+          <div class="baygrid" id="baygrid"></div>
+          <div class="note2" id="leftover"></div>
+          <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+            <button class="b" id="sameAgain">Same as last week</button>
+            <button class="b" id="clearBays">Empty them</button>
+          </div>
+          <div class="note2" id="usual"></div>
+          <div class="msg2" id="wkMsg"></div>
+        </div>
+      </div>
+
+      <div class="block2">
+        <header><h2>Weeks so far</h2></header>
+        <div class="body2" id="weekList">
+          <p style="color:var(--dim);font-size:13px;margin:0">Loading…</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ COURSES ============ -->
+    <div class="pane2" id="p-courses">
+      <div class="block2">
+        <header>
+          <h2 id="crTitle">A new course</h2>
+          <div class="acts">
+            <button class="b" id="crNew">Start fresh</button>
+            <button class="b go" id="crSave">Save the course</button>
+          </div>
+        </header>
+        <div class="body2">
+          <div class="grid2" style="grid-template-columns:2fr 1fr;margin-bottom:18px">
+            <div><label class="f" for="crName">Name</label>
+              <input class="f" id="crName" placeholder="Pebble Beach"></div>
+            <div><label class="f" for="crNine">Which nine</label>
+              <select class="f" id="crNine">
+                <option value="front">Front</option>
+                <option value="back">Back</option>
+              </select></div>
+          </div>
+
+          <label class="f">Par for each hole</label>
+          <div class="holes9" style="margin-bottom:6px">
+            ${''}
+            <span class="hn">1</span><span class="hn">2</span><span class="hn">3</span>
+            <span class="hn">4</span><span class="hn">5</span><span class="hn">6</span>
+            <span class="hn">7</span><span class="hn">8</span><span class="hn">9</span>
+          </div>
+          <div class="holes9" id="parRow" style="margin-bottom:18px"></div>
+
+          <label class="f">Stroke index — 1 is the hardest hole</label>
+          <div class="holes9" id="siRow" style="margin-bottom:8px"></div>
+          <div class="note2">
+            The simulator shows both of these on screen. Worth copying them across
+            the first time you play a course rather than guessing — the stroke
+            index decides which holes handicap strokes land on.
+          </div>
+          <div class="msg2" id="crMsg"></div>
+        </div>
+      </div>
+
+      <div class="block2">
+        <header><h2>Courses</h2></header>
+        <div class="body2" id="courseList">
+          <p style="color:var(--dim);font-size:13px;margin:0">Loading…</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div style="height:50px"></div>
+</div>
+
+<div id="loading" class="gate2"><p>Loading…</p></div>
+
+<footer>
+  <div class="inner"><span>Katy Golf League</span><span>Commissioner view</span></div>
+</footer>
+
+<script type="module">
+import { supabase, requireAuth, me } from './assets/db.js';
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c =>
+  ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+
+const BAYS = 7;
+let teams = [], courses = [], weeks = [], editingCourse = null, editingWeek = null;
+
+/* ---------- boot ---------- */
+(async () => {
+  const session = await requireAuth();
+  if (!session) return;
+  const p = await me();
+  if (!p || !p.is_admin) { $('loading').hidden = true; $('gate').hidden = false; return; }
+
+  buildHoleInputs();
+  buildBayRows();
+  buildPotRows();
+  await refresh();
+
+  $('loading').hidden = true;
+  $('app').hidden = false;
+})();
+
+let usualBay = {}, pots = {};
+
+async function refresh() {
+  const [t, c, m, ws] = await Promise.all([
+    supabase.from('teams').select('id,name,slug,accent,crest').order('name'),
+    supabase.from('courses').select('*').order('name'),
+    supabase.from('matches').select('*,courses(name,nine)').order('week', { ascending:false }),
+    supabase.from('week_settings').select('*')
+  ]);
+  teams   = t.data || [];
+  courses = c.data || [];
+  const settings = Object.fromEntries((ws.data||[]).map(s => [s.week, s]));
+
+  /* group matches into weeks */
+  const byWeek = {};
+  for (const row of m.data || []) {
+    (byWeek[row.week] ??= { week: row.week, played_on: row.played_on,
+       tee_time: row.tee_time, course: row.courses, course_id: row.course_id,
+       matches: [], settings: settings[row.week] }).matches.push(row);
+  }
+  weeks = Object.values(byWeek).sort((a,b) => b.week - a.week);
+
+  /* where each team last played, so Chris can see at a glance
+     whether he's moved anyone */
+  const { data: lb } = await supabase.from('last_bays').select('*');
+  usualBay = Object.fromEntries((lb||[]).map(r => [r.team_id, r.bay]));
+
+  const { data: cp } = await supabase.from('contest_pots').select('*');
+  pots = {};
+  for (const p of cp || []) (pots[p.week] ??= {})[p.kind] = p;
+
+  paintCourseOptions();
+  paintCourses();
+  paintWeeks();
+  paintBayOptions();
+}
+
+/* ============================================================
+   COURSES
+   ============================================================ */
+function buildHoleInputs() {
+  $('parRow').innerHTML = Array.from({length:9}, (_,i) =>
+    `<input class="f" id="par${i}" type="number" min="3" max="6" inputmode="numeric">`).join('');
+  $('siRow').innerHTML = Array.from({length:9}, (_,i) =>
+    `<input class="f" id="si${i}" type="number" min="1" max="9" inputmode="numeric">`).join('');
+}
+
+function paintCourses() {
+  if (!courses.length) {
+    $('courseList').innerHTML =
+      '<p style="color:var(--dim);font-size:13px;margin:0">No courses yet. Add one above.</p>';
+    return;
+  }
+  $('courseList').innerHTML = courses.map(c => `
+    <div class="courserow">
+      <div><b>${esc(c.name)}</b>
+        <span>${esc(c.nine)} nine · par ${c.pars.reduce((a,b)=>a+b,0)} ·
+          S.I. ${c.stroke_index.join(' ')}</span></div>
+      <button class="b" data-edit="${c.id}">Edit</button>
+      <button class="b del" data-delc="${c.id}">Delete</button>
+    </div>`).join('');
+
+  $('courseList').querySelectorAll('[data-edit]').forEach(b =>
+    b.addEventListener('click', () => editCourse(b.dataset.edit)));
+  $('courseList').querySelectorAll('[data-delc]').forEach(b =>
+    b.addEventListener('click', async () => {
+      const c = courses.find(x => x.id === b.dataset.delc);
+      if (!confirm(`Delete ${c.name} ${c.nine}? Weeks that used it will lose their course.`)) return;
+      await supabase.from('courses').delete().eq('id', b.dataset.delc);
+      refresh();
+    }));
+}
+
+function editCourse(id) {
+  const c = courses.find(x => x.id === id);
+  if (!c) return;
+  editingCourse = id;
+  $('crTitle').textContent = c.name + ' ' + c.nine;
+  $('crName').value = c.name;
+  $('crNine').value = c.nine;
+  c.pars.forEach((v,i) => $('par'+i).value = v);
+  c.stroke_index.forEach((v,i) => $('si'+i).value = v);
+  window.scrollTo({ top:0, behavior:'smooth' });
+}
+
+$('crNew').addEventListener('click', () => {
+  editingCourse = null;
+  $('crTitle').textContent = 'A new course';
+  $('crName').value = '';
+  for (let i=0;i<9;i++){ $('par'+i).value=''; $('si'+i).value=''; }
+});
+
+$('crSave').addEventListener('click', async () => {
+  const msg = $('crMsg');
+  const say = (t, ok) => { msg.textContent = t; msg.className = 'msg2 on ' + (ok?'good':'bad'); };
+
+  const name = $('crName').value.trim();
+  if (!name) return say('The course needs a name.');
+
+  const pars = [], si = [];
+  for (let i=0;i<9;i++){
+    const p = Number($('par'+i).value), s = Number($('si'+i).value);
+    if (!p) return say(`Hole ${i+1} is missing its par.`);
+    if (!s) return say(`Hole ${i+1} is missing its stroke index.`);
+    pars.push(p); si.push(s);
+  }
+  const sorted = [...si].sort((a,b) => a-b).join(',');
+  if (sorted !== '1,2,3,4,5,6,7,8,9')
+    return say('The stroke index should use each of 1 to 9 exactly once.');
+
+  const row = { name, nine: $('crNine').value, pars, stroke_index: si };
+  const { error } = editingCourse
+    ? await supabase.from('courses').update(row).eq('id', editingCourse)
+    : await supabase.from('courses').insert(row);
+
+  if (error) return say(error.message);
+  say(editingCourse ? 'Saved.' : 'Added.', true);
+  editingCourse = null;
+  $('crTitle').textContent = 'A new course';
+  refresh();
+});
+
+/* ============================================================
+   WEEKS
+   ============================================================ */
+function paintCourseOptions() {
+  $('wkCourse').innerHTML = courses.length
+    ? courses.map(c => `<option value="${c.id}">${esc(c.name)} — ${esc(c.nine)}</option>`).join('')
+    : '<option value="">Add a course first</option>';
+
+  const holes = ['<option value="">None this week</option>'].concat(
+    Array.from({length:9}, (_,i) => `<option value="${i+1}">Hole ${i+1}</option>`)).join('');
+  $('ctpHole').innerHTML = holes;
+  $('lpHole').innerHTML  = holes;
+}
+
+const POT_KINDS = [['ctp','Closest to the pin'],['long_putt','Long putt'],
+                   ['chip_in','Chip-ins']];
+
+function buildPotRows() {
+  $('potRows').innerHTML = POT_KINDS.map(([k,label]) => `
+    <div style="display:grid;grid-template-columns:1fr 82px 90px 100px;gap:9px;
+         align-items:end;margin-bottom:8px">
+      <div style="font-size:14px;padding-bottom:10px">${label}</div>
+      <div><label class="f" for="pe-${k}">Entries</label>
+        <input class="f" id="pe-${k}" type="number" min="0" inputmode="numeric"></div>
+      <div><label class="f" for="pv-${k}">Each</label>
+        <input class="f" id="pv-${k}" type="number" min="0" step="1" inputmode="decimal"></div>
+      <div><label class="f" for="pc-${k}">Carried</label>
+        <input class="f" id="pc-${k}" type="number" min="0" step="1" inputmode="decimal"></div>
+    </div>`).join('') +
+    `<div class="note2" id="potTotals"></div>`;
+
+  POT_KINDS.forEach(([k]) =>
+    ['pe','pv','pc'].forEach(p =>
+      $(`${p}-${k}`).addEventListener('input', potTotals)));
+  potTotals();
+}
+
+function potTotals() {
+  const bits = POT_KINDS.map(([k,label]) => {
+    const e = Number($('pe-'+k).value) || 0;
+    const v = Number($('pv-'+k).value) || 0;
+    const c = Number($('pc-'+k).value) || 0;
+    const total = e * v + c;
+    return total ? `${label} $${total}` : null;
+  }).filter(Boolean);
+  $('potTotals').textContent = bits.length ? 'On it: ' + bits.join(' · ') : '';
+}
+
+function buildBayRows() {
+  $('baygrid').innerHTML = Array.from({length:BAYS}, (_,i) => `
+    <div class="bayline2">
+      <div class="bayno"><b>${i+1}</b><span>BAY</span></div>
+      <select class="f" data-bay="${i+1}" data-slot="a"></select>
+      <select class="f" data-bay="${i+1}" data-slot="b"></select>
+    </div>`).join('');
+}
+
+function paintBayOptions() {
+  const opts = ['<option value="">—</option>']
+    .concat(teams.map(t => `<option value="${t.id}">${esc(t.name)}</option>`)).join('');
+  $('baygrid').querySelectorAll('select').forEach(s => {
+    const keep = s.value;
+    s.innerHTML = opts;
+    s.value = keep;
+    s.addEventListener('change', checkLeftover);
+  });
+  checkLeftover();
+}
+
+function bayPicks() {
+  return [...$('baygrid').querySelectorAll('select')].map(s => s.value).filter(Boolean);
+}
+
+function checkLeftover() {
+  const picked = bayPicks();
+  const dupes = picked.filter((v,i) => picked.indexOf(v) !== i);
+  const out = teams.filter(t => !picked.includes(t.id));
+
+  const bits = [];
+  if (dupes.length) {
+    const names = [...new Set(dupes)].map(id => teams.find(t => t.id === id)?.name);
+    bits.push(`<b style="color:#B91C1C">${names.join(' and ')} in two bays at once.</b>`);
+  }
+  if (out.length) bits.push(`Sitting out: ${out.map(t => esc(t.name)).join(', ')}.`);
+  $('leftover').innerHTML = bits.join(' ') || 'Every team has a bay.';
+
+  /* flag anyone who's been moved off their usual bay */
+  const moved = [];
+  $('baygrid').querySelectorAll('select').forEach(s => {
+    if (!s.value) return;
+    const bay = Number(s.dataset.bay);
+    const was = usualBay[s.value];
+    if (was && was !== bay) {
+      const t = teams.find(x => x.id === s.value);
+      moved.push(`${t.name} ${was} → ${bay}`);
+    }
+  });
+  $('usual').textContent = moved.length
+    ? 'Moved: ' + moved.join(', ')
+    : '';
+}
+
+/* Most teams sit in the same bay every week, so the useful
+   button is "same as last week" rather than a shuffle. */
+$('sameAgain').addEventListener('click', () => {
+  const prev = weeks.filter(w => w.week !== Number($('wkNo').value))
+                    .sort((a,b) => b.week - a.week)[0];
+  if (!prev) { $('usual').textContent = 'No earlier week to copy.'; return; }
+
+  $('baygrid').querySelectorAll('select').forEach(s => s.value = '');
+  for (const m of prev.matches) {
+    const a = $('baygrid').querySelector(`[data-bay="${m.bay}"][data-slot="a"]`);
+    const b = $('baygrid').querySelector(`[data-bay="${m.bay}"][data-slot="b"]`);
+    if (a) a.value = m.home_team || '';
+    if (b) b.value = m.away_team || '';
+  }
+  $('usual').textContent = `Copied from week ${prev.week}. Move anyone who needs moving.`;
+  checkLeftover();
+});
+
+$('clearBays').addEventListener('click', () => {
+  $('baygrid').querySelectorAll('select').forEach(s => s.value = '');
+  checkLeftover();
+});
+
+$('wkNew').addEventListener('click', () => {
+  editingWeek = null;
+  POT_KINDS.forEach(([k]) => { $('pe-'+k).value=''; $('pv-'+k).value=''; $('pc-'+k).value=''; });
+  potTotals();
+  $('wkTitle').textContent = 'A new week';
+  $('wkSub').textContent = '';
+  $('wkNo').value = weeks.length ? Math.max(...weeks.map(w => w.week)) + 1 : 1;
+  $('wkDate').value = nextTuesday();
+  $('wkTime').value = '19:30';
+  $('ctpHole').value = ''; $('lpHole').value = '';
+  $('baygrid').querySelectorAll('select').forEach(s => s.value = '');
+  checkLeftover();
+});
+
+function nextTuesday() {
+  const d = new Date();
+  d.setDate(d.getDate() + ((2 - d.getDay() + 7) % 7 || 7));
+  return d.toISOString().slice(0,10);
+}
+
+function editWeek(n) {
+  const w = weeks.find(x => x.week === n);
+  if (!w) return;
+  editingWeek = n;
+  $('wkTitle').textContent = 'Week ' + n;
+  $('wkSub').textContent = w.matches.length + ' bays';
+  $('wkNo').value = w.week;
+  $('wkDate').value = w.played_on;
+  $('wkTime').value = (w.tee_time || '19:30').slice(0,5);
+  if (w.course_id) $('wkCourse').value = w.course_id;
+  $('ctpHole').value = w.settings?.ctp_hole || '';
+  $('lpHole').value  = w.settings?.long_putt_hole || '';
+
+  POT_KINDS.forEach(([k]) => {
+    const p = (pots[n] || {})[k] || {};
+    $('pe-'+k).value = p.entries ?? '';
+    $('pv-'+k).value = p.per_entry ?? '';
+    $('pc-'+k).value = p.carried || '';
+  });
+  potTotals();
+
+  $('baygrid').querySelectorAll('select').forEach(s => s.value = '');
+  for (const m of w.matches) {
+    const a = $('baygrid').querySelector(`[data-bay="${m.bay}"][data-slot="a"]`);
+    const b = $('baygrid').querySelector(`[data-bay="${m.bay}"][data-slot="b"]`);
+    if (a) a.value = m.home_team || '';
+    if (b) b.value = m.away_team || '';
+  }
+  checkLeftover();
+  window.scrollTo({ top:0, behavior:'smooth' });
+}
+
+$('wkSave').addEventListener('click', async () => {
+  const msg = $('wkMsg');
+  const say = (t, ok) => { msg.textContent = t; msg.className = 'msg2 on ' + (ok?'good':'bad'); };
+
+  const week = Number($('wkNo').value);
+  const date = $('wkDate').value;
+  const courseId = $('wkCourse').value;
+
+  if (!week)     return say('Which week is it?');
+  if (!date)     return say('The week needs a date.');
+  if (!courseId) return say('Pick a course. Add one on the Courses tab if the list is empty.');
+
+  const picked = bayPicks();
+  if (!picked.length) return say('No teams in any bay yet.');
+  if (picked.length !== new Set(picked).size)
+    return say('A team is in two bays at once.');
+
+  $('wkSave').disabled = true;
+  say('Saving…', true);
+
+  /* rebuild the week from scratch — simpler than working out
+     which bay changed, and rounds hang off match ids so this
+     only runs before anyone has played */
+  const existing = weeks.find(w => w.week === week);
+  if (existing) {
+    const ids = existing.matches.map(m => m.id);
+    const { data: played } = await supabase.from('rounds')
+      .select('id').in('match_id', ids).limit(1);
+    if (played && played.length) {
+      $('wkSave').disabled = false;
+      return say('Cards have already been entered for that week, so the bays are locked.');
+    }
+    await supabase.from('matches').delete().in('id', ids);
+  }
+
+  const rows = [];
+  for (let bay = 1; bay <= BAYS; bay++) {
+    const a = $('baygrid').querySelector(`[data-bay="${bay}"][data-slot="a"]`).value;
+    const b = $('baygrid').querySelector(`[data-bay="${bay}"][data-slot="b"]`).value;
+    if (!a && !b) continue;
+    rows.push({
+      week, played_on: date, tee_time: $('wkTime').value, bay,
+      course_id: courseId,
+      home_team: a || b,
+      away_team: (a && b) ? b : null
+    });
+  }
+
+  const { error } = await supabase.from('matches').insert(rows);
+  if (error) { $('wkSave').disabled = false; return say(error.message); }
+
+  await supabase.from('week_settings').upsert({
+    week,
+    ctp_hole: $('ctpHole').value ? Number($('ctpHole').value) : null,
+    long_putt_hole: $('lpHole').value ? Number($('lpHole').value) : null
+  });
+
+  for (const [k] of POT_KINDS) {
+    const entries = $('pe-'+k).value === '' ? null : Number($('pe-'+k).value);
+    const per     = $('pv-'+k).value === '' ? null : Number($('pv-'+k).value);
+    const carried = Number($('pc-'+k).value) || 0;
+    if (entries == null && per == null && !carried) {
+      await supabase.from('contest_pots').delete().eq('week', week).eq('kind', k);
+    } else {
+      await supabase.from('contest_pots').upsert({
+        week, kind: k, entries, per_entry: per, carried, set_by: null
+      });
+    }
+  }
+
+  $('wkSave').disabled = false;
+  say(`Week ${week} saved — ${rows.length} bays.`, true);
+  editingWeek = null;
+  refresh();
+});
+
+function paintWeeks() {
+  if (!weeks.length) {
+    $('weekList').innerHTML =
+      '<p style="color:var(--dim);font-size:13px;margin:0">Nothing scheduled yet.</p>';
+    return;
+  }
+  $('weekList').innerHTML = weeks.map(w => `
+    <div class="weekrow">
+      <span class="wk">WK ${w.week}</span>
+      <div class="det">
+        <b>${new Date(w.played_on).toLocaleDateString([], {weekday:'long',day:'numeric',month:'long'})}</b>
+        <span>${esc(w.course?.name || 'no course')} ${esc(w.course?.nine || '')} ·
+          ${w.matches.length} bays${w.settings?.ctp_hole ? ' · CTP hole ' + w.settings.ctp_hole : ''}</span>
+      </div>
+      <button class="b" data-editw="${w.week}">Edit</button>
+      <button class="b del" data-delw="${w.week}">Delete</button>
+    </div>`).join('');
+
+  $('weekList').querySelectorAll('[data-editw]').forEach(b =>
+    b.addEventListener('click', () => editWeek(Number(b.dataset.editw))));
+  $('weekList').querySelectorAll('[data-delw]').forEach(b =>
+    b.addEventListener('click', async () => {
+      const n = Number(b.dataset.delw);
+      if (!confirm(`Delete week ${n}? Any cards entered for it go too.`)) return;
+      const w = weeks.find(x => x.week === n);
+      await supabase.from('matches').delete().in('id', w.matches.map(m => m.id));
+      await supabase.from('week_settings').delete().eq('week', n);
+      refresh();
+    }));
+}
+
+/* ---------- tabs ---------- */
+document.querySelectorAll('.tabs button').forEach(b =>
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.tabs button').forEach(x =>
+      x.setAttribute('aria-selected', x === b));
+    document.querySelectorAll('.pane2').forEach(p =>
+      p.classList.toggle('on', p.id === b.dataset.p));
+  }));
+</script>
+</body>
+</html>
