@@ -300,6 +300,25 @@ input[disabled],textarea[disabled]{opacity:.55;cursor:not-allowed}
     </fieldset>
 
     <fieldset>
+      <legend>Your tees</legend>
+      <div class="field">
+        <label>Which tee do you play?</label>
+        <div class="teeset" id="teeset" role="group" aria-label="Your tee">
+          <button type="button" class="tk-black" data-tee="black" aria-pressed="false">
+            <span>Black</span></button>
+          <button type="button" class="tk-blue"  data-tee="blue"  aria-pressed="false">
+            <span>Blue</span></button>
+          <button type="button" class="tk-red"   data-tee="red"   aria-pressed="false">
+            <span>Red</span></button>
+        </div>
+        <div class="hint">
+          Sets which yardages you see on a scorecard. Chris sets this when the
+          roster goes in, so it's probably already right.
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
       <legend>Your photo</legend>
       <div class="mugshot">
         <div class="mug" id="mug">—</div>
@@ -388,6 +407,9 @@ const draft = {};
   applyLook();
   paintMug();
   paintBgImage();
+
+  draft.default_tee = profile.default_tee || 'blue';
+  paintTee();
 
   if (profile.can_animate) {
     $('avatarfile').accept = 'image/png,image/jpeg,image/webp,image/gif';
@@ -756,6 +778,18 @@ $('bgmode').addEventListener('change', e => {
   touch(); applyLook();
 });
 
+/* ---------- your tees ---------- */
+function paintTee() {
+  $('teeset').querySelectorAll('button').forEach(b =>
+    b.setAttribute('aria-pressed', b.dataset.tee === draft.default_tee));
+}
+
+$('teeset').querySelectorAll('button').forEach(b =>
+  b.addEventListener('click', () => {
+    draft.default_tee = b.dataset.tee;
+    paintTee(); touch();
+  }));
+
 /* ---------- your photo ---------- */
 const publicAvatar = p => supabase.storage.from('avatars').getPublicUrl(p).data.publicUrl;
 
@@ -853,8 +887,9 @@ $('save').addEventListener('click', async () => {
 
   if (!error) {
     const mine = {};
-    if (draft.quote !== undefined)      mine.quote = draft.quote;
-    if (draft.avatar_url !== undefined) mine.avatar_url = draft.avatar_url;
+    if (draft.quote !== undefined)       mine.quote = draft.quote;
+    if (draft.avatar_url !== undefined)  mine.avatar_url = draft.avatar_url;
+    if (draft.default_tee !== undefined) mine.default_tee = draft.default_tee;
     if (Object.keys(mine).length) {
       await supabase.from('profiles').update(mine).eq('id', profile.id);
     }
@@ -889,6 +924,24 @@ $('navtoggle').addEventListener('click', function(){
 }
 </style>
 <style>
+/* tee picker */
+.teeset{display:flex;gap:10px}
+.teeset button{
+  border:1px solid var(--rule);background:#FBFCFB;cursor:pointer;
+  padding:10px 8px 9px;font-family:inherit;flex:1;
+  display:grid;justify-items:center;gap:7px;
+}
+.teeset button::before{
+  content:"";width:26px;height:26px;border-radius:50%;display:block;
+}
+.teeset button.tk-black::before{background:#1A1A1A}
+.teeset button.tk-blue::before {background:#1B4F8A}
+.teeset button.tk-red::before  {background:#C0392B}
+.teeset button span{font-size:11px;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--dim);font-family:var(--data)}
+.teeset button[aria-pressed="true"]{border-color:var(--ink);box-shadow:0 0 0 1px var(--ink)}
+.teeset button[aria-pressed="true"] span{color:var(--ink)}
+
 /* ============================================================
    Layout, last word.
    This page loads site.css and extra.css for the shared look,

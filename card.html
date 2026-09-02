@@ -138,7 +138,7 @@
 </footer>
 
 <script type="module">
-import { supabase, paintAuthSlot } from './assets/db.js';
+import { supabase, paintAuthSlot, me, getSession } from './assets/db.js';
 import { holeSVG, yardsFor } from './assets/holes.js';
 
 const $ = id => document.getElementById(id);
@@ -146,7 +146,11 @@ const esc = s => String(s ?? '').replace(/[&<>"]/g, c =>
   ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
 
 const params = new URLSearchParams(location.search);
+/* Whatever tee you play, unless the link says otherwise. Chris
+   sets it on the roster, so it's right before anyone has
+   touched their own settings. */
 let tee = params.get('tee') || 'blue';
+let teeFromProfile = false;
 let data = null, plans = null;
 
 paintAuthSlot(0);
@@ -154,6 +158,11 @@ paintAuthSlot(0);
 (async () => {
   const id = params.get('round');
   if (!id) return fail('No card specified.');
+
+  if (!params.get('tee') && await getSession()) {
+    const p = await me();
+    if (p?.default_tee) { tee = p.default_tee; teeFromProfile = true; }
+  }
 
   const { data: rs, error } = await supabase
     .from('round_scores').select('*').eq('id', id).maybeSingle();
@@ -248,7 +257,8 @@ function render() {
   <div class="wrap2">
     <div style="display:flex;align-items:center;gap:14px;margin-top:22px;flex-wrap:wrap">
       <span style="font-family:var(--data);font-size:10px;letter-spacing:.12em;
-        text-transform:uppercase;color:var(--dim)">Yardages from</span>
+        text-transform:uppercase;color:var(--dim)">Yardages from${
+          teeFromProfile ? ' your tees' : ''}</span>
       <div class="teepick" style="margin-left:0">
         <button class="t-black" data-t="black" aria-pressed="${tee==='black'}" aria-label="Black tees"></button>
         <button class="t-blue"  data-t="blue"  aria-pressed="${tee==='blue'}"  aria-label="Blue tees"></button>

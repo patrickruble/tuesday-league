@@ -50,8 +50,13 @@
 .tacts button:hover:not([disabled]){filter:brightness(.95)}
 
 .spots{padding:4px 14px 12px}
-.spot2{display:grid;grid-template-columns:26px 1fr 1fr 70px auto;gap:8px;
+.spot2{display:grid;grid-template-columns:26px 1fr 1fr 66px 92px auto;gap:8px;
   align-items:center;padding:7px 0}
+.teeset{display:flex;gap:4px}
+.teeset button{width:26px;height:26px;border:1px solid var(--rule);cursor:pointer;
+  padding:0;border-radius:50%}
+.teeset button[aria-pressed="true"]{box-shadow:0 0 0 2px var(--ink)}
+.tk-black{background:#1A1A1A}.tk-blue{background:#1B4F8A}.tk-red{background:#C0392B}
 .spot2 + .spot2{border-top:1px dotted var(--rule)}
 .spot2 .n{font-family:var(--data);font-size:11px;color:var(--dim);text-align:center}
 .spot2 input{font-family:inherit;font-size:14px;padding:7px 9px;border:1px solid var(--rule);
@@ -61,7 +66,7 @@
   background:var(--green);color:#fff;padding:3px 6px;white-space:nowrap}
 .spot2 .open{font-family:var(--data);font-size:8px;letter-spacing:.09em;color:var(--dim);
   box-shadow:inset 0 0 0 1px var(--rule);padding:3px 6px;white-space:nowrap}
-.spothead{display:grid;grid-template-columns:26px 1fr 1fr 70px auto;gap:8px;
+.spothead{display:grid;grid-template-columns:26px 1fr 1fr 66px 92px auto;gap:8px;
   font-family:var(--data);font-size:8px;letter-spacing:.1em;text-transform:uppercase;
   color:var(--dim);padding:8px 0 2px}
 
@@ -221,6 +226,11 @@ function paint() {
         <input class="pname" placeholder="Name" value="${esc(s.full_name||'')}">
         <input class="pmail" placeholder="Email" inputmode="email" value="${esc(s.email||'')}">
         <input class="phcp" placeholder="Index" inputmode="decimal" value="${s.hcp_index ?? ''}">
+        <div class="teeset" role="group" aria-label="Tee">
+          ${['black','blue','red'].map(c =>
+            `<button type="button" class="tk-${c}" data-tee="${c}"
+              aria-pressed="${(s.default_tee || 'blue') === c}" aria-label="${c}"></button>`).join('')}
+        </div>
         <span class="${s.claimed_by ? 'claimed' : 'open'}">${s.claimed_by ? 'SIGNED UP' : 'OPEN'}</span>
       </div>`;
     }).join('');
@@ -241,7 +251,7 @@ function paint() {
         </div>
       </div>
       <div class="spots">
-        <div class="spothead"><span></span><span>Player</span><span>Email</span><span>Index</span><span></span></div>
+        <div class="spothead"><span></span><span>Player</span><span>Email</span><span>Index</span><span>Tee</span><span></span></div>
         ${rows}
       </div>
     </div>`;
@@ -257,6 +267,14 @@ function wire() {
     const dirty = () => { save.disabled = false; };
 
     card.querySelectorAll('input').forEach(i => i.addEventListener('input', dirty));
+
+    card.querySelectorAll('.teeset').forEach(g =>
+      g.querySelectorAll('button').forEach(b =>
+        b.addEventListener('click', () => {
+          g.querySelectorAll('button').forEach(x =>
+            x.setAttribute('aria-pressed', x === b));
+          dirty();
+        })));
 
     card.querySelector('.tcol').addEventListener('input', e => {
       if (/^#[0-9a-f]{6}$/i.test(e.target.value)) card.style.setProperty('--c', e.target.value);
@@ -286,15 +304,25 @@ function wire() {
         const hcp  = hcpV === '' ? null : Number(hcpV);
         const spot = Number(row.dataset.spot);
         const rid  = row.dataset.id;
+        const teeBtn = row.querySelector('.teeset button[aria-pressed="true"]');
+        const tee  = teeBtn ? teeBtn.dataset.tee : 'blue';
 
         if (!nm && rid) {
           await supabase.from('roster_spots').delete().eq('id', rid);
         } else if (nm && rid) {
           await supabase.from('roster_spots')
-            .update({ full_name: nm, email: mail, hcp_index: hcp }).eq('id', rid);
+            .update({ full_name: nm, email: mail, hcp_index: hcp, default_tee: tee })
+            .eq('id', rid);
+          /* keep a signed-up player's own setting in step */
+          const claimed = spots.find(x => x.id === rid)?.claimed_by;
+          if (claimed) {
+            await supabase.from('profiles')
+              .update({ default_tee: tee }).eq('id', claimed);
+          }
         } else if (nm) {
           await supabase.from('roster_spots')
-            .insert({ team_id: id, spot, full_name: nm, email: mail, hcp_index: hcp });
+            .insert({ team_id: id, spot, full_name: nm, email: mail,
+                      hcp_index: hcp, default_tee: tee });
         }
       }
 
