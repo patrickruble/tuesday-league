@@ -531,3 +531,12 @@
 @media (max-width:560px){
   .bagitem{grid-template-columns:1fr;gap:3px;padding:11px 13px}
 }
+
+/* the tile on a team card carries the handicap, not initials —
+   a number people actually want at a glance */
+.card .tile.hcp2{
+  font-family:var(--data);
+  font-weight:600;
+  font-size:15px;
+  letter-spacing:-.04em;
+}

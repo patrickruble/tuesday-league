@@ -351,7 +351,10 @@ function buildLeaderboard() {
 function buildTeams() {
   const cards = [...teams].sort((a,b) => a.name.localeCompare(b.name)).map(t => `
     <a class="card" style="--c:${t.accent}" href="teams/${t.slug}.html">
-      <div class="cap"><div class="tile">${esc(t.crest)}</div><b>${esc(t.name)}</b></div>
+      <div class="cap">
+        <div class="tile hcp2">${t.handicap > 0 ? '+' : ''}${t.handicap ?? 0}</div>
+        <b>${esc(t.name)}</b>
+      </div>
       <div class="body"><div class="who">${t.roster.map(p => `<span>${esc(p.name)}</span>`).join('')}</div></div>
       <div class="foot">
         <span class="pts">${t.points || '—'}</span>
