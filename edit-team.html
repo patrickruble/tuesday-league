@@ -355,9 +355,11 @@ input[disabled],textarea[disabled]{opacity:.55;cursor:not-allowed}
     <fieldset>
       <legend>What's in the bag</legend>
       <div class="hint" style="margin-bottom:12px">
-        Shows on your player page. Nobody checks, so feel free to claim the driver
-        you keep meaning to buy.
+        Shows on your player page. Start typing a make and it'll suggest models —
+        anything not on the list can just be typed. Nobody checks, so feel free to
+        claim the driver you keep meaning to buy.
       </div>
+      <datalist id="brands"></datalist>
       <div id="bagrows"></div>
       <button type="button" class="addbag" id="addbag">Add something</button>
     </fieldset>
@@ -388,6 +390,13 @@ const SENT = { hot:'#B8EB7A', good:'#7EBED7', cold:'#E8A87C', bad:'#9AA5A0', odd
 /* Everything pickable comes from one file, so the editor and
    the site can't drift apart. */
 const LOOKS = await fetch('data/looks.json').then(r => r.json());
+
+/* Suggestions for the bag. A hand-kept list rather than an API,
+   because there isn't a decent free one — anything missing can
+   still be typed. */
+const CLUBS = await fetch('data/clubs.json').then(r => r.json()).catch(() => ({
+  brands: [], models: {}
+}));
 const BGS = LOOKS.patterns.map(p => p.key);
 
 let team = null, profile = null, moods = [], taken = {}, dirty = false, saving = false;
@@ -867,7 +876,10 @@ const SLOTS = [
 
 let bag = [];
 
+let bagRowSeq = 0;
+
 function bagRow(item = {}) {
+  const n = ++bagRowSeq;
   const div = document.createElement('div');
   div.className = 'bagrow';
   div.dataset.id = item.id || '';
@@ -876,10 +888,40 @@ function bagRow(item = {}) {
       ${SLOTS.map(([v,l]) =>
         `<option value="${v}"${item.slot === v ? ' selected' : ''}>${l}</option>`).join('')}
     </select>
-    <input placeholder="Make" value="${esc(item.brand || '')}" aria-label="Make">
-    <input placeholder="Model" value="${esc(item.model || '')}" aria-label="Model">
+    <input placeholder="Make" list="brands" value="${esc(item.brand || '')}"
+      aria-label="Make" autocomplete="off">
+    <input placeholder="Model" list="models-${n}" value="${esc(item.model || '')}"
+      aria-label="Model" autocomplete="off">
+    <datalist id="models-${n}"></datalist>
     <input placeholder="Loft, shaft" value="${esc(item.detail || '')}" aria-label="Detail">
     <button type="button" class="drop3" aria-label="Remove">×</button>`;
+
+  const slotSel  = div.querySelector('select');
+  const brandInp = div.querySelectorAll('input')[0];
+  const modelList = div.querySelector('datalist');
+
+  /* Models depend on both the category and the make, so the
+     list is rebuilt whenever either changes. */
+  const refresh = () => {
+    const forSlot = (CLUBS.models || {})[slotSel.value] || {};
+    const brand = brandInp.value.trim();
+
+    /* exact match first, then a loose one so "taylor" still works */
+    let names = forSlot[brand];
+    if (!names && brand) {
+      const hit = Object.keys(forSlot)
+        .find(b => b.toLowerCase().startsWith(brand.toLowerCase()));
+      names = hit ? forSlot[hit] : null;
+    }
+    /* no make yet: offer everything in that category */
+    if (!names) names = [...new Set(Object.values(forSlot).flat())];
+
+    modelList.innerHTML = names.map(m => `<option value="${esc(m)}">`).join('');
+  };
+
+  slotSel.addEventListener('change', refresh);
+  brandInp.addEventListener('input', refresh);
+  refresh();
 
   div.querySelectorAll('select,input').forEach(el =>
     el.addEventListener('input', touch));
@@ -890,6 +932,10 @@ function bagRow(item = {}) {
 }
 
 function paintBag() {
+  const bl = document.getElementById('brands');
+  if (bl && !bl.children.length) {
+    bl.innerHTML = (CLUBS.brands || []).map(b => `<option value="${esc(b)}">`).join('');
+  }
   const host = $('bagrows');
   host.innerHTML = '';
   bag.forEach(item => host.appendChild(bagRow(item)));
@@ -916,7 +962,8 @@ $('addbag').addEventListener('click', () => {
 
 function readBag() {
   return [...$('bagrows').querySelectorAll('.bagrow')].map((row, i) => {
-    const [brand, model, detail] = [...row.querySelectorAll('input')].map(x => x.value.trim());
+    const ins = [...row.querySelectorAll('input')];
+    const [brand, model, detail] = [ins[0].value.trim(), ins[1].value.trim(), ins[2].value.trim()];
     return {
       id: row.dataset.id || null,
       slot: row.querySelector('select').value,

@@ -1,0 +1,110 @@
+{
+  "_comment": "Suggestions for the bag editor, kept by hand. Not exhaustive and it will go stale — anything not here can still be typed. Add lines as people bring things in.",
+
+  "brands": [
+    "Titleist", "TaylorMade", "Callaway", "Ping", "Mizuno", "Cobra", "Srixon",
+    "Cleveland", "Wilson", "PXG", "Honma", "Miura", "Tour Edge", "XXIO",
+    "Ben Hogan", "Sub 70", "Takomo", "Maltby", "Scotty Cameron", "Odyssey",
+    "Bettinardi", "L.A.B. Golf", "Evnroll", "Toulon", "SIK", "Bridgestone",
+    "Vice", "Snell", "Maxfli", "Kirkland", "FootJoy", "Adidas", "Nike",
+    "Puma", "Ecco", "Under Armour", "Sun Mountain", "Vessel", "Jones",
+    "Ghost Golf", "Stitch"
+  ],
+
+  "models": {
+    "driver": {
+      "TaylorMade": ["Qi10", "Qi10 Max", "Qi10 LS", "Stealth 2", "Stealth 2 Plus", "SIM2", "M6"],
+      "Callaway":   ["Paradym Ai Smoke", "Paradym", "Rogue ST Max", "Epic Speed", "Mavrik"],
+      "Titleist":   ["TSR1", "TSR2", "TSR3", "TSR4", "TSi2", "TSi3"],
+      "Ping":       ["G430 Max", "G430 LST", "G430 SFT", "G425 Max", "G410 Plus"],
+      "Cobra":      ["Darkspeed", "Aerojet", "LTDx", "Radspeed"],
+      "Mizuno":     ["ST-Max 230", "ST-G 230", "ST-Z 220"],
+      "Srixon":     ["ZX5 Mk II", "ZX7 Mk II"],
+      "PXG":        ["0311 Black Ops", "0311 GEN6"]
+    },
+    "wood": {
+      "TaylorMade": ["Qi10 Fairway", "Stealth 2 Fairway", "SIM2 Fairway"],
+      "Callaway":   ["Paradym Ai Smoke Fairway", "Rogue ST Max Fairway"],
+      "Titleist":   ["TSR2 Fairway", "TSR3 Fairway"],
+      "Ping":       ["G430 Fairway", "G425 Fairway"],
+      "Cobra":      ["Darkspeed Fairway", "Aerojet Fairway"]
+    },
+    "hybrid": {
+      "TaylorMade": ["Qi10 Rescue", "Stealth 2 Rescue"],
+      "Callaway":   ["Apex UW", "Paradym Hybrid", "Rogue ST Max Hybrid"],
+      "Titleist":   ["TSR2 Hybrid", "TSR3 Hybrid"],
+      "Ping":       ["G430 Hybrid", "G425 Hybrid"],
+      "Cobra":      ["Darkspeed Hybrid"]
+    },
+    "irons": {
+      "Titleist":   ["T100", "T150", "T200", "T350", "620 MB", "620 CB", "AP2"],
+      "TaylorMade": ["P790", "P770", "P7MC", "P7MB", "Stealth", "SIM2 Max"],
+      "Callaway":   ["Apex Pro", "Apex CB", "Apex DCB", "Paradym", "Rogue ST"],
+      "Ping":       ["Blueprint S", "i230", "i525", "G430", "G425", "i210"],
+      "Mizuno":     ["Pro 241", "Pro 243", "Pro 245", "JPX 923 Forged", "JPX 923 Hot Metal", "MP-20"],
+      "Srixon":     ["ZX5 Mk II", "ZX7 Mk II", "ZX4 Mk II"],
+      "Cobra":      ["King Tour", "Darkspeed", "Aerojet"],
+      "PXG":        ["0311 P GEN6", "0317 ST"],
+      "Wilson":     ["Staff Model Blade", "Dynapower", "D9"],
+      "Takomo":     ["101T", "201", "301 MB", "301 CB"],
+      "Sub 70":     ["699 Pro", "699", "639 CB"],
+      "Miura":      ["CB-302", "MC-501", "TC-201"]
+    },
+    "wedge": {
+      "Titleist":   ["Vokey SM10", "Vokey SM9", "Vokey SM8"],
+      "Cleveland": ["RTX 6 ZipCore", "RTX ZipCore", "CBX 4 ZipCore"],
+      "Callaway":   ["Jaws Raw", "Jaws MD5", "Mack Daddy"],
+      "TaylorMade": ["MG4", "MG3", "Hi-Toe 3"],
+      "Ping":       ["s159", "Glide 4.0", "Glide Forged Pro"],
+      "Mizuno":     ["T24", "T22", "S23"]
+    },
+    "putter": {
+      "Scotty Cameron": ["Newport 2", "Newport", "Phantom X 5", "Phantom 11", "Special Select Squareback", "Super Select Fastback"],
+      "Odyssey":    ["White Hot OG #7", "White Hot OG #1", "Ai-One", "Tri-Beam", "Two Ball Ten", "Jailbird 380"],
+      "TaylorMade": ["Spider Tour", "Spider X", "TP Soto", "TP Juno"],
+      "Ping":       ["Anser 2", "PLD Anser", "Tyne 4", "Kushin 4", "DS72"],
+      "L.A.B. Golf": ["DF3", "DF 2.1", "Link.1", "Mezz.1 Max"],
+      "Bettinardi": ["Queen B 6", "Studio Stock 8", "BB1", "Inovai 6"],
+      "Evnroll":    ["ER2", "ER5", "ER11", "Zero Series"],
+      "Toulon":     ["Madison", "Chicago", "Las Vegas"],
+      "Mizuno":     ["M.Craft OMOI", "M.Craft IV"],
+      "Wilson":     ["8802", "Infinite Buckingham"]
+    },
+    "ball": {
+      "Titleist":   ["Pro V1", "Pro V1x", "Pro V1x Left Dash", "AVX", "Tour Speed", "Tour Soft", "Velocity"],
+      "Callaway":   ["Chrome Soft", "Chrome Soft X", "Chrome Tour", "Supersoft", "ERC Soft"],
+      "TaylorMade": ["TP5", "TP5x", "Tour Response", "Soft Response"],
+      "Bridgestone":["Tour B X", "Tour B XS", "Tour B RX", "e12 Contact"],
+      "Srixon":     ["Z-Star", "Z-Star XV", "Q-Star Tour", "Soft Feel"],
+      "Vice":       ["Pro Plus", "Pro", "Pro Soft"],
+      "Snell":      ["MTB-X", "MTB Prime"],
+      "Maxfli":     ["Tour", "Tour X", "Softfli"],
+      "Kirkland":   ["Signature 3-Piece", "Signature V3"],
+      "Wilson":     ["Staff Model", "Triad", "Duo Soft"]
+    },
+    "glove": {
+      "FootJoy":    ["StaSof", "WeatherSof", "Pure Touch", "HyperFLX"],
+      "Titleist":   ["Players", "Perma-Soft", "Players Flex"],
+      "TaylorMade": ["Tour Preferred", "Stratus Tech"],
+      "Callaway":   ["Tour Authentic", "Dawn Patrol", "Weather Spann"],
+      "Under Armour": ["Iso-Chill", "CoolSwitch"]
+    },
+    "shoes": {
+      "FootJoy":    ["Premiere Series", "Pro/SLX", "HyperFlex", "Traditions", "Fuel"],
+      "Nike":       ["Air Zoom Victory Tour", "Air Zoom Infinity Tour", "Roshe G"],
+      "Adidas":     ["Tour360", "Codechaos", "ZG23", "S2G"],
+      "Ecco":       ["Biom H4", "Biom C4", "Golf LT1"],
+      "Puma":       ["Ignite Elevate", "ProAdapt", "Phantomcat"],
+      "Under Armour": ["Drive Pro", "HOVR Drive", "Spieth 6"]
+    },
+    "bag": {
+      "Sun Mountain": ["Two5 Plus", "Three 5", "C-130", "Eco-Lite"],
+      "Titleist":   ["Players 4 Plus", "Players 4", "Hybrid 14", "Jet Black Cart"],
+      "Vessel":     ["Player IV Pro", "VLS Lux", "Sunday II"],
+      "Ping":       ["Hoofer 14", "Hoofer Lite", "Pioneer Cart"],
+      "Jones":      ["Utility Trouper", "Rover", "Original"],
+      "Ghost Golf": ["Player", "Traveler"],
+      "Callaway":   ["Fairway 14", "Org 14", "Chev Dry"]
+    }
+  }
+}
