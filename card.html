@@ -290,7 +290,7 @@ function render() {
     <div class="inner">
       <div class="crest">${esc(team.crest)}</div>
       <div>
-        <div class="eyebrow">Week ${match.week} · ${new Date(match.played_on)
+        <div class="eyebrow">Week ${match.week} · ${new Date(match.played_on + 'T12:00:00')
           .toLocaleDateString([], {weekday:'long',day:'numeric',month:'long'})}</div>
         <h1>${esc(course.name)}</h1>
         <div class="meta">${esc(course.nine)} nine · par ${parTotal} ·

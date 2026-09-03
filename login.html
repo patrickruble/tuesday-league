@@ -278,7 +278,19 @@ $('do-reset').addEventListener('click', async () => {
 });
 
 /* ---------- claim a roster spot ---------- */
+let needCode = false;
+
 async function paintSpots() {
+  /* only ask for the code when the account can't be matched to
+     a spot by its email */
+  try {
+    const { data } = await supabase.rpc('needs_join_code');
+    needCode = !!data;
+  } catch { needCode = false; }
+
+  const box = document.getElementById('codebox');
+  if (box) box.hidden = !needCode;
+
   const spots = await openSpots();
   const list = $('spotlist');
   if (!spots.length) {
@@ -296,7 +308,13 @@ async function paintSpots() {
   list.querySelectorAll('.spot').forEach(el =>
     el.addEventListener('click', async () => {
       el.disabled = true;
-      const r = await claimSpot(el.dataset.id);
+      const code = needCode ? ($('joincode')?.value || '').trim() : null;
+      if (needCode && !code) {
+        el.disabled = false;
+        $('joincode')?.focus();
+        return say('Put the league code in first.');
+      }
+      const r = await claimSpot(el.dataset.id, code);
       if (!r.ok) { el.disabled = false; return say(r.error); }
       say('Got it. Taking you to your team page…', true);
       setTimeout(() => location.replace(next), 800);

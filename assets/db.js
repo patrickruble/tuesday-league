@@ -144,8 +144,10 @@ export async function openSpots() {
   return data;
 }
 
-export async function claimSpot(spotId) {
-  const { error } = await supabase.rpc('claim_spot', { p_spot: spotId });
+export async function claimSpot(spotId, code = null) {
+  const { error } = await supabase.rpc('claim_spot', {
+    p_spot: spotId, p_code: code
+  });
   if (error) return { ok:false, error: friendly(error) };
   _me = null;
   return { ok:true };

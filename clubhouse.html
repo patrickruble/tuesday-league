@@ -143,6 +143,11 @@
 
 .post .gif,.reply .gif{margin-top:10px;max-width:290px}
 .post .gif img,.reply .gif img{width:100%;display:block;border:1px solid var(--rule)}
+
+/* a face fills the tile; initials stay as they were */
+.av{overflow:hidden}
+.av img{width:100%;height:100%;object-fit:cover;display:block}
+.av.hasface{background:#EEF1EE!important}
 </style>
 </head>
 <body>
@@ -224,6 +229,18 @@ const KINDS = {
 
 const initials = n => (n||'?').split(/\s+/).map(w=>w[0]).join('').slice(0,2).toUpperCase();
 
+const avatarUrl = p => p
+  ? supabase.storage.from('avatars').getPublicUrl(p).data.publicUrl
+  : null;
+
+/* A face where there is one, initials where there isn't. */
+function face(name, path, accent) {
+  const url = avatarUrl(path);
+  return url
+    ? `<img src="${esc(url)}" alt="" loading="lazy">`
+    : esc(initials(name));
+}
+
 function ago(iso) {
   const s = (Date.now() - new Date(iso)) / 1000;
   if (s < 60)     return 'now';
@@ -264,7 +281,9 @@ function paintComposer() {
   wrap.innerHTML = `
   <div class="compose" id="compose">
     <div class="row1">
-      <div class="av" style="background:${profile.accent || 'var(--dim)'}">${esc(initials(profile.full_name))}</div>
+      <div class="av${profile.avatar_url ? ' hasface' : ''}"
+        style="background:${profile.accent || 'var(--dim)'}">${
+        face(profile.full_name, profile.avatar_url)}</div>
       <button class="prompt" id="openc">Selling something? Need a sub? Got something to say?</button>
     </div>
     <div class="composer">
@@ -473,7 +492,8 @@ function paintFeed() {
       <div class="stripe"></div>
       <div class="in">
         <div class="meta">
-          <div class="av" style="--c:${accent}">${esc(initials(p.author_name))}</div>
+          <div class="av${p.author_avatar ? ' hasface' : ''}" style="--c:${accent}">${
+            face(p.author_name, p.author_avatar)}</div>
           <div class="nm"><b>${esc(p.author_name)}</b>
             <span>${esc(p.team_name || 'No team')}</span></div>
           <span class="kindtag ${p.pinned ? 'pin' : 'k-' + p.kind}">
@@ -523,12 +543,13 @@ async function toggleReplies(id) {
 
   const { data } = await supabase
     .from('post_replies')
-    .select('id,body,gif_url,gif_alt,created_at,author_id,profiles(full_name)')
+    .select('id,body,gif_url,gif_alt,created_at,author_id,profiles(full_name,avatar_url)')
     .eq('post_id', id).order('created_at');
 
   box.innerHTML = (data || []).map(r => `
     <div class="reply">
-      <div class="av">${esc(initials(r.profiles?.full_name))}</div>
+      <div class="av${r.profiles?.avatar_url ? ' hasface' : ''}">${
+        face(r.profiles?.full_name, r.profiles?.avatar_url)}</div>
       <div><b>${esc(r.profiles?.full_name || 'Someone')}</b><time>${ago(r.created_at)}</time>
         ${r.body ? `<p>${esc(r.body)}</p>` : ''}
         ${r.gif_url ? `<div class="gif"><img src="${esc(r.gif_url)}" alt="${esc(r.gif_alt||'')}" loading="lazy"></div>` : ''}

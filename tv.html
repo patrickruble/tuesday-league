@@ -252,7 +252,7 @@ function paintBays() {
   };
 
   el.innerHTML = `
-    <h2>Tonight <small>Week ${tonight.week} · ${new Date(tonight.date)
+    <h2>Tonight <small>Week ${tonight.week} · ${new Date(tonight.date + 'T12:00:00')
       .toLocaleDateString([], { day:'numeric', month:'long' })}${
       conds ? ' · ' + esc(conds) : ''}</small></h2>
     <div class="bays">

@@ -365,6 +365,24 @@ input[disabled],textarea[disabled]{opacity:.55;cursor:not-allowed}
     </fieldset>
 
     <fieldset>
+      <legend>Your account</legend>
+      <div class="field">
+        <label for="pw1">New password</label>
+        <input type="password" id="pw1" autocomplete="new-password"
+          placeholder="At least 8 characters">
+      </div>
+      <div class="field">
+        <label for="pw2">Type it again</label>
+        <input type="password" id="pw2" autocomplete="new-password">
+      </div>
+      <div class="pwacts">
+        <span class="hint" id="pwmsg">Changing this signs you out of nothing —
+          you stay signed in here.</span>
+        <button type="button" id="pwsave">Change it</button>
+      </div>
+    </fieldset>
+
+    <fieldset>
       <legend>Roster quotes</legend>
       <div id="roster"></div>
       <div class="hint">You can only change your own.</div>
@@ -382,7 +400,7 @@ input[disabled],textarea[disabled]{opacity:.55;cursor:not-allowed}
 </div>
 
 <script type="module">
-import { supabase, requireAuth, me } from './assets/db.js';
+import { supabase, requireAuth, me, setPassword } from './assets/db.js';
 
 const $ = id => document.getElementById(id);
 const SENT = { hot:'#B8EB7A', good:'#7EBED7', cold:'#E8A87C', bad:'#9AA5A0', odd:'#C9A0DC' };
@@ -863,6 +881,27 @@ $('bgmode').addEventListener('change', e => {
   touch(); applyLook();
 });
 
+/* ---------- your password ---------- */
+$('pwsave').addEventListener('click', async () => {
+  const a = $('pw1').value, b = $('pw2').value;
+  const msg = $('pwmsg');
+  const say = (t, bad) => { msg.textContent = t; msg.className = 'hint' + (bad ? ' bad' : ''); };
+
+  if (a.length < 8)  return say('Passwords need at least 8 characters.', true);
+  if (a !== b)       return say('Those two don\u2019t match.', true);
+
+  $('pwsave').disabled = true;
+  say('Changing it…');
+
+  const r = await setPassword(a);
+  $('pwsave').disabled = false;
+
+  if (!r.ok) return say(r.error, true);
+
+  $('pw1').value = ''; $('pw2').value = '';
+  say('Done. Use the new one next time you sign in.');
+});
+
 /* ---------- what's in the bag ---------- */
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c =>
   ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
@@ -1142,6 +1181,14 @@ window.addEventListener('beforeunload', e => {
 }
 </style>
 <style>
+/* password */
+.pwacts{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.pwacts .hint{flex:1;min-width:180px;margin:0}
+.pwacts .hint.bad{color:#B91C1C}
+.pwacts button{background:var(--green);color:#fff;border:0;padding:11px 18px;
+  font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
+.pwacts button:disabled{opacity:.5;cursor:default}
+
 /* the bag */
 .bagrow{display:grid;grid-template-columns:104px 1fr 1fr 96px 34px;gap:7px;
   align-items:center;padding:7px 0}

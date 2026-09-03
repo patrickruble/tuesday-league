@@ -343,7 +343,7 @@ async function pickMatch() {
     <div class="pick">${data.map(m => `
       <a href="?match=${m.id}">
         <b>Week ${m.week}${m.bay ? ' · Bay ' + m.bay : ''}</b>
-        <span>${new Date(m.played_on).toLocaleDateString([], {weekday:'long',day:'numeric',month:'long'})}
+        <span>${new Date(m.played_on + 'T12:00:00').toLocaleDateString([], {weekday:'long',day:'numeric',month:'long'})}
           · ${esc(m.courses?.name || '')} ${esc(m.courses?.nine || '')}</span>
       </a>`).join('')}
     </div>`;
@@ -482,7 +482,7 @@ function render() {
   $('app').hidden = false;
   $('app').innerHTML = `
   <div class="top">
-    <div class="crumb">Week ${match.week} · ${new Date(match.played_on)
+    <div class="crumb">Week ${match.week} · ${new Date(match.played_on + 'T12:00:00')
       .toLocaleDateString([], {weekday:'short',day:'numeric',month:'short'})}</div>
     <div class="bayline">
       ${match.bay ? `<div class="bay"><b>${match.bay}</b><span>BAY</span></div>` : ''}

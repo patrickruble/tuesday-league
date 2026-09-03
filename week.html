@@ -175,7 +175,7 @@ let weeks = [];
   }
 
   $('weekpick').innerHTML = weeks.map(w =>
-    `<option value="${w.week}">Week ${w.week} · ${new Date(w.played_on)
+    `<option value="${w.week}">Week ${w.week} · ${new Date(w.played_on + 'T12:00:00')
       .toLocaleDateString([], {day:'numeric',month:'short'})}</option>`).join('');
   $('weekpick').addEventListener('change', e => load(+e.target.value));
 
@@ -189,7 +189,7 @@ async function load(week) {
 
   $('sub').textContent =
     `${w.course_name} ${w.nine} nine · ` +
-    new Date(w.played_on).toLocaleDateString([], {weekday:'long',day:'numeric',month:'long'}) +
+    new Date(w.played_on + 'T12:00:00').toLocaleDateString([], {weekday:'long',day:'numeric',month:'long'}) +
     (wc?.line ? ' · ' + wc.line : '');
 
   const [{ data: holes }, { data: cards }, { data: prog }] = await Promise.all([

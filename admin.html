@@ -68,6 +68,42 @@
   padding:30px;text-align:center}
 .gate h2{font-size:22px;margin:0 0 9px}
 .gate p{color:var(--dim);font-size:14px;margin:0}
+
+/* ============================================================
+   THE POT — who's paid, ticked off on the night
+   ============================================================ */
+.potpanel{background:var(--card);border:1px solid var(--rule);margin:20px 0}
+.potpanel > header{display:flex;align-items:baseline;gap:14px;padding:13px 16px;
+  border-bottom:1px solid var(--rule);flex-wrap:wrap}
+.potpanel h2{font-size:16px;margin:0;font-family:var(--display);font-weight:800}
+.sub2{font-family:var(--data);font-size:11px;color:var(--dim)}
+.potbody{padding:6px 0}
+.pothead{display:grid;grid-template-columns:1fr 76px;gap:8px;
+  padding:8px 16px;font-family:var(--data);font-size:8px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--dim);border-bottom:1px solid var(--rule)}
+.potrow{display:grid;grid-template-columns:1fr 76px;gap:8px;
+  align-items:center;padding:8px 16px;border-bottom:1px dotted var(--rule)}
+.potrow:last-child{border-bottom:0}
+.potrow .nm3{font-size:14px;min-width:0}
+.potrow .nm3 span{display:block;font-size:11px;color:var(--dim)}
+.potrow button{height:34px;border:1px solid var(--rule);background:#FBFCFB;
+  cursor:pointer;font-family:var(--data);font-size:10px;letter-spacing:.06em;
+  color:var(--dim);padding:0}
+.potrow button[data-state="paid"]{background:var(--green);border-color:var(--green);
+  color:#fff}
+.potrow button[data-state="owed"]{background:#FDF3E7;border-color:#E0B77A;color:#8A5A16}
+.potfoot{display:flex;align-items:center;gap:12px;padding:14px 16px;
+  border-top:1px solid var(--rule);margin-top:6px;flex-wrap:wrap}
+.potfoot span{font-size:12px;color:var(--dim)}
+.closewk{background:var(--green);color:#fff;border:0;padding:10px 16px;
+  font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.closewk:disabled{opacity:.5;cursor:default}
+.sub2 b{color:var(--ink);font-size:14px}
+.potrow button:hover{filter:brightness(.96)}
+@media (max-width:620px){
+  .pothead,.potrow{grid-template-columns:1fr 66px;gap:6px;padding:8px 12px}
+  .potrow button{height:32px;font-size:9px}
+}
 </style>
 </head>
 <body>
@@ -117,6 +153,14 @@
   </div>
 
   <div class="wrap">
+    <div class="potpanel" id="potpanel" hidden>
+      <header>
+        <h2>The pot</h2>
+        <span class="sub2" id="pottotals"></span>
+      </header>
+      <div class="potbody" id="potbody"></div>
+    </div>
+
     <div class="bays" id="bays"></div>
     <div id="chase"></div>
   </div>
@@ -166,7 +210,7 @@ let teams = {}, weeks = [], current = null;
 
   weeks = [...new Map(ms.map(m => [m.week, m.played_on])).entries()];
   $('weekpick').innerHTML = weeks.map(([w,d]) =>
-    `<option value="${w}">Week ${w} · ${new Date(d).toLocaleDateString([], {day:'numeric',month:'short'})}</option>`
+    `<option value="${w}">Week ${w} · ${new Date(d + 'T12:00:00').toLocaleDateString([], {day:'numeric',month:'short'})}</option>`
   ).join('');
   $('weekpick').addEventListener('change', e => load(+e.target.value));
 
@@ -174,6 +218,91 @@ let teams = {}, weeks = [], current = null;
   $('loading').hidden = true;
   $('app').hidden = false;
 })();
+
+/* ------------------------------------------------------------
+   The pot
+   Everyone who's put their name down, and a tap to say the
+   money's in. Three contests across, so one row a person.
+------------------------------------------------------------ */
+const POT_KINDS = [['ctp','Closest to the pin'], ['long_putt','Long putt'],
+                   ['chip_in','Chip-in']];
+
+async function paintPot() {
+  if (!current) return;
+
+  const [{ data: ent }, { data: money }] = await Promise.all([
+    supabase.from('entrant_list').select('*').eq('week', current),
+    supabase.from('contest_money').select('*').eq('week', current)
+  ]);
+
+  const rows = ent || [];
+  const panel = document.getElementById('potpanel');
+  panel.hidden = false;
+
+  if (!rows.length) {
+    document.getElementById('pottotals').textContent = '';
+    document.getElementById('potbody').innerHTML = `
+      <div style="padding:20px 16px;font-size:13px;color:var(--dim);line-height:1.5">
+        Nobody's put their name down for week ${current} yet. People enter from the
+        contest board on their phone, then you tick them off here once you've got
+        the money.
+      </div>`;
+    return;
+  }
+
+  const fee  = (money || [])[0]?.per_entry ?? 10;
+  const paid = rows.filter(r => r.paid).length;
+  const owed = rows.length - paid;
+
+  document.getElementById('pottotals').innerHTML =
+    `<b>$${(paid * fee).toFixed(0)}</b> in from ${paid}` +
+    (owed ? ` &nbsp;·&nbsp; <span style="color:#B45309">${owed} still owing $${(owed*fee).toFixed(0)}</span>` : '') +
+    ' &nbsp;·&nbsp; ' +
+    (money || []).filter(m => m.total)
+      .map(m => {
+        const label = POT_KINDS.find(([k]) => k === m.kind)?.[1] || m.kind;
+        const roll = Number(m.carried) > 0
+          ? ` (inc $${Number(m.carried).toFixed(0)} rolled over)` : '';
+        return `${label} $${Number(m.total).toFixed(0)}${roll}`;
+      }).join(' &nbsp;·&nbsp; ');
+
+  document.getElementById('potbody').innerHTML = `
+    <div class="pothead"><span>Who</span><span>$${fee}</span></div>
+    ${rows.map(r => `
+      <div class="potrow">
+        <div class="nm3">${esc(r.full_name)}<span>${esc(r.team_name || '')}</span></div>
+        <button data-pot="${r.profile_id}" data-state="${r.paid ? 'paid' : 'owed'}">${
+          r.paid ? 'PAID' : 'OWES'}</button>
+      </div>`).join('')}
+    <div class="potfoot">
+      <button class="closewk" id="closewk">Close week ${current}</button>
+      <span>Rolls anything nobody won into next week.</span>
+    </div>`;
+
+  document.querySelectorAll('[data-pot]').forEach(b =>
+    b.addEventListener('click', async () => {
+      b.disabled = true;
+      const { error } = await supabase.from('contest_entrants')
+        .update({ paid: b.dataset.state !== 'paid' })
+        .eq('week', current).eq('profile_id', b.dataset.pot);
+      if (error) { b.disabled = false; alert(error.message); return; }
+      paintPot();
+    }));
+
+  document.getElementById('closewk').addEventListener('click', async function () {
+    if (!confirm(`Close week ${current}? Anything nobody won rolls into next week.`)) return;
+    this.disabled = true;
+    const { data, error } = await supabase.rpc('close_week', { p_week: current });
+    if (error) { this.disabled = false; alert(error.message); return; }
+    const rolled = (data || []).filter(r => r.rolled);
+    alert(rolled.length
+      ? 'Rolled over: ' + rolled.map(r =>
+          `${POT_KINDS.find(([k]) => k === r.kind)?.[1] || r.kind} $${Number(r.amount).toFixed(0)}`
+        ).join(', ')
+      : 'All three were won. Nothing to roll over.');
+    paintPot();
+  });
+}
 
 async function load(week) {
   current = week;
@@ -266,7 +395,7 @@ async function load(week) {
 
   const wk = weeks.find(w => w[0] === week);
   $('sub').textContent = `Week ${week} · ` +
-    new Date(wk[1]).toLocaleDateString([], {weekday:'long',day:'numeric',month:'long'});
+    new Date(wk[1] + 'T12:00:00').toLocaleDateString([], {weekday:'long',day:'numeric',month:'long'});
 
   $('chase').innerHTML = chase.length ? `
     <div class="chase">
@@ -287,6 +416,8 @@ async function load(week) {
       this.disabled = true;
     });
   }
+
+  paintPot();
 
   document.querySelectorAll('[data-conf]').forEach(b =>
     b.addEventListener('click', async function(){

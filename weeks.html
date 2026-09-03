@@ -241,7 +241,12 @@ input.f:focus,select.f:focus{outline:none;border-color:var(--green);background:#
             </div>
             <div>
               <label class="f" for="insta">Instagram handle</label>
-              <input class="f" id="insta" placeholder="katyxgolf">
+              <input class="f" id="insta" placeholder="xgolfkaty">
+            </div>
+            <div>
+              <label class="f" for="joincode">League code</label>
+              <input class="f" id="joincode" placeholder="KATY26"
+                style="text-transform:uppercase;font-family:var(--data)">
             </div>
           </div>
           <div style="margin-top:11px">
@@ -250,7 +255,9 @@ input.f:focus,select.f:focus{outline:none;border-color:var(--green);background:#
               placeholder="Send it here and it goes to whoever runs the account.">
           </div>
           <div class="note2">
-            Whatever's set here is what the entry screen tells people.
+            Whatever's set here is what the entry screen tells people. The league
+            code is what stops a stranger signing up and claiming somebody's spot —
+            anyone whose email you've already put on the roster won't be asked for it.
           </div>
           <div class="msg2" id="ruleMsg"></div>
         </div>
@@ -385,6 +392,7 @@ async function refresh() {
     $('drawTime').value  = (cfg.draw_public_at || '11:00').slice(0,5);
     $('insta').value     = cfg.instagram || '';
     $('medianote').value = cfg.media_note || '';
+    $('joincode').value  = cfg.join_code || '';
   }
 
   const { data: cp } = await supabase.from('contest_pots').select('*');
@@ -851,7 +859,8 @@ $('ruleSave').addEventListener('click', async () => {
     mulligans_allowed: $('mullAllow').value === '' ? null : Number($('mullAllow').value),
     draw_public_at:    $('drawTime').value,
     instagram:         $('insta').value.trim().replace(/^@/, '') || null,
-    media_note:        $('medianote').value.trim() || null
+    media_note:        $('medianote').value.trim() || null,
+    join_code:         $('joincode').value.trim().toUpperCase() || null
   }).eq('id', 1);
 
   msg.textContent = error ? error.message : 'Saved.';

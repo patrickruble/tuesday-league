@@ -65,6 +65,20 @@ button{font-family:inherit}
 .tag-new{background:#FDF3E7;color:#8A5A16}
 .empty4{padding:18px 12px;font-size:13px;color:var(--dim);text-align:center}
 
+/* in the pot, or not */
+.entry{display:flex;align-items:center;gap:12px;padding:12px 14px;margin-bottom:13px;
+  font-size:13px;line-height:1.45}
+.entry b{display:block}
+.entry.in{background:#F3F9F1;border-left:4px solid var(--green)}
+.entry.pending{background:#FDF3E7;border-left:4px solid #B45309;color:#7A4A10}
+.entry.out{background:#F2F4F2;border-left:4px solid var(--rule)}
+.entry > div{flex:1;min-width:0}
+.entry button{background:var(--green);color:#fff;border:0;padding:10px 16px;
+  font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap;flex:none}
+.entry.pending button{background:none;color:#8A5A16;padding:0;margin-top:5px;
+  font-size:12px;text-decoration:underline;text-underline-offset:3px;font-weight:400}
+.none2{font-size:13px;color:var(--dim);margin:0;padding:10px 0}
+
 /* posting */
 .post2{border-top:1px dashed var(--rule);padding-top:13px}
 .post2 > button{background:#FBFCFB;border:1px solid var(--rule);padding:11px 15px;
@@ -144,7 +158,7 @@ const esc = s => String(s ?? '').replace(/[&<>"]/g, c =>
   ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
 
 const params = new URLSearchParams(location.search);
-let profile, match, settings = {}, players = [], board = [], pots = {};
+let profile, match, settings = {}, players = [], board = [], pots = {}, entrants = [];
 
 const KINDS = {
   ctp:       { label: 'Closest to the pin', unit: true,  better: 'closest' },
@@ -188,7 +202,7 @@ async function pickMatch() {
          border:1px solid var(--rule);padding:14px 16px;margin-bottom:9px;
          text-decoration:none;color:inherit">
         <b style="display:block;font-size:16px">Week ${m.week}${m.bay ? ' · Bay ' + m.bay : ''}</b>
-        <span style="font-size:12px;color:var(--dim)">${new Date(m.played_on)
+        <span style="font-size:12px;color:var(--dim)">${new Date(m.played_on + 'T12:00:00')
           .toLocaleDateString([], {weekday:'long',day:'numeric',month:'long'})}</span>
       </a>`).join('')}</div>`;
 }
@@ -206,12 +220,14 @@ async function load(id) {
   match = m;
   players = pl || [];
 
-  const [{ data: ws }, { data: money }] = await Promise.all([
+  const [{ data: ws }, { data: money }, { data: ent }] = await Promise.all([
     supabase.from('week_settings').select('*').eq('week', m.week).maybeSingle(),
-    supabase.from('contest_money').select('*').eq('week', m.week)
+    supabase.from('contest_money').select('*').eq('week', m.week),
+    supabase.from('entrant_list').select('*').eq('week', m.week)
   ]);
   settings = ws || {};
   pots = Object.fromEntries((money||[]).map(p => [p.kind, p]));
+  entrants = ent || [];
 
   await refreshBoard();
   render();
@@ -219,10 +235,27 @@ async function load(id) {
 }
 
 async function refreshBoard() {
-  const { data } = await supabase.from('contest_board')
-    .select('*').eq('week', match.week);
-  board = data || [];
+  const [{ data: b }, { data: e }] = await Promise.all([
+    supabase.from('contest_board').select('*').eq('week', match.week),
+    supabase.from('entrant_list').select('*').eq('week', match.week)
+  ]);
+  board = b || [];
+  entrants = e || [];
 }
+
+/* Who can have a number put up against them: whoever paid into
+   that pot. If nobody's been entered, the pot isn't being run
+   that way this week and anyone in the bay can go up. */
+/* One entry covers all three, so eligibility is the same for
+   each of them. If nobody has entered, the pot isn't being run
+   that way this week and anyone in the bay can go up. */
+function eligible() {
+  if (!entrants.length) return players;
+  const paid = new Set(entrants.filter(e => e.paid).map(e => e.profile_id));
+  return players.filter(p => paid.has(p.id));
+}
+
+const myEntry = () => entrants.find(e => e.profile_id === profile.id);
 
 /* ------------------------------------------------------------
    Render
@@ -257,6 +290,7 @@ function render() {
       <p>What's written on the wall, so the other bays can see it too.
          Chris ticks them off at the end.</p>
     </div>
+    ${entryLine()}
     ${list.map(([kind, hole]) => panel(kind, hole)).join('')}
     <div class="foot3">
       <div class="shell">
@@ -267,6 +301,7 @@ function render() {
     </div>`;
 
   list.forEach(([kind]) => wire(kind));
+  wireEntry();
   wireBell();
 }
 
@@ -291,7 +326,9 @@ function panel(kind, hole) {
       <h2>${k.label}</h2>
       ${hole ? `<span class="hole">HOLE ${hole}</span>` : ''}
       ${pot && pot.total ? `<span class="pot">$${Number(pot.total).toFixed(0)}
-        <span>${pot.entries ? pot.entries + ' in' : 'pot'}</span></span>` : ''}
+        <span>${Number(pot.carried) > 0
+          ? '$' + Number(pot.carried).toFixed(0) + ' rolled over'
+          : (pot.entries ? pot.entries + ' in' : 'pot')}</span></span>` : ''}
     </div>
     <p class="hint2">${
       kind === 'ctp'       ? 'Closest wins it. Feet and inches off the pin.' :
@@ -302,10 +339,11 @@ function panel(kind, hole) {
     <div class="board2">${rows}</div>
 
     <div class="post2">
+      ${eligible().length ? `
       <button type="button" data-open="${kind}">Put one on the board</button>
       <div class="form2" data-form="${kind}">
         <div class="who2" data-who="${kind}">
-          ${players.map(p => `
+          ${eligible().map(p => `
             <button type="button" data-id="${p.id}" aria-pressed="false" style="--c:${p.accent}">
               <i></i>${esc(p.full_name)}<span>${esc(p.team_name)}</span>
             </button>`).join('')}
@@ -321,8 +359,40 @@ function panel(kind, hole) {
           <button class="save" data-save="${kind}" disabled>Post it</button>
         </div>
         <div class="msg3" data-msg="${kind}"></div>
-      </div>
+      </div>` : `
+      <p class="none2">Nobody in your bay is in this one.</p>`}
     </div>
+  </div>`;
+}
+
+/* One entry, one line, covering all three. */
+function entryLine() {
+  const fee   = pots.ctp?.per_entry ?? 10;
+  const mine  = myEntry();
+  const paid  = entrants.filter(e => e.paid).length;
+  const owing = entrants.filter(e => !e.paid).length;
+
+  if (mine && mine.paid) {
+    return `<div class="entry in">
+      <b>You're in.</b> ${paid} paid up${owing ? `, ${owing} still to settle` : ''}.
+    </div>`;
+  }
+  if (mine) {
+    return `<div class="entry pending">
+      <div>
+        <b>Name down, money not in yet.</b>
+        Give Chris your $${fee} before you tee off.
+        <button type="button" data-out="1">Take my name off</button>
+      </div>
+    </div>`;
+  }
+  return `<div class="entry out">
+    <div>
+      <b>Not in tonight.</b>
+      $${fee} covers all three — closest to the pin, long putt and the chip-in.
+      ${paid ? `${paid} already in.` : ''}
+    </div>
+    <button type="button" data-in="1">I'm in</button>
   </div>`;
 }
 
@@ -385,6 +455,28 @@ function wire(kind) {
     await refreshBoard();
     render();
   });
+}
+
+function wireEntry() {
+  document.querySelectorAll('[data-in]').forEach(b =>
+    b.addEventListener('click', async () => {
+      b.disabled = true;
+      const { error } = await supabase.from('contest_entrants').insert({
+        week: match.week, profile_id: profile.id
+      });
+      if (error) { b.disabled = false; alert(error.message); return; }
+      await refreshBoard();
+      render();
+    }));
+
+  document.querySelectorAll('[data-out]').forEach(b =>
+    b.addEventListener('click', async () => {
+      b.disabled = true;
+      await supabase.from('contest_entrants').delete()
+        .eq('week', match.week).eq('profile_id', profile.id);
+      await refreshBoard();
+      render();
+    }));
 }
 
 /* ------------------------------------------------------------
