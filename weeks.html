@@ -160,7 +160,10 @@ input.f:focus,select.f:focus{outline:none;border-color:var(--green);background:#
             <div><label class="f" for="ctpHole">Closest to the pin</label>
               <select class="f" id="ctpHole"></select></div>
             <div><label class="f" for="lpHole">Long putt</label>
-              <select class="f" id="lpHole"></select></div>
+              <select class="f" id="lpHole">
+                <option value="any">Any hole</option>
+                <option value="">Not running</option>
+              </select></div>
           </div>
 
           <label class="f" style="margin-top:16px">How the sim is set</label>
@@ -481,10 +484,10 @@ function paintCourseOptions() {
     ? courses.map(c => `<option value="${c.id}">${esc(c.name)} — ${esc(c.nine)}</option>`).join('')
     : '<option value="">Add a course first</option>';
 
-  const holes = ['<option value="">None this week</option>'].concat(
+  /* Closest to the pin is a nominated hole. The long putt is
+     whatever the longest one of the night was, wherever. */
+  $('ctpHole').innerHTML = ['<option value="">None this week</option>'].concat(
     Array.from({length:9}, (_,i) => `<option value="${i+1}">Hole ${i+1}</option>`)).join('');
-  $('ctpHole').innerHTML = holes;
-  $('lpHole').innerHTML  = holes;
 }
 
 const POT_KINDS = [['ctp','Closest to the pin'],['long_putt','Long putt'],
@@ -630,7 +633,7 @@ function editWeek(n) {
   $('wkTime').value = (w.tee_time || '19:30').slice(0,5);
   if (w.course_id) $('wkCourse').value = w.course_id;
   $('ctpHole').value = w.settings?.ctp_hole || '';
-  $('lpHole').value  = w.settings?.long_putt_hole || '';
+  $('lpHole').value  = (w.settings?.long_putt_any ?? true) ? 'any' : '';
   $('wind').value    = w.settings?.wind || '';
   $('windMph').value = w.settings?.wind_speed ?? '';
   $('greens').value  = w.settings?.green_speed || '';
@@ -774,7 +777,8 @@ $('wkSave').addEventListener('click', async () => {
   await supabase.from('week_settings').upsert({
     week,
     ctp_hole: $('ctpHole').value ? Number($('ctpHole').value) : null,
-    long_putt_hole: $('lpHole').value ? Number($('lpHole').value) : null,
+    long_putt_any:  $('lpHole').value === 'any',
+    long_putt_hole: null,
     wind:        $('wind').value || null,
     wind_speed:  $('windMph').value === '' ? null : Number($('windMph').value),
     green_speed: $('greens').value || null,

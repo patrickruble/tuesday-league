@@ -263,7 +263,7 @@ const myEntry = () => entrants.find(e => e.profile_id === profile.id);
 function running() {
   const out = [];
   if (settings.ctp_hole)       out.push(['ctp', settings.ctp_hole]);
-  if (settings.long_putt_hole) out.push(['long_putt', settings.long_putt_hole]);
+  if (settings.long_putt_any ?? true) out.push(['long_putt', null]);
   if (settings.chip_in_any !== false) out.push(['chip_in', null]);
   return out;
 }
@@ -332,7 +332,7 @@ function panel(kind, hole) {
     </div>
     <p class="hint2">${
       kind === 'ctp'       ? 'Closest wins it. Feet and inches off the pin.' :
-      kind === 'long_putt' ? 'Longest wins it.' :
+      kind === 'long_putt' ? 'Any hole, all night. Longest one wins it.' :
                              'From off the green. Everyone who does it goes up.'
     }</p>
 
