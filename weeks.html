@@ -480,14 +480,17 @@ $('crSave').addEventListener('click', async () => {
    WEEKS
    ============================================================ */
 function paintCourseOptions() {
+  const cs = $('wkCourse');
+  if (!cs.dataset.wired) {
+    cs.addEventListener('change', paintCtpHoles);
+    cs.dataset.wired = '1';
+  }
+
   $('wkCourse').innerHTML = courses.length
     ? courses.map(c => `<option value="${c.id}">${esc(c.name)} — ${esc(c.nine)}</option>`).join('')
     : '<option value="">Add a course first</option>';
 
-  /* Closest to the pin is a nominated hole. The long putt is
-     whatever the longest one of the night was, wherever. */
-  $('ctpHole').innerHTML = ['<option value="">None this week</option>'].concat(
-    Array.from({length:9}, (_,i) => `<option value="${i+1}">Hole ${i+1}</option>`)).join('');
+  paintCtpHoles();
 }
 
 const POT_KINDS = [['ctp','Closest to the pin'],['long_putt','Long putt'],
@@ -522,6 +525,21 @@ function potTotals() {
     return total ? `${label} $${total}` : null;
   }).filter(Boolean);
   $('potTotals').textContent = bits.length ? 'On it: ' + bits.join(' · ') : '';
+}
+
+/* The value stored is the position within the nine, but the
+   label should match the screen in the bay — play the back and
+   the first hole is 10. */
+function paintCtpHoles() {
+  const c = courses.find(x => x.id === $('wkCourse').value);
+  const base = c && c.nine === 'back' ? 10 : 1;
+  const keep = $('ctpHole').value;
+
+  $('ctpHole').innerHTML = ['<option value="">None this week</option>']
+    .concat(Array.from({length:9}, (_,i) =>
+      `<option value="${i+1}">Hole ${base + i}</option>`)).join('');
+
+  $('ctpHole').value = keep;
 }
 
 function buildBayRows() {
@@ -632,6 +650,7 @@ function editWeek(n) {
   $('wkDate').value = w.played_on;
   $('wkTime').value = (w.tee_time || '19:30').slice(0,5);
   if (w.course_id) $('wkCourse').value = w.course_id;
+  paintCtpHoles();
   $('ctpHole').value = w.settings?.ctp_hole || '';
   $('lpHole').value  = (w.settings?.long_putt_any ?? true) ? 'any' : '';
   $('wind').value    = w.settings?.wind || '';
