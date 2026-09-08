@@ -148,9 +148,9 @@ button{font-family:inherit}
 }
 .rev .parrow td{background:#F2F4F2;color:var(--dim);font-size:12px}
 .rev .scorerow td{font-size:17px;font-weight:600}
-.rev .ptsrow td{background:#F3F9F1;font-size:12px;color:var(--green);font-weight:600}
+.revsum{margin-top:11px;font-family:var(--data);font-size:14px;font-weight:600}
 .rev .tot{background:var(--green);color:#fff;font-weight:600}
-.rev .parrow .tot,.rev .ptsrow .tot{background:var(--green-deep)}
+.rev .parrow .tot{background:var(--green-deep)}
 
 /* marked the way you'd mark a paper card */
 .rev .scorerow span{display:inline-block;min-width:22px;line-height:20px;position:relative}
@@ -555,6 +555,7 @@ function render() {
   <div class="panel" id="review" hidden>
     <h2>Check it against the screen</h2>
     <div class="revwrap"><table class="rev" id="revtable"></table></div>
+    <div class="revsum" id="revsum"></div>
   </div>
 
   <div class="panel" id="subpanel">
@@ -788,11 +789,17 @@ function paintReview() {
     return `<span class="${cls}">${g}</span>`;
   };
 
+  const gt = gross.reduce((a,b) => a + (b||0), 0);
+  const pt = course.pars.reduce((a,b) => a+b, 0);
+  const diff = gt - pt;
+
   $('revtable').innerHTML =
     cells('Hole', i => holeNo(i)) +
     cells('Par',  (i, par) => par, 'parrow') +
-    cells('Score', mark, 'scorerow') +
-    cells('Pts',  i => pointsFor(i), 'ptsrow');
+    cells('Score', mark, 'scorerow');
+
+  $('revsum').textContent =
+    `${gt} shot, par ${pt} — ${diff === 0 ? 'level' : (diff > 0 ? '+' : '') + diff}`;
 }
 
 function tally() {
