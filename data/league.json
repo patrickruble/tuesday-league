@@ -81,6 +81,10 @@
   },
   "navMore": [
     {
+      "label": "The board",
+      "href": "contests.html"
+    },
+    {
       "label": "Clubhouse",
       "href": "clubhouse.html"
     },

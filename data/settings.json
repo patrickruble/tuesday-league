@@ -26,5 +26,7 @@
   "instagram": null,
   "media_note": null,
   "join_code": "KATY26",
-  "entry_fee": 10
+  "entry_fee": 10,
+  "concede_ft": 4,
+  "concede_ft_playoffs": 2
 }

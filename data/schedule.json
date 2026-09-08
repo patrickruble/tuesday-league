@@ -3,17 +3,46 @@
     "week": 1,
     "date": "2026-09-08",
     "label": "TUE 08 SEPT",
-    "course": "Pebble Beach",
-    "nine": "Front 9",
+    "course": "Dubai Burj",
+    "nine": "Back 9",
     "status": "next",
     "ctpHole": null,
     "longPuttHole": null,
+    "conditions": "moderate wind",
     "bays": [
+      {
+        "bay": "1",
+        "teams": [
+          "the-strangers",
+          "ball-gags-and-bogeys"
+        ]
+      },
       {
         "bay": "2",
         "teams": [
-          "dustin-my-johnson",
-          "good-bull-golf"
+          "dee-is-for-deserter",
+          "good-putts-great-butts"
+        ]
+      },
+      {
+        "bay": "3",
+        "teams": [
+          "pat-daddy-and-the-heartbreakers",
+          "balls-deep"
+        ]
+      },
+      {
+        "bay": "4",
+        "teams": [
+          "putt-pirates",
+          "no-mames-fore"
+        ]
+      },
+      {
+        "bay": "5",
+        "teams": [
+          "m-n-m",
+          "consensual-threesum"
         ]
       }
     ]

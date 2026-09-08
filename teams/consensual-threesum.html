@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>White Tee Privilege — Katy Golf League</title>
+<title>Consensual Threesum — Katy Golf League</title>
 <link rel="icon" href="../favicon.svg" type="image/svg+xml">
 <link rel="icon" href="../favicon-32.png" sizes="32x32">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
@@ -18,8 +18,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --accent:#0F766E;
-    --pat:rgba(15,118,110,0.15);
+    --accent:#BE185D;
+    --pat:rgba(190,24,93,0.15);
     --mood:#7EBED7;
     --team-display:'Archivo','Helvetica Neue',Arial,sans-serif;
     --team-wdth:112;
@@ -48,6 +48,7 @@
       <div class="more">
         <button type="button" id="morebtn" aria-expanded="false" aria-controls="morelist">More</button>
         <div class="morelist" id="morelist">
+          <a href="../contests.html">The board</a>
           <a href="../clubhouse.html">Clubhouse</a>
           <a href="../scrapbook.html">Scrapbook</a>
           <a href="../records.html">Records</a>
@@ -63,10 +64,10 @@
 <div class="hero">
   <div class="inner">
     <div class="eyebrow">Season 3</div>
-    <h1>White Tee Privilege</h1>
+    <h1>Consensual Threesum</h1>
     <div class="underline">
-      <div class="crest-sm">WT</div>
-      <span class="meta">Tuesdays 7:00 · handicap +6</span>
+      <div class="crest-sm">CT</div>
+      <span class="meta">Bay 5 · Tuesdays 7:00</span>
       <span class="tally"><b>—</b> season points</span>
     </div>
   </div>
@@ -102,23 +103,23 @@
       <div class="head"><h2>Roster</h2></div>
       <div class="roster">
       <article class="player">
-        <div class="face">RC</div>
+        <div class="face">JP</div>
         <div class="idx">01 · CAPTAIN</div>
-        <h3><a href="../players/ryan-certa.html" style="color:inherit;text-decoration:none">Ryan Certa</a></h3>
+        <h3><a href="../players/justin-payne.html" style="color:inherit;text-decoration:none">Justin Payne</a></h3>
         <div class="hcp">INDEX TBC</div>
         
       </article>
       <article class="player">
-        <div class="face">RS</div>
+        <div class="face">CN</div>
         <div class="idx">02</div>
-        <h3><a href="../players/reagan-stewart.html" style="color:inherit;text-decoration:none">Reagan Stewart</a></h3>
+        <h3><a href="../players/cody-nall.html" style="color:inherit;text-decoration:none">Cody Nall</a></h3>
         <div class="hcp">INDEX TBC</div>
         
       </article>
       <article class="player">
-        <div class="face">NA</div>
+        <div class="face">HM</div>
         <div class="idx">03</div>
-        <h3><a href="../players/nick-acord.html" style="color:inherit;text-decoration:none">Nick Acord</a></h3>
+        <h3><a href="../players/harrison-mauldin.html" style="color:inherit;text-decoration:none">Harrison Mauldin</a></h3>
         <div class="hcp">INDEX TBC</div>
         
       </article>
@@ -127,23 +128,14 @@
 
     <section>
       <div class="head"><h2>Next round</h2>
-        <span class="note">TUE 08 SEPT · Pebble Beach Front 9</span>
+        <span class="note">TUE 08 SEPT · Dubai Burj Back 9</span>
       </div>
       <div class="h2h">
-        <div class="baytag"><b>—</b><span>BAY</span></div>
+        <div class="baytag"><b>5</b><span>BAY</span></div>
         <div class="txt">
-          <b>Bay to yourselves</b>
-            Nobody beside you this week — Chris will sign your card.
+          <b>Sharing with M-N-M</b>
+            They'll sign off your card, and you'll sign off theirs.
         </div>
-      </div>
-    </section>
-    <section>
-      <div class="head"><h2>Last season</h2>
-        <span class="note">Different format — kept for reference</span></div>
-      <div class="statgrid">
-        <div><b>31.8</b><span>Average</span><small>over 12 rounds</small></div>
-        <div><b>27</b><span>Best</span></div>
-        <div><b>36</b><span>Worst</span></div>
       </div>
     </section>
     <div style="height:30px"></div>
@@ -174,7 +166,7 @@ const SENT = {"hot":"#B8EB7A","good":"#7EBED7","cold":"#E8A87C","bad":"#9AA5A0",
 try {
   const { data } = await supabase.from('teams')
     .select('mood, moods(sentiment)')
-    .eq('slug', "white-tee-privilege")
+    .eq('slug', "consensual-threesum")
     .maybeSingle();
   if (data && data.mood) {
     const el = document.querySelector('.moodline b');
@@ -201,7 +193,7 @@ try {
 <footer>
   <div class="inner">
     <span>Katy Golf League</span>
-    <span>13 teams · 9-hole scramble · Stableford</span>
+    <span>10 teams · 9-hole scramble · Stableford</span>
   </div>
 </footer>
 

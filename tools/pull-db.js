@@ -51,7 +51,7 @@ const load = p => { try { return JSON.parse(fs.readFileSync(p,'utf8')); } catch 
 async function pull() {
   console.log('Pulling from', URL_);
 
-  const [teams, profiles, spots, settings, matches, weekCfg, contests, bagRows] =
+  const [teams, profiles, spots, settings, matches, weekCfg, contests, bagRows, pcs] =
     await Promise.all([
     q('teams', '*', 'name.asc'),
     q('profiles', 'id,full_name,hcp_index,quote,avatar_url,team_id'),
@@ -61,7 +61,8 @@ async function pull() {
       .catch(() => []),
     q('week_settings', '*').catch(() => []),
     q('contest_tallies', '*').catch(() => []),
-    q('bags', '*').catch(() => [])
+    q('bags', '*').catch(() => []),
+    q('player_contests', '*').catch(() => [])
   ]);
 
   /* side contest wins, per player, so a player page can show
@@ -69,6 +70,15 @@ async function pull() {
   const wins = {};
   for (const c of contests) {
     (wins[c.profile_id] ??= {})[c.kind] = c.wins;
+  }
+
+  /* best effort and money won, per player */
+  const detail = {};
+  for (const r of pcs) {
+    const d = (detail[r.profile_id] ??= { closest: null, longest: null, won: 0 });
+    if (r.closest != null) d.closest = r.closest;
+    if (r.longest != null) d.longest = r.longest;
+    d.won += Number(r.won_total || 0);
   }
 
   /* what's in each bag, already in club order from the view */
@@ -102,7 +112,10 @@ async function pull() {
             quote: p ? (p.quote || '') : '',
             photo: p ? publicUrl('avatars', p.avatar_url) : null,
             wins:  p ? (wins[p.id] || null) : null,
-            bag:   p ? (bags[p.id] || null) : null
+            bag:   p ? (bags[p.id] || null) : null,
+            closest:   p ? (detail[p.id]?.closest ?? null) : null,
+            longest:   p ? (detail[p.id]?.longest ?? null) : null,
+            won_total: p ? (detail[p.id]?.won || 0) : 0
           };
         })
       : signed.map(p => ({
@@ -111,7 +124,10 @@ async function pull() {
           quote: p.quote || '',
           photo: publicUrl('avatars', p.avatar_url),
           wins: wins[p.id] || null,
-          bag: bags[p.id] || null
+          bag: bags[p.id] || null,
+          closest:   detail[p.id]?.closest ?? null,
+          longest:   detail[p.id]?.longest ?? null,
+          won_total: detail[p.id]?.won || 0
         }));
 
     return {

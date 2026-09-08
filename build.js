@@ -868,19 +868,29 @@ function inTheBag(p) {
 function seasonBlock(p) {
   const w = p.wins || {};
   const items = [
-    ['ctp',       'Closest to the pin', 'Nearest wins the pot'],
-    ['long_putt', 'Long putts',         'Longest wins the pot'],
-    ['chip_in',   'Chip-ins',           'From off the green']
+    ['ctp',       'Closest to the pin'],
+    ['long_putt', 'Long putts'],
+    ['chip_in',   'Chip-ins']
   ];
   const any = items.some(([k]) => w[k]);
+
+  /* the best single effort, where there is one */
+  const note = k =>
+    k === 'ctp'       && p.closest  ? `Best ${p.closest}'`  :
+    k === 'long_putt' && p.longest  ? `Best ${p.longest}'`  :
+    k === 'ctp'       ? 'Nearest wins the pot' :
+    k === 'long_putt' ? 'Longest wins the pot' :
+                        'From off the green';
 
   return `
   <section>
     <div class="head"><h2>This season</h2>
-      <span class="note">${any ? 'Side contests' : 'Nothing on the board yet'}</span></div>
+      <span class="note">${any
+        ? (p.won_total ? `$${p.won_total} won` : 'Side contests')
+        : 'Nothing on the board yet'}</span></div>
     <div class="statgrid">
-      ${items.map(([k,label,note]) =>
-        `<div><b>${w[k] || 0}</b><span>${label}</span><small>${note}</small></div>`).join('')}
+      ${items.map(([k,label]) =>
+        `<div><b>${w[k] || 0}</b><span>${label}</span><small>${note(k)}</small></div>`).join('')}
     </div>
   </section>`;
 }

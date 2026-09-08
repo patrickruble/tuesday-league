@@ -1,17 +1,80 @@
 [
   {
-    "slug": "2-js-and-a-hard-r",
-    "name": "2 J's and a Hard R",
-    "crest": "2J",
+    "slug": "ball-gags-and-bogeys",
+    "name": "Ball Gags & Bogeys",
+    "crest": "BG",
     "crestUrl": null,
-    "accent": "#7A1F3D",
+    "accent": "#C2410C",
     "typeface": "archivo",
     "backdrop": "none",
     "backdropColor": null,
     "backdropImage": null,
     "backdropMode": "tile",
-    "handicap": 7,
-    "bay": 4,
+    "handicap": 0,
+    "bay": null,
+    "mood": "content",
+    "moodSentiment": "good",
+    "song": {
+      "title": "",
+      "artist": "",
+      "provider": "youtube",
+      "id": null,
+      "art": null
+    },
+    "bio": "",
+    "roster": [
+      {
+        "name": "Reagan Stewart",
+        "hcp": 0,
+        "quote": "",
+        "photo": null,
+        "wins": null,
+        "bag": null,
+        "closest": null,
+        "longest": null,
+        "won_total": 0
+      },
+      {
+        "name": "Brendan Gray",
+        "hcp": 0,
+        "quote": "",
+        "photo": null,
+        "wins": null,
+        "bag": null,
+        "closest": null,
+        "longest": null,
+        "won_total": 0
+      },
+      {
+        "name": "Chris Pena",
+        "hcp": 0,
+        "quote": "",
+        "photo": null,
+        "wins": null,
+        "bag": null,
+        "closest": null,
+        "longest": null,
+        "won_total": 0
+      }
+    ],
+    "points": 0,
+    "played": 0,
+    "bestRound": null,
+    "lastSeason": null
+  },
+  {
+    "slug": "balls-deep",
+    "name": "Balls Deep",
+    "crest": "BD",
+    "crestUrl": null,
+    "accent": "#0E7490",
+    "typeface": "archivo",
+    "backdrop": "none",
+    "backdropColor": null,
+    "backdropImage": null,
+    "backdropMode": "tile",
+    "handicap": 0,
+    "bay": null,
     "mood": "content",
     "moodSentiment": "good",
     "song": {
@@ -29,296 +92,52 @@
         "quote": "",
         "photo": null,
         "wins": null,
-        "bag": null
+        "bag": null,
+        "closest": null,
+        "longest": null,
+        "won_total": 0
       },
-      {
-        "name": "Ryan Roesler",
-        "hcp": 0,
-        "quote": "",
-        "photo": null,
-        "wins": null,
-        "bag": null
-      },
-      {
-        "name": "Jose Muniz",
-        "hcp": 0,
-        "quote": "",
-        "photo": null,
-        "wins": null,
-        "bag": null
-      }
-    ],
-    "points": 0,
-    "played": 0,
-    "bestRound": null,
-    "lastSeason": {
-      "played": 12,
-      "total": 362,
-      "average": 30.2,
-      "best": 27,
-      "worst": 35
-    }
-  },
-  {
-    "slug": "ar-bombers",
-    "name": "AR Bombers",
-    "crest": "AB",
-    "crestUrl": null,
-    "accent": "#C2410C",
-    "typeface": "archivo",
-    "backdrop": "none",
-    "backdropColor": null,
-    "backdropImage": null,
-    "backdropMode": "tile",
-    "handicap": 5,
-    "bay": 1,
-    "mood": "content",
-    "moodSentiment": "good",
-    "song": {
-      "title": "",
-      "artist": "",
-      "provider": "youtube",
-      "id": null,
-      "art": null
-    },
-    "bio": "",
-    "roster": [
-      {
-        "name": "Justin Krautz",
-        "hcp": 0,
-        "quote": "",
-        "photo": null,
-        "wins": null,
-        "bag": null
-      },
-      {
-        "name": "Blake Krejci",
-        "hcp": 0,
-        "quote": "",
-        "photo": null,
-        "wins": null,
-        "bag": null
-      },
-      {
-        "name": "Collin Snell",
-        "hcp": 0,
-        "quote": "",
-        "photo": null,
-        "wins": null,
-        "bag": null
-      }
-    ],
-    "points": 0,
-    "played": 0,
-    "bestRound": null,
-    "lastSeason": {
-      "played": 12,
-      "total": 366,
-      "average": 30.5,
-      "best": 28,
-      "worst": 34
-    }
-  },
-  {
-    "slug": "big-drive-energy",
-    "name": "Big Drive Energy",
-    "crest": "BD",
-    "crestUrl": null,
-    "accent": "#3F3F46",
-    "typeface": "archivo",
-    "backdrop": "none",
-    "backdropColor": null,
-    "backdropImage": null,
-    "backdropMode": "tile",
-    "handicap": 7,
-    "bay": 4,
-    "mood": "content",
-    "moodSentiment": "good",
-    "song": {
-      "title": "",
-      "artist": "",
-      "provider": "youtube",
-      "id": null,
-      "art": null
-    },
-    "bio": "",
-    "roster": [
-      {
-        "name": "Jett Morton",
-        "hcp": 0,
-        "quote": "",
-        "photo": null,
-        "wins": null,
-        "bag": null
-      },
-      {
-        "name": "Dylan Anderson",
-        "hcp": 0,
-        "quote": "",
-        "photo": null,
-        "wins": null,
-        "bag": null
-      },
-      {
-        "name": "Andrew Lucas",
-        "hcp": 0,
-        "quote": "",
-        "photo": null,
-        "wins": null,
-        "bag": null
-      }
-    ],
-    "points": 0,
-    "played": 0,
-    "bestRound": null,
-    "lastSeason": {
-      "played": 12,
-      "total": 348,
-      "average": 29,
-      "best": 27,
-      "worst": 32
-    }
-  },
-  {
-    "slug": "bogey-express",
-    "name": "Bogey Express",
-    "crest": "BE",
-    "crestUrl": null,
-    "accent": "#DB2777",
-    "typeface": "archivo",
-    "backdrop": "none",
-    "backdropColor": null,
-    "backdropImage": null,
-    "backdropMode": "tile",
-    "handicap": 3,
-    "bay": 3,
-    "mood": "content",
-    "moodSentiment": "good",
-    "song": {
-      "title": "",
-      "artist": "",
-      "provider": "youtube",
-      "id": null,
-      "art": null
-    },
-    "bio": "",
-    "roster": [
-      {
-        "name": "Bill McDaniel",
-        "hcp": 0,
-        "quote": "",
-        "photo": null,
-        "wins": null,
-        "bag": null
-      },
-      {
-        "name": "Miguel Gonzalez",
-        "hcp": 0,
-        "quote": "",
-        "photo": null,
-        "wins": null,
-        "bag": null
-      },
-      {
-        "name": "Carlos Espinoza",
-        "hcp": 0,
-        "quote": "",
-        "photo": null,
-        "wins": null,
-        "bag": null
-      }
-    ],
-    "points": 0,
-    "played": 0,
-    "bestRound": null,
-    "lastSeason": {
-      "played": 12,
-      "total": 378,
-      "average": 31.5,
-      "best": 27,
-      "worst": 36
-    }
-  },
-  {
-    "slug": "dustin-my-johnson",
-    "name": "Dustin My Johnson",
-    "crest": "DJ",
-    "crestUrl": null,
-    "accent": "#1D4ED8",
-    "typeface": "playfair",
-    "backdrop": "none",
-    "backdropColor": "#3B2A2A",
-    "backdropImage": null,
-    "backdropMode": "fixed",
-    "handicap": 7,
-    "bay": 2,
-    "mood": "dialed",
-    "moodSentiment": "hot",
-    "song": {
-      "title": "Sweatpants",
-      "artist": "Childish Gambino",
-      "provider": "spotify",
-      "id": "4NvXTrOSsVlCw0bFe3lKY9",
-      "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e0221b2b485aef32bcc96c1875c"
-    },
-    "bio": "",
-    "roster": [
       {
         "name": "Caleb Fields",
         "hcp": 0,
         "quote": "",
         "photo": null,
         "wins": null,
-        "bag": null
+        "bag": null,
+        "closest": null,
+        "longest": null,
+        "won_total": 0
       },
       {
-        "name": "Eric Mohn",
+        "name": "Adam Fields",
         "hcp": 0,
         "quote": "",
         "photo": null,
         "wins": null,
-        "bag": null
-      },
-      {
-        "name": "Patrick Ruble",
-        "hcp": 0,
-        "quote": "You gotta risk it to get the biscuit",
-        "photo": "https://iubvgagijqlwiauzcisj.supabase.co/storage/v1/object/public/avatars/ce4ee1a8-a206-4029-b7bc-5c575dc86142/avatar-1788375876803.gif",
-        "wins": null,
-        "bag": [
-          {
-            "slot": "driver",
-            "brand": "Ping",
-            "model": "G425 Max",
-            "detail": null
-          }
-        ]
+        "bag": null,
+        "closest": null,
+        "longest": null,
+        "won_total": 0
       }
     ],
     "points": 0,
     "played": 0,
     "bestRound": null,
-    "lastSeason": {
-      "played": 12,
-      "total": 361,
-      "average": 30.1,
-      "best": 27,
-      "worst": 33
-    }
+    "lastSeason": null
   },
   {
-    "slug": "filthy-balls",
-    "name": "Filthy Balls",
-    "crest": "FB",
+    "slug": "consensual-threesum",
+    "name": "Consensual Threesum",
+    "crest": "CT",
     "crestUrl": null,
-    "accent": "#7C2D12",
+    "accent": "#BE185D",
     "typeface": "archivo",
     "backdrop": "none",
     "backdropColor": null,
     "backdropImage": null,
     "backdropMode": "tile",
-    "handicap": 6,
-    "bay": 5,
+    "handicap": 0,
+    "bay": null,
     "mood": "content",
     "moodSentiment": "good",
     "song": {
@@ -331,165 +150,48 @@
     "bio": "",
     "roster": [
       {
-        "name": "Eric Wendt",
+        "name": "Justin Payne",
         "hcp": 0,
         "quote": "",
         "photo": null,
         "wins": null,
-        "bag": null
+        "bag": null,
+        "closest": null,
+        "longest": null,
+        "won_total": 0
       },
       {
-        "name": "Nigel Hansen",
+        "name": "Cody Nall",
         "hcp": 0,
         "quote": "",
         "photo": null,
         "wins": null,
-        "bag": null
+        "bag": null,
+        "closest": null,
+        "longest": null,
+        "won_total": 0
       },
       {
-        "name": "Matt Gallant",
+        "name": "Harrison Mauldin",
         "hcp": 0,
         "quote": "",
         "photo": null,
         "wins": null,
-        "bag": null
+        "bag": null,
+        "closest": null,
+        "longest": null,
+        "won_total": 0
       }
     ],
     "points": 0,
     "played": 0,
     "bestRound": null,
-    "lastSeason": {
-      "played": 12,
-      "total": 370,
-      "average": 30.8,
-      "best": 28,
-      "worst": 34
-    }
+    "lastSeason": null
   },
   {
-    "slug": "good-bull-golf",
-    "name": "Good Bull Golf",
-    "crest": "GB",
-    "crestUrl": null,
-    "accent": "#B91C1C",
-    "typeface": "archivo",
-    "backdrop": "none",
-    "backdropColor": null,
-    "backdropImage": null,
-    "backdropMode": "tile",
-    "handicap": 5,
-    "bay": 1,
-    "mood": "content",
-    "moodSentiment": "good",
-    "song": {
-      "title": "",
-      "artist": "",
-      "provider": "youtube",
-      "id": null,
-      "art": null
-    },
-    "bio": "",
-    "roster": [
-      {
-        "name": "Colin Williams",
-        "hcp": 0,
-        "quote": "",
-        "photo": null,
-        "wins": null,
-        "bag": null
-      },
-      {
-        "name": "Buzz Vargas",
-        "hcp": 0,
-        "quote": "",
-        "photo": null,
-        "wins": null,
-        "bag": null
-      },
-      {
-        "name": "Kaelyn Vargas",
-        "hcp": 0,
-        "quote": "",
-        "photo": null,
-        "wins": null,
-        "bag": null
-      }
-    ],
-    "points": 0,
-    "played": 0,
-    "bestRound": null,
-    "lastSeason": {
-      "played": 12,
-      "total": 380,
-      "average": 31.7,
-      "best": 30,
-      "worst": 35
-    }
-  },
-  {
-    "slug": "hole-patrol",
-    "name": "Hole Patrol",
-    "crest": "HP",
-    "crestUrl": null,
-    "accent": "#4D7C0F",
-    "typeface": "archivo",
-    "backdrop": "none",
-    "backdropColor": null,
-    "backdropImage": null,
-    "backdropMode": "tile",
-    "handicap": 6,
-    "bay": 3,
-    "mood": "content",
-    "moodSentiment": "good",
-    "song": {
-      "title": "",
-      "artist": "",
-      "provider": "youtube",
-      "id": null,
-      "art": null
-    },
-    "bio": "",
-    "roster": [
-      {
-        "name": "Brendan Gray",
-        "hcp": 0,
-        "quote": "",
-        "photo": null,
-        "wins": null,
-        "bag": null
-      },
-      {
-        "name": "Mike Dujka",
-        "hcp": 0,
-        "quote": "",
-        "photo": null,
-        "wins": null,
-        "bag": null
-      },
-      {
-        "name": "Chris Pena",
-        "hcp": 0,
-        "quote": "",
-        "photo": null,
-        "wins": null,
-        "bag": null
-      }
-    ],
-    "points": 0,
-    "played": 0,
-    "bestRound": null,
-    "lastSeason": {
-      "played": 12,
-      "total": 362,
-      "average": 30.2,
-      "best": 28,
-      "worst": 32
-    }
-  },
-  {
-    "slug": "jager-bombers",
-    "name": "Jager Bombers",
-    "crest": "JB",
+    "slug": "dee-is-for-deserter",
+    "name": "Dee is For Deserter",
+    "crest": "DD",
     "crestUrl": null,
     "accent": "#A16207",
     "typeface": "archivo",
@@ -497,248 +199,8 @@
     "backdropColor": null,
     "backdropImage": null,
     "backdropMode": "tile",
-    "handicap": 7,
-    "bay": 6,
-    "mood": "content",
-    "moodSentiment": "good",
-    "song": {
-      "title": "",
-      "artist": "",
-      "provider": "youtube",
-      "id": null,
-      "art": null
-    },
-    "bio": "",
-    "roster": [
-      {
-        "name": "Brian Ron",
-        "hcp": 0,
-        "quote": "",
-        "photo": null,
-        "wins": null,
-        "bag": null
-      },
-      {
-        "name": "Jeff Henderson",
-        "hcp": 0,
-        "quote": "",
-        "photo": null,
-        "wins": null,
-        "bag": null
-      },
-      {
-        "name": "Mo Wiley",
-        "hcp": 0,
-        "quote": "",
-        "photo": null,
-        "wins": null,
-        "bag": null
-      }
-    ],
-    "points": 0,
-    "played": 0,
-    "bestRound": null,
-    "lastSeason": {
-      "played": 12,
-      "total": 347,
-      "average": 28.9,
-      "best": 26,
-      "worst": 31
-    }
-  },
-  {
-    "slug": "links-and-drinks",
-    "name": "Links & Drinks",
-    "crest": "LD",
-    "crestUrl": null,
-    "accent": "#4338CA",
-    "typeface": "archivo",
-    "backdrop": "none",
-    "backdropColor": null,
-    "backdropImage": null,
-    "backdropMode": "tile",
-    "handicap": 5,
-    "bay": 6,
-    "mood": "content",
-    "moodSentiment": "good",
-    "song": {
-      "title": "",
-      "artist": "",
-      "provider": "youtube",
-      "id": null,
-      "art": null
-    },
-    "bio": "",
-    "roster": [
-      {
-        "name": "Garrett Bills",
-        "hcp": 0,
-        "quote": "",
-        "photo": null,
-        "wins": null,
-        "bag": null
-      },
-      {
-        "name": "Tom Janusis",
-        "hcp": 0,
-        "quote": "",
-        "photo": null,
-        "wins": null,
-        "bag": null
-      },
-      {
-        "name": "Gary Galloway",
-        "hcp": 0,
-        "quote": "",
-        "photo": null,
-        "wins": null,
-        "bag": null
-      }
-    ],
-    "points": 0,
-    "played": 0,
-    "bestRound": null,
-    "lastSeason": {
-      "played": 12,
-      "total": 403,
-      "average": 33.6,
-      "best": 30,
-      "worst": 42
-    }
-  },
-  {
-    "slug": "putt-pirates",
-    "name": "Putt Pirates",
-    "crest": "PP",
-    "crestUrl": null,
-    "accent": "#0E7490",
-    "typeface": "archivo",
-    "backdrop": "none",
-    "backdropColor": null,
-    "backdropImage": null,
-    "backdropMode": "tile",
-    "handicap": 4,
-    "bay": 5,
-    "mood": "content",
-    "moodSentiment": "good",
-    "song": {
-      "title": "",
-      "artist": "",
-      "provider": "youtube",
-      "id": null,
-      "art": null
-    },
-    "bio": "",
-    "roster": [
-      {
-        "name": "Ryan Tuckey",
-        "hcp": 0,
-        "quote": "",
-        "photo": null,
-        "wins": null,
-        "bag": null
-      },
-      {
-        "name": "Joe Chaisson",
-        "hcp": 0,
-        "quote": "",
-        "photo": null,
-        "wins": null,
-        "bag": null
-      },
-      {
-        "name": "Alonzo Brown",
-        "hcp": 0,
-        "quote": "",
-        "photo": null,
-        "wins": null,
-        "bag": null
-      }
-    ],
-    "points": 0,
-    "played": 0,
-    "bestRound": null,
-    "lastSeason": {
-      "played": 12,
-      "total": 388,
-      "average": 32.3,
-      "best": 28,
-      "worst": 36
-    }
-  },
-  {
-    "slug": "shannannagans",
-    "name": "Shannannagans",
-    "crest": "SH",
-    "crestUrl": null,
-    "accent": "#6D28D9",
-    "typeface": "archivo",
-    "backdrop": "none",
-    "backdropColor": null,
-    "backdropImage": null,
-    "backdropMode": "tile",
-    "handicap": -3,
-    "bay": 7,
-    "mood": "content",
-    "moodSentiment": "good",
-    "song": {
-      "title": "",
-      "artist": "",
-      "provider": "youtube",
-      "id": null,
-      "art": null
-    },
-    "bio": "",
-    "roster": [
-      {
-        "name": "Shannon Chaisson",
-        "hcp": 0,
-        "quote": "",
-        "photo": null,
-        "wins": null,
-        "bag": null
-      },
-      {
-        "name": "Susanna Stewart",
-        "hcp": 0,
-        "quote": "",
-        "photo": null,
-        "wins": null,
-        "bag": null
-      },
-      {
-        "name": "Megan Pena",
-        "hcp": 0,
-        "quote": "",
-        "photo": null,
-        "wins": null,
-        "bag": null
-      }
-    ],
-    "points": 0,
-    "played": 0,
-    "bestRound": null,
-    "lastSeason": {
-      "played": 12,
-      "total": 472,
-      "average": 39.3,
-      "best": 32,
-      "worst": 44
-    }
-  },
-  {
-    "slug": "white-tee-privilege",
-    "name": "White Tee Privilege",
-    "crest": "WT",
-    "crestUrl": null,
-    "accent": "#0F766E",
-    "typeface": "archivo",
-    "backdrop": "none",
-    "backdropColor": null,
-    "backdropImage": null,
-    "backdropMode": "tile",
-    "handicap": 6,
-    "bay": 2,
+    "handicap": 0,
+    "bay": null,
     "mood": "content",
     "moodSentiment": "good",
     "song": {
@@ -756,15 +218,10 @@
         "quote": "",
         "photo": null,
         "wins": null,
-        "bag": null
-      },
-      {
-        "name": "Reagan Stewart",
-        "hcp": 0,
-        "quote": "",
-        "photo": null,
-        "wins": null,
-        "bag": null
+        "bag": null,
+        "closest": null,
+        "longest": null,
+        "won_total": 0
       },
       {
         "name": "Nick Acord",
@@ -772,7 +229,336 @@
         "quote": "",
         "photo": null,
         "wins": null,
-        "bag": null
+        "bag": null,
+        "closest": null,
+        "longest": null,
+        "won_total": 0
+      },
+      {
+        "name": "Michael Packard",
+        "hcp": 0,
+        "quote": "",
+        "photo": null,
+        "wins": null,
+        "bag": null,
+        "closest": null,
+        "longest": null,
+        "won_total": 0
+      }
+    ],
+    "points": 0,
+    "played": 0,
+    "bestRound": null,
+    "lastSeason": null
+  },
+  {
+    "slug": "good-putts-great-butts",
+    "name": "Good Putts Great Butts",
+    "crest": "GP",
+    "crestUrl": null,
+    "accent": "#4D7C0F",
+    "typeface": "archivo",
+    "backdrop": "none",
+    "backdropColor": null,
+    "backdropImage": null,
+    "backdropMode": "tile",
+    "handicap": 0,
+    "bay": null,
+    "mood": "content",
+    "moodSentiment": "good",
+    "song": {
+      "title": "",
+      "artist": "",
+      "provider": "youtube",
+      "id": null,
+      "art": null
+    },
+    "bio": "",
+    "roster": [
+      {
+        "name": "Candy Espinoza",
+        "hcp": 0,
+        "quote": "",
+        "photo": null,
+        "wins": null,
+        "bag": null,
+        "closest": null,
+        "longest": null,
+        "won_total": 0
+      },
+      {
+        "name": "Morgan Kiel",
+        "hcp": 0,
+        "quote": "",
+        "photo": null,
+        "wins": null,
+        "bag": null,
+        "closest": null,
+        "longest": null,
+        "won_total": 0
+      },
+      {
+        "name": "Megan Pena",
+        "hcp": 0,
+        "quote": "",
+        "photo": null,
+        "wins": null,
+        "bag": null,
+        "closest": null,
+        "longest": null,
+        "won_total": 0
+      }
+    ],
+    "points": 0,
+    "played": 0,
+    "bestRound": null,
+    "lastSeason": null
+  },
+  {
+    "slug": "m-n-m",
+    "name": "M-N-M",
+    "crest": "MM",
+    "crestUrl": null,
+    "accent": "#86198F",
+    "typeface": "archivo",
+    "backdrop": "none",
+    "backdropColor": null,
+    "backdropImage": null,
+    "backdropMode": "tile",
+    "handicap": 0,
+    "bay": null,
+    "mood": "content",
+    "moodSentiment": "good",
+    "song": {
+      "title": "",
+      "artist": "",
+      "provider": "youtube",
+      "id": null,
+      "art": null
+    },
+    "bio": "",
+    "roster": [
+      {
+        "name": "Michael McCarthy",
+        "hcp": 0,
+        "quote": "",
+        "photo": null,
+        "wins": null,
+        "bag": null,
+        "closest": null,
+        "longest": null,
+        "won_total": 0
+      },
+      {
+        "name": "Nigel Hansen",
+        "hcp": 0,
+        "quote": "",
+        "photo": null,
+        "wins": null,
+        "bag": null,
+        "closest": null,
+        "longest": null,
+        "won_total": 0
+      },
+      {
+        "name": "Matt Gallant",
+        "hcp": 0,
+        "quote": "",
+        "photo": null,
+        "wins": null,
+        "bag": null,
+        "closest": null,
+        "longest": null,
+        "won_total": 0
+      }
+    ],
+    "points": 0,
+    "played": 0,
+    "bestRound": null,
+    "lastSeason": null
+  },
+  {
+    "slug": "no-mames-fore",
+    "name": "No Mames, Fore!",
+    "crest": "NM",
+    "crestUrl": null,
+    "accent": "#6D28D9",
+    "typeface": "archivo",
+    "backdrop": "none",
+    "backdropColor": null,
+    "backdropImage": null,
+    "backdropMode": "tile",
+    "handicap": 0,
+    "bay": null,
+    "mood": "content",
+    "moodSentiment": "good",
+    "song": {
+      "title": "",
+      "artist": "",
+      "provider": "youtube",
+      "id": null,
+      "art": null
+    },
+    "bio": "",
+    "roster": [
+      {
+        "name": "Roberto Esquivel",
+        "hcp": 0,
+        "quote": "",
+        "photo": null,
+        "wins": null,
+        "bag": null,
+        "closest": null,
+        "longest": null,
+        "won_total": 0
+      },
+      {
+        "name": "Miguel Gonzalez",
+        "hcp": 0,
+        "quote": "",
+        "photo": null,
+        "wins": null,
+        "bag": null,
+        "closest": null,
+        "longest": null,
+        "won_total": 0
+      },
+      {
+        "name": "Carlos Espinoza",
+        "hcp": 0,
+        "quote": "",
+        "photo": null,
+        "wins": null,
+        "bag": null,
+        "closest": null,
+        "longest": null,
+        "won_total": 0
+      }
+    ],
+    "points": 0,
+    "played": 0,
+    "bestRound": null,
+    "lastSeason": null
+  },
+  {
+    "slug": "pat-daddy-and-the-heartbreakers",
+    "name": "Pat Daddy & The Heartbreakers",
+    "crest": "PD",
+    "crestUrl": null,
+    "accent": "#0F766E",
+    "typeface": "archivo",
+    "backdrop": "none",
+    "backdropColor": null,
+    "backdropImage": null,
+    "backdropMode": "tile",
+    "handicap": 0,
+    "bay": null,
+    "mood": "content",
+    "moodSentiment": "good",
+    "song": {
+      "title": "",
+      "artist": "",
+      "provider": "youtube",
+      "id": null,
+      "art": null
+    },
+    "bio": "",
+    "roster": [
+      {
+        "name": "Eric Mohn",
+        "hcp": 0,
+        "quote": "",
+        "photo": null,
+        "wins": null,
+        "bag": null,
+        "closest": null,
+        "longest": null,
+        "won_total": 0
+      },
+      {
+        "name": "Patrick Ruble",
+        "hcp": 0,
+        "quote": "",
+        "photo": null,
+        "wins": null,
+        "bag": null,
+        "closest": null,
+        "longest": null,
+        "won_total": 0
+      },
+      {
+        "name": "Joseph Dickey",
+        "hcp": 0,
+        "quote": "",
+        "photo": null,
+        "wins": null,
+        "bag": null,
+        "closest": null,
+        "longest": null,
+        "won_total": 0
+      }
+    ],
+    "points": 0,
+    "played": 0,
+    "bestRound": null,
+    "lastSeason": null
+  },
+  {
+    "slug": "putt-pirates",
+    "name": "Putt Pirates",
+    "crest": "PP",
+    "crestUrl": null,
+    "accent": "#1E3A8A",
+    "typeface": "archivo",
+    "backdrop": "none",
+    "backdropColor": null,
+    "backdropImage": null,
+    "backdropMode": "tile",
+    "handicap": 0,
+    "bay": 5,
+    "mood": "content",
+    "moodSentiment": "good",
+    "song": {
+      "title": "",
+      "artist": "",
+      "provider": "youtube",
+      "id": null,
+      "art": null
+    },
+    "bio": "",
+    "roster": [
+      {
+        "name": "Joe Chaisson",
+        "hcp": 0,
+        "quote": "",
+        "photo": null,
+        "wins": null,
+        "bag": null,
+        "closest": null,
+        "longest": null,
+        "won_total": 0
+      },
+      {
+        "name": "Ryan Tuckey",
+        "hcp": 0,
+        "quote": "",
+        "photo": null,
+        "wins": null,
+        "bag": null,
+        "closest": null,
+        "longest": null,
+        "won_total": 0
+      },
+      {
+        "name": "Alonzo Brown",
+        "hcp": 0,
+        "quote": "",
+        "photo": null,
+        "wins": null,
+        "bag": null,
+        "closest": null,
+        "longest": null,
+        "won_total": 0
       }
     ],
     "points": 0,
@@ -780,10 +566,73 @@
     "bestRound": null,
     "lastSeason": {
       "played": 12,
-      "total": 382,
-      "average": 31.8,
-      "best": 27,
+      "total": 388,
+      "average": 32.3,
+      "best": 28,
       "worst": 36
     }
+  },
+  {
+    "slug": "the-strangers",
+    "name": "The Strangers",
+    "crest": "TS",
+    "crestUrl": null,
+    "accent": "#B91C1C",
+    "typeface": "archivo",
+    "backdrop": "none",
+    "backdropColor": null,
+    "backdropImage": null,
+    "backdropMode": "tile",
+    "handicap": 0,
+    "bay": null,
+    "mood": "content",
+    "moodSentiment": "good",
+    "song": {
+      "title": "",
+      "artist": "",
+      "provider": "youtube",
+      "id": null,
+      "art": null
+    },
+    "bio": "",
+    "roster": [
+      {
+        "name": "Bill Poppe",
+        "hcp": 0,
+        "quote": "",
+        "photo": null,
+        "wins": null,
+        "bag": null,
+        "closest": null,
+        "longest": null,
+        "won_total": 0
+      },
+      {
+        "name": "Larry Graves",
+        "hcp": 0,
+        "quote": "",
+        "photo": null,
+        "wins": null,
+        "bag": null,
+        "closest": null,
+        "longest": null,
+        "won_total": 0
+      },
+      {
+        "name": "John Armstrong",
+        "hcp": 0,
+        "quote": "",
+        "photo": null,
+        "wins": null,
+        "bag": null,
+        "closest": null,
+        "longest": null,
+        "won_total": 0
+      }
+    ],
+    "points": 0,
+    "played": 0,
+    "bestRound": null,
+    "lastSeason": null
   }
 ]
