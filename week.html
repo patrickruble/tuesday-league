@@ -77,6 +77,17 @@
 
 .sech{font-size:13px;letter-spacing:.14em;text-transform:uppercase;margin:0 0 12px;
   font-family:var(--display);font-weight:800}
+.inpot{background:var(--card);border:1px solid var(--rule);padding:14px 16px;
+  margin-bottom:12px;line-height:1.5;border-left:5px solid var(--green)}
+.inpot.none4{border-left-color:var(--rule)}
+.inpot b{display:block;font-size:15px}
+.inpot span{display:block;font-size:13px;color:var(--dim)}
+.inpot .owing{color:#B45309;font-size:12px;margin-top:5px}
+.alsoran{margin-top:9px;padding-top:8px;border-top:1px solid var(--rule);
+  font-family:var(--data);font-size:11px;color:var(--dim)}
+.waiting2{background:var(--card);border:1px dashed var(--rule);padding:20px;
+  text-align:center;color:var(--dim);font-size:14px;margin:22px 0}
+
 .cwrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;
   margin-bottom:28px}
 .cbox{background:var(--card);border:1px solid var(--rule);
@@ -178,8 +189,20 @@ paintAuthSlot(0);
 let weeks = [];
 
 (async () => {
-  const { data } = await supabase.from('week_summary').select('*');
-  weeks = data || [];
+  const [{ data: ms }, { data: sums }] = await Promise.all([
+    supabase.from('matches').select('week,played_on,courses(name,nine)')
+      .order('week', { ascending: false }),
+    supabase.from('week_summary').select('*')
+  ]);
+  const sumBy = Object.fromEntries((sums || []).map(s => [s.week, s]));
+  const seen = {};
+  for (const m of ms || []) {
+    if (seen[m.week]) continue;
+    seen[m.week] = { week: m.week, played_on: m.played_on,
+      course_name: m.courses?.name || '', nine: m.courses?.nine || '',
+      ...(sumBy[m.week] || {}) };
+  }
+  weeks = Object.values(seen).sort((a,b) => b.week - a.week);
 
   if (!weeks.length) {
     $('body').innerHTML = `<div class="empty3">
@@ -197,6 +220,14 @@ let weeks = [];
   $('weekpick').addEventListener('change', e => load(+e.target.value));
 
   load(weeks[0].week);
+
+  /* the board moves during the night, so this should too */
+  supabase.channel('week-live')
+    .on('postgres_changes', { event:'*', schema:'public', table:'side_contests' },
+        () => load(+$('weekpick').value))
+    .on('postgres_changes', { event:'*', schema:'public', table:'contest_entrants' },
+        () => load(+$('weekpick').value))
+    .subscribe();
 })();
 
 async function load(week) {
@@ -209,13 +240,21 @@ async function load(week) {
     new Date(w.played_on + 'T12:00:00').toLocaleDateString([], {weekday:'long',day:'numeric',month:'long'}) +
     (wc?.line ? ' · ' + wc.line : '');
 
-  const [{ data: holes }, { data: cards }, { data: prog }, { data: wcs }] =
+  const [{ data: holes }, { data: cards }, { data: prog }, { data: board },
+         { data: ent }, { data: money }, { data: run }] =
     await Promise.all([
       supabase.from('hole_stats').select('*').eq('week', week).order('hole'),
       supabase.from('round_scores').select('*').eq('week', week).eq('status','confirmed'),
       supabase.from('week_progress').select('*').eq('week', week).maybeSingle(),
-      supabase.from('week_contests').select('*').eq('week', week)
+      supabase.from('contest_board').select('*').eq('week', week),
+      supabase.from('entrant_list').select('*').eq('week', week),
+      supabase.from('contest_money').select('*').eq('week', week),
+      supabase.from('week_settings').select('*').eq('week', week).maybeSingle()
     ]);
+
+  const ctx = { week, board: board || [], entrants: ent || [],
+                money: Object.fromEntries((money||[]).map(m => [m.kind, m])),
+                run: run || {} };
 
   const teams = {};
   const { data: ts } = await supabase.from('teams').select('id,name,slug,accent,crest');
@@ -248,7 +287,7 @@ async function load(week) {
     ${waiting} card${waiting === 1 ? '' : 's'} still to be signed off, so these
     numbers will move. Only confirmed cards are counted.</div>` : ''}
 
-  <div class="big">
+  ${w.cards_in ? `<div class="big">
     <div><b>${w.cards_in}</b><span>Cards in</span></div>
     <div><b>${w.avg_points}</b><span>Average points</span></div>
     <div><b>${w.best_points}</b><span>Best round</span>
@@ -256,9 +295,9 @@ async function load(week) {
     <div><b>${w.avg_gross}</b><span>Average gross</span></div>
     <div><b>${totalBird}</b><span>Birdies</span></div>
     <div><b>${totalEag}</b><span>Eagles</span></div>
-  </div>
+  </div>` : `<div class="waiting2">No cards in yet — this fills in as they arrive.</div>`}
 
-  ${contestBlock(wcs)}
+  ${contestBlock(ctx)}
 
   ${hardest && easiest ? `
   <div class="pair">
@@ -322,6 +361,67 @@ async function load(week) {
   </div>`;
 }
 
+
+const KIND_LABEL = { ctp:'Closest to the pin', long_putt:'Long putt', chip_in:'Chip-in' };
+
+/* Before anyone plays, this says who's in the pot and what it's
+   worth. As numbers go up it fills in with them. */
+function contestBlock(ctx) {
+  const running = [];
+  if (ctx.run.ctp_hole) running.push(['ctp', ctx.run.ctp_hole]);
+  if (ctx.run.long_putt_any ?? true) running.push(['long_putt', null]);
+  if (ctx.run.chip_in_any ?? true) running.push(['chip_in', null]);
+  if (!running.length) return '';
+
+  const nine = (weeks.find(x => x.week === ctx.week) || {}).nine;
+  const holeLabel = h => h == null ? '' : ' \u00b7 hole ' + ((nine === 'back' ? 9 : 0) + h);
+
+  const paid  = ctx.entrants.filter(e => e.paid).length;
+  const total = ctx.entrants.length;
+
+  const who = total
+    ? `<div class="inpot">
+         <b>${total} in the pot</b>
+         <span>${ctx.entrants.map(e => esc(e.full_name)).join(' \u00b7 ')}</span>
+         ${paid < total ? `<span class="owing">${total - paid} still to settle up</span>` : ''}
+       </div>`
+    : `<div class="inpot none4">
+         <b>Nobody in yet</b>
+         <span>Put your name down on the board and it shows here.</span>
+       </div>`;
+
+  const boxes = running.map(([kind, hole]) => {
+    const marks = ctx.board.filter(b => b.kind === kind)
+      .sort((a,b) => (a.standing || 99) - (b.standing || 99));
+    const pot  = ctx.money[kind];
+    const lead = marks[0];
+
+    return `
+      <div class="cbox ${lead ? 'won' : 'open'}" style="--c:${lead ? lead.accent : 'var(--dim)'}">
+        <div class="clab">${KIND_LABEL[kind]}${holeLabel(hole)}</div>
+        ${lead ? `
+          <div class="cval">${lead.value != null
+            ? lead.value + (lead.unit === 'in' ? '"' : "'") : 'Holed it'}</div>
+          <div class="cwho">
+            <b>${esc(lead.full_name)}</b>
+            <span>${esc(lead.team_name || '')}${lead.bay ? ' \u00b7 bay ' + lead.bay : ''}</span>
+          </div>
+          ${marks.length > 1 ? `<div class="alsoran">${
+            marks.slice(1,4).map(m => esc(m.full_name.split(' ')[0]) + ' ' +
+              (m.value != null ? m.value + (m.unit === 'in' ? '"' : "'") : '')).join(' \u00b7 ')
+          }${marks.length > 4 ? ' +' + (marks.length - 4) : ''}</div>` : ''}
+        ` : `
+          <div class="cval none3">\u2014</div>
+          <div class="cwho"><span>Still there for the taking</span></div>
+        `}
+        ${pot && pot.total ? `<div class="cpot">$${Number(pot.total).toFixed(0)}${
+          Number(pot.carried) > 0 ? ' \u00b7 $' + Number(pot.carried).toFixed(0) + ' carried in' : ''
+        }</div>` : ''}
+      </div>`;
+  }).join('');
+
+  return `<h2 class="sech">The contests</h2>${who}<div class="cwrap">${boxes}</div>`;
+}
 </script>
 <script>
 (function(){
