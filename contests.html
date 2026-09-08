@@ -75,7 +75,7 @@ button{font-family:inherit}
 .entry > div{flex:1;min-width:0}
 .entry button{background:var(--green);color:#fff;border:0;padding:10px 16px;
   font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap;flex:none}
-.entry.pending button{background:none;color:#8A5A16;padding:0;margin-top:5px;
+.entry.in button{background:none;color:var(--dim);padding:0;margin-top:5px;
   font-size:12px;text-decoration:underline;text-underline-offset:3px;font-weight:400}
 .none2{font-size:13px;color:var(--dim);margin:0;padding:10px 0}
 
@@ -251,8 +251,8 @@ async function refreshBoard() {
    that way this week and anyone in the bay can go up. */
 function eligible() {
   if (!entrants.length) return players;
-  const paid = new Set(entrants.filter(e => e.paid).map(e => e.profile_id));
-  return players.filter(p => paid.has(p.id));
+  const inPot = new Set(entrants.map(e => e.profile_id));
+  return players.filter(p => inPot.has(p.id));
 }
 
 const myEntry = () => entrants.find(e => e.profile_id === profile.id);
@@ -372,16 +372,18 @@ function entryLine() {
   const paid  = entrants.filter(e => e.paid).length;
   const owing = entrants.filter(e => !e.paid).length;
 
+  const total = entrants.length;
+
   if (mine && mine.paid) {
     return `<div class="entry in">
-      <b>You're in.</b> ${paid} paid up${owing ? `, ${owing} still to settle` : ''}.
+      <b>You're in and squared up.</b> ${total} playing for it.
     </div>`;
   }
   if (mine) {
-    return `<div class="entry pending">
+    return `<div class="entry in">
       <div>
-        <b>Name down, money not in yet.</b>
-        Give Chris your $${fee} before you tee off.
+        <b>You're in.</b> ${total} playing for it. Settle the $${fee} with Chris
+        whenever — it won't stop you putting a number up.
         <button type="button" data-out="1">Take my name off</button>
       </div>
     </div>`;
@@ -390,7 +392,7 @@ function entryLine() {
     <div>
       <b>Not in tonight.</b>
       $${fee} covers all three — closest to the pin, long putt and the chip-in.
-      ${paid ? `${paid} already in.` : ''}
+      ${total ? `${total} already in.` : ''}
     </div>
     <button type="button" data-in="1">I'm in</button>
   </div>`;
