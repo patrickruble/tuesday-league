@@ -1,11 +1,10 @@
 {
-  "_comment": "Sponsors shown in the footer and, for bay tier, on the schedule. Remove the examples before showing this to anyone — these are placeholders, not real businesses.",
+  "_comment": "Shown in the footer of every generated page. Add more as people offer things.",
 
   "title": null,
 
   "supporters": [
-    { "name": "Example Pro Shop",  "blurb": "Club fitting and repairs", "url": null },
-    { "name": "Example Taproom",   "blurb": "Post-round headquarters",  "url": null }
+    { "name": "Club regripping", "blurb": "Contact Caleb Fields", "url": null }
   ],
 
   "bays": []
