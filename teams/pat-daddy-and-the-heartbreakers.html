@@ -25,12 +25,13 @@
     --team-wdth:100;
   }
   .sheet{background-color:#241F2E}
-  .sheet{
-    background-image:var(--pattern),url("https://iubvgagijqlwiauzcisj.supabase.co/storage/v1/object/public/backdrops/0d309f87-3899-446a-b002-a37cf33e00e1/backdrop-1788892895561.jpg");
-    background-repeat:no-repeat;
-    background-size:cover;
-    background-position:center;
-    background-attachment:scroll;
+  /* doubled selector so it beats .bg-none from patterns.css */
+  .sheet.sheet{
+    background-image:url("https://iubvgagijqlwiauzcisj.supabase.co/storage/v1/object/public/backdrops/0d309f87-3899-446a-b002-a37cf33e00e1/backdrop-1788892895561.jpg")!important;
+    background-repeat:no-repeat!important;
+    background-size:cover!important;
+    background-position:center!important;
+    background-attachment:scroll!important;
   }
 
   /* dark background — invert the type rather than floating
@@ -89,6 +90,7 @@
     </nav>
   </div>
 </header>
+<div id="cardcta"></div>
 
 
 <div class="hero">
@@ -133,6 +135,7 @@
 </div>
 
 <div class="sheet bg-grid">
+  <div id="cardcta"></div>
   <div class="wrap">
     
     <section>

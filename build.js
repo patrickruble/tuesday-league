@@ -253,6 +253,7 @@ ${head}
     </nav>
   </div>
 </header>
+<div id="cardcta"></div>
 
 ${body}
 
@@ -617,12 +618,13 @@ function buildTeamPage(t) {
     --team-wdth:${face.wdth};
   }
 ${t.backdropColor ? `  .sheet{background-color:${t.backdropColor}}` : ''}
-${t.backdropImage ? `  .sheet{
-    background-image:${t.backdrop && t.backdrop !== 'none' ? 'var(--pattern),' : ''}url("${assetUrl(t.backdropImage)}");
-    background-repeat:${t.backdropMode === 'tile' ? 'repeat' : 'no-repeat'};
-    background-size:${t.backdropMode === 'tile' ? 'auto' : 'cover'};
-    background-position:center;
-    background-attachment:${t.backdropMode === 'fixed' ? 'fixed' : 'scroll'};
+${t.backdropImage ? `  /* doubled selector so it beats .bg-none from patterns.css */
+  .sheet.sheet{
+    background-image:url("${assetUrl(t.backdropImage)}")!important;
+    background-repeat:${t.backdropMode === 'tile' ? 'repeat' : 'no-repeat'}!important;
+    background-size:${t.backdropMode === 'tile' ? 'auto' : 'cover'}!important;
+    background-position:center!important;
+    background-attachment:${t.backdropMode === 'fixed' ? 'fixed' : 'scroll'}!important;
   }` : ''}
 ${t.backdropColor && isDark(t.backdropColor) ? `
   /* dark background — invert the type rather than floating
@@ -775,6 +777,7 @@ ${t.backdropColor && isDark(t.backdropColor) ? `
 </div>
 
 <div class="sheet bg-${t.backdrop}">
+  <div id="cardcta"></div>
   <div class="wrap">
     ${t.bio ? `<section>
       <div class="head"><h2>The Team</h2></div>
