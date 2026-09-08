@@ -625,7 +625,20 @@ ${t.backdropImage ? `  /* doubled selector so it beats .bg-none from patterns.cs
     background-size:${t.backdropMode === 'tile' ? 'auto' : 'cover'}!important;
     background-position:center!important;
     background-attachment:${t.backdropMode === 'fixed' ? 'fixed' : 'scroll'}!important;
-  }` : ''}
+  }
+
+  /* A photo behind the page will swallow the words unless the
+     panels sit on something. Enough backing to read through,
+     little enough that the picture still reads. */
+  .sheet.sheet section{
+    background:rgba(255,255,255,.90);
+    backdrop-filter:blur(3px);
+    -webkit-backdrop-filter:blur(3px);
+    margin:0 0 3px;
+  }
+  .sheet.sheet .roster{background:transparent}
+  .sheet.sheet .player .said,
+  .sheet.sheet .player .cap2{background:rgba(255,255,255,.94)}` : ''}
 ${t.backdropColor && isDark(t.backdropColor) ? `
   /* dark background — invert the type rather than floating
      white boxes on it */
