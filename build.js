@@ -239,23 +239,7 @@ function layout({ title, current, depth = 0, head = '', body }) {
 <link rel="stylesheet" href="${up}assets/site.css">
 <link rel="stylesheet" href="${up}assets/extra.css">
 <link rel="stylesheet" href="${up}assets/patterns.css">
-${t.backdropImage ? `<style>
-  /* The photo gets its own band rather than sitting behind the
-     page. Fixed, so it holds still while you scroll past it. */
-  .cover{height:min(58vh,520px);overflow:hidden;position:relative;background:#0C1410}
-  .coverimg{
-    position:absolute;inset:0;
-    background-image:url("${assetUrl(t.backdropImage)}");
-    background-size:cover;
-    background-position:center;
-    background-attachment:fixed;
-  }
-  @media (max-width:820px){
-    .cover{height:44vh}
-    /* fixed backgrounds misbehave on phones — scroll instead */
-    .coverimg{background-attachment:scroll}
-  }
-</style>` : ''}
+
 ${head}
 </head>
 <body>
@@ -626,6 +610,23 @@ function buildTeamPage(t) {
 
   const head = `
 <link href="https://fonts.googleapis.com/css2?family=${face.google}&display=swap" rel="stylesheet">
+${t.backdropImage ? `<style>
+  /* The photo gets its own band rather than sitting behind the
+     page. Fixed, so it holds still while you scroll past it. */
+  .cover{height:min(58vh,520px);overflow:hidden;position:relative;background:#0C1410}
+  .coverimg{
+    position:absolute;inset:0;
+    background-image:url("${assetUrl(t.backdropImage)}");
+    background-size:cover;
+    background-position:center;
+    background-attachment:fixed;
+  }
+  @media (max-width:820px){
+    .cover{height:44vh}
+    /* fixed backgrounds misbehave on phones — scroll instead */
+    .coverimg{background-attachment:scroll}
+  }
+</style>` : ''}
 <style>
   :root{
     --accent:${t.accent};
@@ -680,7 +681,8 @@ ${t.backdropColor && isDark(t.backdropColor) ? `
   const nextBlock = nextWeek ? `
     <section>
       <div class="head"><h2>Next round</h2>
-        <span class="note">${esc(nextWeek.label)} · ${esc(nextWeek.course)} ${esc(nextWeek.nine)}</span>
+        <span class="note">${esc(nextWeek.label)} · ${esc(nextWeek.course)} ${esc(nextWeek.nine)}${
+          nextWeek.conditions ? ` · ${esc(nextWeek.conditions)}` : ''}</span>
       </div>
       <div class="h2h">
         <div class="baytag"><b>${bay ?? '—'}</b><span>BAY</span></div>
