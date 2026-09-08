@@ -443,24 +443,24 @@
   {
     "slug": "pat-daddy-and-the-heartbreakers",
     "name": "Pat Daddy & The Heartbreakers",
-    "crest": "PD",
+    "crest": "<3",
     "crestUrl": null,
-    "accent": "#0F766E",
-    "typeface": "archivo",
-    "backdrop": "none",
-    "backdropColor": null,
-    "backdropImage": null,
-    "backdropMode": "tile",
+    "accent": "#2563EB",
+    "typeface": "fjalla",
+    "backdrop": "grid",
+    "backdropColor": "#241F2E",
+    "backdropImage": "https://iubvgagijqlwiauzcisj.supabase.co/storage/v1/object/public/backdrops/0d309f87-3899-446a-b002-a37cf33e00e1/backdrop-1788892895561.jpg",
+    "backdropMode": "cover",
     "handicap": 0,
     "bay": null,
-    "mood": "content",
-    "moodSentiment": "good",
+    "mood": "dialed",
+    "moodSentiment": "hot",
     "song": {
-      "title": "",
-      "artist": "",
-      "provider": "youtube",
-      "id": null,
-      "art": null
+      "title": "World a Reggae (Out in the Street They Call It Murder)",
+      "artist": "iNi Kamoze",
+      "provider": "spotify",
+      "id": "3ApxpM5ghkdjWKhbrQaPLk",
+      "art": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e020a5cade1fa91187fe01d18c6"
     },
     "bio": "",
     "roster": [
@@ -478,10 +478,17 @@
       {
         "name": "Patrick Ruble",
         "hcp": 0,
-        "quote": "",
-        "photo": null,
+        "quote": "You gotta risk it to get the biscuit",
+        "photo": "https://iubvgagijqlwiauzcisj.supabase.co/storage/v1/object/public/avatars/ce4ee1a8-a206-4029-b7bc-5c575dc86142/avatar-1788375876803.gif",
         "wins": null,
-        "bag": null,
+        "bag": [
+          {
+            "slot": "driver",
+            "brand": "Ping",
+            "model": "G425 Max",
+            "detail": null
+          }
+        ],
         "closest": null,
         "longest": null,
         "won_total": 0

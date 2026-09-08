@@ -15,18 +15,48 @@
 <link rel="stylesheet" href="../assets/extra.css">
 <link rel="stylesheet" href="../assets/patterns.css">
 
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap" rel="stylesheet">
 <style>
   :root{
-    --accent:#0F766E;
-    --pat:rgba(15,118,110,0.15);
-    --mood:#7EBED7;
-    --team-display:'Archivo','Helvetica Neue',Arial,sans-serif;
-    --team-wdth:112;
+    --accent:#2563EB;
+    --pat:rgba(37,99,235,0.15);
+    --mood:#B8EB7A;
+    --team-display:'Fjalla One',Impact,sans-serif;
+    --team-wdth:100;
+  }
+  .sheet{background-color:#241F2E}
+  .sheet{
+    background-image:var(--pattern),url("https://iubvgagijqlwiauzcisj.supabase.co/storage/v1/object/public/backdrops/0d309f87-3899-446a-b002-a37cf33e00e1/backdrop-1788892895561.jpg");
+    background-repeat:no-repeat;
+    background-size:cover;
+    background-position:center;
+    background-attachment:scroll;
   }
 
-
-
+  /* dark background — invert the type rather than floating
+     white boxes on it */
+  .sheet{
+    --ink:#F3F5F3;
+    --dim:rgba(255,255,255,.56);
+    --rule:rgba(255,255,255,.15);
+    --card:rgba(255,255,255,.055);
+    --pat:rgba(124,161,243,0.22);
+    color:#F3F5F3;
+  }
+  .sheet .panel,.sheet .h2h,.sheet .player,.sheet .match,
+  .sheet .run,.sheet .statgrid > div,.sheet .bag,.sheet .item{
+    background:rgba(255,255,255,.055);
+    border-color:rgba(255,255,255,.15);
+    color:#F3F5F3;
+  }
+  .sheet .roster{background:rgba(255,255,255,.15)}
+  .sheet .head h2{color:#87a9f4}
+  .sheet .hcp{color:#87a9f4}
+  .sheet .said,.sheet .idx,.sheet .pld,.sheet .note,
+  .sheet .course,.sheet small{color:rgba(255,255,255,.56)}
+  .sheet .mid .sc{color:#F3F5F3}
+  .sheet a{color:#92b1f5}
+  .sheet section + section{border-top-color:rgba(255,255,255,.14)}
 </style>
 </head>
 <body>
@@ -66,7 +96,7 @@
     <div class="eyebrow">Season 3</div>
     <h1>Pat Daddy &amp; The Heartbreakers</h1>
     <div class="underline">
-      <div class="crest-sm">PD</div>
+      <div class="crest-sm">&lt;3</div>
       <span class="meta">Bay 3 · Tuesdays 7:00</span>
       <span class="tally"><b>—</b> season points</span>
     </div>
@@ -75,10 +105,16 @@
 
 <div class="status">
   <div class="inner">
-    <div class="moodline"><span class="lbl">Mood</span><i class="dot2"></i><b>content</b></div>
+    <div class="moodline"><span class="lbl">Mood</span><i class="dot2"></i><b>dialed</b></div>
     
-    <div class="song"><span class="lbl">Walk-up</span>
-      <span style="font-size:12px;color:rgba(255,255,255,.45)">not picked yet</span></div>
+    <div class="song">
+      <span class="lbl">Walk-up</span>
+      <div class="art">
+        <img src="https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e020a5cade1fa91187fe01d18c6" alt="" loading="lazy">
+        <button class="play" id="play" aria-label="Play World a Reggae (Out in the Street They Call It Murder)">▶</button>
+      </div>
+      <div class="song-meta"><b>World a Reggae (Out in the Street They Call It Murder)</b><span>iNi Kamoze</span></div>
+    </div>
   </div>
 </div>
 
@@ -96,7 +132,7 @@
   </div>
 </div>
 
-<div class="sheet bg-none">
+<div class="sheet bg-grid">
   <div class="wrap">
     
     <section>
@@ -110,11 +146,11 @@
         
       </article>
       <article class="player">
-        <div class="face">PR</div>
+        <div class="face has-img"><img src="https://iubvgagijqlwiauzcisj.supabase.co/storage/v1/object/public/avatars/ce4ee1a8-a206-4029-b7bc-5c575dc86142/avatar-1788375876803.gif" alt="Patrick Ruble" loading="lazy"></div>
         <div class="idx">02</div>
         <h3><a href="../players/patrick-ruble.html" style="color:inherit;text-decoration:none">Patrick Ruble</a></h3>
         <div class="hcp">INDEX TBC</div>
-        
+        <p class="said">“You gotta risk it to get the biscuit”</p>
       </article>
       <article class="player">
         <div class="face">JD</div>
@@ -147,7 +183,7 @@ import { mountDock, playSong } from '../assets/player.js';
 
 const btn = document.getElementById('play');
 if (btn) {
-  const song = {"title":"","artist":"","provider":"youtube","id":null,"art":null};
+  const song = {"title":"World a Reggae (Out in the Street They Call It Murder)","artist":"iNi Kamoze","provider":"spotify","id":"3ApxpM5ghkdjWKhbrQaPLk","art":"https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e020a5cade1fa91187fe01d18c6"};
   mountDock(document.getElementById('player'), {
     onStop: () => { btn.textContent = '▶'; }
   });
