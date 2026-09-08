@@ -623,22 +623,47 @@ ${t.backdropImage ? `  /* doubled selector so it beats .bg-none from patterns.cs
     background-image:url("${assetUrl(t.backdropImage)}")!important;
     background-repeat:${t.backdropMode === 'tile' ? 'repeat' : 'no-repeat'}!important;
     background-size:${t.backdropMode === 'tile' ? 'auto' : 'cover'}!important;
-    background-position:center!important;
-    background-attachment:${t.backdropMode === 'fixed' ? 'fixed' : 'scroll'}!important;
+    background-position:center top!important;
+    /* fixed, so the photo stays put and the page moves over it */
+    background-attachment:fixed!important;
   }
 
-  /* A photo behind the page will swallow the words unless the
-     panels sit on something. Enough backing to read through,
-     little enough that the picture still reads. */
+  /* Panels have to sit on something or the photo swallows the
+     words. Dark backing with light type, matching the rest of
+     the page, and see-through enough that the picture reads. */
   .sheet.sheet section{
-    background:rgba(255,255,255,.90);
-    backdrop-filter:blur(3px);
-    -webkit-backdrop-filter:blur(3px);
-    margin:0 0 3px;
+    background:rgba(12,20,16,.72)!important;
+    backdrop-filter:blur(6px);
+    -webkit-backdrop-filter:blur(6px);
+    margin:0 0 4px;
+    color:#F3F5F3!important;
   }
-  .sheet.sheet .roster{background:transparent}
-  .sheet.sheet .player .said,
-  .sheet.sheet .player .cap2{background:rgba(255,255,255,.94)}` : ''}
+  .sheet.sheet section h2{color:${lighten(t.accent,.5)}!important}
+  .sheet.sheet section,
+  .sheet.sheet section p,
+  .sheet.sheet section b,
+  .sheet.sheet section span,
+  .sheet.sheet section small,
+  .sheet.sheet section div{border-color:rgba(255,255,255,.16)}
+  .sheet.sheet .panel,
+  .sheet.sheet .h2h,
+  .sheet.sheet .match,
+  .sheet.sheet .statgrid > div,
+  .sheet.sheet .baglist,
+  .sheet.sheet .bagitem{
+    background:rgba(255,255,255,.06)!important;
+    border-color:rgba(255,255,255,.16)!important;
+    color:#F3F5F3!important;
+  }
+  .sheet.sheet .said,
+  .sheet.sheet .idx,
+  .sheet.sheet .pld,
+  .sheet.sheet .note,
+  .sheet.sheet .course,
+  .sheet.sheet small{color:rgba(255,255,255,.62)!important}
+  .sheet.sheet .roster{background:transparent!important}
+  .sheet.sheet .player .cap2{background:rgba(12,20,16,.86)!important}
+  .sheet.sheet a{color:${lighten(t.accent,.55)}!important}` : ''}
 ${t.backdropColor && isDark(t.backdropColor) ? `
   /* dark background — invert the type rather than floating
      white boxes on it */
