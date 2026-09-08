@@ -132,6 +132,59 @@ button{font-family:inherit}
 .short{font-size:12px;color:var(--warn);margin-top:9px}
 
 /* ============================================================
+   THE CHECK — the card across, like the screen in front of you
+   ============================================================ */
+#review h2{font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--dim);margin:0 0 11px}
+.revwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -16px;padding:0 16px}
+.rev{border-collapse:collapse;width:100%;min-width:340px}
+.rev th,.rev td{
+  border:1px solid var(--rule);padding:7px 2px;text-align:center;
+  font-family:var(--data);font-size:13px;
+}
+.rev th{
+  text-align:left;padding-left:8px;width:46px;color:var(--dim);
+  font-size:9px;letter-spacing:.08em;text-transform:uppercase;font-weight:400;
+}
+.rev .parrow td{background:#F2F4F2;color:var(--dim);font-size:12px}
+.rev .scorerow td{font-size:17px;font-weight:600}
+.rev .ptsrow td{background:#F3F9F1;font-size:12px;color:var(--green);font-weight:600}
+.rev .tot{background:var(--green);color:#fff;font-weight:600}
+.rev .parrow .tot,.rev .ptsrow .tot{background:var(--green-deep)}
+
+/* marked the way you'd mark a paper card */
+.rev .scorerow span{display:inline-block;min-width:22px;line-height:20px;position:relative}
+.rev .scorerow .bird::before,
+.rev .scorerow .eag::before{content:"";position:absolute;inset:-1px;
+  border:1.5px solid var(--green);border-radius:50%}
+.rev .scorerow .eag::after{content:"";position:absolute;inset:-4px;
+  border:1.5px solid var(--green);border-radius:50%}
+.rev .scorerow .bog::before{content:"";position:absolute;inset:-1px;
+  border:1.5px solid var(--dim)}
+.rev .scorerow .dbl::before{content:"";position:absolute;inset:-4px;
+  border:1.5px solid var(--dim)}
+
+/* ============================================================
+   SUBS
+   ============================================================ */
+.subhead{display:flex;align-items:center;gap:12px}
+.subhead > div{flex:1;min-width:0}
+.subhead b{display:block;font-size:15px;line-height:1.2}
+.subhead span{font-size:12px;color:var(--dim)}
+.subhead button{background:#FBFCFB;border:1px solid var(--rule);padding:10px 14px;
+  font-size:13px;cursor:pointer;color:var(--ink);white-space:nowrap;flex:none}
+.subhead button:hover{border-color:var(--green);color:var(--green)}
+.subrow{display:flex;align-items:center;gap:10px;padding:11px 0;
+  border-top:1px solid var(--rule);margin-top:11px}
+.subrow + .subrow{margin-top:0}
+.subwho{flex:1;min-width:0}
+.subwho b{display:block;font-size:15px}
+.subwho span{font-size:12px;color:var(--dim)}
+.subdrop{background:none;border:0;font-size:19px;color:var(--dim);cursor:pointer;
+  padding:0 4px;line-height:1}
+.subdrop:hover{color:var(--warn)}
+
+/* ============================================================
    MULLIGANS — one line, because it shouldn't slow the card down
    ============================================================ */
 .mull{display:flex;align-items:center;gap:11px}
@@ -283,10 +336,10 @@ let profile, match, course, team, partner, round, roster = [], conditions = {};
 let gross = Array(9).fill(null);
 let photoPath = null;
 let scoring = { '-2':3, '-1':2, '0':1, '1':0 };
-let strokeFrom = 'hardest';
 let needSignoff = false;
 let mulliganLimit = null;
 let mulligans = 0;
+let subs = [];
 let saveTimer = null;
 
 /* ------------------------------------------------------------
@@ -304,7 +357,6 @@ let saveTimer = null;
   const { data: cfg } = await supabase.from('league_settings').select('*').maybeSingle();
   if (cfg) {
     scoring = cfg.scoring || scoring;
-    strokeFrom = cfg.stroke_from || 'hardest';
     needSignoff = !!cfg.require_signoff;
     mulliganLimit = cfg.mulligans_allowed ?? null;
   }
@@ -393,6 +445,12 @@ async function loadMatch(id) {
   if (round?.gross) gross = round.gross.slice();
   if (round?.mulligans) mulligans = round.mulligans;
 
+  if (round?.id) {
+    const { data: sd } = await supabase.from('round_subs')
+      .select('*').eq('round_id', round.id);
+    subs = sd || [];
+  }
+
   const cached = localStorage.getItem(cacheKey());
   if (cached && !round?.gross) {
     try {
@@ -430,18 +488,10 @@ function conditionsLine() {
   return bits.join(' \u00b7 ');
 }
 
-function strokesOn(i) {
-  const h = team.handicap || 0;
-  if (!h) return 0;
-  const si = course.stroke_index[i];
-  const idx = strokeFrom === 'easiest' ? 10 - si : si;
-  const n = Math.floor(Math.abs(h)/9) + (idx <= Math.abs(h) % 9 ? 1 : 0);
-  return Math.sign(h) * n;
-}
-
 function pointsFor(i) {
   if (gross[i] == null) return null;
-  let diff = (gross[i] + strokesOn(i)) - course.pars[i];
+  /* points are gross — the hole against par, nothing else */
+  let diff = gross[i] - course.pars[i];
   const keys = Object.keys(scoring).map(Number).sort((a,b) => a-b);
   diff = Math.max(keys[0], Math.min(keys[keys.length-1], diff));
   return scoring[String(diff)];
@@ -457,7 +507,6 @@ function render() {
   document.documentElement.style.setProperty('--accent', team.accent);
 
   const holes = course.pars.map((par,i) => {
-    const st = strokesOn(i);
     /* six numbers, centred on par: eagle through triple */
     const opts = [];
     for (let d = -2; d <= 3; d++) opts.push(par + d);
@@ -466,7 +515,6 @@ function render() {
       <div class="hrow">
         <span class="hno">${holeNo(i)}</span>
         <span class="hpar">PAR ${par}</span>
-        ${st ? `<span class="stroke"><i></i>${st > 0 ? '+' : ''}${st}</span>` : ''}
         <span class="pill" id="p${i}">–</span>
       </div>
       <div class="nums" role="group" aria-label="Score for hole ${holeNo(i)}">
@@ -503,6 +551,22 @@ function render() {
   </div>
 
   <div class="holes" id="holes">${holes}</div>
+
+  <div class="panel" id="review" hidden>
+    <h2>Check it against the screen</h2>
+    <div class="revwrap"><table class="rev" id="revtable"></table></div>
+  </div>
+
+  <div class="panel" id="subpanel">
+    <div class="subhead">
+      <div>
+        <b>Anyone filling in?</b>
+        <span>Subs go on the card so it says who actually played.</span>
+      </div>
+      <button type="button" id="addsub">Add a sub</button>
+    </div>
+    <div id="sublist"></div>
+  </div>
 
   <div class="panel" id="mullpanel">
     <div class="mull">
@@ -565,6 +629,9 @@ function wire() {
       }));
   });
 
+  paintSubs();
+  $('addsub').addEventListener('click', addSub);
+
   $('mdown').addEventListener('click', () => bumpMulligans(-1));
   $('mup').addEventListener('click',   () => bumpMulligans(1));
 
@@ -604,6 +671,64 @@ function cheer(row, btn) {
   }
 }
 
+/* ------------------------------------------------------------
+   Subs
+   A name and, if they're covering someone, who for.
+------------------------------------------------------------ */
+function paintSubs() {
+  const host = $('sublist');
+  if (!host) return;
+
+  if (!subs.length) { host.innerHTML = ''; return; }
+
+  host.innerHTML = subs.map(s => `
+    <div class="subrow" data-id="${s.id}">
+      <div class="subwho">
+        <b>${esc(s.name)}</b>
+        ${s.covering_for
+          ? `<span>in for ${esc(roster.find(r => r.id === s.covering_for)?.full_name || 'someone')}</span>`
+          : '<span>playing extra</span>'}
+      </div>
+      <button type="button" class="subdrop" aria-label="Remove">×</button>
+    </div>`).join('');
+
+  host.querySelectorAll('.subdrop').forEach(b =>
+    b.addEventListener('click', async () => {
+      const id = b.closest('.subrow').dataset.id;
+      await supabase.from('round_subs').delete().eq('id', id);
+      subs = subs.filter(s => s.id !== id);
+      paintSubs();
+    }));
+}
+
+async function addSub() {
+  const name = prompt('Who\u2019s filling in?');
+  if (!name || !name.trim()) return;
+
+  let coveringFor = null;
+  if (roster.length) {
+    const list = roster.map((r,i) => `${i+1}. ${r.full_name}`).join('\n');
+    const pick = prompt(
+      `Who are they in for?\n\n${list}\n\nType a number, or leave it blank if ` +
+      `they're just playing extra.`);
+    const n = parseInt(pick, 10);
+    if (n >= 1 && n <= roster.length) coveringFor = roster[n-1].id;
+  }
+
+  if (!round?.id) await saveDraft();
+
+  const { data, error } = await supabase.from('round_subs').insert({
+    round_id: round.id,
+    name: name.trim(),
+    covering_for: coveringFor,
+    added_by: profile.id
+  }).select().maybeSingle();
+
+  if (error) { alert(error.message); return; }
+  subs.push(data);
+  paintSubs();
+}
+
 function bumpMulligans(d) {
   mulligans = Math.max(0, Math.min(20, mulligans + d));
   $('mcount').textContent = mulligans;
@@ -636,9 +761,44 @@ function paint(i) {
   pill.className = 'pill' + (pt == null ? '' : ' p'+pt);
 }
 
+/* Laid out the way the simulator lays it out, so checking one
+   against the other is a matter of reading across. */
+function paintReview() {
+  const el = $('review');
+  if (!el) return;
+
+  const done = gross.filter(g => g != null).length;
+  if (done < 9) { el.hidden = true; return; }
+  el.hidden = false;
+
+  const cells = (label, fn, cls) =>
+    `<tr class="${cls || ''}"><th>${label}</th>` +
+    course.pars.map((par, i) => `<td>${fn(i, par)}</td>`).join('') +
+    `<td class="tot">${
+      label === 'Score' ? gross.reduce((a,b) => a + (b||0), 0) :
+      label === 'Par'   ? course.pars.reduce((a,b) => a+b, 0) :
+      label === 'Pts'   ? roundPoints() : ''
+    }</td></tr>`;
+
+  const mark = (i, par) => {
+    const g = gross[i];
+    if (g == null) return '';
+    const d = g - par;
+    const cls = d <= -2 ? 'eag' : d === -1 ? 'bird' : d === 1 ? 'bog' : d >= 2 ? 'dbl' : '';
+    return `<span class="${cls}">${g}</span>`;
+  };
+
+  $('revtable').innerHTML =
+    cells('Hole', i => holeNo(i)) +
+    cells('Par',  (i, par) => par, 'parrow') +
+    cells('Score', mark, 'scorerow') +
+    cells('Pts',  i => pointsFor(i), 'ptsrow');
+}
+
 function tally() {
   const done = gross.filter(g => g != null).length;
   $('pts').textContent = done ? roundPoints() : '—';
+  paintReview();
 
   const hasPhoto = $('photo').classList.contains('has');
   const ready = done === 9 && hasPhoto;
