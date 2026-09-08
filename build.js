@@ -239,6 +239,23 @@ function layout({ title, current, depth = 0, head = '', body }) {
 <link rel="stylesheet" href="${up}assets/site.css">
 <link rel="stylesheet" href="${up}assets/extra.css">
 <link rel="stylesheet" href="${up}assets/patterns.css">
+${t.backdropImage ? `<style>
+  /* The photo gets its own band rather than sitting behind the
+     page. Fixed, so it holds still while you scroll past it. */
+  .cover{height:min(58vh,520px);overflow:hidden;position:relative;background:#0C1410}
+  .coverimg{
+    position:absolute;inset:0;
+    background-image:url("${assetUrl(t.backdropImage)}");
+    background-size:cover;
+    background-position:center;
+    background-attachment:fixed;
+  }
+  @media (max-width:820px){
+    .cover{height:44vh}
+    /* fixed backgrounds misbehave on phones — scroll instead */
+    .coverimg{background-attachment:scroll}
+  }
+</style>` : ''}
 ${head}
 </head>
 <body>
@@ -618,52 +635,7 @@ function buildTeamPage(t) {
     --team-wdth:${face.wdth};
   }
 ${t.backdropColor ? `  .sheet{background-color:${t.backdropColor}}` : ''}
-${t.backdropImage ? `  /* doubled selector so it beats .bg-none from patterns.css */
-  .sheet.sheet{
-    background-image:url("${assetUrl(t.backdropImage)}")!important;
-    background-repeat:${t.backdropMode === 'tile' ? 'repeat' : 'no-repeat'}!important;
-    background-size:${t.backdropMode === 'tile' ? 'auto' : 'cover'}!important;
-    background-position:center top!important;
-    /* fixed, so the photo stays put and the page moves over it */
-    background-attachment:fixed!important;
-  }
 
-  /* Panels have to sit on something or the photo swallows the
-     words. Dark backing with light type, matching the rest of
-     the page, and see-through enough that the picture reads. */
-  .sheet.sheet section{
-    background:rgba(12,20,16,.72)!important;
-    backdrop-filter:blur(6px);
-    -webkit-backdrop-filter:blur(6px);
-    margin:0 0 4px;
-    color:#F3F5F3!important;
-  }
-  .sheet.sheet section h2{color:${lighten(t.accent,.5)}!important}
-  .sheet.sheet section,
-  .sheet.sheet section p,
-  .sheet.sheet section b,
-  .sheet.sheet section span,
-  .sheet.sheet section small,
-  .sheet.sheet section div{border-color:rgba(255,255,255,.16)}
-  .sheet.sheet .panel,
-  .sheet.sheet .h2h,
-  .sheet.sheet .match,
-  .sheet.sheet .statgrid > div,
-  .sheet.sheet .baglist,
-  .sheet.sheet .bagitem{
-    background:rgba(255,255,255,.06)!important;
-    border-color:rgba(255,255,255,.16)!important;
-    color:#F3F5F3!important;
-  }
-  .sheet.sheet .said,
-  .sheet.sheet .idx,
-  .sheet.sheet .pld,
-  .sheet.sheet .note,
-  .sheet.sheet .course,
-  .sheet.sheet small{color:rgba(255,255,255,.62)!important}
-  .sheet.sheet .roster{background:transparent!important}
-  .sheet.sheet .player .cap2{background:rgba(12,20,16,.86)!important}
-  .sheet.sheet a{color:${lighten(t.accent,.55)}!important}` : ''}
 ${t.backdropColor && isDark(t.backdropColor) ? `
   /* dark background — invert the type rather than floating
      white boxes on it */
@@ -814,6 +786,7 @@ ${t.backdropColor && isDark(t.backdropColor) ? `
   </div>
 </div>
 
+${t.backdropImage ? `<div class="cover"><div class="coverimg"></div></div>` : ''}
 <div class="sheet bg-${t.backdrop}">
   <div id="cardcta"></div>
   <div class="wrap">
