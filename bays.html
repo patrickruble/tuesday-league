@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bay sheets — Katy Golf League</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#007041">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=Instrument+Sans:wght@400;500;600&family=Martian+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/extra.css">
+<style>
+.bar2{background:var(--green-deep);color:#fff}
+.bar2 .inner{max-width:1040px;margin:0 auto;padding:14px 24px;
+  display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.bar2 .note4{flex:1;font-size:13px;color:rgba(255,255,255,.7);line-height:1.45;
+  min-width:200px}
+.bar2 select{font-family:var(--data);font-size:12px;padding:8px 10px;
+  background:transparent;color:#fff;border:1px solid rgba(255,255,255,.3)}
+.bar2 select option{color:var(--ink)}
+.bar2 button{background:var(--lime);color:var(--green-deep);border:0;padding:11px 18px;
+  font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
+
+/* ---------- a sheet ---------- */
+.sheets{max-width:1040px;margin:0 auto;padding:24px}
+.sheet2{
+  background:#fff;border:1px solid var(--rule);margin-bottom:18px;
+  padding:34px 38px;display:grid;grid-template-columns:auto 1fr;gap:34px;
+  align-items:center;
+}
+.sheet2 .code{width:260px;height:260px;flex:none}
+.sheet2 .code canvas,.sheet2 .code img{width:100%;height:auto;display:block}
+.sheet2 .side3{min-width:0}
+.sheet2 .bayno2{
+  font-family:var(--display);font-weight:800;font-size:82px;line-height:.85;
+  letter-spacing:-.04em;color:var(--green);
+}
+.sheet2 .bayno2 span{display:block;font-family:var(--data);font-size:11px;
+  letter-spacing:.2em;color:var(--dim);margin-bottom:6px;font-weight:400}
+.sheet2 h2{font-family:var(--display);font-weight:800;font-size:27px;margin:18px 0 4px;
+  letter-spacing:-.015em;line-height:1.1}
+.sheet2 .vs2{font-size:15px;color:var(--dim);line-height:1.5}
+.sheet2 .vs2 b{color:var(--ink)}
+.sheet2 .how{margin-top:20px;padding-top:16px;border-top:1px solid var(--rule);
+  font-size:14px;line-height:1.6;color:var(--dim)}
+.sheet2 .how b{color:var(--ink)}
+.sheet2 .url2{margin-top:12px;font-family:var(--data);font-size:11px;color:var(--dim);
+  word-break:break-all}
+
+.sheet2.join{border-color:var(--green);border-width:2px}
+.sheet2.join .bayno2{font-size:46px;color:var(--ink)}
+.sheet2.join .thecode{
+  font-family:var(--data);font-size:34px;font-weight:600;letter-spacing:.14em;
+  background:var(--lime);color:var(--green-deep);padding:12px 20px;
+  display:inline-block;margin-top:14px;
+}
+
+.empty6{background:var(--card);border:1px dashed var(--rule);padding:44px 24px;
+  text-align:center;color:var(--dim);line-height:1.6}
+.empty6 b{display:block;color:var(--ink);font-size:18px;margin-bottom:8px;
+  font-family:var(--display);font-weight:800}
+
+/* ---------- print ---------- */
+@media print {
+  @page { size: letter portrait; margin: 12mm; }
+  body { background:#fff }
+  .masthead, .title, .bar2, footer, .noprint { display:none !important }
+  .sheets { padding:0; max-width:none }
+  .sheet2 {
+    border:2px solid #000; margin:0 0 0 0; page-break-after:always;
+    height:calc(100vh - 24mm); align-content:center;
+    grid-template-columns:1fr; justify-items:center; text-align:center;
+    gap:24px;
+  }
+  .sheet2:last-child { page-break-after:auto }
+  .sheet2 .code { width:340px; height:340px }
+  .sheet2 .bayno2 { font-size:110px }
+  .sheet2 .how { border-top-color:#000 }
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="inner">
+    <a class="mark" href="index.html">Katy <svg class="xm" viewBox="0 0 20 20" aria-hidden="true">
+        <rect x="1.4" y="1.4" width="17.2" height="17.2" rx="1" fill="none"
+              stroke="currentColor" stroke-width="2.6"/>
+        <path d="M6.2 6.2 L13.8 13.8 M13.8 6.2 L6.2 13.8" stroke="currentColor"
+              stroke-width="2.8" stroke-linecap="square"/>
+      </svg>
+      Golf League</a>
+    <nav id="nav" class="adminnav">
+      <a href="admin.html">Tonight</a>
+      <a href="rosters.html">Rosters</a>
+      <a href="weeks.html">Weeks</a>
+      <a href="bays.html" aria-current="page">Bay sheets</a>
+      <a href="index.html" class="out">The site</a>
+    </nav>
+    <span class="tagged">COMMISSIONER</span>
+  </div>
+</header>
+
+<div class="title">
+  <div class="inner">
+    <div><div class="eyebrow">One per bay, taped to the wall</div><h1>Bay sheets</h1></div>
+  </div>
+</div>
+
+<div class="bar2">
+  <div class="inner">
+    <select id="weekpick2"></select>
+    <span class="note4" id="note4">
+      Each sheet opens that bay's card straight on their phone. Print once a week
+      and swap them out, or laminate the join sheet and leave it up.
+    </span>
+    <button id="printit">Print these</button>
+  </div>
+</div>
+
+<div class="sheets" id="sheets">
+  <div class="empty6"><b>Loading</b>Working out this week's bays.</div>
+</div>
+
+<footer class="noprint">
+  <div class="inner"><span>Katy Golf League</span><span>Commissioner view</span></div>
+</footer>
+
+<script type="module">
+import { supabase, requireAuth, me } from './assets/db.js';
+import QRCode from 'https://cdn.jsdelivr.net/npm/qrcode@1.5.4/+esm';
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c =>
+  ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+
+let teams = {}, weeks = [], settings = {};
+
+(async () => {
+  const session = await requireAuth();
+  if (!session) return;
+  const p = await me();
+  if (!p?.is_admin) {
+    $('sheets').innerHTML =
+      '<div class="empty6"><b>Commissioner only</b>These are for setting up the bays.</div>';
+    return;
+  }
+
+  const [{ data: ts }, { data: ms }, { data: cfg }] = await Promise.all([
+    supabase.from('teams').select('id,name,accent,crest'),
+    supabase.from('matches').select('id,week,played_on,bay,home_team,away_team')
+      .order('week', { ascending: false }),
+    supabase.from('league_settings').select('*').maybeSingle()
+  ]);
+
+  teams = Object.fromEntries((ts||[]).map(t => [t.id, t]));
+  settings = cfg || {};
+
+  const byWeek = {};
+  for (const m of ms || []) (byWeek[m.week] ??= []).push(m);
+  weeks = Object.entries(byWeek)
+    .map(([week, matches]) => ({ week: +week, matches,
+      played_on: matches[0].played_on }))
+    .sort((a,b) => b.week - a.week);
+
+  if (!weeks.length) {
+    $('sheets').innerHTML = `<div class="empty6">
+      <b>No weeks set up yet</b>
+      Put a week together on the Weeks page and the sheets appear here.</div>`;
+    return;
+  }
+
+  $('weekpick2').innerHTML = weeks.map(w =>
+    `<option value="${w.week}">Week ${w.week} · ${new Date(w.played_on + 'T12:00:00')
+      .toLocaleDateString([], {day:'numeric',month:'short'})}</option>`).join('');
+  $('weekpick2').addEventListener('change', e => paint(+e.target.value));
+
+  paint(weeks[0].week);
+})();
+
+$('printit').addEventListener('click', () => window.print());
+
+async function paint(week) {
+  const w = weeks.find(x => x.week === week);
+  const base = location.href.replace(/bays\.html.*$/, '');
+
+  const sheets = w.matches
+    .sort((a,b) => (a.bay||0) - (b.bay||0))
+    .map(m => {
+      const list = [m.home_team, m.away_team].filter(Boolean).map(id => teams[id]);
+      const url = `${base}enter-scores.html?match=${m.id}`;
+      return `
+      <div class="sheet2">
+        <div class="code" data-url="${esc(url)}"></div>
+        <div class="side3">
+          <div class="bayno2"><span>BAY</span>${m.bay ?? '—'}</div>
+          <h2>${list.map(t => esc(t?.name || '')).join(' &amp; ')}</h2>
+          <div class="vs2">Week ${w.week} · ${new Date(w.played_on + 'T12:00:00')
+            .toLocaleDateString([], {weekday:'long', day:'numeric', month:'long'})}</div>
+          <div class="how">
+            <b>Point your camera at this.</b> It opens your card — nine holes,
+            one tap each. Photo of the screen at the end, then the other team
+            scans your phone to sign it off.
+          </div>
+          <div class="url2">${esc(url)}</div>
+        </div>
+      </div>`;
+    }).join('');
+
+  /* one more sheet for anyone who hasn't signed up */
+  const joinUrl = `${base}login.html`;
+  const joinSheet = `
+    <div class="sheet2 join">
+      <div class="code" data-url="${esc(joinUrl)}"></div>
+      <div class="side3">
+        <div class="bayno2">New here?</div>
+        <h2>Set yourself up</h2>
+        <div class="vs2">Scan it, make an account, pick your name off the roster.</div>
+        ${settings.join_code ? `
+          <div class="thecode">${esc(settings.join_code)}</div>
+          <div class="how" style="border:0;padding-top:10px">
+            <b>You'll need that code.</b> It stops strangers claiming a spot.
+          </div>` : ''}
+        <div class="url2">${esc(joinUrl)}</div>
+      </div>
+    </div>`;
+
+  $('sheets').innerHTML = sheets + joinSheet;
+
+  for (const slot of document.querySelectorAll('.code')) {
+    try {
+      const cv = document.createElement('canvas');
+      await QRCode.toCanvas(cv, slot.dataset.url, {
+        width: 700, margin: 1,
+        color: { dark: '#10221A', light: '#FFFFFF' }
+      });
+      slot.appendChild(cv);
+    } catch {
+      slot.innerHTML = `<p style="font-size:12px;color:var(--dim)">
+        Couldn't draw the code. The address is printed below.</p>`;
+    }
+  }
+}
+</script>
+</body>
+</html>
