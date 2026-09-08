@@ -27,11 +27,14 @@
 .sheets{max-width:1040px;margin:0 auto;padding:24px}
 .sheet2{
   background:#fff;border:1px solid var(--rule);margin-bottom:18px;
-  padding:34px 38px;display:grid;grid-template-columns:auto 1fr;gap:34px;
-  align-items:center;
+  padding:34px 38px;display:grid;grid-template-columns:260px minmax(0,1fr);
+  gap:34px;align-items:center;
 }
-.sheet2 .code{width:260px;height:260px;flex:none}
-.sheet2 .code canvas,.sheet2 .code img{width:100%;height:auto;display:block}
+.sheet2 .code{width:260px;max-width:260px;overflow:hidden}
+.sheet2 .code canvas,.sheet2 .code img{
+  width:260px!important;height:260px!important;max-width:100%;display:block;
+  image-rendering:pixelated;
+}
 .sheet2 .side3{min-width:0}
 .sheet2 .bayno2{
   font-family:var(--display);font-weight:800;font-size:82px;line-height:.85;
@@ -75,7 +78,8 @@
     gap:24px;
   }
   .sheet2:last-child { page-break-after:auto }
-  .sheet2 .code { width:340px; height:340px }
+  .sheet2 .code { width:340px; max-width:340px }
+  .sheet2 .code canvas { width:340px!important; height:340px!important }
   .sheet2 .bayno2 { font-size:110px }
   .sheet2 .how { border-top-color:#000 }
 }
@@ -184,7 +188,9 @@ $('printit').addEventListener('click', () => window.print());
 
 async function paint(week) {
   const w = weeks.find(x => x.week === week);
-  const base = location.href.replace(/bays\.html.*$/, '');
+  /* Always the live address, so a sheet printed from a laptop
+     still sends people to the real site. */
+  const base = 'https://katygolfleague.com/';
 
   const sheets = w.matches
     .sort((a,b) => (a.bay||0) - (b.bay||0))
