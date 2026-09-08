@@ -139,7 +139,7 @@ input.f:focus,select.f:focus{outline:none;border-color:var(--green);background:#
           <span class="sub" id="wkSub"></span>
           <div class="acts">
             <button class="b" id="wkNew">Start fresh</button>
-            <button class="b go" id="wkSave">Save the week</button>
+            <button class="b btn-go" id="wkSave">Save the week</button>
           </div>
         </header>
         <div class="body2">
@@ -184,14 +184,7 @@ input.f:focus,select.f:focus{outline:none;border-color:var(--green);background:#
                 <option value="fast">Fast</option>
                 <option value="tournament">Tournament</option>
               </select></div>
-            <div><label class="f" for="gimme">Concedes</label>
-              <select class="f" id="gimme">
-                <option value="">Not set</option>
-                <option value="7">7 feet</option>
-                <option value="4">4 feet</option>
-                <option value="2">2 feet</option>
-                <option value="0">Putt everything</option>
-              </select></div>
+
           </div>
           <input class="f" id="conds" placeholder="Anything else worth saying"
             style="margin-bottom:18px">
@@ -221,7 +214,7 @@ input.f:focus,select.f:focus{outline:none;border-color:var(--green);background:#
         <header>
           <h2>League rules</h2>
           <span class="sub">applies to every week</span>
-          <div class="acts"><button class="b go" id="ruleSave">Save</button></div>
+          <div class="acts"><button class="b btn-go" id="ruleSave">Save</button></div>
         </header>
         <div class="body2">
           <div class="grid2" style="grid-template-columns:repeat(auto-fit,minmax(190px,1fr))">
@@ -278,7 +271,7 @@ input.f:focus,select.f:focus{outline:none;border-color:var(--green);background:#
           <h2 id="crTitle">A new course</h2>
           <div class="acts">
             <button class="b" id="crNew">Start fresh</button>
-            <button class="b go" id="crSave">Save the course</button>
+            <button class="b btn-go" id="crSave">Save the course</button>
           </div>
         </header>
         <div class="body2">
@@ -301,12 +294,9 @@ input.f:focus,select.f:focus{outline:none;border-color:var(--green);background:#
           </div>
           <div class="holes9" id="parRow" style="margin-bottom:18px"></div>
 
-          <label class="f">Stroke index — 1 is the hardest hole</label>
-          <div class="holes9" id="siRow" style="margin-bottom:8px"></div>
           <div class="note2">
-            The simulator shows both of these on screen. Worth copying them across
-            the first time you play a course rather than guessing — the stroke
-            index decides which holes handicap strokes land on.
+            Copy the pars off the simulator screen the first time you play a
+            course. Points are gross, so nothing else about the holes matters.
           </div>
           <div class="msg2" id="crMsg"></div>
         </div>
@@ -411,8 +401,7 @@ async function refresh() {
 function buildHoleInputs() {
   $('parRow').innerHTML = Array.from({length:9}, (_,i) =>
     `<input class="f" id="par${i}" type="number" min="3" max="6" inputmode="numeric">`).join('');
-  $('siRow').innerHTML = Array.from({length:9}, (_,i) =>
-    `<input class="f" id="si${i}" type="number" min="1" max="9" inputmode="numeric">`).join('');
+
 }
 
 function paintCourses() {
@@ -424,8 +413,7 @@ function paintCourses() {
   $('courseList').innerHTML = courses.map(c => `
     <div class="courserow">
       <div><b>${esc(c.name)}</b>
-        <span>${esc(c.nine)} nine · par ${c.pars.reduce((a,b)=>a+b,0)} ·
-          S.I. ${c.stroke_index.join(' ')}</span></div>
+        <span>${esc(c.nine)} nine · par ${c.pars.reduce((a,b)=>a+b,0)}</span></div>
       <button class="b" data-edit="${c.id}">Edit</button>
       <button class="b del" data-delc="${c.id}">Delete</button>
     </div>`).join('');
@@ -449,7 +437,6 @@ function editCourse(id) {
   $('crName').value = c.name;
   $('crNine').value = c.nine;
   c.pars.forEach((v,i) => $('par'+i).value = v);
-  c.stroke_index.forEach((v,i) => $('si'+i).value = v);
   window.scrollTo({ top:0, behavior:'smooth' });
 }
 
@@ -457,7 +444,7 @@ $('crNew').addEventListener('click', () => {
   editingCourse = null;
   $('crTitle').textContent = 'A new course';
   $('crName').value = '';
-  for (let i=0;i<9;i++){ $('par'+i).value=''; $('si'+i).value=''; }
+  for (let i=0;i<9;i++) $('par'+i).value = '';
 });
 
 $('crSave').addEventListener('click', async () => {
@@ -467,18 +454,14 @@ $('crSave').addEventListener('click', async () => {
   const name = $('crName').value.trim();
   if (!name) return say('The course needs a name.');
 
-  const pars = [], si = [];
+  const pars = [];
   for (let i=0;i<9;i++){
-    const p = Number($('par'+i).value), s = Number($('si'+i).value);
+    const p = Number($('par'+i).value);
     if (!p) return say(`Hole ${i+1} is missing its par.`);
-    if (!s) return say(`Hole ${i+1} is missing its stroke index.`);
-    pars.push(p); si.push(s);
+    pars.push(p);
   }
-  const sorted = [...si].sort((a,b) => a-b).join(',');
-  if (sorted !== '1,2,3,4,5,6,7,8,9')
-    return say('The stroke index should use each of 1 to 9 exactly once.');
 
-  const row = { name, nine: $('crNine').value, pars, stroke_index: si };
+  const row = { name, nine: $('crNine').value, pars };
   const { error } = editingCourse
     ? await supabase.from('courses').update(row).eq('id', editingCourse)
     : await supabase.from('courses').insert(row);
@@ -625,7 +608,7 @@ $('wkNew').addEventListener('click', () => {
   $('wkDate').value = nextTuesday();
   $('wkTime').value = '19:30';
   $('ctpHole').value = ''; $('lpHole').value = '';
-  ['wind','windMph','greens','gimme','conds'].forEach(id => $(id).value = '');
+  ['wind','windMph','greens','conds'].forEach(id => $(id).value = '');
   $('baygrid').querySelectorAll('select').forEach(s => s.value = '');
   checkLeftover();
 });
@@ -651,7 +634,6 @@ function editWeek(n) {
   $('wind').value    = w.settings?.wind || '';
   $('windMph').value = w.settings?.wind_speed ?? '';
   $('greens').value  = w.settings?.green_speed || '';
-  $('gimme').value   = w.settings?.gimme_ft ?? '';
   $('conds').value   = w.settings?.conditions || '';
 
   POT_KINDS.forEach(([k]) => {
@@ -796,7 +778,6 @@ $('wkSave').addEventListener('click', async () => {
     wind:        $('wind').value || null,
     wind_speed:  $('windMph').value === '' ? null : Number($('windMph').value),
     green_speed: $('greens').value || null,
-    gimme_ft:    $('gimme').value === '' ? null : Number($('gimme').value),
     conditions:  $('conds').value.trim() || null
   });
 
@@ -876,16 +857,5 @@ document.querySelectorAll('.tabs button').forEach(b =>
       p.classList.toggle('on', p.id === b.dataset.p));
   }));
 </script>
-<style>
-.block2 > header{flex-wrap:wrap!important}
-.block2 > header .acts{
-  margin-left:auto!important;
-  display:flex!important;
-  gap:8px!important;
-  flex:none!important;
-}
-.block2 > header .acts button{display:inline-block!important;visibility:visible!important}
-</style>
 </body>
 </html>
-

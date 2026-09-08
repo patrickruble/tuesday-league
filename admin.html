@@ -104,6 +104,16 @@
   .pothead,.potrow{grid-template-columns:1fr 66px;gap:6px;padding:8px 12px}
   .potrow button{height:32px;font-size:9px}
 }
+
+/* export */
+.expbar{display:flex;align-items:center;gap:12px;background:var(--card);
+  border:1px solid var(--rule);padding:15px 16px;margin:16px 0 24px;flex-wrap:wrap}
+.expbar > div{flex:1;min-width:180px}
+.expbar b{display:block;font-size:15px}
+.expbar span{font-size:12px;color:var(--dim)}
+.b2{background:#FBFCFB;border:1px solid var(--rule);padding:10px 15px;font-size:13px;
+  cursor:pointer;font-family:inherit;white-space:nowrap}
+.b2:hover{border-color:var(--green);color:var(--green)}
 </style>
 </head>
 <body>
@@ -159,6 +169,15 @@
         <span class="sub2" id="pottotals"></span>
       </header>
       <div class="potbody" id="potbody"></div>
+    </div>
+
+    <div class="expbar" id="expbar" hidden>
+      <div>
+        <b>Take it away</b>
+        <span>Scores for the week, or the whole season, as a spreadsheet.</span>
+      </div>
+      <button class="b2" id="expweek">This week</button>
+      <button class="b2" id="expall">Whole season</button>
     </div>
 
     <div class="bays" id="bays"></div>
@@ -287,6 +306,16 @@ async function paintPot() {
         .eq('week', current).eq('profile_id', b.dataset.pot);
       if (error) { b.disabled = false; alert(error.message); return; }
       paintPot();
+
+  const bar = document.getElementById('expbar');
+  if (bar) {
+    bar.hidden = false;
+    document.getElementById('expweek').textContent = 'Week ' + current;
+    document.getElementById('expweek').onclick = () => exportScores(current);
+    document.getElementById('expall').onclick   = () => exportScores(null);
+  }
+  document.getElementById('expbar').hidden = false;
+  document.getElementById('expweek').textContent = `Week ${current}`;
     }));
 
   document.getElementById('closewk').addEventListener('click', async function () {
@@ -301,7 +330,66 @@ async function paintPot() {
         ).join(', ')
       : 'All three were won. Nothing to roll over.');
     paintPot();
+  document.getElementById('expbar').hidden = false;
+  document.getElementById('expweek').textContent = `Week ${current}`;
   });
+}
+
+/* ------------------------------------------------------------
+   Export
+   A plain CSV — one row a card, nine holes across, so it opens
+   in anything and can be pasted wherever Chris needs it.
+------------------------------------------------------------ */
+function toCSV(rows) {
+  if (!rows.length) return '';
+  const cols = Object.keys(rows[0]);
+  const cell = v => {
+    const s = v == null ? '' : String(v);
+    return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+  };
+  return [cols.join(','), ...rows.map(r => cols.map(c => cell(r[c])).join(','))]
+    .join('\r\n');
+}
+
+function download(name, text) {
+  const blob = new Blob([text], { type: 'text/csv;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+async function exportScores(week) {
+  let q = supabase.from('round_scores').select('*').eq('status', 'confirmed');
+  if (week) q = q.eq('week', week);
+  const { data, error } = await q.order('week');
+
+  if (error) { alert(error.message); return; }
+  if (!data || !data.length) { alert('No confirmed cards to export yet.'); return; }
+
+  const { data: ts } = await supabase.from('teams').select('id,name');
+  const names = Object.fromEntries((ts || []).map(t => [t.id, t.name]));
+
+  const rows = data.map(r => {
+    const row = {
+      week: r.week,
+      date: r.played_on,
+      team: names[r.team_id] || '',
+      course: r.course_name,
+      nine: r.nine,
+      bay: r.bay == null ? '' : r.bay
+    };
+    for (let i = 0; i < 9; i++) row['h' + (i + 1)] = r.gross ? (r.gross[i] ?? '') : '';
+    row.gross = (r.gross || []).reduce((a, b) => a + (b || 0), 0) || '';
+    for (let i = 0; i < 9; i++) row['p' + (i + 1)] = r.points ? (r.points[i] ?? '') : '';
+    row.points    = r.total_points ?? '';
+    row.mulligans = r.mulligans ?? 0;
+    row.handicap  = r.handicap ?? '';
+    return row;
+  });
+
+  download(week ? 'katy-week-' + week + '.csv' : 'katy-season.csv', toCSV(rows));
 }
 
 async function load(week) {
@@ -350,13 +438,13 @@ async function load(week) {
         /* after a couple of hours it's clearly not happening
            tonight, so offer to do it rather than leaving it */
         action = hrs >= 2
-          ? `<button class="act go" data-conf="${r.id}"
+          ? `<button class="act btn-go" data-conf="${r.id}"
                title="Waiting ${hrs.toFixed(0)}h">Confirm it</button>`
-          : `<a class="act go" href="verify.html?round=${r.id}">Open</a>`;
+          : `<a class="act btn-go" href="verify.html?round=${r.id}">Open</a>`;
       } else if (r.status === 'disputed') {
         cls='s-bad'; label='DISPUTED'; nBad++;
         chase.push(`${t.name}'s card is disputed`);
-        action = `<a class="act go" href="verify.html?round=${r.id}">Review</a>`;
+        action = `<a class="act btn-go" href="verify.html?round=${r.id}">Review</a>`;
       } else {
         /* flag the weaker signature so it's visible rather than
            buried in the data */
@@ -418,6 +506,8 @@ async function load(week) {
   }
 
   paintPot();
+  document.getElementById('expbar').hidden = false;
+  document.getElementById('expweek').textContent = `Week ${current}`;
 
   document.querySelectorAll('[data-conf]').forEach(b =>
     b.addEventListener('click', async function(){

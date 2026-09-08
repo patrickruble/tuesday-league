@@ -540,3 +540,57 @@
   font-size:15px;
   letter-spacing:-.04em;
 }
+
+/* ============================================================
+   ENTER YOUR CARD
+   The thing people come here to do, so it says so at the top.
+   ============================================================ */
+.entercard{
+  background:var(--lime);color:var(--green-deep)!important;
+  padding:6px 11px;font-weight:600;margin-right:4px;
+}
+.entercard:hover{background:#fff}
+
+.cta{background:var(--green-deep);color:#fff}
+.cta .inner{max-width:1040px;margin:0 auto;padding:13px 24px;
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.cta .t3{flex:1;min-width:170px;line-height:1.35}
+.cta .t3 b{display:block;font-size:15px}
+.cta .t3 span{font-size:12px;color:rgba(255,255,255,.6)}
+.cta a{background:var(--lime);color:var(--green-deep);text-decoration:none;
+  padding:11px 18px;font-size:14px;font-weight:600;white-space:nowrap}
+.cta a:hover{background:#fff}
+.cta a.ghost3{background:transparent;color:rgba(255,255,255,.8);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.3)}
+.cta a.ghost3:hover{color:#fff;background:rgba(255,255,255,.08)}
+
+/* ============================================================
+   THE .go CLASH
+   site.css uses .go for the arrow that fades in when you hover
+   a leaderboard row — opacity 0 by default, display:none on a
+   phone. Several buttons were given the same class and
+   inherited invisibility. Buttons are never that arrow.
+   ============================================================ */
+button.go,
+a.go[href],
+.acts .go,
+.form .go{
+  opacity:1!important;
+  transform:none!important;
+  display:inline-block!important;
+  text-align:center!important;
+  font-family:inherit!important;
+  font-size:15px!important;
+}
+
+/* the buttons that used to be .go */
+.btn-go{
+  background:var(--green);color:#fff;border:0;padding:12px 20px;
+  font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;
+  opacity:1;display:inline-block;
+}
+.btn-go:hover{background:var(--green-deep)}
+.btn-go:disabled{opacity:.5;cursor:default}
+.b.btn-go{padding:8px 13px;font-size:13px}
+.act.btn-go{padding:7px 12px;font-size:12px;text-decoration:none;
+  display:inline-block;text-align:center}
