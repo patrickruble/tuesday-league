@@ -85,6 +85,9 @@
 .inpot .owing{color:#B45309;font-size:12px;margin-top:5px}
 .alsoran{margin-top:9px;padding-top:8px;border-top:1px solid var(--rule);
   font-family:var(--data);font-size:11px;color:var(--dim)}
+.toboard{margin:-16px 0 26px}
+.toboard a{color:var(--green);font-weight:600;font-size:14px}
+
 .waiting2{background:var(--card);border:1px dashed var(--rule);padding:20px;
   text-align:center;color:var(--dim);font-size:14px;margin:22px 0}
 
@@ -420,7 +423,8 @@ function contestBlock(ctx) {
       </div>`;
   }).join('');
 
-  return `<h2 class="sech">The contests</h2>${who}<div class="cwrap">${boxes}</div>`;
+  return `<h2 class="sech">The contests</h2>${who}<div class="cwrap">${boxes}</div>
+    <p class="toboard"><a href="contests.html">Open the board to put a number up</a></p>`;
 }
 </script>
 <script>

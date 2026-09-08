@@ -251,8 +251,8 @@ async function refreshBoard() {
    that way this week and anyone in the bay can go up. */
 function eligible() {
   if (!entrants.length) return players;
-  const inPot = new Set(entrants.map(e => e.profile_id));
-  return players.filter(p => inPot.has(p.id));
+  const paid = new Set(entrants.filter(e => e.paid).map(e => e.profile_id));
+  return players.filter(p => paid.has(p.id));
 }
 
 const myEntry = () => entrants.find(e => e.profile_id === profile.id);
@@ -360,7 +360,8 @@ function panel(kind, hole) {
         </div>
         <div class="msg3" data-msg="${kind}"></div>
       </div>` : `
-      <p class="none2">Nobody in your bay is in this one.</p>`}
+      <p class="none2">Nobody in your bay has been confirmed in the pot yet.
+        Chris ticks people off on his end once he's got the money.</p>`}
     </div>
   </div>`;
 }
@@ -380,10 +381,10 @@ function entryLine() {
     </div>`;
   }
   if (mine) {
-    return `<div class="entry in">
+    return `<div class="entry pending">
       <div>
-        <b>You're in.</b> ${total} playing for it. Settle the $${fee} with Chris
-        whenever — it won't stop you putting a number up.
+        <b>Name down, waiting on Chris.</b>
+        Give him the $${fee} and he'll tick you off — then you can put a number up.
         <button type="button" data-out="1">Take my name off</button>
       </div>
     </div>`;
